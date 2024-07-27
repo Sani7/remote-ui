@@ -21,6 +21,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
 
 add_subdirectory(qwt)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 set(PROJECT_SOURCES
         simulators/sim-cvs_i10.h
         simulators/sim-cvs_i10.cpp
@@ -43,6 +45,8 @@ set(PROJECT_SOURCES
         helpers.h
         helpers.cpp
         IterableEnum.hpp
+        hex_spinbox.h
+        hex_spinbox.cpp
         better_radiobutton.h
         better_radiobutton.cpp
         led.h
