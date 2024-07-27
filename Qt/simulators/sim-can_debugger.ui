@@ -14,7 +14,211 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QGroupBox" name="groupBox_8">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>10</y>
+      <width>641</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Send CAN message</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_8">
+     <item row="1" column="1">
+      <widget class="QComboBox" name="c_can_send_dlc">
+       <item>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>8</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="10">
+      <widget class="QPushButton" name="b_can_send_send">
+       <property name="text">
+        <string>Send</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="HexSpinBox" name="s_can_send_data1">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="HexSpinBox" name="s_can_send_sid">
+       <property name="maximum">
+        <number>65535</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="HexSpinBox" name="s_can_send_data0">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>SID</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>DLC</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Data0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Data1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Data2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Data3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="6">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Data4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="7">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Data5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="8">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Data6</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="9">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Data7</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="HexSpinBox" name="s_can_send_data2">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="HexSpinBox" name="s_can_send_data3">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="6">
+      <widget class="HexSpinBox" name="s_can_send_data4">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="7">
+      <widget class="HexSpinBox" name="s_can_send_data5">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="8">
+      <widget class="HexSpinBox" name="s_can_send_data6">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="9">
+      <widget class="HexSpinBox" name="s_can_send_data7">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -245,38 +449,38 @@
         <string>HVac am80 cutom kaart robbe</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="b_s_EnableSetValue">
-          <property name="text">
-           <string>Enables set values</string>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="0">
          <widget class="QPushButton" name="SetSingleWeerstandEnalbe">
           <property name="text">
-           <string>Set Single weerstand &amp; Enable</string>
+           <string>Single weerstand &amp; Enable</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QPushButton" name="b_s_SetSingleStroomEnable">
           <property name="text">
-           <string>Set Single stroom &amp; Enable</string>
+           <string>Single stroom &amp; Enable</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="b_s_SetSingleStroomDisable">
-          <property name="text">
-           <string>Set Single stroom &amp; Disable</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
+        <item row="3" column="1">
          <widget class="QPushButton" name="b_s_SetSingleWeerstandDisable">
           <property name="text">
-           <string>Set Single weerstand &amp; Disable</string>
+           <string>Single weerstand &amp; Disable</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="b_s_SetSingleStroomDisable">
+          <property name="text">
+           <string>Single stroom &amp; Disable</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QPushButton" name="b_s_EnableSetValue">
+          <property name="text">
+           <string>Enables set values</string>
           </property>
          </widget>
         </item>
@@ -298,6 +502,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HexSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>hex_spinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
