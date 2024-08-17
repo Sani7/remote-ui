@@ -15,6 +15,7 @@ target_compile_options(tests PRIVATE $<$<CONFIG:Debug>:
     >)
 target_link_libraries(tests
     PRIVATE
+    UI
     gtest
     GTest::gtest_main
 )
