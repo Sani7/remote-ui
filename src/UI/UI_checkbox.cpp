@@ -8,6 +8,10 @@ UI_checkbox::UI_checkbox()
 UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, std::function<void(std::string, std::vector<std::string>)> on_change)
     : UI_x_boxes(id, UI_CHECKBOX_TYPE, text, fg_color, bg_color, options), p_selected(), p_on_change(on_change)
 {
+    for (size_t i = 0; i < p_options.size(); i++)
+    {
+        p_selected.push_back(false);
+    }
 }
 
 UI_checkbox::UI_checkbox(const json& j) : 
