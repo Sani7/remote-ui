@@ -1,17 +1,16 @@
 #pragma once
 
+#include <functional>
 #include "UI_item.hpp"
 #include "UI_x_boxes.hpp"
 
 #define UI_COMBOBOX_TYPE std::string("UIcombobox")
-typedef void (*UI_combobox_on_change) (std::string id, size_t selected);
 
 class UI_combobox : public UI_x_boxes
 {
     public:
         UI_combobox();
-        UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected, UI_combobox_on_change on_change = nullptr);
-        UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, UI_combobox_on_change on_change = nullptr);
+        UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected = 0, std::function<void(std::string, std::string)> on_change = nullptr);
         UI_combobox(const json& j);
 
         void set_selected(size_t selected);
@@ -24,5 +23,5 @@ class UI_combobox : public UI_x_boxes
     private:
         size_t p_selected;
 
-        UI_combobox_on_change p_on_change;
+        std::function<void(std::string, std::string)> p_on_change;
 };

@@ -1,6 +1,6 @@
 #include "UI_slider.hpp"
 
-UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value,  UI_slider_on_change on_change)
+UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value,  std::function<void(std::string, double)> on_change)
     : UI_item(id, UI_SLIDER_TYPE, text, 12, fg_color, bg_color), p_min(min), p_max(max), p_value(value)
 {
     this->p_on_change = on_change;

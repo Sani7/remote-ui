@@ -2,12 +2,11 @@
 #include "UI_item.hpp"
 
 #define UI_SLIDER_TYPE std::string("UISlider")
-typedef void(*UI_slider_on_change)(std::string, double value);
 
 class UI_slider : public UI_item
 {
     public:
-        UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value, UI_slider_on_change on_change);
+        UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value, std::function<void(std::string, double)> on_change = nullptr);
         UI_slider(const json& j);
 
         void set_value(double value);
@@ -20,5 +19,5 @@ class UI_slider : public UI_item
         double p_max;
         double p_value;
 
-        UI_slider_on_change p_on_change;
+        std::function<void(std::string, double)> p_on_change;
 };
