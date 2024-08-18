@@ -1,3 +1,6 @@
 [submodule "external/color"]
 	path = external/color
 	url = git@github.com:Sani7/cpp_color_lib.git
+[submodule "external/timer"]
+	path = external/timer
+	url = git@github.com:Sani7/cpp_timer.git
