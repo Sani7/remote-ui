@@ -18,13 +18,12 @@ UI_combobox::UI_combobox(const json& j)
 
 void UI_combobox::set_selected(size_t selected)
 {
-    if (selected != p_selected)
+    if (selected == p_selected)
+        return;
+    p_selected = selected;
+    if (p_on_change != nullptr)
     {
-        p_selected = selected;
-        if (p_on_change != nullptr)
-        {
-            p_on_change(p_id, selected_text());
-        }
+        p_on_change(p_id, selected_text());
     }
 }
 

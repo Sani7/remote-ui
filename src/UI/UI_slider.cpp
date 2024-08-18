@@ -14,6 +14,11 @@ UI_slider::UI_slider(const json& j)
 
 void UI_slider::set_value(double value)
 {
+    if (value < p_min || value > p_max)
+        return;
+    if (value == p_value)
+        return;
+
     if (p_on_change != nullptr)
     {
         this->p_value = value;
