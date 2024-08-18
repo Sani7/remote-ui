@@ -57,5 +57,6 @@ void UI_combobox::from_json(const json& j)
 json UI_combobox::to_json() const
 {
     json j = UI_x_boxes::to_json();
+    j["selected"] = p_options[p_selected];
     return j;
 }
