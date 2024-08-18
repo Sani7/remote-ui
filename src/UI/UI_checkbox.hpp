@@ -6,7 +6,7 @@
 #define UI_CHECKBOX_TYPE std::string("UIcheckbox")
 typedef void (*UI_checkbox_on_change) (std::string id, std::vector<std::string> selected);
 
-class UI_checkbox : UI_x_boxes
+class UI_checkbox : public UI_x_boxes
 {
     public:
         UI_checkbox();
