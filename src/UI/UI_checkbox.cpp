@@ -24,14 +24,10 @@ void UI_checkbox::toggle_selected(size_t selected)
 {
     if (selected >= p_options.size())
         return;
-    
-    if (p_selected[selected] != p_selected[selected])
+    p_selected[selected] = !p_selected[selected];
+    if (p_on_change != nullptr)
     {
-        p_selected[selected] = !p_selected[selected];
-        if (p_on_change != nullptr)
-        {
-            p_on_change(p_id, selected_text());
-        }
+        p_on_change(p_id, selected_text());
     }
 }
 
