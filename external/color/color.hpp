@@ -60,7 +60,6 @@ class Color {
         Medium_Forest_Green,
         Medium_Goldenrod,
         Medium_Orchid,
-        Medium_Sea_Green,
         Medium_Seagreen,
         Medium_Slate_Blue,
         Medium_Spring_Green,

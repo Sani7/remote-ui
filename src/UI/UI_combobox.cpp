@@ -5,7 +5,7 @@ UI_combobox::UI_combobox()
 {
 }
 
-UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, int selected, UI_combobox_on_change on_change)
+UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected, UI_combobox_on_change on_change)
     : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options), p_selected(selected), p_on_change(on_change)
 {
 }

@@ -13,7 +13,7 @@ Color::Color(std::string hex) {
     if (hex.length() == 6) {
         hex = "FF" + hex;
     }
-    p_color = std::stoul(hex, nullptr, 16);
+    p_color = (uint32_t)std::stoul(hex, nullptr, 16);
 }
 
 Color::Color(Colors color) {
@@ -180,7 +180,7 @@ Color::Color(Colors color) {
             case Colors::Medium_Orchid:
                 Color(0x93, 0x70, 0xDB);
             break;
-            case Colors::Medium_Sea_Green:
+            case Colors::Medium_Seagreen:
                 Color(0x42, 0x6F, 0x42);
             break;
             case Colors::Medium_Slate_Blue:
@@ -326,15 +326,15 @@ uint32_t Color::color() const {
 }
 
 uint8_t Color::red() const {
-    return (p_color >> 24) & 0xFF;
+    return (uint8_t)((p_color >> 24) & 0xFF);
 }
 
 uint8_t Color::green() const {
-    return (p_color >> 16) & 0xFF;
+    return (uint8_t)((p_color >> 16) & 0xFF);
 }
 
 uint8_t Color::blue() const {
-    return (p_color >> 8) & 0xFF;
+    return (uint8_t)((p_color >> 8) & 0xFF);
 }
 
 uint8_t Color::alpha() const {
