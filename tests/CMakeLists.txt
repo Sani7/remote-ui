@@ -13,6 +13,7 @@ target_link_libraries(tests ${LIBS})
 target_compile_options(tests PRIVATE $<$<CONFIG:Debug>:
     -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion
     >)
+
 target_link_libraries(tests
     PRIVATE
     UI

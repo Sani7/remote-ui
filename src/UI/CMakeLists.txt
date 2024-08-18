@@ -5,6 +5,10 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
+target_compile_options(UI PRIVATE $<$<CONFIG:Debug>:
+    -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion
+    >)
+
 target_sources(UI
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/UI_item.cpp
