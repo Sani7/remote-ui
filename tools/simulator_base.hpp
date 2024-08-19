@@ -3,10 +3,12 @@
 #include "UI.hpp"
 #include "timer.hpp"
 
-class SimulatorBase {
+class Simulator_base {
 
     public:
-        SimulatorBase(std::string name);
+        Simulator_base(std::string name);
+
+        std::string name() const;
 
         void add_UI_item(UI_item* item);
         json get_UI_items() const;

@@ -1,18 +1,23 @@
 #include "simulator_base.hpp"
 
-SimulatorBase::SimulatorBase(std::string name)
+Simulator_base::Simulator_base(std::string name)
     : p_name(name), p_timer([this]{ timer(); })
 {
     
 }
 
-void SimulatorBase::add_UI_item(UI_item* item) {
+std::string Simulator_base::name() const {
+    // Get the name of the simulator
+    return p_name;
+}
+
+void Simulator_base::add_UI_item(UI_item* item) {
     // Add a UI item to the simulator
     p_UI_items_map[item->id()] = item;
     p_UI_items.push_back(item);
 }
 
-json SimulatorBase::get_UI_items() const {
+json Simulator_base::get_UI_items() const {
     // Get the UI items
     json items;
     items["name"] = p_name;
@@ -23,17 +28,17 @@ json SimulatorBase::get_UI_items() const {
     return items;
 }
 
-UI_item* SimulatorBase::get_UI_item(std::string id) const {
+UI_item* Simulator_base::get_UI_item(std::string id) const {
     // Get a UI item by id
     return p_UI_items_map.at(id);
 }
 
-void SimulatorBase::run() {
+void Simulator_base::run() {
     // Start the timer
     p_timer.setInterval(std::chrono::milliseconds(100));
 }
 
-void SimulatorBase::stop() {
+void Simulator_base::stop() {
     // Stop the simulator
     p_timer.stop();
 }
