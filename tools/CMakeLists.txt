@@ -2,6 +2,7 @@ add_executable(simulators)
 target_sources(simulators PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/simulator_base.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/simulators.cpp
 )
 
 target_compile_options(simulators PRIVATE $<$<CONFIG:Debug>:
@@ -17,4 +18,5 @@ target_include_directories(simulators
 
 target_link_libraries(simulators PRIVATE
     UI
+    Timer
 )
