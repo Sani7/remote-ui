@@ -23,13 +23,14 @@ void int_handler(int s)
 
 int main(void)
 {
+    // Setup the signal handler
     struct sigaction sigIntHandler;
 
-   sigIntHandler.sa_handler = int_handler;
-   sigemptyset(&sigIntHandler.sa_mask);
-   sigIntHandler.sa_flags = 0;
+    sigIntHandler.sa_handler = int_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
 
-   sigaction(SIGINT, &sigIntHandler, NULL);
+    sigaction(SIGINT, &sigIntHandler, NULL);
 
     Websocket web_socket(9002, [](std::string message) {
         return message;
