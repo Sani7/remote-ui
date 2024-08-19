@@ -3,6 +3,7 @@ target_sources(simulators PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/simulator_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/simulators.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/websocket.cpp
 )
 
 target_compile_options(simulators PRIVATE $<$<CONFIG:Debug>:
@@ -13,7 +14,7 @@ target_include_directories(simulators
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     PRIVATE
-    ${PROJECT_DIR}/external/**
+    ${PROJECT_DIR}/external/websocketpp
 )
 
 target_link_libraries(simulators PRIVATE
