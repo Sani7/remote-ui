@@ -15,8 +15,10 @@ void int_handler(int s)
     UNUSED(s);
     std::cout << "\nCaught Ctrl + C\nShutting down." << std::endl;
     g_web_socket->stop();
-    exit(1); 
-
+    simulators.stop();
+    // delay
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    exit(1);
 }
 
 int main(void)
