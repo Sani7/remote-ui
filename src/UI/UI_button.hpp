@@ -13,7 +13,7 @@ class UI_button : public UI_item
         void from_json(const json& j) override;
         json to_json() const override;
 
-        void click() const;
+        void click() const override;
     private:
         std::function<void(std::string)> p_on_click = nullptr;
 };

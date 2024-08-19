@@ -14,7 +14,7 @@ class UI_combobox : public UI_x_boxes
         UI_combobox(const json& j);
 
         void set_selected(size_t selected);
-        void set_selected(std::string selected);
+        void set_selected(std::string selected) override;
         size_t selected() const;
         std::string selected_text() const;
     
