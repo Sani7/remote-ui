@@ -1,7 +1,6 @@
 #include <iostream>
 #include <signal.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 
 #include "simulators.hpp"
@@ -32,11 +31,15 @@ int main(void)
 
     sigaction(SIGINT, &sigIntHandler, NULL);
 
-    Websocket web_socket(9002, [](std::string message) {
-        return message;
-    });
-    g_web_socket = &web_socket;
-    web_socket.run();
-    
 
+    // The server starts in this thread
+    Websocket web_socket(9002, [](std::string message) { return message; }, []() { return ""; });
+    g_web_socket = &web_socket;
+
+    std::thread message_processor_thread(std::bind(&Websocket::process_messages, &web_socket));
+    
+    // Run the asio loop with the main thread
+    web_socket.run();
+
+    message_processor_thread.join();
 }
