@@ -6,6 +6,8 @@
 #include "color.hpp"
 using json = nlohmann::json;
 
+#define UNUSED(x) (void)(x)
+
 class UI_item {
   public:
     UI_item(std::string type);
