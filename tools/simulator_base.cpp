@@ -29,6 +29,11 @@ UI_item* SimulatorBase::get_UI_item(std::string id) const {
 }
 
 void SimulatorBase::run() {
-    // Run the simulator
+    // Start the timer
     p_timer.setInterval(std::chrono::milliseconds(100));
+}
+
+void SimulatorBase::stop() {
+    // Stop the simulator
+    p_timer.stop();
 }

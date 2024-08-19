@@ -14,6 +14,7 @@ class SimulatorBase {
         UI_item* get_UI_item(std::string id) const;
 
         void run();
+        void stop();
 
         virtual void timer() {};
     protected:
