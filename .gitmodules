@@ -4,3 +4,6 @@
 [submodule "external/timer"]
 	path = external/timer
 	url = git@github.com:Sani7/cpp_timer.git
+[submodule "external/websocketpp"]
+	path = external/websocketpp
+	url = git@github.com:Sani7/websocketpp.git
