@@ -2,7 +2,7 @@
 
 
 Websocket::Websocket(uint16_t port, std::function<std::string(std::string)> on_message)
-    : p_on_message(on_message)
+    : p_on_message(on_message), p_port(port)
 {
         try {
         // Set logging settings
@@ -13,10 +13,9 @@ Websocket::Websocket(uint16_t port, std::function<std::string(std::string)> on_m
         server.init_asio();
 
         // Register our message handler
+        server.set_open_handler(bind(&Websocket::on_open, this, ::_1));
+        server.set_close_handler(bind(&Websocket::on_close, this, ::_1));
         server.set_message_handler(bind(&Websocket::on_message, this, &server, ::_1, ::_2));
-
-        // Listen on port 9002
-        server.listen(port);
     } catch (websocketpp::exception const & e) {
         std::cout << e.what() << std::endl;
     } catch (...) {
@@ -28,6 +27,7 @@ void Websocket::run()
 {
     try
     {
+        server.listen(p_port);
         // Start the server accept loop
         server.start_accept();
 

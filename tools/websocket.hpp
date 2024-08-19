@@ -21,4 +21,5 @@ private:
     void on_message(Server* s, websocketpp::connection_hdl hdl, Server::message_ptr msg);   
     Server server; 
     std::function<std::string(std::string)> p_on_message;
+    uint16_t p_port;
 };
