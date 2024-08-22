@@ -90,24 +90,14 @@ json Simulators::changed_UI_items()
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
     json changed;
     changed["event"] = "UI_changed";
-    if (m_before["UI_items"].empty())
+    
+    changed["diff"] = json::diff(m_before, after);
+
+    if (changed["diff"].empty())
     {
-        changed = after;
-        return changed;
+        return "{}"_json;
     }
 
-    for (const json& item : after["UI_items"])
-    {
-        for (const json& before_item : m_before["UI_items"])
-        {
-            if (before_item["id"] == item["id"])
-            {
-                if (before_item != item)
-                {
-                    changed["UI_items"].push_back(item);
-                }
-            }
-        }
-    }
+    m_before = after;
     return changed;
 }
