@@ -16,7 +16,7 @@ void int_handler(int s)
     if (g_web_socket != nullptr)
         g_web_socket->stop();
     g_simulators.stop();
-    // delay
+    // delay to allow the server to stop gracefully
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     exit(1);
 }
@@ -37,12 +37,14 @@ int main(void)
     Websocket web_socket(9002, [](std::string message) { return message; }, []() { return g_simulators.changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
+    // Start the message processor and broadcast processor in separate threads
     std::thread message_processor_thread(std::bind(&Websocket::process_messages, &web_socket));
     std::thread broadcast_processor_thred(std::bind(&Websocket::process_broadcast, &web_socket));
     
     // Run the asio loop with the main thread
     web_socket.run();
 
+    // Wait for the threads to finish (should never happen)
     message_processor_thread.join();
     broadcast_processor_thred.join();
 }
