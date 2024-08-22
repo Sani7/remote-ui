@@ -11,21 +11,35 @@
                     "description": "The id of the UI element"
                 }
             ],
-            "response": {
-                "name": "UI_element",
-                "type": "UIElements",
-                "description": "The UI element"
-            }
+            "response": [
+                {
+                    "name": "UI_element",
+                    "type": "UIElements",
+                    "description": "The UI element"
+                },
+                {
+                    "response": "get_UI_element",
+                    "type": "string",
+                    "description": "The command name"
+                }
+        ]
         },
         {
             "name": "get_UI_elements",
             "description": "Get the UI elements",
             "parameters": [],
-            "response": {
+            "response": [
+                {
                 "name": "UIElements",
                 "type": "List<UIElements>",
                 "description": "List of UI elements"
-            }
+                },
+                {
+                    "response": "get_UI_elements",
+                    "type": "string",
+                    "description": "The command name"
+                }
+            ]
         },
         {
             "name": "switch_simulator",
@@ -37,28 +51,47 @@
                     "description": "The simulator to switch to"
                 }
             ],
-            "response": {
-            }
+            "response": [
+                {
+                    "response": "switch_simulator",
+                    "type": "string",
+                    "description": "The command name"
+                }
+            ]
         },
         {
             "name": "get_active_simulator_name",
             "description": "Get the name of the active simulator",
             "parameters": [],
-            "response": {
-                "name": "simulator",
-                "type": "string",
-                "description": "The name of the active simulator"
-            }
+            "response": [
+                {
+                    "name": "simulator",
+                    "type": "string",
+                    "description": "The name of the active simulator"
+                },
+                {
+                    "response": "get_active_simulator_name",
+                    "type": "string",
+                    "description": "The command name"
+                }
+            ]
         },
         {
             "name": "get_simulators",
             "description": "Get the list of simulators",
             "parameters": [],
-            "response": {
-                "name": "simulators",
-                "type": "List<string>",
-                "description": "List of simulators"
-            }
+            "response": [
+                {
+                    "name": "simulators",
+                    "type": "List<string>",
+                    "description": "List of simulators"
+                },
+                {
+                    "response": "get_simulators",
+                    "type": "string",
+                    "description": "The command name"
+                }
+            ]
         }
     ],
     "events":
