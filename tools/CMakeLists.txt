@@ -2,7 +2,7 @@ add_executable(server)
 
 include(FetchContent)
 
-FetchContent_Declare(magic_enum URL https://github.com/Neargye/magic_enum/releases/download/v0.9.5/magic_enum-v0.9.5.tar.gz)
+FetchContent_Declare(magic_enum URL https://github.com/Neargye/magic_enum/releases/download/v0.9.5/magic_enum-v0.9.5.tar.gz DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(magic_enum)
 
 target_sources(server PRIVATE
