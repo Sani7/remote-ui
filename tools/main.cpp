@@ -5,6 +5,7 @@
 
 #include "simulators.hpp"
 #include "websocket.hpp"
+#include "message_parser.hpp"
 
 Simulators g_simulators;
 Websocket* g_web_socket;
@@ -34,7 +35,7 @@ int main(void)
 
 
     // The server starts in this thread
-    Websocket web_socket(9002, [](std::string message) { return message; }, []() { return g_simulators.changed_UI_items().dump(); });
+    Websocket web_socket(9002, [](std::string message) { return message_parser(message); }, []() { return g_simulators.changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
     // Start the message processor and broadcast processor in separate threads
