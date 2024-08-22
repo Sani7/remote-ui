@@ -30,27 +30,36 @@ json command_parser(json command)
         case Command::get_UI_element:
         {
             std::string id = command["id"];
-            return g_simulators.invoke_active_simulator()->get_UI_item(id)->to_json();
+            json j;
+            j["response"] = "get_UI_element";
+            j["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(id)->to_json();
+            return j;
         }
         case Command::get_UI_elements:
         {
-            return g_simulators.invoke_active_simulator()->get_UI_items();
+            json j;
+            j["response"] = "get_UI_elements";
+            j["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
+            return j;
         }
         case Command::switch_simulator:
         {
-            std::string name = command["name"];
-            g_simulators.switch_simulator(name);
-            return "";
+            g_simulators.switch_simulator(command["name"]);
+            json j;
+            j["response"] = "switch_simulator";
+            return j;
         }
         case Command::get_active_simulator_name:
         {
             json j;
+            j["response"] = "get_active_simulator_name";
             j["name"] = g_simulators.active_simulator_name();
             return j;
         }
         case Command::get_simulators:
         {
             json j;
+            j["response"] = "get_simulators";
             j["simulators"] = g_simulators.list_simulators();
             return j;
         }
