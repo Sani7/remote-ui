@@ -39,6 +39,7 @@ public:
     void run();
     void stop();
     void process_messages();
+    void process_broadcast();
 private:
     void on_open(websocketpp::connection_hdl hdl);
     void on_close(websocketpp::connection_hdl hdl);

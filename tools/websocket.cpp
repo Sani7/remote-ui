@@ -1,7 +1,8 @@
 #include "websocket.hpp"
 
-
-Websocket::Websocket(uint16_t port, std::function<std::string(std::string)> on_message, std::function<std::string()> on_update)
+Websocket::Websocket(uint16_t port,
+                     std::function<std::string(std::string)> on_message,
+                     std::function<std::string()> on_update)
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
@@ -27,7 +28,7 @@ void Websocket::run()
     {
         // Start the ASIO io_service run loop
         m_server.run();
-    } catch (websocketpp::exception const & e) {
+    } catch (websocketpp::exception const& e) {
         std::cout << e.what() << std::endl;
     } catch (...) {
         std::cout << "other exception" << std::endl;
@@ -44,8 +45,8 @@ void Websocket::on_open(websocketpp::connection_hdl hdl)
 {
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        //std::cout << "on_open" << std::endl;
-        m_actions.push(action(SUBSCRIBE,hdl));
+        // std::cout << "on_open" << std::endl;
+        m_actions.push(action(SUBSCRIBE, hdl));
     }
     m_action_cond.notify_one();
 }
@@ -54,27 +55,31 @@ void Websocket::on_close(websocketpp::connection_hdl hdl)
 {
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        //std::cout << "on_close" << std::endl;
-        m_actions.push(action(UNSUBSCRIBE,hdl));
+        // std::cout << "on_close" << std::endl;
+        m_actions.push(action(UNSUBSCRIBE, hdl));
     }
     m_action_cond.notify_one();
 }
 
-void Websocket::on_message(websocketpp::connection_hdl hdl, Server::message_ptr msg) {
+void Websocket::on_message(websocketpp::connection_hdl hdl, Server::message_ptr msg)
+{
     // queue message up for sending by processing thread
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        //std::cout << "on_message" << std::endl;
-        m_actions.push(action(MESSAGE,hdl,msg));
+        // std::cout << "on_message" << std::endl;
+        m_actions.push(action(MESSAGE, hdl, msg));
     }
     m_action_cond.notify_one();
 }
 
-void Websocket::process_messages() {
-    while(1) {
+void Websocket::process_messages()
+{
+    while (1)
+    {
         std::unique_lock<std::mutex> lock(m_action_lock);
 
-        while(m_actions.empty()) {
+        while (m_actions.empty())
+        {
             m_action_cond.wait(lock);
         }
 
@@ -83,38 +88,49 @@ void Websocket::process_messages() {
 
         lock.unlock();
 
-        switch (a.type)
-        {
-        case SUBSCRIBE:
+        switch (a.type) {
+            case SUBSCRIBE:
             {
                 std::lock_guard<std::mutex> guard(m_connection_lock);
                 m_connections.insert(a.hdl);
             }
             break;
-        case UNSUBSCRIBE:
+            case UNSUBSCRIBE:
             {
                 std::lock_guard<std::mutex> guard(m_connection_lock);
                 m_connections.erase(a.hdl);
             }
             break;
-        case MESSAGE:
+            case MESSAGE:
             {
                 std::lock_guard<std::mutex> guard(m_connection_lock);
                 std::string response = m_on_message(a.msg->get_payload());
                 m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
             }
             break;
-        default:
-            // undefined.
-            break;
+            default:
+                // undefined.
+                break;
         }
+    }
+}
 
-        std::string update = m_on_update();
-        if (!update.empty())
+void Websocket::process_broadcast()
+{
+    while (1)
+    {
         {
             std::lock_guard<std::mutex> guard(m_connection_lock);
-            for (auto it = m_connections.begin(); it != m_connections.end(); ++it)
+            if (m_connections.empty())
             {
+                continue;
+            }
+        }
+        std::string update = m_on_update();
+        if (!update.empty() && update != "{}")
+        {
+            std::lock_guard<std::mutex> guard(m_connection_lock);
+            for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
                 m_server.send(*it, update, websocketpp::frame::opcode::TEXT);
             }
         }

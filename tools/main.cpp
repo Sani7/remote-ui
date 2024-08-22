@@ -38,9 +38,11 @@ int main(void)
     g_web_socket = &web_socket;
 
     std::thread message_processor_thread(std::bind(&Websocket::process_messages, &web_socket));
+    std::thread broadcast_processor_thred(std::bind(&Websocket::process_broadcast, &web_socket));
     
     // Run the asio loop with the main thread
     web_socket.run();
 
     message_processor_thread.join();
+    broadcast_processor_thred.join();
 }
