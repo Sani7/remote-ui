@@ -2,7 +2,7 @@
     "commands":
     [
         {
-            "name": "GetUIElement",
+            "name": "get_UI_element",
             "description": "Get the UI element by id",
             "parameters": [
                 {
@@ -12,13 +12,13 @@
                 }
             ],
             "response": {
-                "name": "UIElement",
+                "name": "UI_element",
                 "type": "UIElements",
                 "description": "The UI element"
             }
         },
         {
-            "name": "GetUIElements",
+            "name": "get_UI_elements",
             "description": "Get the UI elements",
             "parameters": [],
             "response": {
@@ -28,7 +28,7 @@
             }
         },
         {
-            "name": "SwitchSimulator",
+            "name": "switch_simulator",
             "description": "Switch the simulator",
             "parameters": [
                 {
@@ -41,7 +41,7 @@
             }
         },
         {
-            "name": "GetActiveSimulatorName",
+            "name": "get_active_simulator_name",
             "description": "Get the name of the active simulator",
             "parameters": [],
             "response": {
@@ -51,7 +51,7 @@
             }
         },
         {
-            "name": "GetSimulators",
+            "name": "get_simulators",
             "description": "Get the list of simulators",
             "parameters": [],
             "response": {
@@ -83,6 +83,7 @@
             "item": "name"
         },
         {
+            // Server to client
             "type": "ui_changed",
             "UI_elements": [
                 {
