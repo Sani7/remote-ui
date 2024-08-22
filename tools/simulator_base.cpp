@@ -11,8 +11,22 @@ std::string Simulator_base::name() const {
     return p_name;
 }
 
+bool Simulator_base::is_ui_id_unique(std::string id) const {
+    // Check if the UI name is unique
+    for (UI_item* item : p_UI_items) {
+        if (item->id() == id) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void Simulator_base::add_UI_item(UI_item* item) {
     // Add a UI item to the simulator
+    if (is_ui_id_unique(item->id()) == false) {
+        throw std::runtime_error("UI item id " + item->id() + " is not unique");
+    }
     p_UI_items_map[item->id()] = item;
     p_UI_items.push_back(item);
 }

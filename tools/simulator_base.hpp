@@ -10,6 +10,8 @@ class Simulator_base {
 
         std::string name() const;
 
+        bool is_ui_id_unique(std::string id) const;
+
         void add_UI_item(UI_item* item);
         json get_UI_items() const;
 
