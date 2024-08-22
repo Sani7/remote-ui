@@ -6,7 +6,7 @@
 class Simulator_base {
 
     public:
-        Simulator_base(std::string name);
+        Simulator_base(std::string name, std::chrono::milliseconds interval = std::chrono::milliseconds(100));
 
         std::string name() const;
 
@@ -26,4 +26,5 @@ class Simulator_base {
         std::vector<UI_item*> p_UI_items;
         std::map<std::string, UI_item*> p_UI_items_map;
         Timer p_timer;
+        std::chrono::milliseconds m_interval;
 };

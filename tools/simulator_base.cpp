@@ -1,7 +1,7 @@
 #include "simulator_base.hpp"
 
-Simulator_base::Simulator_base(std::string name)
-    : p_name(name), p_timer([this]{ timer(); })
+Simulator_base::Simulator_base(std::string name, std::chrono::milliseconds interval)
+    : p_name(name), p_timer([this]{ timer(); }), m_interval(interval)
 {
     
 }
@@ -49,7 +49,7 @@ UI_item* Simulator_base::get_UI_item(std::string id) const {
 
 void Simulator_base::run() {
     // Start the timer
-    p_timer.setInterval(std::chrono::milliseconds(100));
+    p_timer.setInterval(m_interval);
 }
 
 void Simulator_base::stop() {
