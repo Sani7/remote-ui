@@ -34,7 +34,7 @@ int main(void)
 
 
     // The server starts in this thread
-    Websocket web_socket(9002, [](std::string message) { return message; }, []() { return ""; });
+    Websocket web_socket(9002, [](std::string message) { return message; }, []() { return g_simulators.changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
     std::thread message_processor_thread(std::bind(&Websocket::process_messages, &web_socket));
