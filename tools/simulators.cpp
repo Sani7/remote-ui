@@ -6,6 +6,11 @@ Simulators::Simulators()
     INSERT_SIMULATOR(Test_Sim);
 }
 
+std::string Simulators::active_simulator_name() const
+{
+    return this->m_current_simulator;
+}
+
 void Simulators::run()
 {
     if (this->m_simulators.empty())

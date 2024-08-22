@@ -9,6 +9,7 @@
 class Simulators {
     public:
         Simulators();
+        std::string active_simulator_name() const;
         void run();
         void stop();
         void switch_simulator(std::string name);
