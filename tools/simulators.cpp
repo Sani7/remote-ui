@@ -47,7 +47,7 @@ void Simulators::switch_simulator(std::string name)
     }
 
     this->m_current_simulator = name;
-    this->m_simulators.at(m_current_simulator)->run();
+    this->run();
 }
 
 std::vector<std::string> Simulators::list_simulators() const
