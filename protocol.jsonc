@@ -1,0 +1,96 @@
+{
+    "commands":
+    [
+        {
+            "name": "GetUIElement",
+            "description": "Get the UI element by id",
+            "parameters": [
+                {
+                    "name": "id",
+                    "type": "string",
+                    "description": "The id of the UI element"
+                }
+            ],
+            "response": {
+                "name": "UIElement",
+                "type": "UIElements",
+                "description": "The UI element"
+            }
+        },
+        {
+            "name": "GetUIElements",
+            "description": "Get the UI elements",
+            "parameters": [],
+            "response": {
+                "name": "UIElements",
+                "type": "List<UIElements>",
+                "description": "List of UI elements"
+            }
+        },
+        {
+            "name": "SwitchSimulator",
+            "description": "Switch the simulator",
+            "parameters": [
+                {
+                    "name": "simulator",
+                    "type": "string",
+                    "description": "The simulator to switch to"
+                }
+            ],
+            "response": {
+            }
+        },
+        {
+            "name": "GetActiveSimulatorName",
+            "description": "Get the name of the active simulator",
+            "parameters": [],
+            "response": {
+                "name": "simulator",
+                "type": "string",
+                "description": "The name of the active simulator"
+            }
+        },
+        {
+            "name": "GetSimulators",
+            "description": "Get the list of simulators",
+            "parameters": [],
+            "response": {
+                "name": "simulators",
+                "type": "List<string>",
+                "description": "List of simulators"
+            }
+        }
+    ],
+    "events":
+    [
+        {
+            "type": "clicked",
+            "id": "name"
+        },
+        {
+            "type": "value_changed",
+            "id": "name",
+            "value": 0
+        },
+        {
+            "type": "text_changed",
+            "id": "name",
+            "text": "text"
+        },
+        {
+            "type": "selected",
+            "id": "name",
+            "item": "name"
+        },
+        {
+            "type": "ui_changed",
+            "UI_elements": [
+                {
+                    "id": "name",
+                    "type": "type"
+                    // ,...
+                }
+            ]
+        }
+    ]
+}
