@@ -91,11 +91,21 @@ json Simulators::changed_UI_items()
     json changed;
     changed["event"] = "UI_changed";
     
-    changed["diff"] = json::diff(m_before, after);
+    json diff = json::diff(m_before, after);
 
-    if (changed["diff"].empty())
+    if (diff.empty())
     {
         return "{}"_json;
+    }
+
+    // diff to ui items list
+    // get index out of each item in diff /UI_items/0/** 
+    // Then push the ui_item at that index to the changed json
+    for (auto& item : diff)
+    {
+        std::string path = item["path"];
+        std::string index_s = path.substr(10, path.find("/", 10) - 10);
+        changed["UI_items"].push_back(after["UI_items"][std::stoul(index_s)]);
     }
 
     m_before = after;
