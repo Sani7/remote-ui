@@ -4,7 +4,7 @@
 
 #include "simulator_base.hpp"
 
-#define INSERT_SIMULATOR(type) p_simulators.insert(std::make_pair(type().name(), std::make_unique<type>()));
+#define INSERT_SIMULATOR(type) m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>()));
 
 class Simulators {
     public:
@@ -12,8 +12,9 @@ class Simulators {
         void run();
         void stop();
         void switch_simulator(std::string name);
+        std::vector<std::string> list_simulators() const;
         Simulator_base* invoke_active_simulator() const;
     private:
-        std::map<std::string, std::unique_ptr<Simulator_base>> p_simulators;
-        std::string p_current_simulator;
+        std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
+        std::string m_current_simulator;
 };
