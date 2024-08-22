@@ -6,15 +6,16 @@
 #include "simulators.hpp"
 #include "websocket.hpp"
 
-Simulators simulators;
+Simulators g_simulators;
 Websocket* g_web_socket;
 
 void int_handler(int s)
 {
     UNUSED(s);
     std::cout << "\nCaught Ctrl + C\nShutting down." << std::endl;
-    g_web_socket->stop();
-    simulators.stop();
+    if (g_web_socket != nullptr)
+        g_web_socket->stop();
+    g_simulators.stop();
     // delay
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     exit(1);
