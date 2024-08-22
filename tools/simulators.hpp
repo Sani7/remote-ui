@@ -13,8 +13,10 @@ class Simulators {
         void stop();
         void switch_simulator(std::string name);
         std::vector<std::string> list_simulators() const;
-        Simulator_base* invoke_active_simulator() const;
+        Simulator_base* invoke_active_simulator();
+        json changed_UI_items();
     private:
         std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
         std::string m_current_simulator;
+        json m_before;
 };

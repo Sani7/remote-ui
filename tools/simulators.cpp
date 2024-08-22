@@ -3,7 +3,7 @@
 
 Simulators::Simulators()
 {
-    
+    INSERT_SIMULATOR(Test_Sim);
 }
 
 void Simulators::run()
@@ -17,6 +17,7 @@ void Simulators::run()
         return;
     }
 
+    m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
     this->m_simulators.at(m_current_simulator)->run();
 }
 
@@ -59,7 +60,7 @@ std::vector<std::string> Simulators::list_simulators() const
     return names;
 }
 
-Simulator_base* Simulators::invoke_active_simulator() const
+Simulator_base* Simulators::invoke_active_simulator()
 {
     if (this->m_simulators.empty())
     {
@@ -70,5 +71,43 @@ Simulator_base* Simulators::invoke_active_simulator() const
         return nullptr;
     }
     
+    m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
+
     return this->m_simulators.at(m_current_simulator).get();
+}
+
+json Simulators::changed_UI_items()
+{
+    if (this->m_simulators.empty())
+    {
+        return json();
+    }
+    if (this->m_current_simulator.empty())
+    {
+        return json();
+    }
+
+    json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
+    json changed;
+    changed["event"] = "UI_changed";
+    if (m_before["UI_items"].empty())
+    {
+        changed = after;
+        return changed;
+    }
+
+    for (const json& item : after["UI_items"])
+    {
+        for (const json& before_item : m_before["UI_items"])
+        {
+            if (before_item["id"] == item["id"])
+            {
+                if (before_item != item)
+                {
+                    changed["UI_items"].push_back(item);
+                }
+            }
+        }
+    }
+    return changed;
 }
