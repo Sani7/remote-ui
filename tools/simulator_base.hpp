@@ -70,6 +70,13 @@ class Simulator_base {
          *       Override this function in the derived class
          */
         virtual void timer() {};
+
+        /**
+         * @brief Run at startup
+         *       This function is called at startup
+         *       Override this function in the derived class
+         */
+        virtual void run_at_startup() {};
     protected:
         std::string p_name;
         std::vector<UI_item*> p_UI_items;

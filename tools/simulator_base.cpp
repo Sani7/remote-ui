@@ -50,6 +50,7 @@ UI_item* Simulator_base::get_UI_item(std::string id) const {
 void Simulator_base::run() {
     // Start the timer
     p_timer.setInterval(m_interval);
+    run_at_startup();
 }
 
 void Simulator_base::stop() {
