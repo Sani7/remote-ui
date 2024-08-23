@@ -31,28 +31,28 @@ json command_parser(json command)
     {
         case Command::get_UI_element:
             std::cout << "get_UI_element: " << command["id"] << std::endl;
-            j["response"] = "get_UI_element";
-            j["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(command["id"])->to_json();
+            j["response"]["type"] = "get_UI_element";
+            j["response"]["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(command["id"])->to_json();
             break;
         case Command::get_UI_elements:
             std::cout << "get_UI_elements" << std::endl;
-            j["response"] = "get_UI_elements";
-            j["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
+            j["response"]["type"] = "get_UI_elements";
+            j["response"]["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
         case Command::switch_simulator:
             std::cout << "switch_simulator to " << command["name"] << std::endl;
             g_simulators.switch_simulator(command["name"]);
-            j["response"] = "switch_simulator";
+            j["response"]["type"] = "switch_simulator";
             break;
         case Command::get_active_simulator_name:
             std::cout << "get_active_simulator_name" << std::endl;
-            j["response"] = "get_active_simulator_name";
-            j["name"] = g_simulators.active_simulator_name();
+            j["response"]["type"] = "get_active_simulator_name";
+            j["response"]["name"] = g_simulators.active_simulator_name();
             break;
         case Command::get_simulators:
             std::cout << "get_simulators" << std::endl;
-            j["response"] = "get_simulators";
-            j["simulators"] = g_simulators.list_simulators();
+            j["response"]["type"] = "get_simulators";
+            j["response"]["simulators"] = g_simulators.list_simulators();
             break;
         default:
             break;

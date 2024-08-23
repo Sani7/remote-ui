@@ -94,7 +94,7 @@ json Simulators::changed_UI_items()
 
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
     json changed;
-    changed["event"] = "UI_changed";
+    changed["event"]["type"] = "UI_changed";
     
     json diff = json::diff(m_before, after);
 
@@ -110,7 +110,7 @@ json Simulators::changed_UI_items()
     {
         std::string path = item["path"];
         std::string index_s = path.substr(10, path.find("/", 10) - 10);
-        changed["UI_items"].push_back(after["UI_items"][std::stoul(index_s)]);
+        changed["event"]["UI_items"].push_back(after["UI_items"][std::stoul(index_s)]);
     }
 
     m_before = after;
