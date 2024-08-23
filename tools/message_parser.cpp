@@ -1,11 +1,12 @@
 #include "message_parser.hpp"
 #include <magic_enum.hpp>
+#include <iostream>
 
 extern Simulators g_simulators;
 
 std::string message_parser(std::string message)
 {
-    json j = message;
+    json j = json::parse(message);
     if (j.contains("command"))
     {
         return command_parser(j["command"]).dump();
@@ -23,82 +24,73 @@ std::string message_parser(std::string message)
 
 json command_parser(json command)
 {
-    Command cmd = magic_enum::enum_cast<Command>(command["type"]).value_or(Command::end);
-
+    std::string type = command["type"];
+    Command cmd = magic_enum::enum_cast<Command>(type).value_or(Command::end);
+    json j;
     switch (cmd)
     {
         case Command::get_UI_element:
-        {
-            std::string id = command["id"];
-            json j;
+            std::cout << "get_UI_element: " << command["id"] << std::endl;
             j["response"] = "get_UI_element";
-            j["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(id)->to_json();
-            return j;
-        }
+            j["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(command["id"])->to_json();
+            break;
         case Command::get_UI_elements:
-        {
-            json j;
+            std::cout << "get_UI_elements" << std::endl;
             j["response"] = "get_UI_elements";
             j["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
-            return j;
-        }
+            break;
         case Command::switch_simulator:
-        {
+            std::cout << "switch_simulator to " << command["name"] << std::endl;
             g_simulators.switch_simulator(command["name"]);
-            json j;
             j["response"] = "switch_simulator";
-            return j;
-        }
+            break;
         case Command::get_active_simulator_name:
-        {
-            json j;
+            std::cout << "get_active_simulator_name" << std::endl;
             j["response"] = "get_active_simulator_name";
             j["name"] = g_simulators.active_simulator_name();
-            return j;
-        }
+            break;
         case Command::get_simulators:
-        {
-            json j;
+            std::cout << "get_simulators" << std::endl;
             j["response"] = "get_simulators";
             j["simulators"] = g_simulators.list_simulators();
-            return j;
-        }
+            break;
         default:
-        {
-            return "";
-        }
+            break;
     }
+    return j;
 }
 
 void event_handler(json event)
 {
-    Event e = magic_enum::enum_cast<Event>(event["type"]).value_or(Event::end);
+    std::string type = event["type"];
+    Event e = magic_enum::enum_cast<Event>(type).value_or(Event::end);
+    std::string id;
 
     switch(e)
     {
         case Event::clicked:
         {
-            std::string id = event["id"];
+            id = event["id"];
             g_simulators.invoke_active_simulator()->get_UI_item(id)->click();
             break;
         }
         case Event::value_changed:
         {
-            std::string id = event["id"];
+            id = event["id"];
             int value = event["value"];
             g_simulators.invoke_active_simulator()->get_UI_item(id)->set_value(value);
             break;
         }
         case Event::text_changed:
         {
-            std::string id = event["id"];
+            id = event["id"];
             std::string text = event["text"];
             g_simulators.invoke_active_simulator()->get_UI_item(id)->set_text(text);
             break;
         }
         case Event::selected:
         {
-            std::string id = event["id"];
+            id = event["id"];
             std::string selected = event["selected"];
             g_simulators.invoke_active_simulator()->get_UI_item(id)->set_selected(selected);
             break;
