@@ -77,7 +77,7 @@ void event_handler(json event)
         case Event::value_changed:
         {
             id = event["id"];
-            int value = event["value"];
+            double value = event["value"];
             g_simulators.invoke_active_simulator()->get_UI_item(id)->set_value(value);
             break;
         }
