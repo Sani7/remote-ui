@@ -6,8 +6,10 @@ Websocket::Websocket(uint16_t port,
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
-    m_server.set_access_channels(websocketpp::log::alevel::all);
-    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
+    m_server.set_access_channels(websocketpp::log::alevel::connect +
+                                websocketpp::log::alevel::disconnect);
+    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload +
+                                websocketpp::log::alevel::frame_header);
 
     // Initialize Asio
     m_server.init_asio();
