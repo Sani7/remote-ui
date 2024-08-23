@@ -16,6 +16,7 @@ target_sources(UI
     ${CMAKE_CURRENT_LIST_DIR}/UI_led.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_button.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_slider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_textbox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_combobox.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_checkbox.cpp
