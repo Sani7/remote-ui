@@ -19,9 +19,10 @@ p_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 5
 void Test_Sim::timer()
 {
     // Timer function
-    // p_button.click();
-    // p_combobox.set_selected(1);
-    // p_checkbox.toggle_selected("Option 2");
-    // p_slider.set_value(75);
 }
 
+void Test_Sim::run_at_startup()
+{
+    // Run at startup
+    std::cout << "Test_Sim started" << std::endl;
+}
