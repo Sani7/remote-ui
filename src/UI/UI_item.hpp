@@ -30,6 +30,12 @@ class UI_item {
     void set_bg_color(Color bg_color);
     Color bg_color() const;
 
+    void set_enabled(bool enabled);
+    bool is_enabled() const;
+
+    void set_visible(bool visible);
+    bool is_visible() const;
+
     virtual void from_json(const json& j);
 
     virtual json to_json() const;
@@ -45,4 +51,6 @@ class UI_item {
     uint8_t m_text_size;
     Color m_fg_color;
     Color m_bg_color;
+    bool enabled;
+    bool visible;
 };

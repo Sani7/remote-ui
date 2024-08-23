@@ -1,12 +1,12 @@
 #include "UI_item.hpp"
 
 UI_item::UI_item(std::string id, std::string type,  std::string text, uint8_t text_size, Color fg_color, Color bg_color)
-    : m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color)
+    : m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color), enabled(true), visible(true)
 {
 }
 
 UI_item::UI_item(std::string type)
-    : m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White)
+    : m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White), enabled(true), visible(true)
 {
 }
 
@@ -86,6 +86,25 @@ Color UI_item::bg_color() const
     return m_bg_color;
 }
 
+void UI_item::set_enabled(bool enabled)
+{
+    this->enabled = enabled;
+}
+
+bool UI_item::is_enabled() const
+{
+    return enabled;
+}
+
+void UI_item::set_visible(bool visible)
+{
+    this->visible = visible;
+}
+
+bool UI_item::is_visible() const
+{
+    return visible;
+}
 
 void UI_item::from_json(const json& j)
 {
@@ -100,6 +119,8 @@ void UI_item::from_json(const json& j)
     color.clear();
     j.at("bg_color").get_to(color);
     m_bg_color = Color(color);
+    j.at("enabled").get_to(enabled);
+    j.at("visible").get_to(visible);
 }
 
 json UI_item::to_json() const
@@ -111,5 +132,7 @@ json UI_item::to_json() const
     j["text_size"] = m_text_size;
     j["fg_color"] = m_fg_color.to_hex();
     j["bg_color"] = m_bg_color.to_hex();
+    j["enabled"] = enabled;
+    j["visible"] = visible;
     return j;
 }
