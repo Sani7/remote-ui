@@ -105,6 +105,10 @@ void Websocket::process_messages()
             {
                 std::lock_guard<std::mutex> guard(m_connection_lock);
                 std::string response = m_on_message(a.msg->get_payload());
+                if (response.empty() || response == "{}")
+                {
+                    continue;
+                }
                 m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
             }
             break;
