@@ -85,11 +85,11 @@ json Simulators::changed_UI_items()
 {
     if (this->m_simulators.empty())
     {
-        return json();
+        return "{}"_json;
     }
     if (this->m_current_simulator.empty())
     {
-        return json();
+        return "{}"_json;
     }
 
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();

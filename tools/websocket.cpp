@@ -127,7 +127,10 @@ void Websocket::process_broadcast()
             }
         }
         std::string update = m_on_update();
-        if (!update.empty() && update != "{}")
+        if (update.empty() || update == "{}")
+        {
+            continue;
+        }
         {
             std::lock_guard<std::mutex> guard(m_connection_lock);
             for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
