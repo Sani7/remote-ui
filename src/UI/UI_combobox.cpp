@@ -6,32 +6,32 @@ UI_combobox::UI_combobox()
 }
 
 UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected, std::function<void(std::string, std::string)> on_change)
-    : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options), p_selected(selected), p_on_change(on_change)
+    : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options), m_selected(selected), m_on_change(on_change)
 {
 }
 
 UI_combobox::UI_combobox(const json& j)
-: UI_x_boxes(UI_COMBOBOX_TYPE), p_on_change(nullptr)
+: UI_x_boxes(UI_COMBOBOX_TYPE), m_on_change(nullptr)
 {
     from_json(j);
 }
 
 void UI_combobox::set_selected(size_t selected)
 {
-    if (selected == p_selected)
+    if (selected == m_selected)
         return;
-    p_selected = selected;
-    if (p_on_change != nullptr)
+    m_selected = selected;
+    if (m_on_change != nullptr)
     {
-        p_on_change(p_id, selected_text());
+        m_on_change(m_id, selected_text());
     }
 }
 
 void UI_combobox::set_selected(std::string selected)
 {
-    for (size_t i = 0; i < p_options.size(); i++)
+    for (size_t i = 0; i < m_options.size(); i++)
     {
-        if (p_options[i] == selected)
+        if (m_options[i] == selected)
         {
             set_selected(i);
             return;
@@ -41,12 +41,12 @@ void UI_combobox::set_selected(std::string selected)
 
 size_t UI_combobox::selected() const
 {
-    return p_selected;
+    return m_selected;
 }
 
 std::string UI_combobox::selected_text() const
 {
-    return p_options[p_selected];
+    return m_options[m_selected];
 }
 
 void UI_combobox::from_json(const json& j)
@@ -57,6 +57,6 @@ void UI_combobox::from_json(const json& j)
 json UI_combobox::to_json() const
 {
     json j = UI_x_boxes::to_json();
-    j["selected"] = p_options[p_selected];
+    j["selected"] = m_options[m_selected];
     return j;
 }

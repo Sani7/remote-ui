@@ -20,7 +20,7 @@ class UI_checkbox : public UI_x_boxes
         void from_json(const json& j) override;
         json to_json() const override;
     private:
-        std::vector<bool> p_selected;
+        std::vector<bool> m_selected;
 
-        std::function<void(std::string, std::vector<std::string>)> p_on_change;
+        std::function<void(std::string, std::vector<std::string>)> m_on_change;
 };

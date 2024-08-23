@@ -39,10 +39,10 @@ class UI_item {
     virtual void set_value(double value) {UNUSED(value);};
 
   protected:
-    std::string p_id;
-    std::string p_type;
-    std::string p_text;
-    uint8_t p_text_size;
-    Color p_fg_color;
-    Color p_bg_color;
+    std::string m_id;
+    std::string m_type;
+    std::string m_text;
+    uint8_t m_text_size;
+    Color m_fg_color;
+    Color m_bg_color;
 };

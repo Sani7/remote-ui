@@ -11,9 +11,5 @@ class UI_x_boxes : public UI_item
         void from_json(const json& j) override;
         json to_json() const override;
     protected:
-        std::vector<std::string> p_options;
-        // std::vector<size_t> p_selected_multi;
-        // size_t p_selected;
-
-        // void (*p_on_change) (std::string id, int selected);
+        std::vector<std::string> m_options;
 };

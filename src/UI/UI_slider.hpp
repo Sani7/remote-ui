@@ -15,9 +15,9 @@ class UI_slider : public UI_item
         void from_json(const json& j) override;
         json to_json() const override;
     private:
-        double p_min;
-        double p_max;
-        double p_value;
+        double m_min;
+        double m_max;
+        double m_value;
 
-        std::function<void(std::string, double)> p_on_change;
+        std::function<void(std::string, double)> m_on_change;
 };

@@ -78,9 +78,9 @@ class Simulator_base {
          */
         virtual void run_at_startup() {};
     protected:
-        std::string p_name;
-        std::vector<UI_item*> p_UI_items;
-        std::map<std::string, UI_item*> p_UI_items_map;
-        Timer p_timer;
+        std::string m_name;
+        std::vector<UI_item*> m_UI_items;
+        std::map<std::string, UI_item*> m_UI_items_map;
+        Timer m_timer;
         std::chrono::milliseconds m_interval;
 };

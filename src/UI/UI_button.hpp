@@ -15,5 +15,5 @@ class UI_button : public UI_item
 
         void click() const override;
     private:
-        std::function<void(std::string)> p_on_click = nullptr;
+        std::function<void(std::string)> m_on_click = nullptr;
 };
