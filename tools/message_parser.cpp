@@ -30,28 +30,28 @@ json command_parser(json command)
     switch (cmd)
     {
         case Command::get_UI_element:
-            std::cout << "get_UI_element: " << command["id"] << std::endl;
-            j["response"]["type"] = "get_UI_element";
+            std::cout << type << ": " << command["id"] << std::endl;
+            j["response"]["type"] = type;
             j["response"]["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(command["id"])->to_json();
             break;
         case Command::get_UI_elements:
-            std::cout << "get_UI_elements" << std::endl;
-            j["response"]["type"] = "get_UI_elements";
+            std::cout << type << std::endl;
+            j["response"]["type"] = type;
             j["response"]["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
         case Command::switch_simulator:
-            std::cout << "switch_simulator to " << command["name"] << std::endl;
+            std::cout << type << " to " << command["name"] << std::endl;
             g_simulators.switch_simulator(command["name"]);
-            j["response"]["type"] = "switch_simulator";
+            j["response"]["type"] = type;
             break;
         case Command::get_active_simulator_name:
-            std::cout << "get_active_simulator_name" << std::endl;
-            j["response"]["type"] = "get_active_simulator_name";
+            std::cout << type << std::endl;
+            j["response"]["type"] = type;
             j["response"]["name"] = g_simulators.active_simulator_name();
             break;
         case Command::get_simulators:
-            std::cout << "get_simulators" << std::endl;
-            j["response"]["type"] = "get_simulators";
+            std::cout << type << std::endl;
+            j["response"]["type"] = type;
             j["response"]["simulators"] = g_simulators.list_simulators();
             break;
         default:
