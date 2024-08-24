@@ -37,6 +37,7 @@ std::ostream g_err(&g_error_buffer);
 void int_handler(int s)
 {
     UNUSED(s);
+    std::cout << std::endl;
     g_out << "Caught Ctrl + C" << std::endl;
     if (g_web_socket != nullptr)
         g_web_socket->stop();
