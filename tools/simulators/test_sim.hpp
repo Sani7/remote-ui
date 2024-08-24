@@ -14,4 +14,5 @@ class Test_Sim : public Simulator_base {
         UI_label m_label;
         UI_checkbox m_checkbox;
         UI_slider m_slider;
+        UI_led m_led;
 };
