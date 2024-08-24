@@ -1,9 +1,11 @@
 #include "simulators.hpp"
 #include "test_sim.hpp"
+#include "can_debugger.hpp"
 
 Simulators::Simulators()
 {
     INSERT_SIMULATOR(Test_Sim);
+    INSERT_SIMULATOR(Can_Debugger);
 }
 
 std::string Simulators::active_simulator_name() const
