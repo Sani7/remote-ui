@@ -74,25 +74,25 @@ void event_handler(json event)
     {
         case Event::clicked:
         {
-            spdlog::info("Event {}: {}", type, std::string(event["id"]));
+            spdlog::debug("Event {}: {}", type, std::string(event["id"]));
             g_simulators->invoke_active_simulator()->get_UI_item(std::string(event["id"]))->click();
             break;
         }
         case Event::value_changed:
         {
-            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), (double)(event["value"]));
+            spdlog::debug("Event {}: {} {}", type, std::string(event["id"]), (double)(event["value"]));
             g_simulators->invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_value((double)event["value"]);
             break;
         }
         case Event::text_changed:
         {
-            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), std::string(event["text"]));
+            spdlog::debug("Event {}: {} {}", type, std::string(event["id"]), std::string(event["text"]));
             g_simulators->invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_text(std::string(event["text"]));
             break;
         }
         case Event::selected:
         {
-            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), std::string(event["selected"]));
+            spdlog::debug("Event {}: {} {}", type, std::string(event["id"]), std::string(event["selected"]));
             g_simulators->invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_selected(std::string(event["selected"]));
             break;
         }
