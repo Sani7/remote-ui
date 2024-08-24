@@ -64,6 +64,11 @@ void event_handler(json event)
 {
     std::string type = event["type"];
     Event e = magic_enum::enum_cast<Event>(type).value_or(Event::end);
+    if (g_simulators->invoke_active_simulator() == nullptr)
+    {
+        spdlog::error("Event got called but there is no active simulator");
+        return;
+    }
 
     switch(e)
     {
