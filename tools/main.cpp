@@ -27,7 +27,7 @@ private:
     std::function <void(std::string)> log_function;
 };
 
-Simulators g_simulators;
+Simulators* g_simulators;
 Websocket* g_web_socket;
 Spdlog_buffer g_info_buffer([](std::string message) { spdlog::info(message); });
 Spdlog_buffer g_error_buffer([](std::string message) { spdlog::error(message); });
@@ -41,7 +41,7 @@ void int_handler(int s)
     g_out << "Caught Ctrl + C" << std::endl;
     if (g_web_socket != nullptr)
         g_web_socket->stop();
-    g_simulators.stop();
+    g_simulators->stop();
     g_out << "Shutting down." << std::endl;
     // delay to allow the server to stop gracefully
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -76,7 +76,10 @@ int main(void)
 
     // The server starts in this thread
     spdlog::info("Starting server");
-    Websocket web_socket(9002, &g_out, &g_err, [](std::string message) { return message_parser(message); }, []() { return g_simulators.changed_UI_items().dump(); });
+    Simulators simulators;
+    g_simulators = &simulators;
+    
+    Websocket web_socket(9002, &g_out, &g_err, [](std::string message) { return message_parser(message); }, []() { return g_simulators->changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
     // Start the message processor and broadcast processor in separate threads
