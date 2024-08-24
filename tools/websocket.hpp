@@ -35,7 +35,7 @@ struct action {
 class Websocket
 {
 public:
-    Websocket(uint16_t port, std::function<std::string(std::string)> on_message, std::function<std::string()> on_update);
+    Websocket(uint16_t port, std::ostream* out, std::function<std::string(std::string)> on_message, std::function<std::string()> on_update);
     void run();
     void stop();
     void process_messages();

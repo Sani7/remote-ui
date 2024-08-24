@@ -2,6 +2,7 @@
 
 #include "UI.hpp"
 #include "timer.hpp"
+#include "spdlog/spdlog.h"
 
 class Simulator_base {
 

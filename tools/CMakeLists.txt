@@ -29,8 +29,8 @@ target_include_directories(server
 )
 
 target_link_libraries(server PRIVATE
-    CAN
     UI
     Timer
     magic_enum::magic_enum
+    spdlog
 )

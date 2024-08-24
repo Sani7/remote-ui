@@ -1,11 +1,14 @@
 #include "websocket.hpp"
+#include "spdlog/spdlog.h"
 
-Websocket::Websocket(uint16_t port,
+Websocket::Websocket(uint16_t port, std::ostream* out,
                      std::function<std::string(std::string)> on_message,
                      std::function<std::string()> on_update)
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
+    m_server.get_alog().set_custom(out == &std::cout ? false : true);
+    m_server.get_alog().set_ostream(out);
     m_server.set_access_channels(websocketpp::log::alevel::connect +
                                 websocketpp::log::alevel::disconnect);
     m_server.clear_access_channels(websocketpp::log::alevel::frame_payload +
@@ -31,9 +34,9 @@ void Websocket::run()
         // Start the ASIO io_service run loop
         m_server.run();
     } catch (websocketpp::exception const& e) {
-        std::cout << e.what() << std::endl;
+        spdlog::critical("{}", e.what());
     } catch (...) {
-        std::cout << "other exception" << std::endl;
+        spdlog::critical("other exception");
     }
 }
 
