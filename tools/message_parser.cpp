@@ -30,27 +30,27 @@ json command_parser(json command)
     switch (cmd)
     {
         case Command::get_UI_element:
-            spdlog::info("{}: {}", type, std::string(command["id"]));
+            spdlog::info("Command {}: {}", type, std::string(command["id"]));
             j["response"]["type"] = type;
             j["response"]["UI_item"] = g_simulators.invoke_active_simulator()->get_UI_item(command["id"])->to_json();
             break;
         case Command::get_UI_elements:
-            spdlog::info("{}", type);
+            spdlog::info("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["UI_items"] = g_simulators.invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
         case Command::switch_simulator:
-            spdlog::info("{} to {}", type, std::string(command["name"]));
+            spdlog::info("Command {} to {}", type, std::string(command["name"]));
             g_simulators.switch_simulator(command["name"]);
             j["response"]["type"] = type;
             break;
         case Command::get_active_simulator_name:
-            spdlog::info("{}", type);
+            spdlog::info("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["name"] = g_simulators.active_simulator_name();
             break;
         case Command::get_simulators:
-            spdlog::info("{}", type);
+            spdlog::info("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["simulators"] = g_simulators.list_simulators();
             break;
@@ -64,35 +64,31 @@ void event_handler(json event)
 {
     std::string type = event["type"];
     Event e = magic_enum::enum_cast<Event>(type).value_or(Event::end);
-    std::string id;
 
     switch(e)
     {
         case Event::clicked:
         {
-            id = event["id"];
-            g_simulators.invoke_active_simulator()->get_UI_item(id)->click();
+            spdlog::info("Event {}: {}", type, std::string(event["id"]));
+            g_simulators.invoke_active_simulator()->get_UI_item(std::string(event["id"]))->click();
             break;
         }
         case Event::value_changed:
         {
-            id = event["id"];
-            double value = event["value"];
-            g_simulators.invoke_active_simulator()->get_UI_item(id)->set_value(value);
+            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), (double)(event["value"]));
+            g_simulators.invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_value((double)event["value"]);
             break;
         }
         case Event::text_changed:
         {
-            id = event["id"];
-            std::string text = event["text"];
-            g_simulators.invoke_active_simulator()->get_UI_item(id)->set_text(text);
+            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), std::string(event["text"]));
+            g_simulators.invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_text(std::string(event["text"]));
             break;
         }
         case Event::selected:
         {
-            id = event["id"];
-            std::string selected = event["selected"];
-            g_simulators.invoke_active_simulator()->get_UI_item(id)->set_selected(selected);
+            spdlog::info("Event {}: {} {}", type, std::string(event["id"]), std::string(event["selected"]));
+            g_simulators.invoke_active_simulator()->get_UI_item(std::string(event["id"]))->set_selected(std::string(event["selected"]));
             break;
         }
         default:
