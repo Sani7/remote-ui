@@ -15,19 +15,24 @@
 class Spdlog_buffer : public std::stringbuf
 {
 public:
+    Spdlog_buffer(std::function <void(std::string)> log_function) : log_function(log_function) {}
     int sync() {
         std::string str = this->str();
         str.pop_back();
-        spdlog::info(str);
+        log_function(str);
         this->str("");
         return 0;
     }
+private:
+    std::function <void(std::string)> log_function;
 };
 
 Simulators g_simulators;
 Websocket* g_web_socket;
-Spdlog_buffer g_buffer;
-std::ostream g_out(&g_buffer);
+Spdlog_buffer g_info_buffer([](std::string message) { spdlog::info(message); });
+Spdlog_buffer g_error_buffer([](std::string message) { spdlog::error(message); });
+std::ostream g_out(&g_info_buffer);
+std::ostream g_err(&g_error_buffer);
 
 void int_handler(int s)
 {
@@ -70,7 +75,7 @@ int main(void)
 
     // The server starts in this thread
     spdlog::info("Starting server");
-    Websocket web_socket(9002, &g_out, [](std::string message) { return message_parser(message); }, []() { return g_simulators.changed_UI_items().dump(); });
+    Websocket web_socket(9002, &g_out, &g_err, [](std::string message) { return message_parser(message); }, []() { return g_simulators.changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
     // Start the message processor and broadcast processor in separate threads

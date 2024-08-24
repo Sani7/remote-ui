@@ -1,14 +1,16 @@
 #include "websocket.hpp"
 #include "spdlog/spdlog.h"
 
-Websocket::Websocket(uint16_t port, std::ostream* out,
+Websocket::Websocket(uint16_t port, std::ostream* out, std::ostream* err,
                      std::function<std::string(std::string)> on_message,
                      std::function<std::string()> on_update)
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
     m_server.get_alog().set_custom(out == &std::cout ? false : true);
+    m_server.get_elog().set_custom(err == &std::cerr ? false : true);
     m_server.get_alog().set_ostream(out);
+    m_server.get_elog().set_ostream(err);
     m_server.set_access_channels(websocketpp::log::alevel::connect +
                                 websocketpp::log::alevel::disconnect);
     m_server.clear_access_channels(websocketpp::log::alevel::frame_payload +
@@ -25,18 +27,20 @@ Websocket::Websocket(uint16_t port, std::ostream* out,
 
 void Websocket::run()
 {
-    // listen on specified port
-    m_server.listen(m_port);
-    // Start the server accept loop
-    m_server.start_accept();
     try
     {
+        // listen on specified port
+        m_server.listen(m_port);
+        // Start the server accept loop
+        m_server.start_accept();
         // Start the ASIO io_service run loop
         m_server.run();
     } catch (websocketpp::exception const& e) {
         spdlog::critical("{}", e.what());
+        exit(1);
     } catch (...) {
         spdlog::critical("other exception");
+        exit(1);
     }
 }
 
