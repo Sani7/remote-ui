@@ -7,3 +7,6 @@
 [submodule "external/websocketpp"]
 	path = external/websocketpp
 	url = git@github.com:Sani7/websocketpp.git
+[submodule "external/spdlog"]
+	path = external/spdlog
+	url = git@github.com:gabime/spdlog.git
