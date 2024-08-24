@@ -41,7 +41,8 @@ void int_handler(int s)
     g_out << "Caught Ctrl + C" << std::endl;
     if (g_web_socket != nullptr)
         g_web_socket->stop();
-    g_simulators->stop();
+    if (g_simulators != nullptr)
+        g_simulators->stop();
     g_out << "Shutting down." << std::endl;
     // delay to allow the server to stop gracefully
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
