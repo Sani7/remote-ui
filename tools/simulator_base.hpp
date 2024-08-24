@@ -78,6 +78,9 @@ class Simulator_base {
          *       Override this function in the derived class
          */
         virtual void run_at_startup() {};
+
+        void shutdown();
+        void reboot();
     protected:
         std::string m_name;
         std::vector<UI_item*> m_UI_items;

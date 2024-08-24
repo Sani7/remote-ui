@@ -57,3 +57,13 @@ void Simulator_base::stop() {
     // Stop the simulator
     m_timer.stop();
 }
+
+void Simulator_base::shutdown() {
+    // Shutdown the simulator
+    system("shutdown -h now");
+}
+
+void Simulator_base::reboot() {
+    // Reboot the simulator
+    system("reboot");
+}
