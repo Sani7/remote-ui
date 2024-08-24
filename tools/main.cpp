@@ -59,6 +59,7 @@ void init_logger()
     spdlog::set_default_logger(logger);
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
     spdlog::flush_every(std::chrono::seconds(3));
+    spdlog::set_level(spdlog::level::trace);
 }
 
 int main(void)
