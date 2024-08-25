@@ -234,7 +234,8 @@ void SimulatorBase::process_ui_button(json& uiItem)
         return;
     }
 
-    QColor bg_color = QColor(QString::fromStdString(uiItem["color"]));
+    QColor bg_color = QColor(QString::fromStdString(uiItem["bg_color"]));
+    QColor fg_color = QColor(QString::fromStdString(uiItem["fg_color"]));
     QString text = QString::fromStdString(uiItem["text"]);
     bool enabled = uiItem["enabled"];
 
