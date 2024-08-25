@@ -4,6 +4,7 @@
 #include "sim-scope_mux_tester.h"
 #include "sim-can_debugger.h"
 #include "sim-cvs_i10.h"
+#include "sim-test.h"
 
 MainWindow::MainWindow(QWidget *parent) :
       QMainWindow(parent),
@@ -12,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
       error_dialog(new NetworkError(this)),
       sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
            {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
-           {"CVS_I10", new CVS_I10(m_web_socket, this)}}
+           {"CVS_I10", new CVS_I10(m_web_socket, this)},
+           {"Test_Sim", new Test_Sim(m_web_socket, this)}}
 {
     ui->setupUi(this);
     this->setWindowTitle("Simulator Selector");

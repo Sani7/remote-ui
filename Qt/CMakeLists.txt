@@ -35,6 +35,10 @@ set(PROJECT_SOURCES
         sim-scope_mux_tester.cpp
         sim-scope_mux_tester.ui
 
+        sim-test.h
+        sim-test.cpp
+        sim-test.ui
+
         simulatorbase.h
         simulatorbase.cpp
         helpers.h
