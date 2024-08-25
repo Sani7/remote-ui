@@ -41,6 +41,7 @@ void SimulatorBase::on_cmd_cb(json& j)
     switch (response)
     {
         case Web_socket_wrapper::Command::get_UI_elements:
+        case Web_socket_wrapper::Command::get_UI_element:
             UI_item_parser(j);
             break;
         default:
