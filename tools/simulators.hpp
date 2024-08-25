@@ -18,6 +18,6 @@ class Simulators {
         json changed_UI_items();
     private:
         std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
-        std::string m_current_simulator;
+        std::string m_current_simulator = "";
         json m_before;
 };
