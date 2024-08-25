@@ -8,45 +8,33 @@
 MainWindow::MainWindow(QWidget *parent) :
       QMainWindow(parent),
       ui(new Ui::MainWindow),
-      api(new OpenAPI::OAICANApiApi()),
+      m_web_socket(new Web_socket_wrapper(QUrl("ws://localhost:9002"), this)),
       error_dialog(new NetworkError(this)),
-      sims{{"CANDebugger", new Can_Debugger(api, this)},
-           {"Scope_Mux_Tester", new Scope_Mux_Tester(api, this)},
-           {"CVS_I10", new CVS_I10(api, this)}}
+      sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
+           {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
+           {"CVS_I10", new CVS_I10(m_web_socket, this)}}
 {
     ui->setupUi(this);
     this->setWindowTitle("Simulator Selector");
-    connect(this, &MainWindow::quit, this, &QCoreApplication::quit, Qt::QueuedConnection);
-
-    api->setNewServerForAllOperations(
-        //QUrl("http://localhost:1880"),
-        QUrl("https://cvs-i10.local/api"),
-        "No description provided",
-        QMap<QString, OpenAPI::OAIServerVariable>());
-    api->apiCanapiSimsGet();
 
     //Default sim
-    defaultSim("CVS_I10");
+    //defaultSim("CVS_I10");
 
     connect(ui->pushButton, &QPushButton::clicked, this, [=]{open_sim(ui->comboBox->currentText());});
+    connect(this, &MainWindow::quit, this, &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete api;
+    delete m_web_socket;
     delete error_dialog;
 }
 
 void MainWindow::setup_cb(void)
 {
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiSimsGetSignal, this, [=](QList<QString> summary){Parse_Sims(summary);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiSimsGetSignalError, this, [=](QList<QString> summary, QNetworkReply::NetworkError error_type, const QString &error_str){Parse_Sims(summary, error_type, error_str);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimPutSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimPutSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){
-        apiCanapiUielements_bool_cb(false, error_type, error_str);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimGetSignal, this, [this](OpenAPI::OAISimulatorInfo summary){apiCanapiCurrentsimGet_cb(summary);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimGetSignalError, this, [this](OpenAPI::OAISimulatorInfo summary, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo(), error_type, error_str);});
+    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_connected, this, [=]{m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators);});
 }
 
 void MainWindow::showEvent( QShowEvent* event )
@@ -58,7 +46,7 @@ void MainWindow::showEvent( QShowEvent* event )
 void MainWindow::hideEvent(QHideEvent* event)
 {
     QWidget::hideEvent(event);
-    disconnect(api, nullptr, nullptr, nullptr);
+    disconnect(m_web_socket, nullptr, nullptr, nullptr);
 }
 
 void MainWindow::defaultSim(QString name)
@@ -67,23 +55,11 @@ void MainWindow::defaultSim(QString name)
     this->default_sim = true;
 }
 
-void MainWindow::Parse_Sims(QList<QString> sims, QNetworkReply::NetworkError error_type, const QString error_str)
+void MainWindow::pase_sim_names(json& sims)
 {
-    if (error_type) {
-        QD << "( " << error_type << "," << error_str << ")";
-        error_dialog->set_error(error_str + "\n" + network_reply_to_fix(error_type));
-        error_dialog->open();
-        return;
-    } if (sims.empty()) {
-        QD << " got called with invalid data and no error!";
-        error_dialog->set_error(QString(__FUNCTION__) + " got called with invalid data and no error!");
-        error_dialog->open();
-        return;
-    }
-
-    for (size_t i = 0; i < sims.length(); i++)
+    for (json& item : sims)
     {
-        ui->comboBox->addItem(sims[i]);
+        ui->comboBox->addItem(QString::fromStdString(item));
     }
 
     QThread::msleep(30);
@@ -108,7 +84,7 @@ void MainWindow::open_sim(QString sim_name)
         return;
     }
 
-    api->apiCanapiCurrentsimGet();
+    m_web_socket->send_command(Web_socket_wrapper::Command::get_active_simulator_name);
 }
 
 void MainWindow::open_sim_window(void)
@@ -117,53 +93,43 @@ void MainWindow::open_sim_window(void)
     selected_sim->show();
 }
 
-void MainWindow::apiCanapiUielements_bool_cb(bool output, QNetworkReply::NetworkError error_type, QString error_str)
+void MainWindow::check_active_sim(QString name)
 {
-    if (error_type) {
-        QD << "( " << Qt::hex << output << "," << error_type << "," << error_str << ")";
-        error_dialog->set_error(error_str + "\n" + network_reply_to_fix(error_type));
-        error_dialog->open();
-        return;
-    } if (!output) {
-        QD << " got called with invalid data and no error!";
-        error_dialog->set_error(QString(__FUNCTION__) + " got called with invalid data and no error!");
-        error_dialog->open();
-        return;
-    }
+        if (name == "")
+        {
+            QD << "Name not set";
+            m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, selected_sim_name);
+            return;
+        }
 
-    open_sim_window();
+         QD << "Current sim:" << name;
+
+        if (name == selected_sim_name)
+        {
+            QD << "Name set and right";
+            open_sim_window();
+            return;
+        }
+
+        QD << "Name set and wrong";
+        m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, selected_sim_name);
 }
 
-void MainWindow::apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo summary, QNetworkReply::NetworkError error_type, QString error_str)
+void MainWindow::on_cmd_cb(json& j)
 {
-    if (error_type) {
-        QD << "( " << summary.asJson() << "," << error_type << "," << error_str << ")";
-        error_dialog->set_error(error_str + "\n" + network_reply_to_fix(error_type));
-        error_dialog->open();
-        return;
-    } if (!summary.isValid()) {
-        QD << " got called with invalid data and no error!";
-        error_dialog->set_error(QString(__FUNCTION__) + " got called with invalid data and no error!");
-        error_dialog->open();
-        return;
-    }
-
-    if (!summary.is_name_Set())
+    auto response = magic_enum::enum_cast<Web_socket_wrapper::Command>(std::string(j.at("type"))).value_or(Web_socket_wrapper::Command::end);
+    switch (response)
     {
-        QD << "Name not set";
-        api->apiCanapiCurrentsimPut(selected_sim_name);
-        return;
+        case Web_socket_wrapper::Command::get_simulators:
+            pase_sim_names(j.at("simulators"));
+            break;
+        case Web_socket_wrapper::Command::get_active_simulator_name:
+            check_active_sim(QString::fromStdString(j.at("name")));
+            break;
+        case Web_socket_wrapper::Command::switch_simulator:
+            open_sim_window();
+            break;
+        default:
+            break;
     }
-
-    QD << "Current sim:" << summary.getName();
-
-    if (summary.getName() == selected_sim_name)
-    {
-        QD << "Name set and right";
-        open_sim_window();
-        return;
-    }
-
-    QD << "Name set and wrong";
-    api->apiCanapiCurrentsimPut(selected_sim_name);
 }

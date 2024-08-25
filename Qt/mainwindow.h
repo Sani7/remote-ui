@@ -3,7 +3,7 @@
 
 #include <map>
 #include <QMainWindow>
-#include "OAICANApiApi.h"
+#include "web_socket_wrapper.h"
 #include "networkerror.h"
 #include "simulatorbase.h"
 #include "helpers.h"
@@ -21,24 +21,25 @@ class MainWindow : public QMainWindow
     ~MainWindow();
 
     void defaultSim(QString name);
-    void Parse_Sims(QList<QString> sims, QNetworkReply::NetworkError error_type = QNetworkReply::NetworkError::NoError, QString error_str = QString());
-    void apiCanapiUielements_bool_cb(bool ret, QNetworkReply::NetworkError error_type = QNetworkReply::NetworkError::NoError, QString error_str = QString());
-    void apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo summary, QNetworkReply::NetworkError error_type = QNetworkReply::NetworkError::NoError, QString error_str = QString());
+    void pase_sim_names(json& sims);
     void open_sim_window(void);
+    void check_active_sim(QString name);
     void open_sim(QString sim_name);
     void setup_cb(void);
 
   signals:
     void quit(void);
   private:
-    void showEvent( QShowEvent* event );
+    void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent* event);
+
+    void on_cmd_cb(json& j);
 
     bool default_sim = false;
     QString selected_sim_name;
     QMainWindow* selected_sim;
     Ui::MainWindow *ui;
-    OpenAPI::OAICANApiApi *api;
+    Web_socket_wrapper *m_web_socket;
     NetworkError* error_dialog;
 
     std::map<QString, SimulatorBase*> sims;
