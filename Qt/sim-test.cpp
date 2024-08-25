@@ -26,7 +26,6 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
     setup_buttons();
     setup_comboboxes();
     setup_sliders();
-    setup_sliders();
 }
 
 Test_Sim::~Test_Sim() {
