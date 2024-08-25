@@ -10,6 +10,8 @@ include(FetchContent)
 
 FetchContent_Declare(magic_enum URL https://github.com/Neargye/magic_enum/releases/download/v0.9.6/magic_enum-v0.9.6.tar.gz DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 FetchContent_MakeAvailable(magic_enum)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+FetchContent_MakeAvailable(json)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -45,6 +47,9 @@ set(PROJECT_SOURCES
         networkerror.cpp
         networkerror.ui
 
+        web_socket_wrapper.h
+        web_socket_wrapper.cpp
+
         mainwindow.h
         mainwindow.cpp
         mainwindow.ui
@@ -79,7 +84,7 @@ target_include_directories(Simulator-CVS_I10
     ${PROJECT_BINARY_DIR}/
 )
 
-target_link_libraries(Simulator-CVS_I10 PRIVATE qwt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets)
+target_link_libraries(Simulator-CVS_I10 PRIVATE qwt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
