@@ -8,6 +8,7 @@ class Test_Sim : public Simulator_base {
         void run_at_startup() override;
     private:
         void button_clicked(std::string id);
+        void slider_changed(std::string id, double value);
     private:
         UI_button m_button;
         UI_combobox m_combobox;
