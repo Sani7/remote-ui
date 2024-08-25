@@ -53,7 +53,7 @@ void SimulatorBase::on_event_cb(json& j)
     auto response = magic_enum::enum_cast<Web_socket_wrapper::Event>(std::string(j.at("type"))).value_or(Web_socket_wrapper::Event::end);
     switch (response)
     {
-        case Web_socket_wrapper::Event::ui_changed:
+        case Web_socket_wrapper::Event::UI_changed:
             UI_item_parser(j);
             break;
         default:

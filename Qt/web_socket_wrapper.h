@@ -26,7 +26,7 @@ class Web_socket_wrapper : public QObject
         value_changed,
         text_changed,
         selected,
-        ui_changed,
+        UI_changed,
         end,
         begin = 0
     };
