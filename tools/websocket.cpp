@@ -7,8 +7,8 @@ Websocket::Websocket(uint16_t port, std::ostream* out, std::ostream* err,
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
-    m_server.get_alog().set_custom(out == &std::cout ? false : true);
-    m_server.get_elog().set_custom(err == &std::cerr ? false : true);
+    m_server.get_alog().set_custom(out != &std::cout);
+    m_server.get_elog().set_custom(err != &std::cerr);
     m_server.get_alog().set_ostream(out);
     m_server.get_elog().set_ostream(err);
     m_server.set_access_channels(websocketpp::log::alevel::connect +
