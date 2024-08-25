@@ -242,9 +242,9 @@ void SimulatorBase::process_ui_button(json& uiItem)
         return;
     }
 
-    if (bg_color != button_bg_color(button))
+    if (bg_color != button_bg_color(button) || fg_color != button_color(button))
     {
-        set_button_color(button, QColor(), bg_color);
+        set_button_color(button, fg_color, bg_color);
     }
 }
 
