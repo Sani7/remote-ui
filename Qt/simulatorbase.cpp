@@ -1,24 +1,16 @@
 #include "simulatorbase.h"
 
-SimulatorBase::SimulatorBase(OpenAPI::OAICANApiApi* api, QWidget* parent) :
+SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       QMainWindow{parent},
-      error_dialog(new NetworkError(this))
+      m_error_dialog(new NetworkError(this))
 {
-    this->api = api;
-    timer_update = new QTimer(this);
-    timer_update->connect(timer_update, &QTimer::timeout, this, [=]{sim_update();});
-    refresh_rate = 100;
-}
-
-void SimulatorBase::sim_update(void)
-{
-    api->apiCanapiCurrentsimGet();
+    this->m_web_socket = web_socket;
 }
 
 void SimulatorBase::showEvent( QShowEvent* event )
 {
     QWidget::showEvent( event );
-    QD << "Starting refresh timer";
+    QD << "Connecting callbacks";
     setup_cb();
     this->timer_update->start(refresh_rate);
     closed = false;
@@ -39,95 +31,71 @@ void SimulatorBase::closeEvent(QCloseEvent* event)
 
 void SimulatorBase::setup_cb(void)
 {
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsPushbuttonPostSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsPushbuttonPostSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiUielements_bool_cb(false, false, error_type, error_str);});
-
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsPushbuttonarrayPostSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsPushbuttonarrayPostSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiUielements_bool_cb(false, false, error_type, error_str);});
-
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsTextboxPostSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsTextboxPostSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiUielements_bool_cb(false, false, error_type, error_str);});
-
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsSliderPostSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsSliderPostSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiUielements_bool_cb(false, false, error_type, error_str);});
-
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsTogglearrayPostSignal, this, [this](bool output){apiCanapiUielements_bool_cb(output);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiUielementsTogglearrayPostSignalError, this, [this](bool output, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiUielements_bool_cb(false, false, error_type, error_str);});
-
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimGetSignal, this, [this](OpenAPI::OAISimulatorInfo summary){apiCanapiCurrentsimGet_cb(summary);});
-    connect(api, &OpenAPI::OAICANApiApi::apiCanapiCurrentsimGetSignalError, this, [this](OpenAPI::OAISimulatorInfo summary, QNetworkReply::NetworkError error_type, QString error_str){apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo(), error_type, error_str);});
+    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=](json& j){on_event_cb(j);});
 }
 
-void SimulatorBase::apiCanapiUielements_bool_cb(bool output, bool currentsim, QNetworkReply::NetworkError error_type, QString error_str)
+void SimulatorBase::on_cmd_cb(json& j)
 {
-    if (error_type) {
-        QD << "( " << Qt::hex << output << "," << error_type << "," << error_str << ")";
-        error_dialog->set_error(error_str + "\n" + network_reply_to_fix(error_type));
-        error_dialog->open();
-        return;
-    } if (!output) {
-        QD << " got called with invalid data and no error!";
-        error_dialog->set_error(QString(__FUNCTION__) + " got called with invalid data and no error!");
-        error_dialog->open();
-        return;
-    }
-}
-
-void SimulatorBase::apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo summary, QNetworkReply::NetworkError error_type, QString error_str)
-{
-    if (error_type) {
-        QD << "( " << summary.asJson() << "," << error_type << "," << error_str << ")";
-        error_dialog->set_error(error_str + "\n" + network_reply_to_fix(error_type));
-        error_dialog->open();
-        return;
-    } if (!summary.isValid()) {
-        QD << " got called with invalid data and no error!";
-        error_dialog->set_error(QString(__FUNCTION__) + " got called with invalid data and no error!");
-        error_dialog->open();
-        return;
-    }
-    OAISimulatorInfo_parser(summary);
-}
-
-void SimulatorBase::OAISimulatorInfo_parser(OpenAPI::OAISimulatorInfo input)
-{
-    const OpenAPI::OAIClientUIItem* uiItem;
-
-    for (size_t i = 0; i < input.getUiItems().count(); i++)
+    auto response = magic_enum::enum_cast<Web_socket_wrapper::Command>(std::string(j.at("type"))).value_or(Web_socket_wrapper::Command::end);
+    switch (response)
     {
-        uiItem = &(input.getUiItems().at(i));
+        case Web_socket_wrapper::Command::get_UI_elements:
+            UI_item_parser(j);
+            break;
+        default:
+            break;
+    }
+}
 
-        if (uiItem->getType() == "UIButtonArray")
+void SimulatorBase::on_event_cb(json& j)
+{
+    auto response = magic_enum::enum_cast<Web_socket_wrapper::Event>(std::string(j.at("type"))).value_or(Web_socket_wrapper::Event::end);
+    switch (response)
+    {
+        case Web_socket_wrapper::Event::ui_changed:
+            UI_item_parser(j);
+            break;
+        default:
+            break;
+    }
+}
+
+void SimulatorBase::UI_item_parser(json& input)
+{
+    for (auto& uiItem : input["UI_items"])
+    {
+        if (uiItem["type"] == "UI_button")
         {
-            process_ui_button_array(uiItem);
+            process_ui_button(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UILedArray")
+        if (uiItem["type"] == "UI_led")
         {
-            process_ui_led_array(uiItem);
+            process_ui_led(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UISlider")
+        if (uiItem["type"] == "UI_slider")
         {
             process_ui_slider(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UITextbox")
+        if (uiItem["type"] == "UI_textbox")
         {
             process_ui_textbox(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UILabel")
+        if (uiItem["type"] == "UI_label")
         {
             process_ui_label(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UICombobox")
+        if (uiItem["type"] == "UI_combobox")
         {
             process_ui_combobox(uiItem);
             continue;
         }
-        if (uiItem->getType() == "UIRadioButton")
+        if (uiItem["type"] == "UIRadioButton")
         {
             process_ui_radiobutton(uiItem);
             continue;
@@ -135,36 +103,16 @@ void SimulatorBase::OAISimulatorInfo_parser(OpenAPI::OAISimulatorInfo input)
     }
 }
 
-void SimulatorBase::process_ui_button_array(const OpenAPI::OAIClientUIItem* uiItem)
+void SimulatorBase::process_ui_label(json& uiItem)
 {
-    QJsonObject state = uiItem->getState().asJsonObject();
-    QJsonArray state_array = state["buttonArray"].toArray();
-    for (size_t i = 0; i < state_array.count(); i++)
-    {
-        process_ui_button_array_element(state_array[i].toObject());
-    }
-}
-
-void SimulatorBase::process_ui_led_array(const OpenAPI::OAIClientUIItem* uiItem)
-{
-    QJsonObject state = uiItem->getState().asJsonObject();
-    QJsonArray state_array = state["ledArray"].toArray();
-    for (size_t i = 0; i < state_array.count(); i++)
-    {
-        process_ui_led_array_element(state_array[i].toObject());
-    }
-}
-
-void SimulatorBase::process_ui_label(const OpenAPI::OAIClientUIItem* uiItem)
-{
-    QLabel* label = id_to_label(uiItem->getName());
+    QLabel* label = id_to_label(QString::fromStdString(uiItem["id"]));
     if (label == nullptr)
     {
-        QD << "id_to_label returned null on " << uiItem->getName();
+        QD << "id_to_label returned null on " << QString::fromStdString(uiItem["id"]);
         return;
     }
 
-    QString value = uiItem->getState().asJsonObject()["textString"].toString();
+    QString value = QString::fromStdString(uiItem["text"]);
 
     if (label->text() != value)
     {
@@ -172,27 +120,27 @@ void SimulatorBase::process_ui_label(const OpenAPI::OAIClientUIItem* uiItem)
     }
 }
 
-void SimulatorBase::process_ui_slider(const OpenAPI::OAIClientUIItem* uiItem)
+void SimulatorBase::process_ui_slider(json& uiItem)
 {
-    if (uiItem->getName().startsWith('t'))
+    if (QString::fromStdString(uiItem["id"]).startsWith('t'))
     {
-        QwtSlider* slider = id_to_slider(uiItem->getName());
-        QLabel* label = id_to_slider_label(uiItem->getName());
+        QwtSlider* slider = id_to_slider(QString::fromStdString(uiItem["id"]));
+        QLabel* label = id_to_slider_label(QString::fromStdString(uiItem["id"]));
         if (slider == nullptr)
         {
-            QD << "id_to_slider returned null on " << uiItem->getName();
+            QD << "id_to_slider returned null on " << QString::fromStdString(uiItem["id"]);
             return;
         }
 
-        double value = uiItem->getState().asJsonObject()["currentValue"].toDouble();
-        bool enable = uiItem->getState().asJsonObject()["enable"].toBool();
-        bool visible = uiItem->getState().asJsonObject()["visible"].toBool();
+        double value = uiItem["value"];
+        bool enable = uiItem["enabled"];
+        bool visible = uiItem["visible"];
 
         if (slider->value() != value)
         {
             if (label != nullptr)
             {
-                label->setText(format_slider_value(uiItem->getName(), value));
+                label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
             }
             slider->setValue(value);
         }
@@ -210,24 +158,24 @@ void SimulatorBase::process_ui_slider(const OpenAPI::OAIClientUIItem* uiItem)
         return;
     }
 
-    if (uiItem->getName().startsWith('d'))
+    if (QString::fromStdString(uiItem["id"]).startsWith('d'))
     {
-        QwtDial* dial = id_to_dial(uiItem->getName());
-        QLabel* label = id_to_dial_label(uiItem->getName());
+        QwtDial* dial = id_to_dial(QString::fromStdString(uiItem["id"]));
+        QLabel* label = id_to_dial_label(QString::fromStdString(uiItem["id"]));
         if (dial == nullptr)
         {
-            QD << "id_to_dial returned null on " << uiItem->getName();
+            QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
             return;
         }
 
-        double value = uiItem->getState().asJsonObject()["currentValue"].toDouble();
-        bool visible = uiItem->getState().asJsonObject()["visible"].toBool();
+        double value = uiItem["value"];
+        bool visible = uiItem["visible"];
 
         if (dial->value() != value)
         {
             if (label != nullptr)
             {
-                label->setText(format_dial_value(uiItem->getName(), value));
+                label->setText(format_dial_value(QString::fromStdString(uiItem["id"]), value));
             }
             dial->setValue(value);
         }
@@ -240,31 +188,27 @@ void SimulatorBase::process_ui_slider(const OpenAPI::OAIClientUIItem* uiItem)
     }
 }
 
-void SimulatorBase::process_ui_textbox(const OpenAPI::OAIClientUIItem* uiItem)
+void SimulatorBase::process_ui_textbox(json& uiItem)
 {
     QD << "Not implemented";
     emit quit();
 }
 
-void SimulatorBase::process_ui_combobox(const OpenAPI::OAIClientUIItem* uiItem)
+void SimulatorBase::process_ui_combobox(json& uiItem)
 {
-    QComboBox* combobox = id_to_combobox(uiItem->getName());
+    QComboBox* combobox = id_to_combobox(QString::fromStdString(uiItem["id"]));
     if (combobox == nullptr)
     {
-        QD << "id_to_combobox returned null on " << uiItem->getName();
+        QD << "id_to_combobox returned null on " << QString::fromStdString(uiItem["id"]);
         return;
     }
 
-    QJsonObject state = uiItem->getState().asJsonObject();
-    QString selected = state["selected"].toString();
-    QJsonArray toggleArray = state["toggleArray"].toArray();
+    QString selected = QString::fromStdString(uiItem["selected"]);
 
-
-    for (size_t i = 0; i < toggleArray.count(); i++)
+    for (json& item : uiItem["options"])
     {
-        QString item = toggleArray[i].toObject()["id"].toString();
-        if (combobox->findText(item) == -1)
-            combobox->addItem(item);
+        if (combobox->findText(QString::fromStdString(item)) == -1)
+            combobox->addItem(QString::fromStdString(item));
     }
 
     if (combobox->currentText() != selected)
@@ -273,26 +217,26 @@ void SimulatorBase::process_ui_combobox(const OpenAPI::OAIClientUIItem* uiItem)
     }
 }
 
-void SimulatorBase::process_ui_radiobutton(const OpenAPI::OAIClientUIItem* uiItem)
+void SimulatorBase::process_ui_radiobutton(json& uiItem)
 {
     QD << "Not implemented";
     emit quit();
 }
 
-void SimulatorBase::process_ui_button_array_element(QJsonObject jsonObject)
+void SimulatorBase::process_ui_button(json& uiItem)
 {
     //TODO: fix bgcolor and color
-    QPushButton* button = id_to_button(jsonObject["id"].toString());
+    QPushButton* button = id_to_button(QString::fromStdString(uiItem["id"]));
 
     if (button == nullptr)
     {
-        QD << "id_to_button returned null on " << jsonObject["id"].toString();
+        QD << "id_to_button returned null on " << QString::fromStdString(uiItem["id"]);
         return;
     }
 
-    QColor bg_color = QColor(jsonObject["color"].toString());
-    QString text = jsonObject["title"].toString();
-    bool enabled = jsonObject["enable"].toBool();
+    QColor bg_color = QColor(QString::fromStdString(uiItem["color"]));
+    QString text = QString::fromStdString(uiItem["text"]);
+    bool enabled = uiItem["enabled"];
 
     if (button->text() != text)
     {
@@ -334,18 +278,18 @@ void SimulatorBase::process_ui_button_array_element(QJsonObject jsonObject)
     }
 }
 
-void SimulatorBase::process_ui_led_array_element(QJsonObject jsonObject)
+void SimulatorBase::process_ui_led(json& uiItem)
 {
-    QPushButton* led = id_to_led(jsonObject["id"].toString());
+    QPushButton* led = id_to_led(QString::fromStdString(uiItem["id"]));
     if (led == nullptr)
     {
-        QD << "id_to_led returned null on " << jsonObject["id"].toString();
+        QD << "id_to_led returned null on " << QString::fromStdString(uiItem["id"]);
         return;
     }
 
-    QColor bg_color = QColor(jsonObject["state"].toString());
+    QColor bg_color = QColor(QString::fromStdString(uiItem["led_color"]));
     QColor color = QColor(~bg_color.red(), ~bg_color.green(), ~bg_color.blue());
-    QString text = jsonObject["title"].toString();
+    QString text = QString::fromStdString(uiItem["text"]);
 
     if (false == is_read_only(led))
     {

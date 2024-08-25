@@ -12,7 +12,7 @@ class Can_Debugger : public SimulatorBase {
     Q_OBJECT
 
   public:
-    explicit Can_Debugger(OpenAPI::OAICANApiApi* api, QWidget *parent = nullptr);
+    explicit Can_Debugger(Web_socket_wrapper* web_socket, QWidget *parent = nullptr);
     ~Can_Debugger();
 
   private:

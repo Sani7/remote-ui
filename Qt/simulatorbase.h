@@ -3,18 +3,21 @@
 
 #include <QMainWindow>
 #include <QWidget>
-#include "OAICANApiApi.h"
+#include "web_socket_wrapper.h"
 #include "networkerror.h"
 #include "helpers.h"
 #include <magic_enum.hpp>
 #include "IterableEnum.hpp"
+
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 #define QD qDebug() << "Debug:" << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << ":"
 
 class SimulatorBase : public QMainWindow {
     Q_OBJECT
   public:
-    explicit SimulatorBase(OpenAPI::OAICANApiApi* api, QWidget* parent = nullptr);
+    explicit SimulatorBase(Web_socket_wrapper* api, QWidget* parent = nullptr);
     void setup_cb(void);
     void sim_update(void);
     virtual QLabel* id_to_label(QString name) {return nullptr;}
@@ -32,24 +35,21 @@ class SimulatorBase : public QMainWindow {
   signals:
     void quit();
   protected:
-    void apiCanapiUielements_bool_cb(bool ret, bool currentsim = false, QNetworkReply::NetworkError error_type = QNetworkReply::NetworkError::NoError, QString error_str = QString());
-    void apiCanapiCurrentsimGet_cb(OpenAPI::OAISimulatorInfo output, QNetworkReply::NetworkError error_type = QNetworkReply::NetworkError::NoError, QString error_str = QString());
-
-    void OAISimulatorInfo_parser(OpenAPI::OAISimulatorInfo input);
-    void process_ui_button_array(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_led_array(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_label(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_slider(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_textbox(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_combobox(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_radiobutton(const OpenAPI::OAIClientUIItem* uiItem);
-    void process_ui_button_array_element(QJsonObject jsonObject);
-    void process_ui_led_array_element(QJsonObject jsonObject);
+    void on_event_cb(json& j);
+    void on_cmd_cb(json& j);
+    void UI_item_parser(json& input);
+    virtual void process_ui_label(json& uiItem);
+    virtual void process_ui_slider(json& uiItem);
+    virtual void process_ui_textbox(json& uiItem);
+    virtual void process_ui_combobox(json& uiItem);
+    virtual void process_ui_radiobutton(json& uiItem);
+    virtual void process_ui_button(json& uiItem);
+    virtual void process_ui_led(json& uiItem);
 
     void showEvent(QShowEvent* event);
     void closeEvent(QCloseEvent* event);
 
-    OpenAPI::OAICANApiApi* api;
+    Web_socket_wrapper* m_web_socket;
 
     QTimer* timer_update;
     uint32_t refresh_rate;
