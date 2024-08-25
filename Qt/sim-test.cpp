@@ -82,7 +82,7 @@ void Test_Sim::button_update(button_lookup_e lookup)
 
 void Test_Sim::slider_update(slider_lookup_e lookup)
 {
-    m_web_socket->send_event(Web_socket_wrapper::Event::clicked, QString(magic_enum::enum_name(lookup).data()),
+    m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, QString(magic_enum::enum_name(lookup).data()),
                              slider_lookup[lookup]->value());
 }
 
