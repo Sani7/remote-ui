@@ -122,70 +122,38 @@ void SimulatorBase::process_ui_label(json& uiItem)
 
 void SimulatorBase::process_ui_slider(json& uiItem)
 {
-    if (QString::fromStdString(uiItem["id"]).startsWith('t'))
+    QwtSlider* slider = id_to_slider(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_slider_label(QString::fromStdString(uiItem["id"]));
+    if (slider == nullptr)
     {
-        QwtSlider* slider = id_to_slider(QString::fromStdString(uiItem["id"]));
-        QLabel* label = id_to_slider_label(QString::fromStdString(uiItem["id"]));
-        if (slider == nullptr)
-        {
-            QD << "id_to_slider returned null on " << QString::fromStdString(uiItem["id"]);
-            return;
-        }
-
-        double value = uiItem["value"];
-        bool enable = uiItem["enabled"];
-        bool visible = uiItem["visible"];
-
-        if (slider->value() != value)
-        {
-            if (label != nullptr)
-            {
-                label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
-            }
-            slider->setValue(value);
-        }
-
-        if (slider->isReadOnly() != !enable)
-        {
-            slider->setReadOnly(!enable);
-        }
-
-        if (slider->isVisible() != visible)
-        {
-            slider->setVisible(visible);
-        }
-        //TODO: Add color for scale
+        QD << "id_to_slider returned null on " << QString::fromStdString(uiItem["id"]);
         return;
     }
 
-    if (QString::fromStdString(uiItem["id"]).startsWith('d'))
+    double value = uiItem["value"];
+    bool enable = uiItem["enabled"];
+    bool visible = uiItem["visible"];
+
+    if (slider->value() != value)
     {
-        QwtDial* dial = id_to_dial(QString::fromStdString(uiItem["id"]));
-        QLabel* label = id_to_dial_label(QString::fromStdString(uiItem["id"]));
-        if (dial == nullptr)
+        if (label != nullptr)
         {
-            QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
-            return;
+            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
         }
-
-        double value = uiItem["value"];
-        bool visible = uiItem["visible"];
-
-        if (dial->value() != value)
-        {
-            if (label != nullptr)
-            {
-                label->setText(format_dial_value(QString::fromStdString(uiItem["id"]), value));
-            }
-            dial->setValue(value);
-        }
-
-        if (dial->isVisible() != visible)
-        {
-            dial->setVisible(visible);
-        }
-        return;
+        slider->setValue(value);
     }
+
+    if (slider->isReadOnly() != !enable)
+    {
+        slider->setReadOnly(!enable);
+    }
+
+    if (slider->isVisible() != visible)
+    {
+        slider->setVisible(visible);
+    }
+    //TODO: Add color for scale
+    return;
 }
 
 void SimulatorBase::process_ui_textbox(json& uiItem)
