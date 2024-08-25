@@ -53,6 +53,11 @@ void Simulators::switch_simulator(std::string name)
         this->m_simulators.at(m_current_simulator)->stop();
     }
 
+    if (this->m_simulators.find(name) == this->m_simulators.end())
+    {
+        return;
+    }
+
     this->m_current_simulator = name;
     this->run();
 }
