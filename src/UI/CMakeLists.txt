@@ -12,14 +12,16 @@ target_compile_options(UI PRIVATE $<$<CONFIG:Debug>:
 target_sources(UI
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/UI_item.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_button.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_checkbox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_combobox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_dial.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_label.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_led.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_button.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_slider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_textbox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/UI_thermo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_combobox.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_checkbox.cpp
 )
 
 target_include_directories(UI
