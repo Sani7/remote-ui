@@ -2,7 +2,7 @@
 #include <string>
 #include "UI_item.hpp"
 
-#define UI_TEXTBOX_TYPE std::string("UItextbox")
+#define UI_TEXTBOX_TYPE std::string("UI_textbox")
 
 class UI_textbox : public UI_item
 {

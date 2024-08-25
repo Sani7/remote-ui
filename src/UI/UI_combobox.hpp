@@ -4,7 +4,7 @@
 #include "UI_item.hpp"
 #include "UI_x_boxes.hpp"
 
-#define UI_COMBOBOX_TYPE std::string("UIcombobox")
+#define UI_COMBOBOX_TYPE std::string("UI_combobox")
 
 class UI_combobox : public UI_x_boxes
 {

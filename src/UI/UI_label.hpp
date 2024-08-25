@@ -2,7 +2,7 @@
 #include <string>
 #include "UI_item.hpp"
 
-#define UI_LABEL_TYPE std::string("UIlabel")
+#define UI_LABEL_TYPE std::string("UI_label")
 
 class UI_label : public UI_item
 {

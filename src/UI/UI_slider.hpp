@@ -1,7 +1,7 @@
 #pragma once
 #include "UI_item.hpp"
 
-#define UI_SLIDER_TYPE std::string("UISlider")
+#define UI_SLIDER_TYPE std::string("UI_slider")
 
 class UI_slider : public UI_item
 {

@@ -3,7 +3,7 @@
 #include "UI_item.hpp"
 #include "UI_x_boxes.hpp"
 
-#define UI_CHECKBOX_TYPE std::string("UIcheckbox")
+#define UI_CHECKBOX_TYPE std::string("UI_checkbox")
 
 class UI_checkbox : public UI_x_boxes
 {

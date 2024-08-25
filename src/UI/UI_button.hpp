@@ -2,7 +2,7 @@
 
 #include "UI_item.hpp"
 
-#define UI_BUTTON_TYPE std::string("UIButton")
+#define UI_BUTTON_TYPE std::string("UI_button")
 
 class UI_button : public UI_item
 {

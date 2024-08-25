@@ -2,7 +2,7 @@
 #include <string>
 #include "UI_item.hpp"
 
-#define UI_LED_TYPE std::string("UIled")
+#define UI_LED_TYPE std::string("UI_led")
 
 class UI_led : public UI_item
 {
