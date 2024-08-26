@@ -29,6 +29,9 @@ class SimulatorBase : public QMainWindow {
     virtual QwtDial* id_to_dial(QString name) {return nullptr;}
     virtual QLabel* id_to_dial_label(QString name) {return nullptr;}
     virtual QString format_dial_value(QString name, double val) {return QString();}
+    virtual QwtThermo* id_to_thermo(QString name) {return nullptr;}
+    virtual QLabel* id_to_thermo_label(QString name) {return nullptr;}
+    virtual QString format_thermo_label(QString name) {return QString();}
     virtual QComboBox* id_to_combobox(QString name) {return nullptr;}
     virtual QTextEdit* id_to_textbox(QString name) {return nullptr;}
 
@@ -40,6 +43,8 @@ class SimulatorBase : public QMainWindow {
     void UI_item_parser(json& input);
     virtual void process_ui_label(json& uiItem);
     virtual void process_ui_slider(json& uiItem);
+    virtual void process_ui_dial(json& uiItem);
+    virtual void process_ui_thermo(json& uiItem);
     virtual void process_ui_textbox(json& uiItem);
     virtual void process_ui_combobox(json& uiItem);
     virtual void process_ui_radiobutton(json& uiItem);

@@ -9,6 +9,7 @@
 #include <qwt_plot_curve.h>
 #include <qwt_slider.h>
 #include <qwt_series_data.h>
+#include <qwt_thermo.h>
 #include <QNetworkReply>
 
 void create_dial_needle(QwtDial* dial);

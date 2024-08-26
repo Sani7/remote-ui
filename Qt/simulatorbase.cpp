@@ -81,6 +81,16 @@ void SimulatorBase::UI_item_parser(json& input)
             process_ui_slider(uiItem);
             continue;
         }
+        if (uiItem["type"] == "UI_dial")
+        {
+            process_ui_dial(uiItem);
+            continue;
+        }
+        if (uiItem["type"] == "UI_thermo")
+        {
+            process_ui_thermo(uiItem);
+            continue;
+        }
         if (uiItem["type"] == "UI_textbox")
         {
             process_ui_textbox(uiItem);
@@ -154,6 +164,66 @@ void SimulatorBase::process_ui_slider(json& uiItem)
         slider->setVisible(visible);
     }
     //TODO: Add color for scale
+    return;
+}
+
+void SimulatorBase::process_ui_dial(json& uiItem)
+{
+    QwtDial* dial = id_to_dial(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_dial_label(QString::fromStdString(uiItem["id"]));
+    if (dial == nullptr)
+    {
+        QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
+        return;
+    }
+
+    double value = uiItem["value"];
+    bool visible = uiItem["visible"];
+
+    if (dial->value() != value)
+    {
+        if (label != nullptr)
+        {
+            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
+        }
+        dial->setValue(value);
+    }
+
+
+    if (dial->isVisible() != visible)
+    {
+        dial->setVisible(visible);
+    }
+    return;
+}
+
+void SimulatorBase::process_ui_thermo(json& uiItem)
+{
+    QwtThermo* thermo = id_to_thermo(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_thermo_label(QString::fromStdString(uiItem["id"]));
+    if (thermo == nullptr)
+    {
+        QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
+        return;
+    }
+
+    double value = uiItem["value"];
+    bool visible = uiItem["visible"];
+
+    if (thermo->value() != value)
+    {
+        if (label != nullptr)
+        {
+            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
+        }
+        thermo->setValue(value);
+    }
+
+
+    if (thermo->isVisible() != visible)
+    {
+        thermo->setVisible(visible);
+    }
     return;
 }
 
