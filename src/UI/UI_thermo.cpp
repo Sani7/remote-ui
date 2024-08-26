@@ -26,6 +26,50 @@ double UI_thermo::value() const
     return m_value;
 }
 
+void UI_thermo::set_start_color(Color color)
+{
+    this->m_color_map[0] = color;
+}
+
+void UI_thermo::set_end_color(Color color)
+{
+    this->m_color_map[1] = color;
+}
+
+void UI_thermo::add_color_stop(double value, Color color)
+{
+    if (value <= 0 || value >= 1)
+        return;
+    
+    this->m_color_map[value] = color;
+}
+
+void UI_thermo::add_color_stop_normalized(double value, Color color)
+{
+    if (value < m_min || value > m_max)
+        return;
+
+    double normalized = (value - m_min) / (m_max - m_min);
+    this->m_color_map[normalized] = color;
+}
+
+void UI_thermo::remove_color_stop(double value)
+{
+    if (value <= 0 || value >= 1)
+        return;
+
+    this->m_color_map.erase(value);
+}
+
+void UI_thermo::remove_color_stop_normalized(double value)
+{
+    if (value < m_min || value > m_max)
+        return;
+
+    double normalized = (value - m_min) / (m_max - m_min);
+    this->m_color_map.erase(normalized);
+}
+
 void UI_thermo::from_json(const json& j)
 {
     UI_item::from_json(j);
@@ -33,6 +77,14 @@ void UI_thermo::from_json(const json& j)
     this->m_min = j["min"];
     this->m_max = j["max"];
     this->m_value = j["value"];
+    this->m_color_map.clear();
+    for (auto& i : j["color_map"])
+    {
+        double k = i["key"];
+        std::string c;
+        i["value"].get_to(c);
+        this->m_color_map[k] = Color(c);
+    }
 }
 
 json UI_thermo::to_json() const
@@ -41,5 +93,13 @@ json UI_thermo::to_json() const
     j["min"] = this->m_min;
     j["max"] = this->m_max;
     j["value"] = this->m_value;
+    j["color_map"] = json::array();
+    for (auto& [key, value] : this->m_color_map)
+    {
+        json item = json::object();
+        item["key"] = key;
+        item["value"] = value.to_hex();
+        j["color_map"].push_back(item);
+    }
     return j;
 }
