@@ -54,7 +54,6 @@ void Websocket::on_open(websocketpp::connection_hdl hdl)
 {
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        // std::cout << "on_open" << std::endl;
         m_actions.push(action(SUBSCRIBE, hdl));
     }
     m_action_cond.notify_one();
@@ -64,7 +63,6 @@ void Websocket::on_close(websocketpp::connection_hdl hdl)
 {
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        // std::cout << "on_close" << std::endl;
         m_actions.push(action(UNSUBSCRIBE, hdl));
     }
     m_action_cond.notify_one();
@@ -75,7 +73,6 @@ void Websocket::on_message(websocketpp::connection_hdl hdl, Server::message_ptr 
     // queue message up for sending by processing thread
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
-        // std::cout << "on_message" << std::endl;
         m_actions.push(action(MESSAGE, hdl, msg));
     }
     m_action_cond.notify_one();
@@ -121,8 +118,16 @@ void Websocket::process_messages()
                 m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
             }
             break;
+            case BROADCAST:
+            {
+                std::lock_guard<std::mutex> guard(m_connection_lock);
+                for (auto it : m_connections)
+                {
+                    m_server.send(it, a.payload, websocketpp::frame::opcode::TEXT);
+                }
+            }
+            break;
             default:
-                // undefined.
                 break;
         }
     }
@@ -132,23 +137,16 @@ void Websocket::process_broadcast()
 {
     while (1)
     {
-        {
-            std::lock_guard<std::mutex> guard(m_connection_lock);
-            if (m_connections.empty())
-            {
-                continue;
-            }
-        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         std::string update = m_on_update();
         if (update.empty() || update == "{}")
         {
             continue;
         }
         {
-            std::lock_guard<std::mutex> guard(m_connection_lock);
-            for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
-                m_server.send(*it, update, websocketpp::frame::opcode::TEXT);
-            }
+            std::lock_guard<std::mutex> guard(m_action_lock);
+            m_actions.push(action(BROADCAST, update));
         }
+        m_action_cond.notify_one();
     }
 }

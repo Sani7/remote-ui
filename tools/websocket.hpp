@@ -19,17 +19,20 @@ using websocketpp::lib::placeholders::_2;
 enum action_type {
     SUBSCRIBE,
     UNSUBSCRIBE,
-    MESSAGE
+    MESSAGE,
+    BROADCAST
 };
 
 struct action {
     action(action_type t, websocketpp::connection_hdl h) : type(t), hdl(h) {}
     action(action_type t, websocketpp::connection_hdl h, Server::message_ptr m)
       : type(t), hdl(h), msg(m) {}
+    action(action_type t, std::string p) : type(t), payload(p) {}
 
     action_type type;
     websocketpp::connection_hdl hdl;
     Server::message_ptr msg;
+    std::string payload;
 };
 
 class Websocket
