@@ -25,6 +25,12 @@ class Test_Sim : public SimulatorBase {
     ITERABLE_ENUM_BEGIN(slider_lookup_e)
         slider
     ITERABLE_ENUM_END;
+    ITERABLE_ENUM_BEGIN(dial_lookup_e)
+        dial
+    ITERABLE_ENUM_END;
+    ITERABLE_ENUM_BEGIN(thermo_lookup_e)
+        thermo
+    ITERABLE_ENUM_END;
     ITERABLE_ENUM_BEGIN(combobox_lookup_e)
         combobox
     ITERABLE_ENUM_END;
@@ -35,6 +41,7 @@ class Test_Sim : public SimulatorBase {
     void setup_buttons(void);
     void setup_sliders(void);
     void setup_comboboxes(void);
+    void setup_dials(void);
 
     void button_update(button_lookup_e lookup);
     void slider_update(slider_lookup_e lookup);
@@ -46,6 +53,8 @@ class Test_Sim : public SimulatorBase {
     QwtSlider* id_to_slider(QString name);
     QLabel* id_to_slider_label(QString name);
     QString format_slider_value(QString name, double val);
+    QwtDial* id_to_dial(QString name);
+    QwtThermo* id_to_thermo(QString name);
     QComboBox* id_to_combobox(QString name);
 
   private:
@@ -53,6 +62,8 @@ class Test_Sim : public SimulatorBase {
     std::unordered_map<button_lookup_e, QPushButton*> button_lookup;
     std::unordered_map<slider_lookup_e, bool> slider_lock;
     std::unordered_map<slider_lookup_e, QwtSlider*> slider_lookup;
+    std::unordered_map<dial_lookup_e, QwtDial*> dial_lookup;
+    std::unordered_map<thermo_lookup_e, QwtThermo*> thermo_lookup;
     std::unordered_map<led_lookup_e, QPushButton*> led_lookup;
     std::unordered_map<combobox_lookup_e, QComboBox*> combobox_lookup;
     std::unordered_map<label_lookup_e, QLabel*> label_lookup;

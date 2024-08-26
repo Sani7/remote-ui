@@ -15,9 +15,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" rowspan="4">
-     <widget class="QwtSlider" name="Slider"/>
-    </item>
     <item row="0" column="1">
      <widget class="QPushButton" name="led">
       <property name="text">
@@ -36,11 +33,28 @@
      <widget class="QComboBox" name="combobox"/>
     </item>
     <item row="3" column="1">
+     <widget class="QwtDial" name="dial">
+      <property name="lineWidth">
+       <number>4</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>TextLabel</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="0" rowspan="5">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QwtSlider" name="slider"/>
+      </item>
+      <item>
+       <widget class="QwtThermo" name="thermo"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -58,9 +72,19 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QwtDial</class>
+   <extends>QWidget</extends>
+   <header>qwt_dial.h</header>
+  </customwidget>
+  <customwidget>
    <class>QwtSlider</class>
    <extends>QWidget</extends>
    <header>qwt_slider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QwtThermo</class>
+   <extends>QWidget</extends>
+   <header>qwt_thermo.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

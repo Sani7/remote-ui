@@ -10,7 +10,13 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
         {button_lookup_e::button, ui->button}
     };
     slider_lookup = {
-        {slider_lookup_e::slider, ui->Slider}
+        {slider_lookup_e::slider, ui->slider}
+    };
+    dial_lookup = {
+        {dial_lookup_e::dial, ui->dial}
+    };
+    thermo_lookup = {
+        {thermo_lookup_e::thermo, ui->thermo}
     };
     led_lookup = {
         {led_lookup_e::led, ui->led}
@@ -26,6 +32,7 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
     setup_buttons();
     setup_comboboxes();
     setup_sliders();
+    setup_dials();
 }
 
 Test_Sim::~Test_Sim() {
@@ -71,6 +78,14 @@ void Test_Sim::setup_comboboxes(void)
     for (Iterable<combobox_lookup_e> lookup; lookup < combobox_lookup_e::end; lookup++)
     {
         connect(combobox_lookup[lookup], &QComboBox::currentIndexChanged, this, [=]{combobox_update(lookup);});
+    }
+}
+
+void Test_Sim::setup_dials(void)
+{
+    for (Iterable<dial_lookup_e> lookup; lookup < dial_lookup_e::end; lookup++)
+    {
+        create_dial_needle(dial_lookup[lookup]);
     }
 }
 
@@ -135,7 +150,7 @@ QwtSlider* Test_Sim::id_to_slider(QString name)
     slider_lookup_e lookup = magic_enum::enum_cast<slider_lookup_e>(name.toStdString()).value_or(slider_lookup_e::end);
     if (lookup == slider_lookup_e::end)
     {
-        QD << "thermo lookup == end, instead of " << name;
+        QD << "slider lookup == end, instead of " << name;
         emit quit();
         return nullptr;
     }
@@ -158,6 +173,32 @@ QLabel* Test_Sim::id_to_slider_label(QString name)
 QString Test_Sim::format_slider_value(QString name, double val)
 {
     return "";
+}
+
+QwtDial* Test_Sim::id_to_dial(QString name)
+{
+    dial_lookup_e lookup = magic_enum::enum_cast<dial_lookup_e>(name.toStdString()).value_or(dial_lookup_e::end);
+    if (lookup == dial_lookup_e::end)
+    {
+        QD << "dial lookup == end, instead of " << name;
+        emit quit();
+        return nullptr;
+    }
+
+    return dial_lookup[lookup];
+}
+
+QwtThermo* Test_Sim::id_to_thermo(QString name)
+{
+    thermo_lookup_e lookup = magic_enum::enum_cast<thermo_lookup_e>(name.toStdString()).value_or(thermo_lookup_e::end);
+    if (lookup == thermo_lookup_e::end)
+    {
+        QD << "thermo lookup == end, instead of " << name;
+        emit quit();
+        return nullptr;
+    }
+
+    return thermo_lookup[lookup];
 }
 
 QComboBox* Test_Sim::id_to_combobox(QString name)
