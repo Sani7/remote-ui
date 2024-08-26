@@ -12,6 +12,13 @@ m_dial("dial", "Dial", Color(Color::White), Color(Color::Black), 0, 100, 50),
 m_thermo("thermo", "Thermo", Color(Color::White), Color(Color::Black), 0, 100, 50),
 m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 {
+    this->m_thermo.set_start_color(Color(Color::Red));
+    this->m_thermo.set_end_color(Color(Color::Red));
+    this->m_thermo.add_color_stop(0.10, Color(Color::Yellow));
+    this->m_thermo.add_color_stop(0.50, Color(Color::Green));
+    this->m_thermo.add_color_stop(0.60, Color(Color::Yellow));
+    this->m_thermo.add_color_stop(0.90, Color(Color::Red));
+
     this->add_UI_item(&this->m_button);
     this->add_UI_item(&this->m_combobox);
     this->add_UI_item(&this->m_label);
