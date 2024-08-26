@@ -8,6 +8,8 @@ m_combobox("combobox", "Combobox", Color(Color::White), Color(Color::Black), {"O
 m_label("label", "Label", Color(Color::White), Color(Color::Black)),
 m_checkbox("checkbox", "Checkbox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, [](std::string id, std::vector<std::string> selected) { spdlog::info("Checkbox {} selected {}", id, (selected.size() > 0 ? selected[0] : "")); }),
 m_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 50, [this](std::string id, double value) { slider_changed(id, value); }),
+m_dial("dial", "Dial", Color(Color::White), Color(Color::Black), 0, 100, 50),
+m_thermo("thermo", "Thermo", Color(Color::White), Color(Color::Black), 0, 100, 50),
 m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 {
     this->add_UI_item(&this->m_button);
@@ -15,6 +17,8 @@ m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
     this->add_UI_item(&this->m_label);
     this->add_UI_item(&this->m_checkbox);
     this->add_UI_item(&this->m_slider);
+    this->add_UI_item(&this->m_dial);
+    this->add_UI_item(&this->m_thermo);
     this->add_UI_item(&this->m_led);
 }
 
@@ -48,6 +52,8 @@ void Test_Sim::slider_changed(std::string id, double value)
     if (id == "slider")
     {
         this->m_label.set_text(std::to_string(value));
+        this->m_dial.set_value(value);
+        this->m_thermo.set_value(value);
         return;
     }
 }
