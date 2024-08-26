@@ -49,8 +49,10 @@ TEST(UI_item, from_json)
     j["id"] = "item_id";
     j["text"] = "item_text";
     j["text_size"] = 12;
-    j["fg_color"] = "0xFFFFFF00";
-    j["bg_color"] = "0x00000000";
+    j["fg_color"] = "0xFFFFFFFF";
+    j["bg_color"] = "0x000000FF";
+    j["enabled"] = true;
+    j["visible"] = true;
 
     item.from_json(j);
     EXPECT_EQ(item.id(), "item_id");

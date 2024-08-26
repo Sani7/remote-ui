@@ -9,8 +9,6 @@ TEST(UI_button, to_from_json)
     EXPECT_EQ(button.text(), button2.text());
     EXPECT_EQ(button.fg_color(), button2.fg_color());
     EXPECT_EQ(button.bg_color(), button2.bg_color());
-
-    std::cout << j.dump(4) << std::endl;
 }
 
 void on_click(std::string id)
