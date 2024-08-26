@@ -14,12 +14,11 @@
 
 void create_dial_needle(QwtDial* dial);
 
-void set_thermo_color(QwtSlider* slider, QColor color, QColor bg);
-void set_button_color(QPushButton* button, QColor color, QColor bg);
-void set_button_color(QPushButton* button, QString color, QString bg);
-QColor button_bg_color(QPushButton* button);
-QColor button_color(QPushButton* button);
-void reset_button_color(QPushButton* button);
+void set_widget_color(QWidget* widget, QColor color, QColor bg);
+void set_widget_color(QWidget* widget, QString color, QString bg);
+QColor widget_bg_color(QWidget* widget);
+QColor widget_color(QWidget* widget);
+void reset_widget_color(QWidget* widget);
 void set_read_only(QWidget* widget, bool readOnly = true);
 bool is_read_only(QWidget* widget);
 QString network_reply_to_fix(QNetworkReply::NetworkError error);

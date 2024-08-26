@@ -290,31 +290,31 @@ void SimulatorBase::process_ui_button(json& uiItem)
 
     if (bg_color == QColor(0x83, 0x91, 0x92))
     {
-        reset_button_color(button);
+        reset_widget_color(button);
         return;
     }
 
     if (bg_color == QColor(0xFF, 0x00, 0x00))
     {
-        set_button_color(button, QString("black"), QString("darkred"));
+        set_widget_color(button, QString("black"), QString("darkred"));
         return;
     }
 
     if (bg_color == QColor(0x00, 0xFF, 0x00))
     {
-        set_button_color(button, QString("white"), QString("darkgreen"));
+        set_widget_color(button, QString("white"), QString("darkgreen"));
         return;
     }
 
     if (bg_color == QColor(0xFF8800))
     {
-        set_button_color(button, QString("darkred"), QString("darkorange"));
+        set_widget_color(button, QString("darkred"), QString("darkorange"));
         return;
     }
 
-    if (bg_color != button_bg_color(button) || fg_color != button_color(button))
+    if (bg_color != widget_bg_color(button) || fg_color != widget_color(button))
     {
-        set_button_color(button, fg_color, bg_color);
+        set_widget_color(button, fg_color, bg_color);
     }
 }
 
@@ -343,30 +343,30 @@ void SimulatorBase::process_ui_led(json& uiItem)
 
     if (bg_color == QColor(0x83, 0x91, 0x92))
     {
-        reset_button_color(led);
+        reset_widget_color(led);
         return;
     }
 
     if (bg_color == QColor(0xFF, 0x00, 0x00))
     {
-        set_button_color(led, QString("black"), QString("darkred"));
+        set_widget_color(led, QString("black"), QString("darkred"));
         return;
     }
 
     if (bg_color == QColor(0x00, 0xFF, 0x00))
     {
-        set_button_color(led, QString("white"), QString("darkgreen"));
+        set_widget_color(led, QString("white"), QString("darkgreen"));
         return;
     }
 
     if (bg_color == QColor(0xFF8800))
     {
-        set_button_color(led, QString("darkred"), QString("darkorange"));
+        set_widget_color(led, QString("darkred"), QString("darkorange"));
         return;
     }
 
-    if (bg_color != button_bg_color(led))
+    if (bg_color != widget_bg_color(led))
     {
-        set_button_color(led, color, bg_color);
+        set_widget_color(led, color, bg_color);
     }
 }

@@ -9,30 +9,23 @@ void create_dial_needle(QwtDial* dial)
     dial->setNeedle( needle );
 }
 
-void set_thermo_color(QwtSlider* slider, QColor color, QColor bg)
+void set_widget_color(QWidget* widget, QColor color, QColor bg)
 {
-    QString style = QString("#%1 { background-color: %2; color: %3;}").arg(slider->objectName(), bg.name(), color.name());
+    QString style = QString("#%1 { background-color: %2; color: %3;}").arg(widget->objectName(), bg.name(), color.name());
 
-    slider->setStyleSheet(style);
+    widget->setStyleSheet(style);
 }
 
-void set_button_color(QPushButton* button, QColor color, QColor bg)
+void set_widget_color(QWidget* widget, QString color, QString bg)
 {
-    QString style = QString("#%1 { background-color: %2; color: %3;}").arg(button->objectName(), bg.name(), color.name());
+    QString style = QString("#%1 { background-color: %2; color: %3;}").arg(widget->objectName(), bg, color);
 
-    button->setStyleSheet(style);
+    widget->setStyleSheet(style);
 }
 
-void set_button_color(QPushButton* button, QString color, QString bg)
+QColor widget_bg_color(QWidget* widget)
 {
-    QString style = QString("#%1 { background-color: %2; color: %3;}").arg(button->objectName(), bg, color);
-
-    button->setStyleSheet(style);
-}
-
-QColor button_bg_color(QPushButton* button)
-{
-    std::string input = button->styleSheet().toStdString();
+    std::string input = widget->styleSheet().toStdString();
     QColor background_color;
 
            // Find the position of "background-color:"
@@ -49,9 +42,9 @@ QColor button_bg_color(QPushButton* button)
     return background_color;
 }
 
-QColor button_color(QPushButton* button)
+QColor widget_color(QWidget* widget)
 {
-    std::string input = button->styleSheet().toStdString();
+    std::string input = widget->styleSheet().toStdString();
     QColor color;
 
            // Find the position of "color:"
@@ -67,9 +60,9 @@ QColor button_color(QPushButton* button)
     return color;
 }
 
-void reset_button_color(QPushButton* button)
+void reset_widget_color(QWidget* widget)
 {
-    button->setStyleSheet("");
+    widget->setStyleSheet("");
 }
 
 bool is_read_only(QWidget* widget)
