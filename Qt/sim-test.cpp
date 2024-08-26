@@ -6,6 +6,9 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
       ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Test Sim");
+    this->setWindowState(Qt::WindowMaximized);
+
     button_lookup = {
         {button_lookup_e::button, ui->button}
     };
@@ -21,7 +24,6 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
     led_lookup = {
         {led_lookup_e::led, ui->led}
     };
-
     combobox_lookup = {
         {combobox_lookup_e::combobox, ui->combobox}
     };
