@@ -43,4 +43,5 @@ target_link_libraries(server PRIVATE
     magic_enum::magic_enum
     spdlog
     UI
+    CAN
 )
