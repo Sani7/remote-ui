@@ -24,7 +24,7 @@ std::string UI_textbox::hint() const
 void UI_textbox::from_json(const json& j)
 {
     UI_item::from_json(j);
-    m_hint = j["hint"];
+    m_hint = j.at("hint");
 }
 
 json UI_textbox::to_json() const

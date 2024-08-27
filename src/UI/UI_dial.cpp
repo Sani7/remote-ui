@@ -30,9 +30,9 @@ void UI_dial::from_json(const json& j)
 {
     UI_item::from_json(j);
 
-    this->m_min = j["min"];
-    this->m_max = j["max"];
-    this->m_value = j["value"];
+    this->m_min = j.at("min");
+    this->m_max = j.at("max");
+    this->m_value = j.at("value");
 }
 
 json UI_dial::to_json() const

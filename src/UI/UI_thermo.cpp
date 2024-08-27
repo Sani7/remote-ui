@@ -74,15 +74,14 @@ void UI_thermo::from_json(const json& j)
 {
     UI_item::from_json(j);
 
-    this->m_min = j["min"];
-    this->m_max = j["max"];
-    this->m_value = j["value"];
+    this->m_min = j.at("min");
+    this->m_max = j.at("max");
+    this->m_value = j.at("value");
     this->m_color_map.clear();
     for (auto& i : j["color_map"])
     {
-        double k = i["key"];
-        std::string c;
-        i["value"].get_to(c);
+        double k = i.at("key");
+        std::string c = i.at("value");
         this->m_color_map[k] = Color(c);
     }
 }
