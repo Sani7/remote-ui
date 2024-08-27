@@ -2,14 +2,14 @@
 #include <iostream>
 
 Test_Sim::Test_Sim() :
-Simulator_base("Test_Sim"),
+Simulator_base("Test_Sim", std::chrono::milliseconds(1000)),
 m_button("button", "Off", Color(Color::White), Color(Color::Red), [this](std::string id) { button_clicked(id); }),
 m_combobox("combobox", "Combobox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0, [](std::string id, std::string selected) { spdlog::info("Combobox {} selected {}", id, selected); }),
 m_label("label", "Label", Color(Color::White), Color(Color::Black)),
 m_checkbox("checkbox", "Checkbox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, [](std::string id, std::vector<std::string> selected) { spdlog::info("Checkbox {} selected {}", id, (selected.size() > 0 ? selected[0] : "")); }),
-m_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 50, [this](std::string id, double value) { slider_changed(id, value); }),
-m_dial("dial", "Dial", Color(Color::White), Color(Color::Black), 0, 100, 50),
-m_thermo("thermo", "Thermo", Color(Color::White), Color(Color::Black), 0, 100, 50),
+m_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 0, [this](std::string id, double value) { slider_changed(id, value); }),
+m_dial("dial", "Dial", Color(Color::White), Color(Color::Black), 0, 100, 0),
+m_thermo("thermo", "Thermo", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 {
     this->m_thermo.set_start_color(Color(Color::Red));
@@ -32,6 +32,12 @@ m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 void Test_Sim::timer()
 {
     // Timer function
+    this->m_button.click();
+    if (this->m_slider.value() == this->m_slider.max())
+    {
+        this->m_slider.set_value(0);
+    }
+    this->m_slider.set_value(this->m_slider.value() + 1);
 }
 
 void Test_Sim::run_at_startup()
