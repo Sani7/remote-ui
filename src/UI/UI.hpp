@@ -7,4 +7,5 @@
 #include "UI_label.hpp"
 #include "UI_led.hpp"
 #include "UI_slider.hpp"
+#include "UI_textbox.hpp"
 #include "UI_thermo.hpp"
