@@ -58,19 +58,10 @@ void Test_Sim::setup_sliders(void)
 {
     for (Iterable<slider_lookup_e> lookup; lookup < slider_lookup_e::end; lookup++)
     {
-        connect(slider_lookup[lookup], &QwtSlider::valueChanged, this, [=]{
-            // Update the text while moving the slider
+        connect(slider_lookup[lookup], &QwtSlider::sliderMoved, this, [=]{
             //value_lookup_e lookup_v = thermo_to_value_lookup(lookup);
             //value_lookup[lookup_v]->setText(format_value(lookup_v, thermo_lookup[lookup]->value()));
-        });
-        connect(slider_lookup[lookup], &QwtSlider::sliderPressed, this, [=]{
-            // When changing the sliders lock that slider
-            slider_lock[lookup] = true;
-        });
-        connect(slider_lookup[lookup], &QwtSlider::sliderReleased, this, [=]{
-            // Only trigger the update event when the slider is released and unlock the slider
             slider_update(lookup);
-            slider_lock[lookup] = false;
         });
     }
 }
@@ -154,13 +145,6 @@ QwtSlider* Test_Sim::id_to_slider(QString name)
     {
         QD << "slider lookup == end, instead of " << name;
         emit quit();
-        return nullptr;
-    }
-
-    // Check if the slider is being changed
-    if (slider_lock[lookup])
-    {
-        QD << "Slider in lock retrurning null";
         return nullptr;
     }
 

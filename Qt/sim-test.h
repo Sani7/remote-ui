@@ -60,7 +60,6 @@ class Test_Sim : public SimulatorBase {
   private:
     Ui::Test_Sim* ui;
     std::unordered_map<button_lookup_e, QPushButton*> button_lookup;
-    std::unordered_map<slider_lookup_e, bool> slider_lock;
     std::unordered_map<slider_lookup_e, QwtSlider*> slider_lookup;
     std::unordered_map<dial_lookup_e, QwtDial*> dial_lookup;
     std::unordered_map<thermo_lookup_e, QwtThermo*> thermo_lookup;
