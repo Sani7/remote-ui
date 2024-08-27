@@ -1,4 +1,5 @@
 #include "simulators.hpp"
+#include <unordered_set>
 #include "test_sim.hpp"
 #include "can_debugger.hpp"
 
@@ -111,13 +112,20 @@ json Simulators::changed_UI_items()
     }
 
     // diff to ui items list
-    // get index out of each item in diff /UI_items/0/** 
+    // get index out of each item in diff /UI_items/0/**
+    // but the index can be the same for multiple items
     // Then push the ui_item at that index to the changed json
+    std::unordered_set<size_t> addedIndices;
+
     for (auto& item : diff)
     {
         std::string path = item["path"];
-        std::string index_s = path.substr(10, path.find("/", 10) - 10);
-        changed["event"]["UI_items"].push_back(after["UI_items"][std::stoul(index_s)]);
+        size_t index = std::stoul(path.substr(10, path.find("/", 10) - 10));
+        if (addedIndices.find(index) != addedIndices.end())
+            continue;
+        
+        changed["event"]["UI_items"].push_back(after["UI_items"][index]);
+        addedIndices.insert(index);
     }
 
     m_before = after;
