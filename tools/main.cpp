@@ -53,7 +53,7 @@ void init_logger()
 {
     spdlog::init_thread_pool(8192, 1);
     auto stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt >();
-    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/sim_us.txt", 1024*1024*10, 3);
+    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log-sim_us.txt", 1024*1024*10, 3);
     std::vector<spdlog::sink_ptr> sinks {stdout_sink, rotating_sink};
     auto logger = std::make_shared<spdlog::async_logger>("sim_us", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
