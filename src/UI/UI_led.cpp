@@ -7,7 +7,8 @@ m_led_color(led_color)
     
 }
 
-UI_led::UI_led(const json& j) : UI_item(j)
+UI_led::UI_led(const json& j) : 
+UI_item(UI_LED_TYPE)
 {
     from_json(j);
 }
