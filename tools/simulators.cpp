@@ -75,6 +75,7 @@ std::vector<std::string> Simulators::list_simulators() const
 
 Simulator_base* Simulators::invoke_active_simulator()
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
     if (this->m_simulators.empty())
     {
         return nullptr;
@@ -91,6 +92,7 @@ Simulator_base* Simulators::invoke_active_simulator()
 
 json Simulators::changed_UI_items()
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
     if (this->m_simulators.empty())
     {
         return "{}"_json;

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <map>
+#include <mutex>
 
 #include "simulator_base.hpp"
 
@@ -19,5 +20,6 @@ class Simulators {
     private:
         std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
         std::string m_current_simulator = "";
+        std::mutex m_mutex;
         json m_before;
 };
