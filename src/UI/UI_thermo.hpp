@@ -13,6 +13,9 @@ class UI_thermo : public UI_item
         void set_value(double value) override;
         double value() const;
 
+        double min() const;
+        double max() const;
+
         void set_start_color(Color color);
         void set_end_color(Color color);
         void add_color_stop(double value, Color color);

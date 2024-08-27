@@ -26,6 +26,16 @@ double UI_dial::value() const
     return m_value;
 }
 
+double UI_dial::min() const
+{
+    return m_min;
+}
+
+double UI_dial::max() const
+{
+    return m_max;
+}
+
 void UI_dial::from_json(const json& j)
 {
     UI_item::from_json(j);

@@ -12,6 +12,9 @@ class UI_dial : public UI_item
         void set_value(double value) override;
         double value() const;
 
+        double min() const;
+        double max() const;
+
         void from_json(const json& j) override;
         json to_json() const override;
     private:

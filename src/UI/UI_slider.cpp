@@ -31,6 +31,16 @@ double UI_slider::value() const
     return m_value;
 }
 
+double UI_slider::min() const
+{
+    return m_min;
+}
+
+double UI_slider::max() const
+{
+    return m_max;
+}
+
 void UI_slider::from_json(const json& j)
 {
     UI_item::from_json(j);

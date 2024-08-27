@@ -26,6 +26,16 @@ double UI_thermo::value() const
     return m_value;
 }
 
+double UI_thermo::min() const
+{
+    return m_min;
+}
+
+double UI_thermo::max() const
+{
+    return m_max;
+}
+
 void UI_thermo::set_start_color(Color color)
 {
     this->m_color_map[0] = color;
