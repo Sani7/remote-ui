@@ -24,7 +24,7 @@ std::string message_parser(std::string message)
 
 json command_parser(json command)
 {
-    json j;
+    json j = "{}"_json;
     try
     {
         std::string type = command.at("type");
