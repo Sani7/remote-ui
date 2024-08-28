@@ -117,15 +117,6 @@ void Websocket::process_messages()
                 m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
             }
             break;
-            case BROADCAST:
-            {
-                std::lock_guard<std::mutex> guard(m_connection_lock);
-                for (auto it : m_connections)
-                {
-                    m_server.send(it, a.payload, websocketpp::frame::opcode::TEXT);
-                }
-            }
-            break;
             default:
                 break;
         }
@@ -143,9 +134,11 @@ void Websocket::process_broadcast()
             continue;
         }
         {
-            std::lock_guard<std::mutex> guard(m_action_lock);
-            m_actions.push(action(BROADCAST, update));
+            std::lock_guard<std::mutex> guard(m_connection_lock);
+            for (auto it : m_connections)
+            {
+                m_server.send(it, update, websocketpp::frame::opcode::TEXT);
+            }
         }
-        m_action_cond.notify_one();
     }
 }
