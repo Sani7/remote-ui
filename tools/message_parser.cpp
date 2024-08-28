@@ -85,25 +85,25 @@ void event_handler(json event)
             case Event::clicked:
             {
                 spdlog::debug("Event {}: {}", type, std::string(event.at("id")));
-                std::thread([id = std::string(event.at("id"))] { g_simulators->invoke_active_simulator()->get_UI_item(id)->click(); }).detach();
+                g_simulators->invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->click();
                 break;
             }
             case Event::value_changed:
             {
                 spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), (double)(event["value"]));
-                std::thread([id = std::string(event.at("id")), value = (double)(event["value"])] { g_simulators->invoke_active_simulator()->get_UI_item(id)->set_value(value); }).detach();
+                g_simulators->invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->set_value((double)event.at("value"));
                 break;
             }
             case Event::text_changed:
             {
                 spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), std::string(event.at("text")));
-                std::thread([id = std::string(event.at("id")), text = std::string(event.at("text"))] { g_simulators->invoke_active_simulator()->get_UI_item(id)->set_text(text); }).detach();
+                g_simulators->invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->set_text(std::string(event.at("text")));
                 break;
             }
             case Event::selected:
             {
                 spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), std::string(event.at("selected")));
-                std::thread([id = std::string(event.at("id")), selected = std::string(event.at("selected"))]{ g_simulators->invoke_active_simulator()->get_UI_item(id)->set_selected(selected); }).detach();
+                g_simulators->invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->set_selected(std::string(event.at("selected")));
                 break;
             }
             default:

@@ -19,10 +19,10 @@ void UI_slider::set_value(double value)
     if (value == m_value)
         return;
 
+    this->m_value = value;
     if (m_on_change != nullptr)
     {
-        this->m_value = value;
-        m_on_change(m_id, value);
+        std::thread([this] { m_on_change(m_id, m_value); }).detach();
     }
 }
 

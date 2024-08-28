@@ -27,6 +27,6 @@ void UI_button::click() const
 {
     if (m_on_click != nullptr)
     {
-        m_on_click(m_id);
+        std::thread([this] { m_on_click(m_id); }).detach();
     }
 }

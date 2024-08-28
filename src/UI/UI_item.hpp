@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <thread>
 #include <cstdint>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -18,7 +19,7 @@ class UI_item {
     std::string type() const;
     bool is_type(json j);
 
-    void set_text(std::string text);
+    virtual void set_text(std::string text);
     std::string text() const;
 
     void set_text_size(uint8_t text_size);

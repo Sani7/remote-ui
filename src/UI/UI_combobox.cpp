@@ -23,7 +23,7 @@ void UI_combobox::set_selected(size_t selected)
     m_selected = selected;
     if (m_on_change != nullptr)
     {
-        m_on_change(m_id, selected_text());
+        std::thread([this] { m_on_change(m_id, selected_text()); }).detach();
     }
 }
 
