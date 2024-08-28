@@ -6,7 +6,8 @@ UI_textbox::UI_textbox(std::string id, std::string hint, Color fg_color, Color b
 }
 
 UI_textbox::UI_textbox(const json& j)
-    : UI_item(UI_TEXTBOX_TYPE)
+    : UI_item(UI_TEXTBOX_TYPE),
+    m_on_change(nullptr)
 {
     from_json(j);
 }

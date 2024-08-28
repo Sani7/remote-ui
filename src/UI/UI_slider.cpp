@@ -7,7 +7,8 @@ UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_
 }
 
 UI_slider::UI_slider(const json& j)
-: UI_item(UI_SLIDER_TYPE)
+: UI_item(UI_SLIDER_TYPE),
+m_on_change(nullptr)
 {
     from_json(j);
 }

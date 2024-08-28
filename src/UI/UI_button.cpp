@@ -7,7 +7,8 @@ UI_button::UI_button(std::string id, std::string text, Color fg_color, Color bg_
 }
 
 UI_button::UI_button(const json& j)
-    : UI_item(UI_BUTTON_TYPE)
+    : UI_item(UI_BUTTON_TYPE),
+    m_on_click(nullptr)
 {
     from_json(j);
 }
