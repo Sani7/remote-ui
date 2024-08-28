@@ -7,7 +7,7 @@
 class UI_textbox : public UI_item
 {
 public:
-    UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, std::function<void(std::string, std::string)> on_change);
+    UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, std::function<void(std::string, std::string)> on_change = nullptr);
     UI_textbox(const json& j);
 
     void set_text(std::string text) override;
