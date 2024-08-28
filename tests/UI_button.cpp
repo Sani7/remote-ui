@@ -21,4 +21,5 @@ TEST(UI_button, on_click)
 {
     UI_button button("button_id", "button_text", Color(255, 255, 255), Color(0, 0, 0), on_click);
     button.click();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
