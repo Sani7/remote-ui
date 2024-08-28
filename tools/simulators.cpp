@@ -119,15 +119,22 @@ json Simulators::changed_UI_items()
     // Then push the ui_item at that index to the changed json
     std::unordered_set<size_t> addedIndices;
 
-    for (auto& item : diff)
+    try
     {
-        std::string path = item["path"];
-        size_t index = std::stoul(path.substr(10, path.find("/", 10) - 10));
-        if (addedIndices.find(index) != addedIndices.end())
-            continue;
-        
-        changed["event"]["UI_items"].push_back(after["UI_items"][index]);
-        addedIndices.insert(index);
+        for (auto& item : diff)
+        {
+            std::string path = item["path"];
+            size_t index = std::stoul(path.substr(10, path.find("/", 10) - 10));
+            if (addedIndices.find(index) != addedIndices.end())
+                continue;
+            
+            changed["event"]["UI_items"].push_back(after["UI_items"][index]);
+            addedIndices.insert(index);
+        }
+    }
+    catch(const std::exception& e)
+    {
+        spdlog::error(e.what());
     }
 
     m_before = after;
