@@ -109,7 +109,6 @@ void Websocket::process_messages()
             break;
             case MESSAGE:
             {
-                std::lock_guard<std::mutex> guard(m_connection_lock);
                 std::string response = m_on_message(a.msg->get_payload());
                 if (response.empty() || response == "{}")
                 {
