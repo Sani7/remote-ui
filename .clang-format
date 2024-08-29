@@ -1,0 +1,9 @@
+﻿---
+BasedOnStyle: Microsoft
+AlignAfterOpenBracket: Align
+ConstructorInitializerIndentWidth: '4'
+ContinuationIndentWidth: '4'
+TabWidth: '4'
+UseTab: Never
+
+...
