@@ -3,32 +3,36 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/async.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
 
+#include "message_parser.hpp"
 #include "simulators.hpp"
 #include "websocket.hpp"
-#include "message_parser.hpp"
 
 class Spdlog_buffer : public std::stringbuf
 {
-public:
-    Spdlog_buffer(std::function <void(std::string)> log_function) : log_function(log_function) {}
-    int sync() {
+  public:
+    Spdlog_buffer(std::function<void(std::string)> log_function) : log_function(log_function)
+    {
+    }
+    int sync()
+    {
         std::string str = this->str();
         str.pop_back();
         log_function(str);
         this->str("");
         return 0;
     }
-private:
-    std::function <void(std::string)> log_function;
+
+  private:
+    std::function<void(std::string)> log_function;
 };
 
-Simulators* g_simulators;
-Websocket* g_web_socket;
+Simulators *g_simulators;
+Websocket *g_web_socket;
 Spdlog_buffer g_info_buffer([](std::string message) { spdlog::info(message); });
 Spdlog_buffer g_error_buffer([](std::string message) { spdlog::error(message); });
 std::ostream g_out(&g_info_buffer);
@@ -52,10 +56,11 @@ void int_handler(int s)
 void init_logger()
 {
     spdlog::init_thread_pool(8192, 1);
-    auto stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt >();
-    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log-sim_us.txt", 1024*1024*10, 3);
-    std::vector<spdlog::sink_ptr> sinks {stdout_sink, rotating_sink};
-    auto logger = std::make_shared<spdlog::async_logger>("sim_us", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log-sim_us.txt", 1024 * 1024 * 10, 3);
+    std::vector<spdlog::sink_ptr> sinks{stdout_sink, rotating_sink};
+    auto logger = std::make_shared<spdlog::async_logger>("sim_us", sinks.begin(), sinks.end(), spdlog::thread_pool(),
+                                                         spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
     spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
     spdlog::flush_every(std::chrono::seconds(3));
@@ -80,14 +85,16 @@ int main(void)
     spdlog::info("Starting server");
     Simulators simulators;
     g_simulators = &simulators;
-    
-    Websocket web_socket(9002, &g_out, &g_err, [](std::string message) { return message_parser(message); }, []() { return g_simulators->changed_UI_items().dump(); });
+
+    Websocket web_socket(
+        9002, &g_out, &g_err, [](std::string message) { return message_parser(message); },
+        []() { return g_simulators->changed_UI_items().dump(); });
     g_web_socket = &web_socket;
 
     // Start the message processor and broadcast processor in separate threads
     std::thread message_processor_thread(std::bind(&Websocket::process_messages, &web_socket));
     std::thread broadcast_processor_thred(std::bind(&Websocket::process_broadcast, &web_socket));
-    
+
     // Run the asio loop with the main thread
     web_socket.run();
 

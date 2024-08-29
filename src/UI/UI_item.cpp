@@ -1,16 +1,18 @@
 #include "UI_item.hpp"
 
-UI_item::UI_item(std::string id, std::string type,  std::string text, uint8_t text_size, Color fg_color, Color bg_color)
-    : m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color), enabled(true), visible(true)
+UI_item::UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color)
+    : m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color),
+      enabled(true), visible(true)
 {
 }
 
 UI_item::UI_item(std::string type)
-    : m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White), enabled(true), visible(true)
+    : m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White),
+      enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(const json& j)
+UI_item::UI_item(const json &j)
 {
     from_json(j);
 }
@@ -106,7 +108,7 @@ bool UI_item::is_visible() const
     return visible;
 }
 
-void UI_item::from_json(const json& j)
+void UI_item::from_json(const json &j)
 {
     if (!is_type(j))
         return;

@@ -1,17 +1,17 @@
 #include "UI_combobox.hpp"
 
-UI_combobox::UI_combobox()
-    : UI_x_boxes(UI_COMBOBOX_TYPE)
+UI_combobox::UI_combobox() : UI_x_boxes(UI_COMBOBOX_TYPE)
 {
 }
 
-UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected, std::function<void(std::string, std::string)> on_change)
+UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color,
+                         std::vector<std::string> options, size_t selected,
+                         std::function<void(std::string, std::string)> on_change)
     : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options), m_selected(selected), m_on_change(on_change)
 {
 }
 
-UI_combobox::UI_combobox(const json& j)
-: UI_x_boxes(UI_COMBOBOX_TYPE), m_on_change(nullptr)
+UI_combobox::UI_combobox(const json &j) : UI_x_boxes(UI_COMBOBOX_TYPE), m_on_change(nullptr)
 {
     from_json(j);
 }
@@ -49,7 +49,7 @@ std::string UI_combobox::selected_text() const
     return m_options[m_selected];
 }
 
-void UI_combobox::from_json(const json& j)
+void UI_combobox::from_json(const json &j)
 {
     UI_x_boxes::from_json(j);
     std::string selected_str = j.at("selected");

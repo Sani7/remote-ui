@@ -1,11 +1,12 @@
 #include "UI_checkbox.hpp"
 
-UI_checkbox::UI_checkbox()
-    : UI_x_boxes(UI_CHECKBOX_TYPE), m_selected(), m_on_change(nullptr)
+UI_checkbox::UI_checkbox() : UI_x_boxes(UI_CHECKBOX_TYPE), m_selected(), m_on_change(nullptr)
 {
 }
 
-UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, std::function<void(std::string, std::vector<std::string>)> on_change)
+UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color,
+                         std::vector<std::string> options,
+                         std::function<void(std::string, std::vector<std::string>)> on_change)
     : UI_x_boxes(id, UI_CHECKBOX_TYPE, text, fg_color, bg_color, options), m_selected(), m_on_change(on_change)
 {
     for (size_t i = 0; i < m_options.size(); i++)
@@ -14,8 +15,7 @@ UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color
     }
 }
 
-UI_checkbox::UI_checkbox(const json& j) : 
-UI_x_boxes(UI_CHECKBOX_TYPE), m_selected(), m_on_change(nullptr)
+UI_checkbox::UI_checkbox(const json &j) : UI_x_boxes(UI_CHECKBOX_TYPE), m_selected(), m_on_change(nullptr)
 {
     from_json(j);
 }
@@ -61,10 +61,10 @@ std::vector<std::string> UI_checkbox::selected_text() const
     return selected_text;
 }
 
-void UI_checkbox::from_json(const json& j)
+void UI_checkbox::from_json(const json &j)
 {
     UI_x_boxes::from_json(j);
-    
+
     if (j.contains("selected"))
     {
         m_selected.clear();

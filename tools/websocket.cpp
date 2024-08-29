@@ -1,9 +1,8 @@
 #include "websocket.hpp"
 #include "spdlog/spdlog.h"
 
-Websocket::Websocket(uint16_t port, std::ostream* out, std::ostream* err,
-                     std::function<std::string(std::string)> on_message,
-                     std::function<std::string()> on_update)
+Websocket::Websocket(uint16_t port, std::ostream *out, std::ostream *err,
+                     std::function<std::string(std::string)> on_message, std::function<std::string()> on_update)
     : m_on_message(on_message), m_on_update(on_update), m_port(port)
 {
     // Set logging settings
@@ -11,10 +10,8 @@ Websocket::Websocket(uint16_t port, std::ostream* out, std::ostream* err,
     m_server.get_elog().set_custom(err != &std::cerr);
     m_server.get_alog().set_ostream(out);
     m_server.get_elog().set_ostream(err);
-    m_server.set_access_channels(websocketpp::log::alevel::connect +
-                                websocketpp::log::alevel::disconnect);
-    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload +
-                                websocketpp::log::alevel::frame_header);
+    m_server.set_access_channels(websocketpp::log::alevel::connect + websocketpp::log::alevel::disconnect);
+    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header);
 
     // Initialize Asio
     m_server.init_asio();
@@ -35,10 +32,14 @@ void Websocket::run()
         m_server.start_accept();
         // Start the ASIO io_service run loop
         m_server.run();
-    } catch (websocketpp::exception const& e) {
+    }
+    catch (websocketpp::exception const &e)
+    {
         spdlog::critical("{}", e.what());
         exit(1);
-    } catch (...) {
+    }
+    catch (...)
+    {
         spdlog::critical("other exception");
         exit(1);
     }
@@ -94,31 +95,29 @@ void Websocket::process_messages()
 
         lock.unlock();
 
-        switch (a.type) {
-            case SUBSCRIBE:
+        switch (a.type)
+        {
+        case SUBSCRIBE: {
+            std::lock_guard<std::mutex> guard(m_connection_lock);
+            m_connections.insert(a.hdl);
+        }
+        break;
+        case UNSUBSCRIBE: {
+            std::lock_guard<std::mutex> guard(m_connection_lock);
+            m_connections.erase(a.hdl);
+        }
+        break;
+        case MESSAGE: {
+            std::string response = m_on_message(a.msg->get_payload());
+            if (response.empty() || response == "{}")
             {
-                std::lock_guard<std::mutex> guard(m_connection_lock);
-                m_connections.insert(a.hdl);
+                continue;
             }
+            m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
+        }
+        break;
+        default:
             break;
-            case UNSUBSCRIBE:
-            {
-                std::lock_guard<std::mutex> guard(m_connection_lock);
-                m_connections.erase(a.hdl);
-            }
-            break;
-            case MESSAGE:
-            {
-                std::string response = m_on_message(a.msg->get_payload());
-                if (response.empty() || response == "{}")
-                {
-                    continue;
-                }
-                m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
-            }
-            break;
-            default:
-                break;
         }
     }
 }

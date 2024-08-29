@@ -1,14 +1,13 @@
 #include "UI_slider.hpp"
 
-UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value,  std::function<void(std::string, double)> on_change)
+UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max,
+                     double value, std::function<void(std::string, double)> on_change)
     : UI_item(id, UI_SLIDER_TYPE, text, 12, fg_color, bg_color), m_min(min), m_max(max), m_value(value)
 {
     this->m_on_change = on_change;
 }
 
-UI_slider::UI_slider(const json& j)
-: UI_item(UI_SLIDER_TYPE),
-m_on_change(nullptr)
+UI_slider::UI_slider(const json &j) : UI_item(UI_SLIDER_TYPE), m_on_change(nullptr)
 {
     from_json(j);
 }
@@ -42,7 +41,7 @@ double UI_slider::max() const
     return m_max;
 }
 
-void UI_slider::from_json(const json& j)
+void UI_slider::from_json(const json &j)
 {
     UI_item::from_json(j);
 

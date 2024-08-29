@@ -5,8 +5,7 @@ UI_dial::UI_dial(std::string id, std::string text, Color fg_color, Color bg_colo
 {
 }
 
-UI_dial::UI_dial(const json& j)
-: UI_item(UI_DIAL_TYPE)
+UI_dial::UI_dial(const json &j) : UI_item(UI_DIAL_TYPE)
 {
     from_json(j);
 }
@@ -36,7 +35,7 @@ double UI_dial::max() const
     return m_max;
 }
 
-void UI_dial::from_json(const json& j)
+void UI_dial::from_json(const json &j)
 {
     UI_item::from_json(j);
 

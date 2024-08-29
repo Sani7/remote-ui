@@ -1,13 +1,12 @@
 #include "UI_textbox.hpp"
 
-UI_textbox::UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, std::function<void(std::string, std::string)> on_change)
+UI_textbox::UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color,
+                       std::function<void(std::string, std::string)> on_change)
     : UI_item(id, UI_TEXTBOX_TYPE, "", 0, fg_color, bg_color), m_hint(hint), m_on_change(on_change)
 {
 }
 
-UI_textbox::UI_textbox(const json& j)
-    : UI_item(UI_TEXTBOX_TYPE),
-    m_on_change(nullptr)
+UI_textbox::UI_textbox(const json &j) : UI_item(UI_TEXTBOX_TYPE), m_on_change(nullptr)
 {
     from_json(j);
 }
@@ -33,7 +32,7 @@ std::string UI_textbox::hint() const
     return m_hint;
 }
 
-void UI_textbox::from_json(const json& j)
+void UI_textbox::from_json(const json &j)
 {
     UI_item::from_json(j);
     m_hint = j.at("hint");

@@ -1,7 +1,7 @@
 #include "simulators.hpp"
-#include <unordered_set>
-#include "test_sim.hpp"
 #include "can_debugger.hpp"
+#include "test_sim.hpp"
+#include <unordered_set>
 
 Simulators::Simulators()
 {
@@ -66,14 +66,14 @@ void Simulators::switch_simulator(std::string name)
 std::vector<std::string> Simulators::list_simulators() const
 {
     std::vector<std::string> names;
-    for (const auto& simulator : this->m_simulators)
+    for (const auto &simulator : this->m_simulators)
     {
         names.push_back(simulator.first);
     }
     return names;
 }
 
-Simulator_base* Simulators::invoke_active_simulator()
+Simulator_base *Simulators::invoke_active_simulator()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     if (this->m_simulators.empty())
@@ -84,7 +84,7 @@ Simulator_base* Simulators::invoke_active_simulator()
     {
         return nullptr;
     }
-    
+
     m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
 
     return this->m_simulators.at(m_current_simulator).get();
@@ -105,7 +105,7 @@ json Simulators::changed_UI_items()
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
     json changed;
     changed["event"]["type"] = "UI_changed";
-    
+
     json diff = json::diff(m_before, after);
 
     if (diff.empty())
@@ -121,18 +121,18 @@ json Simulators::changed_UI_items()
 
     try
     {
-        for (auto& item : diff)
+        for (auto &item : diff)
         {
             std::string path = item["path"];
             size_t index = std::stoul(path.substr(10, path.find("/", 10) - 10));
             if (addedIndices.find(index) != addedIndices.end())
                 continue;
-            
+
             changed["event"]["UI_items"].push_back(after["UI_items"][index]);
             addedIndices.insert(index);
         }
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
         spdlog::error(e.what());
     }

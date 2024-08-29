@@ -1,19 +1,20 @@
 #pragma once
-#include <functional>
-#include <thread>
+#include "color.hpp"
 #include <cstdint>
+#include <functional>
 #include <nlohmann/json.hpp>
 #include <string>
-#include "color.hpp"
+#include <thread>
 using json = nlohmann::json;
 
 #define UNUSED(x) (void)(x)
 
-class UI_item {
+class UI_item
+{
   public:
     UI_item(std::string type);
     UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color);
-    UI_item(const json& j);
+    UI_item(const json &j);
 
     std::string id() const;
     std::string type() const;
@@ -37,13 +38,19 @@ class UI_item {
     void set_visible(bool visible);
     bool is_visible() const;
 
-    virtual void from_json(const json& j);
+    virtual void from_json(const json &j);
 
     virtual json to_json() const;
 
     virtual void click() const {};
-    virtual void set_selected(std::string selected) {UNUSED(selected);};
-    virtual void set_value(double value) {UNUSED(value);};
+    virtual void set_selected(std::string selected)
+    {
+        UNUSED(selected);
+    };
+    virtual void set_value(double value)
+    {
+        UNUSED(value);
+    };
 
   protected:
     std::string m_id;
