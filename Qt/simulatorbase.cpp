@@ -5,6 +5,7 @@ SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       m_error_dialog(new NetworkError(this))
 {
     this->m_web_socket = web_socket;
+    m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
 }
 
 void SimulatorBase::showEvent( QShowEvent* event )
@@ -33,6 +34,7 @@ void SimulatorBase::setup_cb(void)
 {
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
     connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=](json& j){on_event_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open();});
 }
 
 void SimulatorBase::on_cmd_cb(json& j)

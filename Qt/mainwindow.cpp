@@ -19,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Simulator Selector");
 
+    m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
+
     //Default sim
     //defaultSim("CVS_I10");
 
@@ -37,6 +39,7 @@ void MainWindow::setup_cb(void)
 {
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
     connect(m_web_socket, &Web_socket_wrapper::on_connected, this, [=]{m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators);});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open();});
 }
 
 void MainWindow::showEvent( QShowEvent* event )

@@ -2,6 +2,7 @@
 #define WEB_SOCKET_WRAPPER_H
 
 #include <QtWebSockets/QWebSocket>
+#include <QTimer>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -48,10 +49,14 @@ class Web_socket_wrapper : public QObject
   private Q_SLOTS:
     void m_on_connected();
     void m_on_received(QString message);
+    void m_on_pong(quint64 elapsedTime);
+    void m_on_pong_timeout();
 
   private:
     bool m_connected = false;
     QWebSocket* m_web_socket;
+    QTimer* m_ping_timer;
+    QTimer* m_pong_timer;
 };
 
 #endif // WEB_SOCKET_WRAPPER_H
