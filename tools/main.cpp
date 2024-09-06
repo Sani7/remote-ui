@@ -62,7 +62,7 @@ void init_logger()
     auto logger = std::make_shared<spdlog::async_logger>("sim_us", sinks.begin(), sinks.end(), spdlog::thread_pool(),
                                                          spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
-    spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
+    spdlog::set_pattern("[%H:%M:%S %z] [%^---%L---%$] [thread %t] %v");
     spdlog::flush_every(std::chrono::seconds(3));
     spdlog::set_level(spdlog::level::trace);
 }
