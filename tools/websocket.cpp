@@ -11,7 +11,8 @@ Websocket::Websocket(uint16_t port, std::ostream *out, std::ostream *err,
     m_server.get_alog().set_ostream(out);
     m_server.get_elog().set_ostream(err);
     m_server.set_access_channels(websocketpp::log::alevel::connect + websocketpp::log::alevel::disconnect);
-    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header + websocketpp::log::alevel::control);
+    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header +
+                                   websocketpp::log::alevel::control);
 
     // Initialize Asio
     m_server.init_asio();
