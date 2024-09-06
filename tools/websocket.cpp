@@ -11,7 +11,7 @@ Websocket::Websocket(uint16_t port, std::ostream *out, std::ostream *err,
     m_server.get_alog().set_ostream(out);
     m_server.get_elog().set_ostream(err);
     m_server.set_access_channels(websocketpp::log::alevel::connect + websocketpp::log::alevel::disconnect);
-    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header);
+    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header + websocketpp::log::alevel::control);
 
     // Initialize Asio
     m_server.init_asio();
@@ -71,6 +71,12 @@ void Websocket::on_close(websocketpp::connection_hdl hdl)
 
 void Websocket::on_message(websocketpp::connection_hdl hdl, Server::message_ptr msg)
 {
+    // return pong
+    if (msg->get_opcode() == websocketpp::frame::opcode::PING)
+    {
+        m_server.send(hdl, msg->get_payload(), websocketpp::frame::opcode::PONG);
+        return;
+    }
     // queue message up for sending by processing thread
     {
         std::lock_guard<std::mutex> guard(m_action_lock);
