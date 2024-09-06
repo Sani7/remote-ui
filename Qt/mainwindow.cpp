@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
       QMainWindow(parent),
       ui(new Ui::MainWindow),
       m_web_socket(new Web_socket_wrapper(QUrl("ws://localhost:9002"), this)),
-      error_dialog(new NetworkError(this)),
-      sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
+      m_error_dialog(new NetworkError(this)),
+      m_sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
            {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
            {"CVS_I10", new CVS_I10(m_web_socket, this)},
            {"Test_Sim", new Test_Sim(m_web_socket, this)}}
@@ -30,7 +30,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete m_web_socket;
-    delete error_dialog;
+    delete m_error_dialog;
 }
 
 void MainWindow::setup_cb(void)
@@ -53,8 +53,8 @@ void MainWindow::hideEvent(QHideEvent* event)
 
 void MainWindow::defaultSim(QString name)
 {
-    this->selected_sim_name = name;
-    this->default_sim = true;
+    this->m_selected_sim_name = name;
+    this->m_default_sim = true;
 }
 
 void MainWindow::pase_sim_names(json& sims)
@@ -66,10 +66,10 @@ void MainWindow::pase_sim_names(json& sims)
 
     QThread::msleep(30);
 
-    if (this->default_sim)
+    if (this->m_default_sim)
     {
-        ui->comboBox->setCurrentText(this->selected_sim_name);
-        open_sim(this->selected_sim_name);
+        ui->comboBox->setCurrentText(this->m_selected_sim_name);
+        open_sim(this->m_selected_sim_name);
     }
 }
 
@@ -77,8 +77,8 @@ void MainWindow::open_sim(QString sim_name)
 {
     try
     {
-        selected_sim = sims.at(sim_name);
-        this->selected_sim_name = sim_name;
+        m_selected_sim = m_sims.at(sim_name);
+        this->m_selected_sim_name = sim_name;
     }
     catch (const std::out_of_range& ex)
     {
@@ -92,7 +92,7 @@ void MainWindow::open_sim(QString sim_name)
 void MainWindow::open_sim_window(void)
 {
     this->hide();
-    selected_sim->show();
+    m_selected_sim->show();
 }
 
 void MainWindow::check_active_sim(QString name)
@@ -100,13 +100,13 @@ void MainWindow::check_active_sim(QString name)
         if (name == "")
         {
             QD << "Name not set";
-            m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, selected_sim_name);
+            m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, m_selected_sim_name);
             return;
         }
 
          QD << "Current sim:" << name;
 
-        if (name == selected_sim_name)
+        if (name == m_selected_sim_name)
         {
             QD << "Name set and right";
             open_sim_window();
@@ -114,7 +114,7 @@ void MainWindow::check_active_sim(QString name)
         }
 
         QD << "Name set and wrong";
-        m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, selected_sim_name);
+        m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, m_selected_sim_name);
 }
 
 void MainWindow::on_cmd_cb(json& j)

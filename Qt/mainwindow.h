@@ -35,14 +35,14 @@ class MainWindow : public QMainWindow
 
     void on_cmd_cb(json& j);
 
-    bool default_sim = false;
-    QString selected_sim_name;
-    QMainWindow* selected_sim;
-    Ui::MainWindow *ui;
+    bool m_default_sim = false;
+    QString m_selected_sim_name;
+    QMainWindow* m_selected_sim;
+    Ui::MainWindow* ui;
     Web_socket_wrapper *m_web_socket;
-    NetworkError* error_dialog;
+    NetworkError* m_error_dialog;
 
-    std::map<QString, SimulatorBase*> sims;
+    std::map<QString, SimulatorBase*> m_sims;
 };
 
 #endif // MAINWINDOW_H
