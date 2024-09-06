@@ -22,22 +22,22 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
 add_subdirectory(qwt)
 
 set(PROJECT_SOURCES
-        sim-cvs_i10.h
-        sim-cvs_i10.cpp
-        sim-cvs_i10_helper.cpp
-        sim-cvs_i10.ui
+        simulators/sim-cvs_i10.h
+        simulators/sim-cvs_i10.cpp
+        simulators/sim-cvs_i10_helper.cpp
+        simulators/sim-cvs_i10.ui
 
-        sim-can_debugger.h
-        sim-can_debugger.cpp
-        sim-can_debugger.ui
+        simulators/sim-can_debugger.h
+        simulators/sim-can_debugger.cpp
+        simulators/sim-can_debugger.ui
 
-        sim-scope_mux_tester.h
-        sim-scope_mux_tester.cpp
-        sim-scope_mux_tester.ui
+        simulators/sim-scope_mux_tester.h
+        simulators/sim-scope_mux_tester.cpp
+        simulators/sim-scope_mux_tester.ui
 
-        sim-test.h
-        sim-test.cpp
-        sim-test.ui
+        simulators/sim-test.h
+        simulators/sim-test.cpp
+        simulators/sim-test.ui
 
         simulatorbase.h
         simulatorbase.cpp
