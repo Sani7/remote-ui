@@ -42,15 +42,9 @@ class UI_item
 
     virtual json to_json() const;
 
-    virtual void click() const {};
-    virtual void set_selected(std::string selected)
-    {
-        UNUSED(selected);
-    };
-    virtual void set_value(double value)
-    {
-        UNUSED(value);
-    };
+    virtual void click() const;
+    virtual void set_selected(std::string selected);
+    virtual void set_value(double value);
 
   protected:
     std::string m_id;

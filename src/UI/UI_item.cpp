@@ -138,3 +138,14 @@ json UI_item::to_json() const
     j["visible"] = visible;
     return j;
 }
+
+void UI_item::click() const {};
+
+void UI_item::set_selected(std::string selected)
+{
+    UNUSED(selected);
+};
+void UI_item::set_value(double value)
+{
+    UNUSED(value);
+};
