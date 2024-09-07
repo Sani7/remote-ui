@@ -18,6 +18,8 @@ target_compile_options(UI PRIVATE $<$<CONFIG:Debug>:
     -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion
     >)
 
+file(GLOB_RECURSE CUSTOM_UI_SOURCES "custom/*.cpp")
+
 target_sources(UI
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/UI_item.cpp
@@ -42,6 +44,8 @@ target_sources(UI
     ${CMAKE_CURRENT_LIST_DIR}/UI_thermo.hpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.cpp
     ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.hpp
+
+    ${CUSTOM_UI_SOURCES}
 )
 
 target_include_directories(UI
@@ -49,6 +53,7 @@ target_include_directories(UI
     ${CMAKE_CURRENT_LIST_DIR}
     PRIVATE
     ${PROJECT_DIR}/external/**
+    ${PROJECT_DIR}/src/CAN/
     ${CMAKE_BINARY_DIR}/**
 )
 

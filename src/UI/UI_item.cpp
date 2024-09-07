@@ -161,3 +161,8 @@ void UI_item::set_value(double value)
 {
     UNUSED(value);
 };
+
+void UI_item::can_send(can_message_t msg)
+{
+    UNUSED(msg);
+};

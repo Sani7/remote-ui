@@ -49,6 +49,7 @@ class UI_item : public QObject
     virtual void click();
     virtual void set_selected(std::string selected);
     virtual void set_value(double value);
+    virtual void can_send(can_message_t msg);
 
   signals:
     void value_changed();
