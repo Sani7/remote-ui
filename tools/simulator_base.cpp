@@ -1,8 +1,9 @@
 #include "simulator_base.hpp"
 
 Simulator_base::Simulator_base(std::string name, std::chrono::milliseconds interval, QObject* parrent)
-    : QObject(parrent), m_name(name), m_timer([this] { timer(); }), m_interval(interval)
+    : QObject(parrent), m_name(name), m_timer(new QTimer(this)), m_interval(interval)
 {
+    connect(m_timer, &QTimer::timeout, this, [this]{timer();});
 }
 
 std::string Simulator_base::name() const
@@ -59,14 +60,14 @@ UI_item *Simulator_base::get_UI_item(std::string id) const
 void Simulator_base::run()
 {
     // Start the timer
-    m_timer.setInterval(m_interval);
+    m_timer->start(m_interval);
     run_at_startup();
 }
 
 void Simulator_base::stop()
 {
     // Stop the simulator
-    m_timer.stop();
+    m_timer->stop();
 }
 
 void Simulator_base::shutdown()

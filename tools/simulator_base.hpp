@@ -2,7 +2,7 @@
 
 #include "UI.hpp"
 #include "spdlog/spdlog.h"
-#include "timer.hpp"
+#include <QTimer>
 
 class Simulator_base : public QObject
 {
@@ -89,6 +89,6 @@ class Simulator_base : public QObject
     std::string m_name;
     std::vector<UI_item *> m_UI_items;
     std::map<std::string, UI_item *> m_UI_items_map;
-    Timer m_timer;
+    QTimer* m_timer;
     std::chrono::milliseconds m_interval;
 };

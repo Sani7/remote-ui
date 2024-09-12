@@ -40,8 +40,7 @@ target_include_directories(server
 
 target_link_libraries(server PRIVATE
     Qt::WebSockets
-    UI
-    Timer
     magic_enum::magic_enum
     spdlog
+    UI
 )
