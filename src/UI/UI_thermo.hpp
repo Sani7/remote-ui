@@ -8,8 +8,9 @@ class UI_thermo : public UI_item
 {
     Q_OBJECT
   public:
-    UI_thermo(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value, QObject* parrent = nullptr);
-    UI_thermo(const json &j, QObject* parrent = nullptr);
+    UI_thermo(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+              QObject *parrent = nullptr);
+    UI_thermo(const json &j, QObject *parrent = nullptr);
 
     void set_value(double value) override;
     double value() const;

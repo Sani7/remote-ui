@@ -1,16 +1,16 @@
 #include "UI_combobox.hpp"
 
-UI_combobox::UI_combobox(QObject* parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
+UI_combobox::UI_combobox(QObject *parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
 {
 }
 
 UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color,
-                         std::vector<std::string> options, size_t selected, QObject* parrent)
+                         std::vector<std::string> options, size_t selected, QObject *parrent)
     : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected(selected)
 {
 }
 
-UI_combobox::UI_combobox(const json &j, QObject* parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
+UI_combobox::UI_combobox(const json &j, QObject *parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
 {
     from_json(j);
 }

@@ -32,8 +32,7 @@ json Simulators::command_parser(json command)
         case Command::get_UI_element:
             spdlog::info("Command {}: {}", type, std::string(command.at("id")));
             j["response"]["type"] = type;
-            j["response"]["UI_item"] =
-                invoke_active_simulator()->get_UI_item(command.at("id"))->to_json();
+            j["response"]["UI_item"] = invoke_active_simulator()->get_UI_item(command.at("id"))->to_json();
             break;
         case Command::get_UI_elements:
             spdlog::info("Command {}", type);
@@ -88,9 +87,7 @@ void Simulators::event_handler(json event)
         }
         case Event::value_changed: {
             spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), (double)(event["value"]));
-            invoke_active_simulator()
-                ->get_UI_item(std::string(event.at("id")))
-                ->set_value((double)event.at("value"));
+            invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->set_value((double)event.at("value"));
             break;
         }
         case Event::text_changed: {

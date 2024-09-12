@@ -3,8 +3,8 @@
 #include <memory>
 #include <mutex>
 
-#include "websocket.hpp"
 #include "simulator_base.hpp"
+#include "websocket.hpp"
 
 #define INSERT_SIMULATOR(type) m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>()));
 
@@ -44,7 +44,7 @@ class Simulators : public QObject
     Simulator_base *invoke_active_simulator();
     json changed_UI_items();
 
-    //parsing of websocket messages
+    // parsing of websocket messages
     QString message_parser(QString message);
     json command_parser(json command);
     void event_handler(json event);

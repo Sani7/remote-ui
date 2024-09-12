@@ -15,9 +15,10 @@ class UI_item : public QObject
 {
     Q_OBJECT
   public:
-    explicit UI_item(std::string type, QObject* parrent = nullptr);
-    explicit UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color, QObject* parrent = nullptr);
-    explicit UI_item(const json &j, QObject* parrent = nullptr);
+    explicit UI_item(std::string type, QObject *parrent = nullptr);
+    explicit UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color,
+                     Color bg_color, QObject *parrent = nullptr);
+    explicit UI_item(const json &j, QObject *parrent = nullptr);
     ~UI_item();
 
     std::string id() const;

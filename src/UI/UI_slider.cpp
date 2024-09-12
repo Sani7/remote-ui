@@ -1,13 +1,12 @@
 #include "UI_slider.hpp"
 
 UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max,
-                     double value, QObject* parrent)
+                     double value, QObject *parrent)
     : UI_item(id, UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
 {
-
 }
 
-UI_slider::UI_slider(const json &j, QObject* parrent) : UI_item(UI_SLIDER_TYPE, parrent)
+UI_slider::UI_slider(const json &j, QObject *parrent) : UI_item(UI_SLIDER_TYPE, parrent)
 {
     from_json(j);
 }

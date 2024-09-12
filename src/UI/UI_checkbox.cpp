@@ -1,11 +1,11 @@
 #include "UI_checkbox.hpp"
 
-UI_checkbox::UI_checkbox(QObject* parrent) : UI_x_boxes(UI_CHECKBOX_TYPE, parrent), m_selected()
+UI_checkbox::UI_checkbox(QObject *parrent) : UI_x_boxes(UI_CHECKBOX_TYPE, parrent), m_selected()
 {
 }
 
 UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color,
-                         std::vector<std::string> options, QObject* parrent)
+                         std::vector<std::string> options, QObject *parrent)
     : UI_x_boxes(id, UI_CHECKBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected()
 {
     for (size_t i = 0; i < m_options.size(); i++)
@@ -14,7 +14,7 @@ UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color
     }
 }
 
-UI_checkbox::UI_checkbox(const json &j, QObject* parrent) : UI_x_boxes(UI_CHECKBOX_TYPE, parrent), m_selected()
+UI_checkbox::UI_checkbox(const json &j, QObject *parrent) : UI_x_boxes(UI_CHECKBOX_TYPE, parrent), m_selected()
 {
     from_json(j);
 }

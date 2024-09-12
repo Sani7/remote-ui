@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
 #include <QtCore/QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -16,9 +16,9 @@ class Websocket : public QObject
     ~Websocket();
 
     void broadcast(QString message);
-    void send(QWebSocket* conn, QString message);
+    void send(QWebSocket *conn, QString message);
   signals:
-    void on_message(QWebSocket* conn, QString message);
+    void on_message(QWebSocket *conn, QString message);
     void closed();
 
   private slots:

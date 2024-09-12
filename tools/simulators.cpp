@@ -1,12 +1,10 @@
 #include "simulators.hpp"
 #include "can_debugger.hpp"
 #include "test_sim.hpp"
-#include <unordered_set>
 #include <QDebug>
+#include <unordered_set>
 
-Simulators::Simulators(uint16_t port, QObject* parrent) :
-      QObject(parrent),
-      m_server(new Websocket(port, this))
+Simulators::Simulators(uint16_t port, QObject *parrent) : QObject(parrent), m_server(new Websocket(port, this))
 {
     qDebug() << port;
     INSERT_SIMULATOR(Test_Sim);
@@ -16,7 +14,7 @@ Simulators::Simulators(uint16_t port, QObject* parrent) :
 
 void Simulators::setup_connections()
 {
-    connect(m_server, &Websocket::on_message, this, [this](QWebSocket* conn, QString message){
+    connect(m_server, &Websocket::on_message, this, [this](QWebSocket *conn, QString message) {
         QString response = message_parser(message);
         if (response.isEmpty() || response == "{}")
             return;
@@ -80,7 +78,8 @@ void Simulators::switch_simulator(std::string name)
         disconnect(m_simulators.at(m_current_simulator).get());
     }
     this->m_current_simulator = name;
-    connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this, [this]{m_server->broadcast(QString::fromStdString(changed_UI_items().dump()));});
+    connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
+            [this] { m_server->broadcast(QString::fromStdString(changed_UI_items().dump())); });
     this->run();
 }
 

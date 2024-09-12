@@ -9,9 +9,10 @@ class UI_checkbox : public UI_x_boxes
 {
     Q_OBJECT
   public:
-    UI_checkbox(QObject* parrent = nullptr);
-    UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options, QObject* parrent = nullptr);
-    UI_checkbox(const json &j, QObject* parrent = nullptr);
+    UI_checkbox(QObject *parrent = nullptr);
+    UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options,
+                QObject *parrent = nullptr);
+    UI_checkbox(const json &j, QObject *parrent = nullptr);
 
     void toggle_selected(size_t selected);
     void toggle_selected(std::string selected);

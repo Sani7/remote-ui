@@ -1,6 +1,6 @@
-#include <QtCore/QCoreApplication>
-#include <QtCore/QCommandLineParser>
 #include <QtCore/QCommandLineOption>
+#include <QtCore/QCommandLineParser>
+#include <QtCore/QCoreApplication>
 
 #include "spdlog/async.h"
 #include "spdlog/sinks/rotating_file_sink.h"
@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("QtWebSockets example: echoserver");
     parser.addHelpOption();
 
-    QCommandLineOption portOption(QStringList() << "p" << "port",
+    QCommandLineOption portOption(QStringList() << "p"
+                                                << "port",
                                   QCoreApplication::translate("main", "Port for echoserver [default: 9002]."),
                                   QCoreApplication::translate("main", "port"), QLatin1String("9002"));
     parser.addOption(portOption);

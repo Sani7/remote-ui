@@ -1,11 +1,11 @@
 #include "UI_textbox.hpp"
 
-UI_textbox::UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, QObject* parrent)
+UI_textbox::UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, QObject *parrent)
     : UI_item(id, UI_TEXTBOX_TYPE, "", 0, fg_color, bg_color, parrent), m_hint(hint)
 {
 }
 
-UI_textbox::UI_textbox(const json &j, QObject* parrent) : UI_item(UI_TEXTBOX_TYPE, parrent)
+UI_textbox::UI_textbox(const json &j, QObject *parrent) : UI_item(UI_TEXTBOX_TYPE, parrent)
 {
     from_json(j);
 }

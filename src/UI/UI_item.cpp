@@ -1,21 +1,19 @@
 #include "UI_item.hpp"
 
-UI_item::UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color, QObject* parrent)
-    : QObject(parrent),
-      m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color),
-      enabled(true), visible(true)
+UI_item::UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color,
+                 QObject *parrent)
+    : QObject(parrent), m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color),
+      m_bg_color(bg_color), enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(std::string type, QObject* parrent)
-    : QObject(parrent),
-      m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White),
-      enabled(true), visible(true)
+UI_item::UI_item(std::string type, QObject *parrent)
+    : QObject(parrent), m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black),
+      m_bg_color(Color::White), enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(const json &j, QObject* parrent) :
-    QObject(parrent)
+UI_item::UI_item(const json &j, QObject *parrent) : QObject(parrent)
 {
     from_json(j);
 }
