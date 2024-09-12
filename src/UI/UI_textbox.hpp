@@ -6,10 +6,10 @@
 
 class UI_textbox : public UI_item
 {
+    Q_OBJECT
   public:
-    UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color,
-               std::function<void(std::string, std::string)> on_change = nullptr);
-    UI_textbox(const json &j);
+    UI_textbox(std::string id, std::string hint, Color fg_color, Color bg_color, QObject* parrent = nullptr);
+    UI_textbox(const json &j, QObject* parrent = nullptr);
 
     void set_text(std::string text) override;
 
@@ -18,8 +18,9 @@ class UI_textbox : public UI_item
 
     void from_json(const json &j) override;
     json to_json() const override;
+  signals:
+    void on_change(std::string id, std::string text);
 
   private:
     std::string m_hint;
-    std::function<void(std::string, std::string)> m_on_change;
 };

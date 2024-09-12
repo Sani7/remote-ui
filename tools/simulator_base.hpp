@@ -4,9 +4,9 @@
 #include "spdlog/spdlog.h"
 #include "timer.hpp"
 
-class Simulator_base
+class Simulator_base : public QObject
 {
-
+    Q_OBJECT
   public:
     /**
      * @brief Construct a new Simulator_base object
@@ -14,7 +14,7 @@ class Simulator_base
      * @param name The name of the simulator
      * @param interval The interval of the timer (default is 100ms)
      */
-    Simulator_base(std::string name, std::chrono::milliseconds interval = std::chrono::milliseconds(100));
+    Simulator_base(std::string name, std::chrono::milliseconds interval = std::chrono::milliseconds(100), QObject* parrent = nullptr);
 
     /**
      * @brief Returns the name of the simulator
@@ -82,6 +82,8 @@ class Simulator_base
 
     void shutdown();
     void reboot();
+  signals:
+    void sim_changed();
 
   protected:
     std::string m_name;

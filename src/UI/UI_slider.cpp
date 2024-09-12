@@ -1,13 +1,13 @@
 #include "UI_slider.hpp"
 
 UI_slider::UI_slider(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max,
-                     double value, std::function<void(std::string, double)> on_change)
-    : UI_item(id, UI_SLIDER_TYPE, text, 12, fg_color, bg_color), m_min(min), m_max(max), m_value(value)
+                     double value, QObject* parrent)
+    : UI_item(id, UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
 {
-    this->m_on_change = on_change;
+
 }
 
-UI_slider::UI_slider(const json &j) : UI_item(UI_SLIDER_TYPE), m_on_change(nullptr)
+UI_slider::UI_slider(const json &j, QObject* parrent) : UI_item(UI_SLIDER_TYPE, parrent)
 {
     from_json(j);
 }
@@ -20,10 +20,8 @@ void UI_slider::set_value(double value)
         return;
 
     this->m_value = value;
-    if (m_on_change != nullptr)
-    {
-        std::thread([this] { m_on_change(m_id, m_value); }).detach();
-    }
+    emit value_changed();
+    emit on_change(m_id, m_value);
 }
 
 double UI_slider::value() const

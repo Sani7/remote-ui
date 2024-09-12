@@ -1,13 +1,12 @@
 #include "UI_button.hpp"
 
-UI_button::UI_button(std::string id, std::string text, Color fg_color, Color bg_color,
-                     std::function<void(std::string)> on_click)
-    : UI_item(id, UI_BUTTON_TYPE, text, 12, fg_color, bg_color)
+UI_button::UI_button(std::string id, std::string text, Color fg_color, Color bg_color, QObject* parrent)
+    : UI_item(id, UI_BUTTON_TYPE, text, 12, fg_color, bg_color, parrent)
 {
-    this->m_on_click = on_click;
+
 }
 
-UI_button::UI_button(const json &j) : UI_item(UI_BUTTON_TYPE), m_on_click(nullptr)
+UI_button::UI_button(const json &j, QObject* parrent) : UI_item(UI_BUTTON_TYPE, parrent)
 {
     from_json(j);
 }
@@ -23,10 +22,7 @@ json UI_button::to_json() const
     return j;
 }
 
-void UI_button::click() const
+void UI_button::click()
 {
-    if (m_on_click != nullptr)
-    {
-        std::thread([this] { m_on_click(m_id); }).detach();
-    }
+    emit on_click(m_id);
 }

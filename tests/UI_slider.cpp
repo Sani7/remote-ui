@@ -12,23 +12,8 @@ TEST(UI_slider, to_from_json)
     EXPECT_EQ(slider.value(), slider2.value());
 }
 
-static double val = 0;
-void on_change(std::string id, double value)
-{
-    EXPECT_EQ(id, "slider_id");
-    val = value;
-}
-
-TEST(UI_slider, set_value)
-{
-    UI_slider slider("slider_id", "slider_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50, on_change);
-    slider.set_value(75);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    EXPECT_EQ(val, 75);
-}
-
 TEST(UI_slider, value)
 {
-    UI_slider slider("slider_id", "slider_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50, on_change);
+    UI_slider slider("slider_id", "slider_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50);
     EXPECT_EQ(slider.value(), 50);
 }

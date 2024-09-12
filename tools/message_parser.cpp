@@ -1,15 +1,13 @@
-#include "message_parser.hpp"
+#include "simulators.hpp"
 #include <iostream>
 #include <magic_enum.hpp>
 
-extern Simulators *g_simulators;
-
-std::string message_parser(std::string message)
+QString Simulators::message_parser(QString message)
 {
-    json j = json::parse(message);
+    json j = json::parse(message.toStdString());
     if (j.contains("command"))
     {
-        return command_parser(j["command"]).dump();
+        return QString::fromStdString(command_parser(j["command"]).dump());
     }
     else if (j.contains("event"))
     {
@@ -22,7 +20,7 @@ std::string message_parser(std::string message)
     }
 }
 
-json command_parser(json command)
+json Simulators::command_parser(json command)
 {
     json j = "{}"_json;
     try
@@ -35,27 +33,27 @@ json command_parser(json command)
             spdlog::info("Command {}: {}", type, std::string(command.at("id")));
             j["response"]["type"] = type;
             j["response"]["UI_item"] =
-                g_simulators->invoke_active_simulator()->get_UI_item(command.at("id"))->to_json();
+                invoke_active_simulator()->get_UI_item(command.at("id"))->to_json();
             break;
         case Command::get_UI_elements:
             spdlog::info("Command {}", type);
             j["response"]["type"] = type;
-            j["response"]["UI_items"] = g_simulators->invoke_active_simulator()->get_UI_items()["UI_items"];
+            j["response"]["UI_items"] = invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
         case Command::switch_simulator:
             spdlog::info("Command {} to {}", type, std::string(command.at("name")));
-            g_simulators->switch_simulator(command.at("name"));
+            switch_simulator(command.at("name"));
             j["response"]["type"] = type;
             break;
         case Command::get_active_simulator_name:
             spdlog::info("Command {}", type);
             j["response"]["type"] = type;
-            j["response"]["name"] = g_simulators->active_simulator_name();
+            j["response"]["name"] = active_simulator_name();
             break;
         case Command::get_simulators:
             spdlog::info("Command {}", type);
             j["response"]["type"] = type;
-            j["response"]["simulators"] = g_simulators->list_simulators();
+            j["response"]["simulators"] = list_simulators();
             break;
         default:
             break;
@@ -69,13 +67,13 @@ json command_parser(json command)
     return j;
 }
 
-void event_handler(json event)
+void Simulators::event_handler(json event)
 {
     try
     {
         std::string type = event.at("type");
         Event e = magic_enum::enum_cast<Event>(type).value_or(Event::end);
-        if (g_simulators->invoke_active_simulator() == nullptr)
+        if (invoke_active_simulator() == nullptr)
         {
             spdlog::error("Event got called but there is no active simulator");
             return;
@@ -85,26 +83,26 @@ void event_handler(json event)
         {
         case Event::clicked: {
             spdlog::debug("Event {}: {}", type, std::string(event.at("id")));
-            g_simulators->invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->click();
+            invoke_active_simulator()->get_UI_item(std::string(event.at("id")))->click();
             break;
         }
         case Event::value_changed: {
             spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), (double)(event["value"]));
-            g_simulators->invoke_active_simulator()
+            invoke_active_simulator()
                 ->get_UI_item(std::string(event.at("id")))
                 ->set_value((double)event.at("value"));
             break;
         }
         case Event::text_changed: {
             spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), std::string(event.at("text")));
-            g_simulators->invoke_active_simulator()
+            invoke_active_simulator()
                 ->get_UI_item(std::string(event.at("id")))
                 ->set_text(std::string(event.at("text")));
             break;
         }
         case Event::selected: {
             spdlog::debug("Event {}: {} {}", type, std::string(event.at("id")), std::string(event.at("selected")));
-            g_simulators->invoke_active_simulator()
+            invoke_active_simulator()
                 ->get_UI_item(std::string(event.at("id")))
                 ->set_selected(std::string(event.at("selected")));
             break;

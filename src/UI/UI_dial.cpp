@@ -1,11 +1,11 @@
 #include "UI_dial.hpp"
 
-UI_dial::UI_dial(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value)
-    : UI_item(id, UI_DIAL_TYPE, text, 12, fg_color, bg_color), m_min(min), m_max(max), m_value(value)
+UI_dial::UI_dial(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value, QObject* parrent)
+    : UI_item(id, UI_DIAL_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
 {
 }
 
-UI_dial::UI_dial(const json &j) : UI_item(UI_DIAL_TYPE)
+UI_dial::UI_dial(const json &j, QObject* parrent) : UI_item(UI_DIAL_TYPE, parrent)
 {
     from_json(j);
 }
@@ -18,6 +18,7 @@ void UI_dial::set_value(double value)
         return;
 
     this->m_value = value;
+    emit value_changed();
 }
 
 double UI_dial::value() const

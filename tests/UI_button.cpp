@@ -1,4 +1,5 @@
 #include "Test.hpp"
+#include <QObject>
 
 TEST(UI_button, to_from_json)
 {
@@ -9,17 +10,4 @@ TEST(UI_button, to_from_json)
     EXPECT_EQ(button.text(), button2.text());
     EXPECT_EQ(button.fg_color(), button2.fg_color());
     EXPECT_EQ(button.bg_color(), button2.bg_color());
-}
-
-void on_click(std::string id)
-{
-    UNUSED(id);
-    EXPECT_EQ(id, "button_id");
-}
-
-TEST(UI_button, on_click)
-{
-    UI_button button("button_id", "button_text", Color(255, 255, 255), Color(0, 0, 0), on_click);
-    button.click();
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }

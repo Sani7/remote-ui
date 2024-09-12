@@ -1,13 +1,13 @@
 #include "test_sim.hpp"
 #include <iostream>
 
-Test_Sim::Test_Sim() :
-Simulator_base("Test_Sim", std::chrono::milliseconds(1000)),
-m_button("button", "Off", Color(Color::White), Color(Color::Red), [this](std::string id) { button_clicked(id); }),
-m_combobox("combobox", "Combobox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0, [](std::string id, std::string selected) { spdlog::info("Combobox {} selected {}", id, selected); }),
+Test_Sim::Test_Sim(QObject* parrent) :
+Simulator_base("Test_Sim", std::chrono::milliseconds(1000), parrent),
+m_button("button", "Off", Color(Color::White), Color(Color::Red)),
+m_combobox("combobox", "Combobox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0),
 m_label("label", "Label", Color(Color::White), Color(Color::Black)),
-m_checkbox("checkbox", "Checkbox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, [](std::string id, std::vector<std::string> selected) { spdlog::info("Checkbox {} selected {}", id, (selected.size() > 0 ? selected[0] : "")); }),
-m_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 0, [this](std::string id, double value) { slider_changed(id, value); }),
+m_checkbox("checkbox", "Checkbox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}),
+m_slider("slider", "Slider", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_dial("dial", "Dial", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_thermo("thermo", "Thermo", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
@@ -27,6 +27,9 @@ m_led("led", "Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
     this->add_UI_item(&this->m_dial);
     this->add_UI_item(&this->m_thermo);
     this->add_UI_item(&this->m_led);
+
+    QObject::connect(&m_button, &UI_button::on_click, [this](std::string id) { button_clicked(id); });
+    QObject::connect(&m_slider, &UI_slider::on_change, [this](std::string id, double value) { slider_changed(id, value); });
 }
 
 void Test_Sim::timer()

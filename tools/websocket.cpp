@@ -1,150 +1,69 @@
 #include "websocket.hpp"
-#include "spdlog/spdlog.h"
+#include "QtWebSockets/qwebsocketserver.h"
+#include "QtWebSockets/qwebsocket.h"
+#include <QtCore/QDebug>
 
-Websocket::Websocket(uint16_t port, std::ostream *out, std::ostream *err,
-                     std::function<std::string(std::string)> on_message, std::function<std::string()> on_update)
-    : m_on_message(on_message), m_on_update(on_update), m_port(port)
+Websocket::Websocket(uint16_t port, QObject *parent) :
+    QObject(parent),
+    m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"),
+                                              QWebSocketServer::NonSecureMode, this))
 {
-    // Set logging settings
-    m_server.get_alog().set_custom(out != &std::cout);
-    m_server.get_elog().set_custom(err != &std::cerr);
-    m_server.get_alog().set_ostream(out);
-    m_server.get_elog().set_ostream(err);
-    m_server.set_access_channels(websocketpp::log::alevel::connect + websocketpp::log::alevel::disconnect);
-    m_server.clear_access_channels(websocketpp::log::alevel::frame_payload + websocketpp::log::alevel::frame_header +
-                                   websocketpp::log::alevel::control);
-
-    // Initialize Asio
-    m_server.init_asio();
-
-    // Register our message handler
-    m_server.set_open_handler(std::bind(&Websocket::on_open, this, ::_1));
-    m_server.set_close_handler(std::bind(&Websocket::on_close, this, ::_1));
-    m_server.set_message_handler(std::bind(&Websocket::on_message, this, ::_1, ::_2));
-}
-
-void Websocket::run()
-{
-    try
-    {
-        // listen on specified port
-        m_server.listen(m_port);
-        // Start the server accept loop
-        m_server.start_accept();
-        // Start the ASIO io_service run loop
-        m_server.run();
-    }
-    catch (websocketpp::exception const &e)
-    {
-        spdlog::critical("{}", e.what());
-        exit(1);
-    }
-    catch (...)
-    {
-        spdlog::critical("other exception");
-        exit(1);
+    if (m_pWebSocketServer->listen(QHostAddress::Any, port)) {
+        qDebug() << "Echoserver listening on port" << port;
+        connect(m_pWebSocketServer, &QWebSocketServer::newConnection,
+                this, &Websocket::onNewConnection);
+        connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
     }
 }
 
-void Websocket::stop()
+Websocket::~Websocket()
 {
-    m_server.stop_listening();
-    m_server.stop();
+    m_pWebSocketServer->close();
+    qDeleteAll(m_clients.begin(), m_clients.end());
 }
 
-void Websocket::on_open(websocketpp::connection_hdl hdl)
+void Websocket::broadcast(QString message)
 {
-    {
-        std::lock_guard<std::mutex> guard(m_action_lock);
-        m_actions.push(action(SUBSCRIBE, hdl));
-    }
-    m_action_cond.notify_one();
-}
-
-void Websocket::on_close(websocketpp::connection_hdl hdl)
-{
-    {
-        std::lock_guard<std::mutex> guard(m_action_lock);
-        m_actions.push(action(UNSUBSCRIBE, hdl));
-    }
-    m_action_cond.notify_one();
-}
-
-void Websocket::on_message(websocketpp::connection_hdl hdl, Server::message_ptr msg)
-{
-    // return pong
-    if (msg->get_opcode() == websocketpp::frame::opcode::PING)
-    {
-        m_server.send(hdl, msg->get_payload(), websocketpp::frame::opcode::PONG);
-        return;
-    }
-    // queue message up for sending by processing thread
-    {
-        std::lock_guard<std::mutex> guard(m_action_lock);
-        m_actions.push(action(MESSAGE, hdl, msg));
-    }
-    m_action_cond.notify_one();
-}
-
-void Websocket::process_messages()
-{
-    while (1)
-    {
-        std::unique_lock<std::mutex> lock(m_action_lock);
-
-        while (m_actions.empty())
-        {
-            m_action_cond.wait(lock);
-        }
-
-        action a = m_actions.front();
-        m_actions.pop();
-
-        lock.unlock();
-
-        switch (a.type)
-        {
-        case SUBSCRIBE: {
-            std::lock_guard<std::mutex> guard(m_connection_lock);
-            m_connections.insert(a.hdl);
-        }
-        break;
-        case UNSUBSCRIBE: {
-            std::lock_guard<std::mutex> guard(m_connection_lock);
-            m_connections.erase(a.hdl);
-        }
-        break;
-        case MESSAGE: {
-            std::string response = m_on_message(a.msg->get_payload());
-            if (response.empty() || response == "{}")
-            {
-                continue;
-            }
-            m_server.send(a.hdl, response, websocketpp::frame::opcode::TEXT);
-        }
-        break;
-        default:
-            break;
-        }
+    foreach (QWebSocket* conn, m_clients) {
+        conn->sendTextMessage(message);
     }
 }
 
-void Websocket::process_broadcast()
+void Websocket::send(QWebSocket* conn, QString message)
 {
-    while (1)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        std::string update = m_on_update();
-        if (update.empty() || update == "{}")
-        {
-            continue;
-        }
-        {
-            std::lock_guard<std::mutex> guard(m_connection_lock);
-            for (auto it : m_connections)
-            {
-                m_server.send(it, update, websocketpp::frame::opcode::TEXT);
-            }
-        }
+    conn->sendTextMessage(message);
+}
+
+void Websocket::onNewConnection()
+{
+    QWebSocket *pSocket = m_pWebSocketServer->nextPendingConnection();
+
+    connect(pSocket, &QWebSocket::textMessageReceived, this, &Websocket::processTextMessage);
+    connect(pSocket, &QWebSocket::binaryMessageReceived, this, &Websocket::processBinaryMessage);
+    connect(pSocket, &QWebSocket::disconnected, this, &Websocket::socketDisconnected);
+
+    m_clients << pSocket;
+}
+
+void Websocket::processTextMessage(QString message)
+{
+    QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    qDebug() << "Message received:" << message;
+    emit on_message(pClient, message);
+}
+
+void Websocket::processBinaryMessage(QByteArray message)
+{
+    QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    qDebug() << "Binary Message received:" << message;
+}
+
+void Websocket::socketDisconnected()
+{
+    QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    qDebug() << "socketDisconnected:" << pClient;
+    if (pClient) {
+        m_clients.removeAll(pClient);
+        pClient->deleteLater();
     }
 }

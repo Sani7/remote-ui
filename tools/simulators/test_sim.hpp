@@ -2,8 +2,9 @@
 #include "simulator_base.hpp"
 
 class Test_Sim : public Simulator_base {
+    Q_OBJECT
     public:
-        Test_Sim();
+        Test_Sim(QObject* parrent = nullptr);
         void timer() override;
         void run_at_startup() override;
     private:

@@ -1,7 +1,7 @@
 #include "simulator_base.hpp"
 
-Simulator_base::Simulator_base(std::string name, std::chrono::milliseconds interval)
-    : m_name(name), m_timer([this] { timer(); }), m_interval(interval)
+Simulator_base::Simulator_base(std::string name, std::chrono::milliseconds interval, QObject* parrent)
+    : QObject(parrent), m_name(name), m_timer([this] { timer(); }), m_interval(interval)
 {
 }
 
@@ -32,6 +32,7 @@ void Simulator_base::add_UI_item(UI_item *item)
     {
         throw std::runtime_error("UI item id " + item->id() + " is not unique");
     }
+    connect(item, &UI_item::value_changed, this, [this]{emit sim_changed();});
     m_UI_items_map[item->id()] = item;
     m_UI_items.push_back(item);
 }

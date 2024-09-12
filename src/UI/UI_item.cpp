@@ -1,20 +1,27 @@
 #include "UI_item.hpp"
 
-UI_item::UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color)
-    : m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color),
+UI_item::UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color, QObject* parrent)
+    : QObject(parrent),
+      m_id(id), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color), m_bg_color(bg_color),
       enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(std::string type)
-    : m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White),
+UI_item::UI_item(std::string type, QObject* parrent)
+    : QObject(parrent),
+      m_id(""), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black), m_bg_color(Color::White),
       enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(const json &j)
+UI_item::UI_item(const json &j, QObject* parrent) :
+    QObject(parrent)
 {
     from_json(j);
+}
+
+UI_item::~UI_item()
+{
 }
 
 std::string UI_item::id() const
@@ -41,6 +48,7 @@ void UI_item::set_text(std::string text)
     if (this->m_text != text)
     {
         this->m_text = text;
+        emit value_changed();
     }
 }
 
@@ -54,6 +62,7 @@ void UI_item::set_text_size(uint8_t text_size)
     if (this->m_text_size != text_size)
     {
         this->m_text_size = text_size;
+        emit value_changed();
     }
 }
 
@@ -67,6 +76,7 @@ void UI_item::set_fg_color(Color fg_color)
     if (this->m_fg_color != fg_color)
     {
         this->m_fg_color = fg_color;
+        emit value_changed();
     }
 }
 
@@ -80,6 +90,7 @@ void UI_item::set_bg_color(Color bg_color)
     if (this->m_bg_color != bg_color)
     {
         this->m_bg_color = bg_color;
+        emit value_changed();
     }
 }
 
@@ -90,7 +101,11 @@ Color UI_item::bg_color() const
 
 void UI_item::set_enabled(bool enabled)
 {
-    this->enabled = enabled;
+    if (this->enabled != enabled)
+    {
+        this->enabled = enabled;
+        emit value_changed();
+    }
 }
 
 bool UI_item::is_enabled() const
@@ -100,7 +115,11 @@ bool UI_item::is_enabled() const
 
 void UI_item::set_visible(bool visible)
 {
-    this->visible = visible;
+    if (this->visible != visible)
+    {
+        this->visible = visible;
+        emit value_changed();
+    }
 }
 
 bool UI_item::is_visible() const
@@ -139,7 +158,7 @@ json UI_item::to_json() const
     return j;
 }
 
-void UI_item::click() const {};
+void UI_item::click() {};
 
 void UI_item::set_selected(std::string selected)
 {

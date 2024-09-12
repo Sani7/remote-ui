@@ -1,12 +1,12 @@
 #include "UI_x_boxes.hpp"
 
-UI_x_boxes::UI_x_boxes(std::string type) : UI_item(type), m_options()
+UI_x_boxes::UI_x_boxes(std::string type, QObject* parrent) : UI_item(type, parrent), m_options()
 {
 }
 
 UI_x_boxes::UI_x_boxes(std::string id, std::string type, std::string text, Color fg_color, Color bg_color,
-                       std::vector<std::string> options)
-    : UI_item(id, type, text, 12, fg_color, bg_color), m_options(options)
+                       std::vector<std::string> options, QObject* parrent)
+    : UI_item(id, type, text, 12, fg_color, bg_color, parrent), m_options(options)
 {
 }
 

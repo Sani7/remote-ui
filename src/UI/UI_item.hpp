@@ -5,16 +5,20 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <thread>
+
+#include <QObject>
 using json = nlohmann::json;
 
 #define UNUSED(x) (void)(x)
 
-class UI_item
+class UI_item : public QObject
 {
+    Q_OBJECT
   public:
-    UI_item(std::string type);
-    UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color);
-    UI_item(const json &j);
+    explicit UI_item(std::string type, QObject* parrent = nullptr);
+    explicit UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color, QObject* parrent = nullptr);
+    explicit UI_item(const json &j, QObject* parrent = nullptr);
+    ~UI_item();
 
     std::string id() const;
     std::string type() const;
@@ -42,9 +46,12 @@ class UI_item
 
     virtual json to_json() const;
 
-    virtual void click() const;
+    virtual void click();
     virtual void set_selected(std::string selected);
     virtual void set_value(double value);
+
+  signals:
+    void value_changed();
 
   protected:
     std::string m_id;
