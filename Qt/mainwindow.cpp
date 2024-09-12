@@ -6,10 +6,10 @@
 #include "sim-cvs_i10.h"
 #include "sim-test.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent) :
       QMainWindow(parent),
       ui(new Ui::MainWindow),
-      m_web_socket(new Web_socket_wrapper(QUrl("ws://localhost:9002"), this)),
+      m_web_socket(new Web_socket_wrapper(QUrl("ws://" + host + ":" + QString::number(port)), this)),
       m_error_dialog(new NetworkError(this)),
       m_sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
            {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Simulator Selector");
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
-
     //Default sim
     //defaultSim("CVS_I10");
 
