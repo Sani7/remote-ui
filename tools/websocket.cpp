@@ -1,7 +1,7 @@
 #include "websocket.hpp"
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QtWebSockets/qwebsocket.h"
-#include <QtCore/QDebug>
+#include <spdlog/spdlog.h>
 
 Websocket::Websocket(uint16_t port, QObject *parent) :
     QObject(parent),
@@ -9,7 +9,7 @@ Websocket::Websocket(uint16_t port, QObject *parent) :
                                               QWebSocketServer::NonSecureMode, this))
 {
     if (m_pWebSocketServer->listen(QHostAddress::Any, port)) {
-        qDebug() << "Echoserver listening on port" << port;
+        spdlog::debug("Echoserver listening on port {}", port);
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection,
                 this, &Websocket::onNewConnection);
         connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
@@ -32,6 +32,7 @@ void Websocket::broadcast(QString message)
 void Websocket::send(QWebSocket* conn, QString message)
 {
     conn->sendTextMessage(message);
+    spdlog::trace("sending message: {}", message.toStdString());
 }
 
 void Websocket::onNewConnection()
@@ -43,25 +44,28 @@ void Websocket::onNewConnection()
     connect(pSocket, &QWebSocket::disconnected, this, &Websocket::socketDisconnected);
 
     m_clients << pSocket;
+    spdlog::debug("socket connected");
 }
 
 void Websocket::processTextMessage(QString message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    qDebug() << "Message received:" << message;
+    spdlog::trace("Message received: {}", message.toStdString());
     emit on_message(pClient, message);
 }
 
 void Websocket::processBinaryMessage(QByteArray message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    qDebug() << "Binary Message received:" << message;
+    spdlog::trace("Binary Message received: {}", message.data());
+    Q_UNUSED(message);
+    Q_UNUSED(pClient);
 }
 
 void Websocket::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    qDebug() << "socketDisconnected:" << pClient;
+    spdlog::debug("socket Disconnected");
     if (pClient) {
         m_clients.removeAll(pClient);
         pClient->deleteLater();
