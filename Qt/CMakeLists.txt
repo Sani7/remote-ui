@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(json)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Svg WebSockets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Svg WebSockets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
 
 add_subdirectory(qwt)
