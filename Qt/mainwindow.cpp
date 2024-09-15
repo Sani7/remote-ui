@@ -20,6 +20,7 @@ MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent) :
     this->setWindowTitle("Simulator Selector");
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
+    ui->connection->setText("Connected to ws://" + host + ":" + QString::number(port));
     //Default sim
     //defaultSim("CVS_I10");
 
