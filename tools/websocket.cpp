@@ -9,7 +9,7 @@ Websocket::Websocket(uint16_t port, QObject *parent)
 {
     if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
-        spdlog::debug("Echoserver listening on port {}", port);
+        spdlog::debug("Server listening on port {}", port);
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
         connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
     }
