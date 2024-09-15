@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      align-items: center;
+    }
+    #chat-box {
+      height: 800px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    #message-input {
+      width: 90%;
+      border: 1px solid #999999;
+      padding: 5px;
+    }
+    .client_message {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-box"></div>
+  <input type="text" id="message-input" placeholder="Type your message..." onkeypress="input_event(event)">
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    const socket = new WebSocket('ws://localhost:9002');
+    const chatBox = document.getElementById('chat-box');
+    const messageInput = document.getElementById('message-input');
+
+    // Event listener for when the WebSocket connection is established
+    socket.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened:', event);
+    });
+
+    // Event listener for when a message is received from the WebSocket server
+    socket.addEventListener('message', (event) => {
+      chatBox.innerHTML += `<p>${event.data}</p>`;
+      chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+    });
+
+    // Function to send a message to the WebSocket server
+    function sendMessage() {
+      const message = messageInput.value;
+
+      if (message.trim() !== '') {
+        socket.send(message);
+        chatBox.innerHTML += `<p class="client_message">${message}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        messageInput.value = '';
+      }
+    }
+    
+    function input_event(event) {
+    if (event.key == "Enter") {
+        sendMessage();
+      }
+    }
+  </script>
+</body>
+</html>
