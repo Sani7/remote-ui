@@ -1,0 +1,8 @@
+{"command":{"type":"switch_simulator","name":"Test_Sim"}}
+{"command":{"type":"get_active_simulator_name"}}
+{"command":{"type":"get_simulators"}}
+{"command":{"type":"get_UI_elements"}}
+{"command":{"type":"get_UI_element", "id":"button"}}
+{"event":{"type":"clicked","id":"button"}}
+{"event":{"type":"selected","id":"combobox", "selected":"item1"}}
+{"event":{"type":"value_changed","id":"slider","value":0.5}}
