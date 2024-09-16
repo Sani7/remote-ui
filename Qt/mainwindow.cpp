@@ -39,7 +39,7 @@ void MainWindow::setup_cb(void)
 {
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
     connect(m_web_socket, &Web_socket_wrapper::on_connected, this, [=]{m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators);});
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open();});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open(); ui->connection->setText("Could not connect to the server");});
 }
 
 void MainWindow::showEvent( QShowEvent* event )
