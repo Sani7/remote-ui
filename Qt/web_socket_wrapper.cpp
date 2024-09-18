@@ -10,7 +10,7 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent) :
     connect(m_web_socket, &QWebSocket::connected, this, &Web_socket_wrapper::m_on_connected);
     connect(m_web_socket, &QWebSocket::disconnected, this, &Web_socket_wrapper::on_closed);
     connect(m_web_socket, &QWebSocket::pong, this, &Web_socket_wrapper::m_on_pong);
-    connect(m_ping_timer, &QTimer::timeout, this, [=]{
+    connect(m_ping_timer, &QTimer::timeout, this, [=, this]{
         m_web_socket->ping();
         m_pong_timer->start(500);
     });

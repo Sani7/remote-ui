@@ -32,9 +32,9 @@ void SimulatorBase::closeEvent(QCloseEvent* event)
 
 void SimulatorBase::setup_cb(void)
 {
-    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
-    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=](json& j){on_event_cb(j);});
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open();});
+    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json& j){on_cmd_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json& j){on_event_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this]{m_error_dialog->open();});
 }
 
 void SimulatorBase::on_cmd_cb(json& j)

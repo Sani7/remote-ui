@@ -48,7 +48,7 @@ void Test_Sim::setup_buttons(void)
         switch (lookup)
         {
             default:
-                connect(button_lookup[lookup], &QPushButton::clicked, this, [=]{button_update(lookup);});
+                connect(button_lookup[lookup], &QPushButton::clicked, this, [=, this]{button_update(lookup);});
                 break;
         }
     }
@@ -58,7 +58,7 @@ void Test_Sim::setup_sliders(void)
 {
     for (Iterable<slider_lookup_e> lookup; lookup < slider_lookup_e::end; lookup++)
     {
-        connect(slider_lookup[lookup], &QwtSlider::sliderMoved, this, [=]{
+        connect(slider_lookup[lookup], &QwtSlider::sliderMoved, this, [=, this]{
             //value_lookup_e lookup_v = thermo_to_value_lookup(lookup);
             //value_lookup[lookup_v]->setText(format_value(lookup_v, thermo_lookup[lookup]->value()));
             slider_update(lookup);
@@ -70,7 +70,7 @@ void Test_Sim::setup_comboboxes(void)
 {
     for (Iterable<combobox_lookup_e> lookup; lookup < combobox_lookup_e::end; lookup++)
     {
-        connect(combobox_lookup[lookup], &QComboBox::currentIndexChanged, this, [=]{combobox_update(lookup);});
+        connect(combobox_lookup[lookup], &QComboBox::currentIndexChanged, this, [=, this]{combobox_update(lookup);});
     }
 }
 

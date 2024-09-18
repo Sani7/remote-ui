@@ -24,7 +24,7 @@ MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent) :
     //Default sim
     //defaultSim("CVS_I10");
 
-    connect(ui->pushButton, &QPushButton::clicked, this, [=]{open_sim(ui->comboBox->currentText());});
+    connect(ui->pushButton, &QPushButton::clicked, this, [=, this]{open_sim(ui->comboBox->currentText());});
     connect(this, &MainWindow::quit, this, &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
@@ -37,9 +37,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup_cb(void)
 {
-    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=](json& j){on_cmd_cb(j);});
-    connect(m_web_socket, &Web_socket_wrapper::on_connected, this, [=]{m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators);});
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=]{m_error_dialog->open(); ui->connection->setText("Could not connect to the server");});
+    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json& j){on_cmd_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_connected, this, [=, this]{m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators);});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this]{m_error_dialog->open(); ui->connection->setText("Could not connect to the server");});
 }
 
 void MainWindow::showEvent( QShowEvent* event )
