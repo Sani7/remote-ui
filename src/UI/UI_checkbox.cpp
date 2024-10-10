@@ -4,9 +4,9 @@ UI_checkbox::UI_checkbox(QObject *parrent) : UI_x_boxes(UI_CHECKBOX_TYPE, parren
 {
 }
 
-UI_checkbox::UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color,
+UI_checkbox::UI_checkbox(std::string text, Color fg_color, Color bg_color,
                          std::vector<std::string> options, QObject *parrent)
-    : UI_x_boxes(id, UI_CHECKBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected()
+    : UI_x_boxes(UI_CHECKBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected()
 {
     for (size_t i = 0; i < m_options.size(); i++)
     {
@@ -25,7 +25,7 @@ void UI_checkbox::toggle_selected(size_t selected)
         return;
     m_selected[selected] = !m_selected[selected];
     emit value_changed();
-    emit on_change(m_id, selected_text()[selected]);
+    emit on_change(selected_text()[selected]);
 }
 
 void UI_checkbox::toggle_selected(std::string selected)
@@ -72,9 +72,9 @@ void UI_checkbox::from_json(const json &j)
     }
 }
 
-json UI_checkbox::to_json() const
+json UI_checkbox::to_json(size_t id) const
 {
-    json j = UI_x_boxes::to_json();
+    json j = UI_x_boxes::to_json(id);
     j["selected"] = m_selected;
     return j;
 }

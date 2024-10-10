@@ -1,7 +1,7 @@
 #include "UI_led.hpp"
 
-UI_led::UI_led(std::string id, std::string text, Color fg_color, Color bg_color, Color led_color, QObject *parrent)
-    : UI_item(id, UI_LED_TYPE, text, 12, fg_color, bg_color, parrent), m_led_color(led_color)
+UI_led::UI_led(std::string text, Color fg_color, Color bg_color, Color led_color, QObject *parrent)
+    : UI_item(UI_LED_TYPE, text, 12, fg_color, bg_color, parrent), m_led_color(led_color)
 {
 }
 
@@ -32,9 +32,9 @@ void UI_led::from_json(const json &j)
     m_led_color = Color(color);
 }
 
-json UI_led::to_json() const
+json UI_led::to_json(size_t id) const
 {
-    json j = UI_item::to_json();
+    json j = UI_item::to_json(id);
     j["led_color"] = m_led_color.to_hex();
     return j;
 }

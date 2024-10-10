@@ -4,9 +4,9 @@ UI_combobox::UI_combobox(QObject *parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parren
 {
 }
 
-UI_combobox::UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color,
+UI_combobox::UI_combobox(std::string text, Color fg_color, Color bg_color,
                          std::vector<std::string> options, size_t selected, QObject *parrent)
-    : UI_x_boxes(id, UI_COMBOBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected(selected)
+    : UI_x_boxes(UI_COMBOBOX_TYPE, text, fg_color, bg_color, options, parrent), m_selected(selected)
 {
 }
 
@@ -21,7 +21,7 @@ void UI_combobox::set_selected(size_t selected)
         return;
     m_selected = selected;
     emit value_changed();
-    emit on_change(m_id, selected_text());
+    emit on_change(selected_text());
 }
 
 void UI_combobox::set_selected(std::string selected)
@@ -60,9 +60,9 @@ void UI_combobox::from_json(const json &j)
     }
 }
 
-json UI_combobox::to_json() const
+json UI_combobox::to_json(size_t id) const
 {
-    json j = UI_x_boxes::to_json();
+    json j = UI_x_boxes::to_json(id);
     j["selected"] = m_options[m_selected];
     return j;
 }

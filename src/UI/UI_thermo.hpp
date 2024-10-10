@@ -8,7 +8,7 @@ class UI_thermo : public UI_item
 {
     Q_OBJECT
   public:
-    UI_thermo(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+    UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
               QObject *parrent = nullptr);
     UI_thermo(const json &j, QObject *parrent = nullptr);
 
@@ -26,7 +26,7 @@ class UI_thermo : public UI_item
     void remove_color_stop_normalized(double value);
 
     void from_json(const json &j) override;
-    json to_json() const override;
+    json to_json(size_t id) const override;
 
   private:
     double m_min;

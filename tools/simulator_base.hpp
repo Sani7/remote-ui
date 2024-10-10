@@ -25,16 +25,6 @@ class Simulator_base : public QObject
     std::string name() const;
 
     /**
-     * @brief This function checks if the UI id is unique
-     *         (hence not already pushed in with the add_UI_item function)
-     *
-     * @param id The id to check
-     * @return true The id is unique
-     * @return false The id is already in use
-     */
-    bool is_ui_id_unique(std::string id) const;
-
-    /**
      * @brief This function adds a UI item to the simulator
      *        only if the id is unique
      *        Use this function only in the constructor of the simulator
@@ -55,7 +45,21 @@ class Simulator_base : public QObject
      * @param id The id of the UI item
      * @return UI_item* A pointer to the UI item object
      */
-    UI_item *get_UI_item(std::string id) const;
+    UI_item *get_UI_item(size_t id) const;
+
+    size_t ptr_to_id(UI_item *ptr) const
+    {
+        size_t id = 0;
+        while (id < m_UI_items.size())
+        {
+            if (m_UI_items[id] == ptr)
+            {
+                return id;
+            }
+            id++;
+        }
+        return (size_t)-1;
+    }
 
     /**
      * @brief Run the simulator
@@ -89,7 +93,6 @@ class Simulator_base : public QObject
   protected:
     std::string m_name;
     std::vector<UI_item *> m_UI_items;
-    std::map<std::string, UI_item *> m_UI_items_map;
     QTimer *m_timer;
     std::chrono::milliseconds m_interval;
 };

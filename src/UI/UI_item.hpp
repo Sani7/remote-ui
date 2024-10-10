@@ -16,12 +16,11 @@ class UI_item : public QObject
     Q_OBJECT
   public:
     explicit UI_item(std::string type, QObject *parrent = nullptr);
-    explicit UI_item(std::string id, std::string type, std::string text, uint8_t text_size, Color fg_color,
+    explicit UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color,
                      Color bg_color, QObject *parrent = nullptr);
     explicit UI_item(const json &j, QObject *parrent = nullptr);
     ~UI_item();
 
-    std::string id() const;
     std::string type() const;
     bool is_type(json j);
 
@@ -45,7 +44,7 @@ class UI_item : public QObject
 
     virtual void from_json(const json &j);
 
-    virtual json to_json() const;
+    virtual json to_json(size_t id) const;
 
     virtual void click();
     virtual void set_selected(std::string selected);
@@ -55,7 +54,7 @@ class UI_item : public QObject
     void value_changed();
 
   protected:
-    std::string m_id;
+    size_t m_id;
     std::string m_type;
     std::string m_text;
     uint8_t m_text_size;

@@ -4,9 +4,9 @@ UI_x_boxes::UI_x_boxes(std::string type, QObject *parrent) : UI_item(type, parre
 {
 }
 
-UI_x_boxes::UI_x_boxes(std::string id, std::string type, std::string text, Color fg_color, Color bg_color,
+UI_x_boxes::UI_x_boxes(std::string type, std::string text, Color fg_color, Color bg_color,
                        std::vector<std::string> options, QObject *parrent)
-    : UI_item(id, type, text, 12, fg_color, bg_color, parrent), m_options(options)
+    : UI_item(type, text, 12, fg_color, bg_color, parrent), m_options(options)
 {
 }
 
@@ -23,9 +23,9 @@ void UI_x_boxes::from_json(const json &j)
     }
 }
 
-json UI_x_boxes::to_json() const
+json UI_x_boxes::to_json(size_t id) const
 {
-    json j = UI_item::to_json();
+    json j = UI_item::to_json(id);
     j["options"] = this->m_options;
     return j;
 }

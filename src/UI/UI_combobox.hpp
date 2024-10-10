@@ -11,7 +11,7 @@ class UI_combobox : public UI_x_boxes
     Q_OBJECT
   public:
     UI_combobox(QObject *parrent = nullptr);
-    UI_combobox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options,
+    UI_combobox(std::string text, Color fg_color, Color bg_color, std::vector<std::string> options,
                 size_t selected = 0, QObject *parrent = nullptr);
     UI_combobox(const json &j, QObject *parrent = nullptr);
 
@@ -21,9 +21,9 @@ class UI_combobox : public UI_x_boxes
     std::string selected_text() const;
 
     void from_json(const json &j) override;
-    json to_json() const override;
+    json to_json(size_t id) const override;
   signals:
-    void on_change(std::string id, std::string selected);
+    void on_change(std::string selected);
 
   private:
     size_t m_selected;

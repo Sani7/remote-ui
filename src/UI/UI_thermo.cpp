@@ -1,8 +1,8 @@
 #include "UI_thermo.hpp"
 
-UI_thermo::UI_thermo(std::string id, std::string text, Color fg_color, Color bg_color, double min, double max,
+UI_thermo::UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parrent)
-    : UI_item(id, UI_THERMO_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
+    : UI_item(UI_THERMO_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
 {
 }
 
@@ -103,9 +103,9 @@ void UI_thermo::from_json(const json &j)
     }
 }
 
-json UI_thermo::to_json() const
+json UI_thermo::to_json(size_t id) const
 {
-    json j = UI_item::to_json();
+    json j = UI_item::to_json(id);
     j["min"] = this->m_min;
     j["max"] = this->m_max;
     j["value"] = this->m_value;

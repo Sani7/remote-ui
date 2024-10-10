@@ -10,7 +10,7 @@ class UI_checkbox : public UI_x_boxes
     Q_OBJECT
   public:
     UI_checkbox(QObject *parrent = nullptr);
-    UI_checkbox(std::string id, std::string text, Color fg_color, Color bg_color, std::vector<std::string> options,
+    UI_checkbox(std::string text, Color fg_color, Color bg_color, std::vector<std::string> options,
                 QObject *parrent = nullptr);
     UI_checkbox(const json &j, QObject *parrent = nullptr);
 
@@ -20,10 +20,10 @@ class UI_checkbox : public UI_x_boxes
     std::vector<std::string> selected_text() const;
 
     void from_json(const json &j) override;
-    json to_json() const override;
+    json to_json(size_t id) const override;
 
   signals:
-    void on_change(std::string, std::string);
+    void on_change(std::string);
 
   private:
     std::vector<bool> m_selected;
