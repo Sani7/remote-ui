@@ -118,10 +118,17 @@ void SimulatorBase::UI_item_parser(json& input)
 
 void SimulatorBase::process_ui_label(json& uiItem)
 {
-    QLabel* label = id_to_label(QString::fromStdString(uiItem["id"]));
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto label = qobject_cast<QLabel*>(widget);
     if (label == nullptr)
     {
-        QD << "id_to_label returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QLabel";
         return;
     }
 
@@ -135,11 +142,18 @@ void SimulatorBase::process_ui_label(json& uiItem)
 
 void SimulatorBase::process_ui_slider(json& uiItem)
 {
-    QwtSlider* slider = id_to_slider(QString::fromStdString(uiItem["id"]));
-    QLabel* label = id_to_slider_label(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_label(uiItem["id"]);
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto slider = qobject_cast<QwtSlider*>(widget);
     if (slider == nullptr)
     {
-        QD << "id_to_slider returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QwtSlider";
         return;
     }
 
@@ -151,7 +165,7 @@ void SimulatorBase::process_ui_slider(json& uiItem)
     {
         if (label != nullptr)
         {
-            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
+            label->setText(format_value((size_t)uiItem.at("id"), value));
         }
         slider->setValue(value);
     }
@@ -171,11 +185,18 @@ void SimulatorBase::process_ui_slider(json& uiItem)
 
 void SimulatorBase::process_ui_dial(json& uiItem)
 {
-    QwtDial* dial = id_to_dial(QString::fromStdString(uiItem["id"]));
-    QLabel* label = id_to_dial_label(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_label(uiItem["id"]);
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto dial = qobject_cast<QwtDial*>(widget);
     if (dial == nullptr)
     {
-        QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QwtDial";
         return;
     }
 
@@ -186,7 +207,7 @@ void SimulatorBase::process_ui_dial(json& uiItem)
     {
         if (label != nullptr)
         {
-            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
+            label->setText(format_value(uiItem["id"], value));
         }
         dial->setValue(value);
     }
@@ -201,11 +222,18 @@ void SimulatorBase::process_ui_dial(json& uiItem)
 
 void SimulatorBase::process_ui_thermo(json& uiItem)
 {
-    QwtThermo* thermo = id_to_thermo(QString::fromStdString(uiItem["id"]));
-    QLabel* label = id_to_thermo_label(QString::fromStdString(uiItem["id"]));
+    QLabel* label = id_to_label(uiItem["id"]);
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto thermo = qobject_cast<QwtThermo*>(widget);
     if (thermo == nullptr)
     {
-        QD << "id_to_dial returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QwtThermo";
         return;
     }
 
@@ -216,7 +244,7 @@ void SimulatorBase::process_ui_thermo(json& uiItem)
     {
         if (label != nullptr)
         {
-            label->setText(format_slider_value(QString::fromStdString(uiItem["id"]), value));
+            label->setText(format_value(uiItem["id"], value));
         }
         thermo->setValue(value);
     }
@@ -237,10 +265,17 @@ void SimulatorBase::process_ui_textbox(json& uiItem)
 
 void SimulatorBase::process_ui_combobox(json& uiItem)
 {
-    QComboBox* combobox = id_to_combobox(QString::fromStdString(uiItem["id"]));
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto combobox = qobject_cast<QComboBox*>(widget);
     if (combobox == nullptr)
     {
-        QD << "id_to_combobox returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QComboBox";
         return;
     }
 
@@ -267,11 +302,17 @@ void SimulatorBase::process_ui_radiobutton(json& uiItem)
 void SimulatorBase::process_ui_button(json& uiItem)
 {
     //TODO: fix bgcolor and color
-    QPushButton* button = id_to_button(QString::fromStdString(uiItem["id"]));
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
 
+    auto button = qobject_cast<QPushButton*>(widget);
     if (button == nullptr)
     {
-        QD << "id_to_button returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type QPushButton";
         return;
     }
 
@@ -322,10 +363,17 @@ void SimulatorBase::process_ui_button(json& uiItem)
 
 void SimulatorBase::process_ui_led(json& uiItem)
 {
-    QPushButton* led = id_to_led(QString::fromStdString(uiItem["id"]));
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto led = qobject_cast<QPushButton*>(widget);
     if (led == nullptr)
     {
-        QD << "id_to_led returned null on " << QString::fromStdString(uiItem["id"]);
+        QD << "widget is not of type led";
         return;
     }
 

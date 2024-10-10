@@ -20,20 +20,9 @@ class SimulatorBase : public QMainWindow {
     explicit SimulatorBase(Web_socket_wrapper* api, QWidget* parent = nullptr);
     void setup_cb(void);
     void sim_update(void);
-    virtual QLabel* id_to_label(QString name) {return nullptr;}
-    virtual QPushButton* id_to_led(QString name) {return nullptr;}
-    virtual QPushButton* id_to_button(QString name) {return nullptr;}
-    virtual QwtSlider* id_to_slider(QString name) {return nullptr;}
-    virtual QLabel* id_to_slider_label(QString name) {return nullptr;}
-    virtual QString format_slider_value(QString name, double val) {return QString();}
-    virtual QwtDial* id_to_dial(QString name) {return nullptr;}
-    virtual QLabel* id_to_dial_label(QString name) {return nullptr;}
-    virtual QString format_dial_value(QString name, double val) {return QString();}
-    virtual QwtThermo* id_to_thermo(QString name) {return nullptr;}
-    virtual QLabel* id_to_thermo_label(QString name) {return nullptr;}
-    virtual QString format_thermo_label(QString name) {return QString();}
-    virtual QComboBox* id_to_combobox(QString name) {return nullptr;}
-    virtual QTextEdit* id_to_textbox(QString name) {return nullptr;}
+    virtual QWidget* id_to_ui(size_t id) {return nullptr;}
+    virtual QLabel* id_to_label(size_t name) {return nullptr;}
+    virtual QString format_value(size_t name, double val) {return QString();}
 
   signals:
     void quit();
