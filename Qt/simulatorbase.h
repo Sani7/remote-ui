@@ -20,15 +20,21 @@ class SimulatorBase : public QMainWindow {
     explicit SimulatorBase(Web_socket_wrapper* api, QWidget* parent = nullptr);
     void setup_cb(void);
     void sim_update(void);
-    virtual QWidget* id_to_ui(size_t id) {return nullptr;}
+    QWidget* id_to_ui(size_t id);
     virtual QLabel* id_to_label(size_t name) {return nullptr;}
-    virtual QString format_value(size_t name, double val) {return QString();}
 
   signals:
     void quit();
   protected:
     void on_event_cb(json& j);
     void on_cmd_cb(json& j);
+
+    void push_ui_item(QWidget* item);
+
+    void button_update(size_t lookup);
+    void slider_update(size_t lookup);
+    void combobox_update(size_t lookup);
+
     void UI_item_parser(json& input);
     virtual void process_ui_label(json& uiItem);
     virtual void process_ui_slider(json& uiItem);

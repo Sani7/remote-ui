@@ -6,6 +6,12 @@ SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
 {
     this->m_web_socket = web_socket;
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
+    ui_lookup.reserve(40);
+}
+
+QWidget* SimulatorBase::id_to_ui(size_t id)
+{
+    return ui_lookup.at(id);
 }
 
 void SimulatorBase::showEvent( QShowEvent* event )
@@ -62,6 +68,34 @@ void SimulatorBase::on_event_cb(json& j)
         default:
             break;
     }
+}
+
+void SimulatorBase::push_ui_item(QWidget* item)
+{
+    ui_lookup.emplace_back(item);
+}
+
+void SimulatorBase::button_update(size_t lookup)
+{
+    m_web_socket->send_event(Web_socket_wrapper::Event::clicked, lookup);
+}
+
+void SimulatorBase::slider_update(size_t lookup)
+{
+    QwtSlider* slider = qobject_cast<QwtSlider*>(ui_lookup.at(lookup));
+    if (slider == nullptr)
+        return;
+    m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, lookup,
+                             slider->value());
+}
+
+void SimulatorBase::combobox_update(size_t lookup)
+{
+    QComboBox* combobox = qobject_cast<QComboBox*>(ui_lookup.at(lookup));
+    if (combobox == nullptr)
+        return;
+    m_web_socket->send_event(Web_socket_wrapper::Event::selected, lookup,
+                             combobox->currentText());
 }
 
 void SimulatorBase::UI_item_parser(json& input)
@@ -160,12 +194,13 @@ void SimulatorBase::process_ui_slider(json& uiItem)
     double value = uiItem["value"];
     bool enable = uiItem["enabled"];
     bool visible = uiItem["visible"];
+    QString unit = QString::fromStdString(uiItem.at("unit"));
 
     if (slider->value() != value)
     {
         if (label != nullptr)
         {
-            label->setText(format_value((size_t)uiItem.at("id"), value));
+            label->setText(QString("%0 %1").arg(value).arg(unit));
         }
         slider->setValue(value);
     }
@@ -202,12 +237,13 @@ void SimulatorBase::process_ui_dial(json& uiItem)
 
     double value = uiItem["value"];
     bool visible = uiItem["visible"];
+    QString unit = QString::fromStdString(uiItem.at("unit"));
 
     if (dial->value() != value)
     {
         if (label != nullptr)
         {
-            label->setText(format_value(uiItem["id"], value));
+            label->setText(QString("%0 %1").arg(value).arg(unit));
         }
         dial->setValue(value);
     }
@@ -239,12 +275,13 @@ void SimulatorBase::process_ui_thermo(json& uiItem)
 
     double value = uiItem["value"];
     bool visible = uiItem["visible"];
+    QString unit = QString::fromStdString(uiItem.at("unit"));
 
     if (thermo->value() != value)
     {
         if (label != nullptr)
         {
-            label->setText(format_value(uiItem["id"], value));
+            label->setText(QString("%0 %1").arg(value).arg(unit));
         }
         thermo->setValue(value);
     }
