@@ -34,10 +34,11 @@ class Web_socket_wrapper : public QObject
   public:
     explicit Web_socket_wrapper(const QUrl &url, QObject *parent = nullptr);
     ~Web_socket_wrapper();
-    void send_command(Command command, QString id = QString());
-    void send_event(Event event, QString id);
-    void send_event(Event event, QString id, double val);
-    void send_event(Event event, QString id, QString val);
+    void send_command(Command command, size_t id = 0);
+    void send_command(Command command, QString id);
+    void send_event(Event event, size_t id);
+    void send_event(Event event, size_t id, double val);
+    void send_event(Event event, size_t id, QString val);
     void close();
 
   Q_SIGNALS:
