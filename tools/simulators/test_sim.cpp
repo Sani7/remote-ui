@@ -9,7 +9,7 @@ m_label("Label", Color(Color::White), Color(Color::Black)),
 m_checkbox("Option 1", Color(Color::White), Color(Color::Black)),
 m_slider("Slider", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_dial("Dial", Color(Color::White), Color(Color::Black), 0, 100, 0),
-m_thermo("Thermo", Color(Color::White), Color(Color::Black), 0, 100, 0),
+m_thermo("Thermo", "%", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_led("Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 {
     this->m_thermo.set_start_color(Color(Color::Red));
