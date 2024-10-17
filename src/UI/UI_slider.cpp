@@ -1,11 +1,18 @@
 #include "UI_slider.hpp"
 
-UI_slider::UI_slider(std::string text, Color fg_color, Color bg_color, double min, double max,
+UI_slider::UI_slider(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parrent)
-    : UI_item(UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
+    : UI_item(UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value), m_unit(unit)
 {
 }
 
+UI_slider::UI_slider(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+              QObject *parrent)
+              : UI_slider(text, "", fg_color, bg_color, min, max, value, parrent)
+{
+
+}
+              
 UI_slider::UI_slider(const json &j, QObject *parrent) : UI_item(UI_SLIDER_TYPE, parrent)
 {
     from_json(j);
@@ -45,6 +52,7 @@ void UI_slider::from_json(const json &j)
     this->m_min = j.at("min");
     this->m_max = j.at("max");
     this->m_value = j.at("value");
+    this->m_unit = j.at("unit");
 }
 
 json UI_slider::to_json(size_t id) const
@@ -53,5 +61,6 @@ json UI_slider::to_json(size_t id) const
     j["min"] = this->m_min;
     j["max"] = this->m_max;
     j["value"] = this->m_value;
+    j["unit"] = this->m_unit;
     return j;
 }

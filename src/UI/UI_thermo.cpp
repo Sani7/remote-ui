@@ -1,8 +1,14 @@
 #include "UI_thermo.hpp"
 
-UI_thermo::UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max,
+UI_thermo::UI_thermo(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parrent)
-    : UI_item(UI_THERMO_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value)
+    : UI_item(UI_THERMO_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value), m_unit(unit)
+{
+}
+
+UI_thermo::UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+                     QObject *parrent)
+    : UI_thermo(text, "", fg_color, bg_color, min, max, value, parrent)
 {
 }
 
@@ -94,6 +100,7 @@ void UI_thermo::from_json(const json &j)
     this->m_min = j.at("min");
     this->m_max = j.at("max");
     this->m_value = j.at("value");
+    this->m_unit = j.at("unit");
     this->m_color_map.clear();
     for (auto &i : j["color_map"])
     {
@@ -109,6 +116,7 @@ json UI_thermo::to_json(size_t id) const
     j["min"] = this->m_min;
     j["max"] = this->m_max;
     j["value"] = this->m_value;
+    j["unit"] = this->m_unit;
     j["color_map"] = json::array();
     for (auto &[key, value] : this->m_color_map)
     {

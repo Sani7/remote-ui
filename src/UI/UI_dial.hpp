@@ -7,6 +7,8 @@ class UI_dial : public UI_item
 {
     Q_OBJECT
   public:
+    UI_dial(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max, double value,
+            QObject *parrent = nullptr);
     UI_dial(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
             QObject *parrent = nullptr);
     UI_dial(const json &j, QObject *parrent = nullptr);
@@ -24,4 +26,5 @@ class UI_dial : public UI_item
     double m_min;
     double m_max;
     double m_value;
+    std::string m_unit;
 };
