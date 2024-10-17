@@ -9,27 +9,13 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
     this->setWindowTitle("Test Sim");
     this->setWindowState(Qt::WindowMaximized);
 
-    button_lookup = {
-        {button_lookup_e::button, ui->button}
-    };
-    slider_lookup = {
-        {slider_lookup_e::slider, ui->slider}
-    };
-    dial_lookup = {
-        {dial_lookup_e::dial, ui->dial}
-    };
-    thermo_lookup = {
-        {thermo_lookup_e::thermo, ui->thermo}
-    };
-    led_lookup = {
-        {led_lookup_e::led, ui->led}
-    };
-    combobox_lookup = {
-        {combobox_lookup_e::combobox, ui->combobox}
-    };
-    label_lookup = {
-        {label_lookup_e::label, ui->label}
-    };
+    push_ui_item(ui->button);
+    push_ui_item(ui->combobox);
+    push_ui_item(ui->label);
+    push_ui_item(ui->slider);
+    push_ui_item(ui->dial);
+    push_ui_item(ui->thermo);
+    push_ui_item(ui->led);
 
     setup_buttons();
     setup_comboboxes();
@@ -43,159 +29,54 @@ Test_Sim::~Test_Sim() {
 
 void Test_Sim::setup_buttons(void)
 {
-    for (Iterable<button_lookup_e> lookup; lookup < button_lookup_e::end; lookup++)
+    for (size_t i = 0; i < ui_lookup.size(); i++)
     {
-        switch (lookup)
-        {
-            default:
-                connect(button_lookup[lookup], &QPushButton::clicked, this, [=, this]{button_update(lookup);});
-                break;
-        }
+        QPushButton* button = qobject_cast<QPushButton*>(ui_lookup.at(i));
+        if (button == nullptr)
+            continue;
+
+        connect(button, &QPushButton::clicked, this, [=, this] {
+            button_update(i);
+        });
     }
 }
 
 void Test_Sim::setup_sliders(void)
 {
-    for (Iterable<slider_lookup_e> lookup; lookup < slider_lookup_e::end; lookup++)
+    for (size_t i = 0; i < ui_lookup.size(); i++)
     {
-        connect(slider_lookup[lookup], &QwtSlider::sliderMoved, this, [=, this]{
+        QwtSlider* slider = qobject_cast<QwtSlider*>(ui_lookup.at(i));
+        if (slider == nullptr)
+            continue;
+
+        connect(slider, &QwtSlider::sliderMoved, this, [=, this]{
             //value_lookup_e lookup_v = thermo_to_value_lookup(lookup);
             //value_lookup[lookup_v]->setText(format_value(lookup_v, thermo_lookup[lookup]->value()));
-            slider_update(lookup);
+            slider_update(i);
         });
     }
 }
 
 void Test_Sim::setup_comboboxes(void)
 {
-    for (Iterable<combobox_lookup_e> lookup; lookup < combobox_lookup_e::end; lookup++)
+    for (size_t i = 0; i < ui_lookup.size(); i++)
     {
-        connect(combobox_lookup[lookup], &QComboBox::currentIndexChanged, this, [=, this]{combobox_update(lookup);});
+        QComboBox* combobox = qobject_cast<QComboBox*>(ui_lookup.at(i));
+        if (combobox == nullptr)
+            continue;
+
+        connect(combobox, &QComboBox::currentIndexChanged, this, [=, this]{combobox_update(i);});
     }
 }
 
 void Test_Sim::setup_dials(void)
 {
-    for (Iterable<dial_lookup_e> lookup; lookup < dial_lookup_e::end; lookup++)
+    for (size_t i = 0; i < ui_lookup.size(); i++)
     {
-        create_dial_needle(dial_lookup[lookup]);
+        QwtDial* dial = qobject_cast<QwtDial*>(ui_lookup.at(i));
+        if (dial == nullptr)
+            continue;
+
+        create_dial_needle(dial);
     }
-}
-
-void Test_Sim::button_update(button_lookup_e lookup)
-{
-    m_web_socket->send_event(Web_socket_wrapper::Event::clicked, QString(magic_enum::enum_name(lookup).data()));
-}
-
-void Test_Sim::slider_update(slider_lookup_e lookup)
-{
-    m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, QString(magic_enum::enum_name(lookup).data()),
-                             slider_lookup[lookup]->value());
-}
-
-void Test_Sim::combobox_update(combobox_lookup_e lookup)
-{
-    m_web_socket->send_event(Web_socket_wrapper::Event::selected, QString(magic_enum::enum_name(lookup).data()),
-                             combobox_lookup[lookup]->currentText());
-}
-
-QLabel* Test_Sim::id_to_label(QString name)
-{
-    label_lookup_e lookup = magic_enum::enum_cast<label_lookup_e>(name.toStdString()).value_or(label_lookup_e::end);
-    if (lookup == label_lookup_e::end)
-    {
-        QD << "label lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return label_lookup[lookup];
-}
-
-QPushButton* Test_Sim::id_to_led(QString name)
-{
-    led_lookup_e lookup = magic_enum::enum_cast<led_lookup_e>(name.toStdString()).value_or(led_lookup_e::end);
-    if (lookup == led_lookup_e::end)
-    {
-        QD << "led lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return led_lookup[lookup];
-}
-
-QPushButton* Test_Sim::id_to_button(QString name)
-{
-    button_lookup_e lookup = magic_enum::enum_cast<button_lookup_e>(name.toStdString()).value_or(button_lookup_e::end);
-    if (lookup == button_lookup_e::end)
-    {
-        QD << "button lookup == end, instead of" << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return button_lookup[lookup];
-}
-
-QwtSlider* Test_Sim::id_to_slider(QString name)
-{
-    slider_lookup_e lookup = magic_enum::enum_cast<slider_lookup_e>(name.toStdString()).value_or(slider_lookup_e::end);
-    if (lookup == slider_lookup_e::end)
-    {
-        QD << "slider lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return slider_lookup[lookup];
-}
-
-QLabel* Test_Sim::id_to_slider_label(QString name)
-{
-    return nullptr;
-}
-
-QString Test_Sim::format_slider_value(QString name, double val)
-{
-    return "";
-}
-
-QwtDial* Test_Sim::id_to_dial(QString name)
-{
-    dial_lookup_e lookup = magic_enum::enum_cast<dial_lookup_e>(name.toStdString()).value_or(dial_lookup_e::end);
-    if (lookup == dial_lookup_e::end)
-    {
-        QD << "dial lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return dial_lookup[lookup];
-}
-
-QwtThermo* Test_Sim::id_to_thermo(QString name)
-{
-    thermo_lookup_e lookup = magic_enum::enum_cast<thermo_lookup_e>(name.toStdString()).value_or(thermo_lookup_e::end);
-    if (lookup == thermo_lookup_e::end)
-    {
-        QD << "thermo lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return thermo_lookup[lookup];
-}
-
-QComboBox* Test_Sim::id_to_combobox(QString name)
-{
-    combobox_lookup_e lookup = magic_enum::enum_cast<combobox_lookup_e>(name.toStdString()).value_or(combobox_lookup_e::end);
-    if (lookup == combobox_lookup_e::end)
-    {
-        QD << "combobox lookup == end, instead of " << name;
-        emit quit();
-        return nullptr;
-    }
-
-    return combobox_lookup[lookup];
 }
