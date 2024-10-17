@@ -102,6 +102,8 @@ void UI_thermo::from_json(const json &j)
     this->m_value = j.at("value");
     this->m_unit = j.at("unit");
     this->m_color_map.clear();
+    if (!j.contains("color_map"))
+        return;
     for (auto &i : j["color_map"])
     {
         double k = i.at("key");
@@ -117,6 +119,8 @@ json UI_thermo::to_json(size_t id) const
     j["max"] = this->m_max;
     j["value"] = this->m_value;
     j["unit"] = this->m_unit;
+    if (this->m_color_map.empty())
+        return j;
     j["color_map"] = json::array();
     for (auto &[key, value] : this->m_color_map)
     {
