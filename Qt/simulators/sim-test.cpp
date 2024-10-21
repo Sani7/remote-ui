@@ -80,3 +80,16 @@ void Test_Sim::setup_dials(void)
         create_dial_needle(dial);
     }
 }
+
+QLabel* Test_Sim::id_to_label(size_t id)
+{
+    QWidget* widget = ui_lookup.at(id);
+    if (widget == ui->slider)
+        return ui->slider_label;
+    if (widget == ui->thermo)
+        return ui->thermo_label;
+    if (widget == ui->dial)
+        return ui->dial_label;
+
+    return nullptr;
+}

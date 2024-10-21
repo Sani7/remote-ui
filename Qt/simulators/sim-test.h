@@ -31,6 +31,8 @@ class Test_Sim : public SimulatorBase {
     void setup_comboboxes(void);
     void setup_dials(void);
 
+    QLabel* id_to_label(size_t name) override;
+
   private:
     Ui::Test_Sim* ui;
 };
