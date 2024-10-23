@@ -1,11 +1,11 @@
 #include "UI_button.hpp"
 
-UI_button::UI_button(std::string text, Color fg_color, Color bg_color, QObject *parrent)
-    : UI_item(UI_BUTTON_TYPE, text, 12, fg_color, bg_color, parrent)
+UI_button::UI_button(std::string text, Color fg_color, Color bg_color, QObject *parent)
+    : UI_item(UI_BUTTON_TYPE, text, 12, fg_color, bg_color, parent)
 {
 }
 
-UI_button::UI_button(const json &j, QObject *parrent) : UI_item(UI_BUTTON_TYPE, parrent)
+UI_button::UI_button(const json &j, QObject *parent) : UI_item(UI_BUTTON_TYPE, parent)
 {
     from_json(j);
 }

@@ -1,6 +1,6 @@
 #include "UI_combobox.hpp"
 
-UI_combobox::UI_combobox(QObject *parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
+UI_combobox::UI_combobox(QObject *parent) : UI_x_boxes(UI_COMBOBOX_TYPE, parent)
 {
 }
 
@@ -10,7 +10,7 @@ UI_combobox::UI_combobox(Color fg_color, Color bg_color,
 {
 }
 
-UI_combobox::UI_combobox(const json &j, QObject *parrent) : UI_x_boxes(UI_COMBOBOX_TYPE, parrent)
+UI_combobox::UI_combobox(const json &j, QObject *parent) : UI_x_boxes(UI_COMBOBOX_TYPE, parent)
 {
     from_json(j);
 }

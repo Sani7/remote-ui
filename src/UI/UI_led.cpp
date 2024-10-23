@@ -1,11 +1,11 @@
 #include "UI_led.hpp"
 
-UI_led::UI_led(std::string text, Color fg_color, Color bg_color, Color led_color, QObject *parrent)
-    : UI_item(UI_LED_TYPE, text, 12, fg_color, bg_color, parrent), m_led_color(led_color)
+UI_led::UI_led(std::string text, Color fg_color, Color bg_color, Color led_color, QObject *parent)
+    : UI_item(UI_LED_TYPE, text, 12, fg_color, bg_color, parent), m_led_color(led_color)
 {
 }
 
-UI_led::UI_led(const json &j, QObject *parrent) : UI_item(UI_LED_TYPE, parrent)
+UI_led::UI_led(const json &j, QObject *parent) : UI_item(UI_LED_TYPE, parent)
 {
     from_json(j);
 }

@@ -15,7 +15,7 @@ class Simulator_base : public QObject
      * @param interval The interval of the timer (default is 100ms)
      */
     Simulator_base(std::string name, std::chrono::milliseconds interval = std::chrono::milliseconds(100),
-                   QObject *parrent = nullptr);
+                   QObject *parent = nullptr);
 
     /**
      * @brief Returns the name of the simulator

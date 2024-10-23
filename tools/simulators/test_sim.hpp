@@ -4,7 +4,7 @@
 class Test_Sim : public Simulator_base {
     Q_OBJECT
     public:
-        Test_Sim(QObject* parrent = nullptr);
+        Test_Sim(QObject* parent = nullptr);
         void timer() override;
         void run_at_startup() override;
     private:

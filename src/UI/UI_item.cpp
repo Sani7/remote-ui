@@ -1,19 +1,19 @@
 #include "UI_item.hpp"
 
 UI_item::UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color,
-                 QObject *parrent)
-    : QObject(parrent), m_id((size_t)-1), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color),
+                 QObject *parent)
+    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(text), m_text_size(text_size), m_fg_color(fg_color),
       m_bg_color(bg_color), enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(std::string type, QObject *parrent)
-    : QObject(parrent), m_id((size_t)-1), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black),
+UI_item::UI_item(std::string type, QObject *parent)
+    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black),
       m_bg_color(Color::White), enabled(true), visible(true)
 {
 }
 
-UI_item::UI_item(const json &j, QObject *parrent) : QObject(parrent)
+UI_item::UI_item(const json &j, QObject *parent) : QObject(parent)
 {
     from_json(j);
 }
@@ -162,7 +162,9 @@ void UI_item::set_value(double value)
     UNUSED(value);
 };
 
-void UI_item::can_send(can_message_t msg)
+void UI_item::can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
 {
-    UNUSED(msg);
+    UNUSED(id);
+    UNUSED(dlc);
+    UNUSED(payload);
 };

@@ -9,8 +9,8 @@ class UI_led : public UI_item
     Q_OBJECT
   public:
     UI_led(std::string text, Color fg_color, Color bg_color, Color led_color,
-           QObject *parrent = nullptr);
-    UI_led(const json &j, QObject *parrent = nullptr);
+           QObject *parent = nullptr);
+    UI_led(const json &j, QObject *parent = nullptr);
 
     Color led_color() const;
     void set_led_color(Color led_color);

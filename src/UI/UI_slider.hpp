@@ -8,10 +8,10 @@ class UI_slider : public UI_item
     Q_OBJECT
   public:
     UI_slider(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max, double value,
-              QObject *parrent = nullptr);
+              QObject *parent = nullptr);
     UI_slider(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
-              QObject *parrent = nullptr);
-    UI_slider(const json &j, QObject *parrent = nullptr);
+              QObject *parent = nullptr);
+    UI_slider(const json &j, QObject *parent = nullptr);
 
     void set_value(double value) override;
     double value() const;

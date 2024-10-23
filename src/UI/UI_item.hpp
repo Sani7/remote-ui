@@ -7,6 +7,7 @@
 #include <thread>
 
 #include <QObject>
+#include <QCanBusFrame>
 using json = nlohmann::json;
 
 #define UNUSED(x) (void)(x)
@@ -15,10 +16,10 @@ class UI_item : public QObject
 {
     Q_OBJECT
   public:
-    explicit UI_item(std::string type, QObject *parrent = nullptr);
+    explicit UI_item(std::string type, QObject *parent = nullptr);
     explicit UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color,
-                     Color bg_color, QObject *parrent = nullptr);
-    explicit UI_item(const json &j, QObject *parrent = nullptr);
+                     Color bg_color, QObject *parent = nullptr);
+    explicit UI_item(const json &j, QObject *parent = nullptr);
     ~UI_item();
 
     std::string type() const;
@@ -49,7 +50,7 @@ class UI_item : public QObject
     virtual void click();
     virtual void set_selected(std::string selected);
     virtual void set_value(double value);
-    virtual void can_send(can_message_t msg);
+    virtual void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload);
 
   signals:
     void value_changed();

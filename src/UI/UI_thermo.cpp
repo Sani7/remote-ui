@@ -1,18 +1,18 @@
 #include "UI_thermo.hpp"
 
 UI_thermo::UI_thermo(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
-                     double value, QObject *parrent)
-    : UI_item(UI_THERMO_TYPE, text, 12, fg_color, bg_color, parrent), m_min(min), m_max(max), m_value(value), m_unit(unit)
+                     double value, QObject *parent)
+    : UI_item(UI_THERMO_TYPE, text, 12, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value), m_unit(unit)
 {
 }
 
 UI_thermo::UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
-                     QObject *parrent)
-    : UI_thermo(text, "", fg_color, bg_color, min, max, value, parrent)
+                     QObject *parent)
+    : UI_thermo(text, "", fg_color, bg_color, min, max, value, parent)
 {
 }
 
-UI_thermo::UI_thermo(const json &j, QObject *parrent) : UI_item(UI_THERMO_TYPE, parrent)
+UI_thermo::UI_thermo(const json &j, QObject *parent) : UI_item(UI_THERMO_TYPE, parent)
 {
     from_json(j);
 }
