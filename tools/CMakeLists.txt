@@ -4,8 +4,9 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS WebSockets)
+find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus)
 
+qt_standard_project_setup()
 qt_add_executable(server)
 
 include(FetchContent)
@@ -14,6 +15,7 @@ FetchContent_Declare(magic_enum URL https://github.com/Neargye/magic_enum/releas
 FetchContent_MakeAvailable(magic_enum)
 
 file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
+file(GLOB_RECURSE CAN_SOURCES "CAN/*.[hc]pp")
 
 target_sources(server PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
@@ -25,6 +27,7 @@ target_sources(server PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/websocket.cpp
     ${CMAKE_CURRENT_LIST_DIR}/websocket.hpp
     ${SIM_SOURCES}
+    ${CAN_SOURCES}
 )
 
 target_compile_options(server PRIVATE $<$<CONFIG:Debug>:
@@ -40,8 +43,8 @@ target_include_directories(server
 
 target_link_libraries(server PRIVATE
     Qt::WebSockets
+    Qt::SerialBus
     magic_enum::magic_enum
     spdlog
     UI
-    CAN
 )
