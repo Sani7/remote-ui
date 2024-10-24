@@ -2,8 +2,6 @@
 
 #include "UI_item.hpp"
 #include <QCanBusFrame>
-#include <chrono>
-#include <ctime>
 
 #define UI_CAN_TYPE std::string("UI_can")
 
