@@ -14,9 +14,9 @@ class CAN_Interface : public QObject
     ~CAN_Interface();
 
     void send_frame(const QCanBusFrame &frame);
-    QCanBusFrame read_frame();
   signals:
-    void frames_received();
+    void frame_received(const QCanBusFrame frame);
+
   private:
     QCanBusDevice *m_canDevice;
 };

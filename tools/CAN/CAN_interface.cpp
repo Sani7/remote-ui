@@ -16,7 +16,10 @@ CAN_Interface::CAN_Interface(QString dev, QObject *parent)
 
     m_canDevice->connectDevice();
     connect(m_canDevice, &QCanBusDevice::framesReceived, this, [this] {
-        emit frames_received();
+        for (const QCanBusFrame &frame : m_canDevice->readAllFrames())
+        {
+            emit frame_received(frame);
+        }
     });
 }
 
@@ -29,9 +32,4 @@ CAN_Interface::~CAN_Interface()
 void CAN_Interface::send_frame(const QCanBusFrame &frame)
 {
     m_canDevice->writeFrame(frame);
-}
-
-QCanBusFrame CAN_Interface::read_frame()
-{
-    return m_canDevice->readFrame();
 }
