@@ -1,7 +1,7 @@
 #include "CAN_interface.hpp"
 
 CAN_Interface::CAN_Interface(QString dev, QObject *parent)
-: QObject(parent)
+    : QObject(parent), m_mid(0)
 {
     if (!QCanBus::instance()->plugins().contains(QStringLiteral("socketcan"))) {
         throw std::runtime_error("CAN Interface: socketcan plugin not found");
@@ -32,4 +32,10 @@ CAN_Interface::~CAN_Interface()
 void CAN_Interface::send_frame(const QCanBusFrame &frame)
 {
     m_canDevice->writeFrame(frame);
+}
+
+
+uint8_t CAN_Interface::next_mid()
+{
+    return m_mid++;
 }
