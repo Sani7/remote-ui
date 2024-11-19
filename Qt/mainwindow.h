@@ -6,7 +6,6 @@
 #include "web_socket_wrapper.h"
 #include "networkerror.h"
 #include "simulatorbase.h"
-#include "helpers.h"
 
 namespace Ui {
 class MainWindow;
