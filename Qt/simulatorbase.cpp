@@ -2,9 +2,9 @@
 
 SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       QMainWindow{parent},
-      m_error_dialog(new NetworkError(this))
+      m_error_dialog(new NetworkError(this)),
+      m_web_socket(web_socket)
 {
-    this->m_web_socket = web_socket;
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     ui_lookup.reserve(40);
 }
