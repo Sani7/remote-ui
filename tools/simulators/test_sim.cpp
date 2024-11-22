@@ -4,7 +4,7 @@
 Test_Sim::Test_Sim(QObject* parrent) :
 Simulator_base("Test_Sim", std::chrono::milliseconds(1000), parrent),
 m_button("Off", Color(Color::White), Color(Color::Red)),
-m_combobox("Combobox", Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0),
+m_combobox(Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0),
 m_label("Label", Color(Color::White), Color(Color::Black)),
 m_checkbox("Option 1", Color(Color::White), Color(Color::Black)),
 m_slider("Slider", Color(Color::White), Color(Color::Black), 0, 100, 0),
