@@ -3,15 +3,16 @@
 SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       QMainWindow{parent},
       m_error_dialog(new NetworkError(this)),
+      m_timer_update(new QTimer()),
       m_web_socket(web_socket)
 {
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
-    ui_lookup.reserve(40);
+    m_ui_lookup.reserve(40);
 }
 
 QWidget* SimulatorBase::id_to_ui(size_t id)
 {
-    return ui_lookup.at(id);
+    return m_ui_lookup.at(id);
 }
 
 void SimulatorBase::showEvent( QShowEvent* event )
@@ -19,21 +20,22 @@ void SimulatorBase::showEvent( QShowEvent* event )
     QWidget::showEvent( event );
     QD << "Connecting callbacks";
     setup_cb();
-    this->timer_update->start(refresh_rate);
-    closed = false;
+    m_web_socket->send_command(Web_socket_wrapper::Command::get_UI_elements);
+    this->m_timer_update->start(m_refresh_rate);
+    m_open = true;
 }
 
 void SimulatorBase::closeEvent(QCloseEvent* event)
 {
-    if (!closed)
+    if (m_open == true)
     {
         QD << "Disconnecting callbacks";
         QWidget::closeEvent(event);
-        this->timer_update->stop();
-        disconnect(api, nullptr, nullptr, nullptr);
+        m_timer_update->stop();
+        disconnect(m_web_socket, nullptr, nullptr, nullptr);
+        m_open = false;
         this->parentWidget()->show();
     }
-    closed = true;
 }
 
 void SimulatorBase::setup_cb(void)
@@ -72,8 +74,8 @@ void SimulatorBase::on_event_cb(json& j)
 
 void SimulatorBase::push_ui_item(QWidget* item)
 {
-    ui_lookup.emplace_back(item);
-    setup_ui_item(item, ui_lookup.size());
+    m_ui_lookup.emplace_back(item);
+    setup_ui_item(item, m_ui_lookup.size() - 1);
 }
 
 void SimulatorBase::button_update(size_t lookup)
@@ -83,7 +85,7 @@ void SimulatorBase::button_update(size_t lookup)
 
 void SimulatorBase::slider_update(size_t lookup)
 {
-    QwtSlider* slider = qobject_cast<QwtSlider*>(ui_lookup.at(lookup));
+    QwtSlider* slider = qobject_cast<QwtSlider*>(m_ui_lookup.at(lookup));
     if (slider == nullptr)
         return;
     m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, lookup,
@@ -92,7 +94,7 @@ void SimulatorBase::slider_update(size_t lookup)
 
 void SimulatorBase::combobox_update(size_t lookup)
 {
-    QComboBox* combobox = qobject_cast<QComboBox*>(ui_lookup.at(lookup));
+    QComboBox* combobox = qobject_cast<QComboBox*>(m_ui_lookup.at(lookup));
     if (combobox == nullptr)
         return;
     m_web_socket->send_event(Web_socket_wrapper::Event::selected, lookup,

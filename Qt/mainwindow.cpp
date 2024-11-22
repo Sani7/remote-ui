@@ -111,7 +111,7 @@ void MainWindow::check_active_sim(QString name)
 
         if (name == m_selected_sim_name)
         {
-            QD << "Name set and right";
+            QD << "Name set and the same";
             open_sim_window();
             return;
         }

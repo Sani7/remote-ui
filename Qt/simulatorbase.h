@@ -56,12 +56,14 @@ class SimulatorBase : public QMainWindow {
     void showEvent(QShowEvent* event);
     void closeEvent(QCloseEvent* event);
 
+  private:
     Web_socket_wrapper* m_web_socket;
 
-    QTimer* timer_update;
-    uint32_t refresh_rate;
-    NetworkError* error_dialog;
-    bool closed = false;
+    QTimer* m_timer_update;
+    uint32_t m_refresh_rate;
+    NetworkError* m_error_dialog;
+    bool m_open = false;
+    std::vector<QWidget*>m_ui_lookup;
 };
 
 #endif // SIMULATORBASE_H
