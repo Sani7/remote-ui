@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
         IterableEnum.hpp
         better_radiobutton.h
         better_radiobutton.cpp
+        led.h
+        led.cpp
 
         networkerror.h
         networkerror.cpp

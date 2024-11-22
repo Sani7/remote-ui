@@ -408,7 +408,7 @@ void SimulatorBase::process_ui_led(json& uiItem)
         return;
     }
 
-    auto led = qobject_cast<QPushButton*>(widget);
+    auto led = qobject_cast<Led*>(widget);
     if (led == nullptr)
     {
         QD << "widget is not of type led";

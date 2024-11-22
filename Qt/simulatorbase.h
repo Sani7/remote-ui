@@ -6,6 +6,7 @@
 #include "web_socket_wrapper.h"
 #include "networkerror.h"
 #include "helpers.h"
+#include "led.h"
 #include <magic_enum.hpp>
 #include "IterableEnum.hpp"
 

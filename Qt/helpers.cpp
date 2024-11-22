@@ -65,17 +65,6 @@ void reset_widget_color(QWidget* widget)
     widget->setStyleSheet("");
 }
 
-bool is_read_only(QWidget* widget)
-{
-    return widget->testAttribute(Qt::WA_TransparentForMouseEvents) || (widget->focusPolicy() == Qt::NoFocus);
-}
-
-void set_read_only(QWidget* widget, bool read_only)
-{
-    widget->setAttribute(Qt::WA_TransparentForMouseEvents, read_only);
-    widget->setFocusPolicy(read_only ? Qt::NoFocus : Qt::StrongFocus);
-}
-
 QString network_reply_to_fix(QNetworkReply::NetworkError error)
 {
     switch (error) {

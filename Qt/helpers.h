@@ -19,8 +19,6 @@ void set_widget_color(QWidget* widget, QString color, QString bg);
 QColor widget_bg_color(QWidget* widget);
 QColor widget_color(QWidget* widget);
 void reset_widget_color(QWidget* widget);
-void set_read_only(QWidget* widget, bool readOnly = true);
-bool is_read_only(QWidget* widget);
 QString network_reply_to_fix(QNetworkReply::NetworkError error);
 
 #endif // HELPERS_H

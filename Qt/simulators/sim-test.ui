@@ -23,7 +23,7 @@
      </widget>
     </item>
     <item row="1" column="3">
-     <widget class="QPushButton" name="led">
+     <widget class="Led" name="led">
       <property name="text">
        <string>PushButton</string>
       </property>
@@ -123,6 +123,11 @@
    <class>QwtThermo</class>
    <extends>QWidget</extends>
    <header>qwt_thermo.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Led</class>
+   <extends>QPushButton</extends>
+   <header>led.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
