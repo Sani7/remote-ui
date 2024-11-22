@@ -24,7 +24,6 @@ add_subdirectory(qwt)
 set(PROJECT_SOURCES
         simulators/sim-cvs_i10.h
         simulators/sim-cvs_i10.cpp
-        simulators/sim-cvs_i10_helper.cpp
         simulators/sim-cvs_i10.ui
 
         simulators/sim-can_debugger.h

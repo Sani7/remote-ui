@@ -73,6 +73,7 @@ void SimulatorBase::on_event_cb(json& j)
 void SimulatorBase::push_ui_item(QWidget* item)
 {
     ui_lookup.emplace_back(item);
+    setup_ui_item(item, ui_lookup.size());
 }
 
 void SimulatorBase::button_update(size_t lookup)
@@ -418,11 +419,6 @@ void SimulatorBase::process_ui_led(json& uiItem)
     QColor color = QColor(~bg_color.red(), ~bg_color.green(), ~bg_color.blue());
     QString text = QString::fromStdString(uiItem["text"]);
 
-    if (false == is_read_only(led))
-    {
-        set_read_only(led);
-    }
-
     if (text != led->text())
     {
         led->setText(text);
@@ -456,4 +452,47 @@ void SimulatorBase::process_ui_led(json& uiItem)
     {
         set_widget_color(led, color, bg_color);
     }
+}
+
+void SimulatorBase::setup_ui_item(QWidget* item, size_t index)
+{
+    setup_button(item, index);
+    setup_combobox(item, index);
+    setup_dial(item, index);
+    setup_slider(item, index);
+}
+
+void SimulatorBase::setup_button(QWidget* item, size_t index)
+{
+    QPushButton* button = qobject_cast<QPushButton*>(item);
+    if (button == nullptr)
+        return;
+    connect(button, &QPushButton::clicked, this, [=, this]{button_update(index);});
+}
+
+void SimulatorBase::setup_combobox(QWidget* item, size_t index)
+{
+    QComboBox* combobox = qobject_cast<QComboBox*>(item);
+    if (combobox == nullptr)
+        return;
+
+    connect(combobox, &QComboBox::currentIndexChanged, this, [=, this]{combobox_update(index);});
+}
+
+void SimulatorBase::setup_dial(QWidget* item, size_t index)
+{
+    QwtDial* dial = qobject_cast<QwtDial*>(item);
+    if (dial == nullptr)
+        return;
+
+    create_dial_needle(dial);
+}
+
+void SimulatorBase::setup_slider(QWidget* item, size_t index)
+{
+    QwtSlider* slider = qobject_cast<QwtSlider*>(item);
+    if (slider == nullptr)
+        return;
+
+    connect(slider, &QwtSlider::sliderMoved, this, [=, this]{slider_update(index);});
 }

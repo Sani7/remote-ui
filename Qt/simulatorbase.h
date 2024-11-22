@@ -46,6 +46,12 @@ class SimulatorBase : public QMainWindow {
     virtual void process_ui_button(json& uiItem);
     virtual void process_ui_led(json& uiItem);
 
+    void setup_ui_item(QWidget* item, size_t index);
+    void setup_button(QWidget* item, size_t index);
+    void setup_combobox(QWidget* item, size_t index);
+    void setup_dial(QWidget* item, size_t index);
+    void setup_slider(QWidget* item, size_t index);
+
     void showEvent(QShowEvent* event);
     void closeEvent(QCloseEvent* event);
 
