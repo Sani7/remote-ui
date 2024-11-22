@@ -1,5 +1,4 @@
 #include "test_sim.hpp"
-#include <iostream>
 
 Test_Sim::Test_Sim(QObject* parrent) :
 Simulator_base("Test_Sim", std::chrono::milliseconds(1000), parrent),

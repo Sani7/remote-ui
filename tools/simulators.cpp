@@ -6,7 +6,6 @@
 
 Simulators::Simulators(uint16_t port, QObject *parrent) : QObject(parrent), m_server(new Websocket(port, this))
 {
-    qDebug() << port;
     INSERT_SIMULATOR(Test_Sim);
     INSERT_SIMULATOR(Can_Debugger);
     setup_connections();
