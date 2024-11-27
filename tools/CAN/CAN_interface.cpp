@@ -33,9 +33,3 @@ void CAN_Interface::send_frame(const QCanBusFrame &frame)
 {
     m_canDevice->writeFrame(frame);
 }
-
-
-uint8_t CAN_Interface::next_mid()
-{
-    return m_mid++;
-}
