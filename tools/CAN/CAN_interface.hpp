@@ -16,5 +16,6 @@ class CAN_Interface : public QObject
     void frame_received(const QCanBusFrame frame);
 
   private:
+    void processErrors(QCanBusDevice::CanBusError error) const;
     QCanBusDevice *m_canDevice;
 };

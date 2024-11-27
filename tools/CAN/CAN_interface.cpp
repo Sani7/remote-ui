@@ -1,9 +1,12 @@
 #include "CAN_interface.hpp"
+#include "spdlog/spdlog.h"
+#include "magic_enum.hpp"
 
 CAN_Interface::CAN_Interface(QString dev, QObject *parent)
-    : QObject(parent), m_mid(0)
+    : QObject(parent)
 {
     if (!QCanBus::instance()->plugins().contains(QStringLiteral("socketcan"))) {
+        spdlog::critical("Runtime error: CAN Interface: socketcan plugin not found");
         throw std::runtime_error("CAN Interface: socketcan plugin not found");
     }
     QString errorString;
@@ -11,8 +14,12 @@ CAN_Interface::CAN_Interface(QString dev, QObject *parent)
     if (!m_canDevice)
     {
         // Error handling goes here
+        spdlog::critical("Runtime error: CAN Interface: {}", errorString.toStdString());
         throw std::runtime_error("CAN Interface: " + errorString.toStdString());
     }
+
+    connect(m_canDevice, &QCanBusDevice::errorOccurred,
+            this, [=, this](QCanBusDevice::CanBusError error){processErrors(error);});
 
     m_canDevice->connectDevice();
     connect(m_canDevice, &QCanBusDevice::framesReceived, this, [this] {
@@ -32,4 +39,19 @@ CAN_Interface::~CAN_Interface()
 void CAN_Interface::send_frame(const QCanBusFrame &frame)
 {
     m_canDevice->writeFrame(frame);
+}
+
+void CAN_Interface::processErrors(QCanBusDevice::CanBusError error) const
+{
+    switch (error) {
+    case QCanBusDevice::ReadError:
+    case QCanBusDevice::WriteError:
+    case QCanBusDevice::ConnectionError:
+    case QCanBusDevice::ConfigurationError:
+    case QCanBusDevice::UnknownError:
+        spdlog::critical("CAN Interface: {} {}", magic_enum::enum_name<QCanBusDevice::CanBusError>(error), m_canDevice->errorString().toStdString());
+        break;
+    default:
+        break;
+    }
 }
