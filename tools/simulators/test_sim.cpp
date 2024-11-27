@@ -27,13 +27,12 @@ m_led("Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
     this->add_UI_item(&this->m_led);
     this->add_UI_item(&this->m_checkbox);
 
-    QObject::connect(&m_button, &UI_button::on_click, [this] { button_clicked(&m_button); });
-    QObject::connect(&m_slider, &UI_slider::on_change, [this](double value) { slider_changed(&m_slider, value); });
+    QObject::connect(&m_button, &UI_button::on_click, this, [=, this] { button_clicked(&m_button); });
+    QObject::connect(&m_slider, &UI_slider::on_change, this, [=, this](double value) { slider_changed(&m_slider, value); });
 }
 
 void Test_Sim::timer()
 {
-    // Timer function
     this->m_button.click();
     if (this->m_slider.value() == this->m_slider.max())
     {
