@@ -39,12 +39,13 @@ int main(int argc, char *argv[])
     QCommandLineOption can_port_option(QStringList() << "c"
                                                 << "can",
                                   QCoreApplication::translate("main", "CAN device [default: can0]."),
-                                  QCoreApplication::translate("main", "can device"), QLatin1String("can9"));
+                                  QCoreApplication::translate("main", "can device"), QLatin1String("can0"));
     parser.addOption(port_option);
     parser.addOption(can_port_option);
     parser.process(a);
     uint16_t port = parser.value(port_option).toUShort();
     QString can_port = parser.value(can_port_option);
+    spdlog::info(can_port.toStdString());
 
     // Initialize the logger
     init_logger();
