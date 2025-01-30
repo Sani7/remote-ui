@@ -4,8 +4,6 @@ template <class T> T ByteArrayToStdArray(const QByteArray &byteArray)
 {
     T stdArray;
 
-    // qDebug() << "std::array size" <<stdArray.size();
-
     for (unsigned int i = 0; i < stdArray.size() && i < (unsigned int)byteArray.size(); i++)
     {
         stdArray[i] = (unsigned char)byteArray.at(i);
