@@ -14,6 +14,7 @@ class CAN_Interface : public QObject
     void send_frame(const QCanBusFrame &frame);
   signals:
     void frame_received(const QCanBusFrame frame);
+    void frame_send(const QCanBusFrame frame);
 
   private:
     void processErrors(QCanBusDevice::CanBusError error) const;

@@ -39,6 +39,7 @@ CAN_Interface::~CAN_Interface()
 void CAN_Interface::send_frame(const QCanBusFrame &frame)
 {
     m_canDevice->writeFrame(frame);
+    emit frame_send(frame);
 }
 
 void CAN_Interface::processErrors(QCanBusDevice::CanBusError error) const
