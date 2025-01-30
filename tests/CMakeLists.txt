@@ -5,10 +5,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-include_directories(${GTEST_INCLUDE_DIR})
-
-link_directories(${GTEST_LIB_DIR})
-
 # tests
 file(GLOB_RECURSE TEST_SOURCES "*.[hc]pp")
 add_executable(tests ${TEST_SOURCES})
