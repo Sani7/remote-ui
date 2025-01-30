@@ -51,6 +51,7 @@ class UI_item : public QObject
     virtual void set_selected(std::string selected);
     virtual void set_value(double value);
     virtual void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload);
+    virtual void can_clear();
 
   signals:
     void value_changed();

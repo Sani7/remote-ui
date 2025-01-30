@@ -29,6 +29,8 @@ class Simulators : public QObject
         value_changed,
         text_changed,
         selected,
+        can_send,
+        can_clear,
         ui_changed,
         end,
         begin = 0

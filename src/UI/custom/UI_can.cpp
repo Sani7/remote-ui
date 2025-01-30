@@ -24,13 +24,13 @@ UI_can::UI_can(const json &j, QObject *parent) : UI_item(UI_CAN_TYPE, parent)
     from_json(j);
 }
 
-void UI_can::add_send_message(QCanBusFrame& msg)
+void UI_can::add_send_message(QCanBusFrame msg)
 {
     m_can_send_messages.push_back(msg);
     emit value_changed();
 }
 
-void UI_can::add_received_message(QCanBusFrame& msg)
+void UI_can::add_received_message(QCanBusFrame msg)
 {
     m_can_received_messages.push_back(msg);
     emit value_changed();
@@ -46,6 +46,12 @@ void UI_can::clear_receive_buffer()
 {
     m_can_received_messages.clear();
     emit value_changed();
+}
+
+void UI_can::can_clear()
+{
+    clear_send_buffer();
+    clear_receive_buffer();
 }
 
 void UI_can::from_json(const json &j)

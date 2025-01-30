@@ -11,10 +11,10 @@ class CAN_Interface : public QObject
     CAN_Interface(QString dev, QObject *parent = nullptr);
     ~CAN_Interface();
 
-    void send_frame(const QCanBusFrame &frame);
+    void send_frame(const QCanBusFrame frame);
   signals:
-    void frame_received(const QCanBusFrame frame);
-    void frame_send(const QCanBusFrame frame);
+    void frame_received(QCanBusFrame frame);
+    void frame_send(QCanBusFrame frame);
 
   private:
     void processErrors(QCanBusDevice::CanBusError error) const;

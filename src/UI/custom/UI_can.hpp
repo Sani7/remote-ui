@@ -12,8 +12,8 @@ class UI_can : public UI_item
     UI_can(Color fg_color, Color bg_color, QObject *parent = nullptr);
     UI_can(const json &j, QObject *parent = nullptr);
 
-    void add_send_message(QCanBusFrame& msg);
-    void add_received_message(QCanBusFrame& msg);
+    void add_send_message(QCanBusFrame msg);
+    void add_received_message(QCanBusFrame msg);
     void clear_send_buffer();
     void clear_receive_buffer();
 
@@ -21,6 +21,7 @@ class UI_can : public UI_item
     json to_json(size_t id) const override;
 
     void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload) override;
+    void can_clear() override;
   signals:
     void on_send(QCanBusFrame msg);
   private:

@@ -60,7 +60,7 @@ json Simulators::command_parser(json command)
     }
     catch (const json::exception &e)
     {
-        spdlog::error(e.what());
+        spdlog::error("{} {}", __FUNCTION__, e.what());
     }
 
     return j;
@@ -104,6 +104,18 @@ void Simulators::event_handler(json event)
                 ->set_selected(std::string(event.at("selected")));
             break;
         }
+        case Event::can_send: {
+            spdlog::debug("Event {}: {}", type, (size_t)event.at("id"));
+            invoke_active_simulator()
+                ->get_UI_item(event.at("id"))
+                ->can_send((uint32_t)event.at("sid"), (uint8_t)event.at("dlc"), (std::array<uint8_t, 8>)event.at("payload"));
+            break;
+        }
+        case Event::can_clear: {
+            spdlog::debug("Event {}: {}", type, (size_t)event.at("id"));
+            invoke_active_simulator()->get_UI_item(event.at("id"))->can_clear();
+            break;
+        }
         default: {
             break;
         }
@@ -111,6 +123,6 @@ void Simulators::event_handler(json event)
     }
     catch (const json::exception &e)
     {
-        spdlog::error(e.what());
+        spdlog::error("{} {}", __FUNCTION__, e.what());
     }
 }

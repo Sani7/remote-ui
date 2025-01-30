@@ -130,7 +130,7 @@ json Simulators::changed_UI_items()
 
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
     json changed;
-    changed["event"]["type"] = "UI_changed";
+    changed["event"]["type"] = "ui_changed";
 
     json diff = json::diff(m_before, after);
 

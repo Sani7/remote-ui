@@ -36,7 +36,7 @@ CAN_Interface::~CAN_Interface()
     delete m_canDevice;
 }
 
-void CAN_Interface::send_frame(const QCanBusFrame &frame)
+void CAN_Interface::send_frame(const QCanBusFrame frame)
 {
     m_canDevice->writeFrame(frame);
     emit frame_send(frame);

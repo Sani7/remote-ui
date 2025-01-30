@@ -11,5 +11,4 @@ class Can_Debugger : public Simulator_base {
     private:
         CAN_Wrapper* m_wrapper;
         UI_can m_can_ui;
-        UI_button m_clear_can_list;
 };
