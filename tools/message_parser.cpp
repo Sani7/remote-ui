@@ -1,5 +1,4 @@
 #include "simulators.hpp"
-#include <iostream>
 #include <magic_enum.hpp>
 
 QString Simulators::message_parser(QString message)
