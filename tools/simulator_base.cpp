@@ -53,6 +53,7 @@ void Simulator_base::run()
 void Simulator_base::stop()
 {
     // Stop the simulator
+    run_at_stop();
     m_timer->stop();
 }
 

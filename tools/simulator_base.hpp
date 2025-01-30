@@ -85,6 +85,13 @@ class Simulator_base : public QObject
      */
     virtual void run_at_startup() {};
 
+    /**
+     * @brief Run at stop
+     *        This function is called when a simulator is stoped
+     *        Override this function in the derived class
+     */
+    virtual void run_at_stop() {};
+
     void shutdown();
     void reboot();
   signals:
