@@ -57,18 +57,18 @@ void UI_can::from_json(const json &j)
     UI_item::from_json(j);
     m_can_send_messages.clear();
     m_can_received_messages.clear();
-    for (const auto &msg : j.at("can_send_messages"))
+    for (const auto &msg : j.at("send_msgs"))
     {
         QCanBusFrame can_msg;
         can_msg.setFrameId(msg.at("id"));
-        can_msg.setPayload(QByteArray(msg.at("bytes"), msg.at("dlc")));
+        can_msg.setPayload(QByteArray(msg.at("payload"), msg.at("dlc")));
         m_can_send_messages.push_back(can_msg);
     }
-    for (const auto &msg : j.at("can_received_messages"))
+    for (const auto &msg : j.at("rcvd_msgs"))
     {
         QCanBusFrame can_msg;
         can_msg.setFrameId(msg.at("id"));
-        can_msg.setPayload(QByteArray(msg.at("bytes"), msg.at("dlc")));
+        can_msg.setPayload(QByteArray(msg.at("payload"), msg.at("dlc")));
         m_can_received_messages.push_back(can_msg);
     }
 }
@@ -83,21 +83,21 @@ json UI_can::to_json(size_t id) const
         json can_msg;
         can_msg["id"] = (uint32_t)msg.frameId();
         can_msg["dlc"] = msg.payload().size();
-        can_msg["bytes"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
+        can_msg["payload"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
 
         can_send_messages.push_back(can_msg);
     }
-    j["can_send_messages"] = can_send_messages;
+    j["send_msgs"] = can_send_messages;
     for (const auto &msg : m_can_received_messages)
     {
         json can_msg;
         can_msg["id"] = (uint32_t)msg.frameId();
         can_msg["dlc"] = msg.payload().size();
-        can_msg["bytes"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
+        can_msg["payload"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
 
         can_received_messages.push_back(can_msg);
     }
-    j["can_received_messages"] = can_received_messages;
+    j["rcvd_msgs"] = can_received_messages;
     return j;
 }
 
