@@ -73,10 +73,11 @@ void Web_socket_wrapper::send_event(Event event, size_t id)
     switch (event)
     {
         case Event::clicked:
+        case Event::can_clear:
             j["event"]["type"] = magic_enum::enum_name(event).data();
             j["event"]["id"] = id;
             m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
+            break;            
         default:
             break;
     }
@@ -113,6 +114,24 @@ void Web_socket_wrapper::send_event(Event event, size_t id, QString val)
             j["event"]["type"] = magic_enum::enum_name(event).data();
             j["event"]["id"] = id;
             j["event"]["selected"] = val.toStdString();
+            m_web_socket->sendTextMessage(QString(j.dump().data()));
+            break;
+        default:
+            break;
+    }
+}
+
+void Web_socket_wrapper::send_event(Event event, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload)
+{
+    json j;
+    switch (event)
+    {
+        case Event::can_send:
+            j["event"]["type"] = magic_enum::enum_name(event).data();
+            j["event"]["id"] = id;
+            j["event"]["sid"] = sid;
+            j["event"]["dlc"] = dlc;
+            j["event"]["payload"] = payload;
             m_web_socket->sendTextMessage(QString(j.dump().data()));
             break;
         default:

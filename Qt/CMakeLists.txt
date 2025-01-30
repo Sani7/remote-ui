@@ -51,6 +51,10 @@ set(PROJECT_SOURCES
         better_radiobutton.cpp
         led.h
         led.cpp
+        
+        can_transceive.h
+        can_transceive.cpp
+        can_transceive.ui
 
         networkerror.h
         networkerror.cpp

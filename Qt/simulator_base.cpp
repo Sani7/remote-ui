@@ -1,4 +1,5 @@
 #include "simulator_base.h"
+#include "can_transceive.h"
 
 SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       QMainWindow{parent},
@@ -64,7 +65,7 @@ void SimulatorBase::on_event_cb(json& j)
     auto response = magic_enum::enum_cast<Web_socket_wrapper::Event>(std::string(j.at("type"))).value_or(Web_socket_wrapper::Event::end);
     switch (response)
     {
-        case Web_socket_wrapper::Event::UI_changed:
+        case Web_socket_wrapper::Event::ui_changed:
             UI_item_parser(j);
             break;
         default:
@@ -125,6 +126,11 @@ void SimulatorBase::UI_item_parser(json& input)
         if (uiItem["type"] == "UIRadioButton")
         {
             process_ui_radiobutton(uiItem);
+            continue;
+        }
+        if (uiItem["type"] == "UI_can")
+        {
+            process_ui_can(uiItem);
             continue;
         }
     }
@@ -433,12 +439,42 @@ void SimulatorBase::process_ui_led(json& uiItem)
     }
 }
 
+void SimulatorBase::process_ui_can(json& uiItem)
+{
+    QWidget* widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        return;
+    }
+
+    auto can_ui = qobject_cast<Can_Transceive*>(widget);
+    if (can_ui == nullptr)
+    {
+        QD << "widget is not of type led";
+        return;
+    }
+
+    can_ui->clear();
+    for (auto& send_item : uiItem["can_send_messages"])
+    {
+        can_ui->add_send_item(send_item["id"], send_item["dlc"], send_item["bytes"]);
+    }
+
+    for (auto& recvd_item : uiItem["can_received_messages"])
+    {
+        can_ui->add_receive_item(recvd_item["id"], recvd_item["dlc"], recvd_item["bytes"]);
+    }
+
+}
+
 void SimulatorBase::setup_ui_item(QWidget* item, size_t index)
 {
     setup_button(item, index);
     setup_combobox(item, index);
     setup_dial(item, index);
     setup_slider(item, index);
+    setup_can_ui(item, index);
 }
 
 void SimulatorBase::setup_button(QWidget* item, size_t index)
@@ -478,4 +514,18 @@ void SimulatorBase::setup_slider(QWidget* item, size_t index)
     connect(slider, &QwtSlider::sliderMoved, this, [=, this]{
         m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index,
                                  slider->value());});
+}
+
+void SimulatorBase::setup_can_ui(QWidget* item, size_t index)
+{
+    Can_Transceive* can = qobject_cast<Can_Transceive*>(item);
+    if (can == nullptr)
+        return;
+
+    connect(can, &Can_Transceive::send_can_message, this, [=, this](uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload){
+        m_web_socket->send_event(Web_socket_wrapper::Event::can_send, index, id, dlc, payload);
+    });
+    connect(can, &Can_Transceive::can_clear, this, [=, this]{
+        m_web_socket->send_event(Web_socket_wrapper::Event::can_clear, index);
+    });
 }

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Can_Transceive</class>
+ <widget class="QWidget" name="Can_Transceive">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>713</width>
+    <height>562</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Received CAN messages</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QTableWidget" name="recvd_list">
+        <column>
+         <property name="text">
+          <string>SID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>DLC</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 0</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 2</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 3</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 4</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 5</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 6</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 7</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox_8">
+     <property name="title">
+      <string>Send CAN message</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_8">
+      <item row="1" column="1">
+       <widget class="QComboBox" name="c_can_send_dlc">
+        <item>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="10">
+       <widget class="QPushButton" name="b_can_send_send">
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="HexSpinBox" name="s_can_send_data1">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="HexSpinBox" name="s_can_send_sid">
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="HexSpinBox" name="s_can_send_data0">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>SID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>DLC</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Data 0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Data 1</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Data 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Data 3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Data 4</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Data 5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Data 6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="9">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Data 7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="HexSpinBox" name="s_can_send_data2">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="HexSpinBox" name="s_can_send_data3">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="HexSpinBox" name="s_can_send_data4">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="7">
+       <widget class="HexSpinBox" name="s_can_send_data5">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="8">
+       <widget class="HexSpinBox" name="s_can_send_data6">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="9">
+       <widget class="HexSpinBox" name="s_can_send_data7">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Send CAN messages</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QTableWidget" name="send_list">
+        <column>
+         <property name="text">
+          <string>SID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>DLC</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 0</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 2</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 3</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 4</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 5</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 6</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Data 7</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="b_clear">
+     <property name="text">
+      <string>clear buffers</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HexSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>hex_spinbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

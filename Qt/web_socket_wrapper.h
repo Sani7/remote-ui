@@ -27,7 +27,9 @@ class Web_socket_wrapper : public QObject
         value_changed,
         text_changed,
         selected,
-        UI_changed,
+        can_send,
+        can_clear,
+        ui_changed,
         end,
         begin = 0
     };
@@ -39,6 +41,7 @@ class Web_socket_wrapper : public QObject
     void send_event(Event event, size_t id);
     void send_event(Event event, size_t id, double val);
     void send_event(Event event, size_t id, QString val);
+    void send_event(Event event, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload);
     void close();
 
   Q_SIGNALS:
