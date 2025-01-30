@@ -9,3 +9,5 @@
 #include "UI_slider.hpp"
 #include "UI_textbox.hpp"
 #include "UI_thermo.hpp"
+
+#include "custom/UI_can.hpp"
