@@ -32,20 +32,26 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("QtWebSockets example: echoserver");
     parser.addHelpOption();
 
-    QCommandLineOption portOption(QStringList() << "p"
+    QCommandLineOption port_option(QStringList() << "p"
                                                 << "port",
                                   QCoreApplication::translate("main", "Port for echoserver [default: 9002]."),
                                   QCoreApplication::translate("main", "port"), QLatin1String("9002"));
-    parser.addOption(portOption);
+    QCommandLineOption can_port_option(QStringList() << "c"
+                                                << "can",
+                                  QCoreApplication::translate("main", "CAN device [default: can0]."),
+                                  QCoreApplication::translate("main", "can device"), QLatin1String("can9"));
+    parser.addOption(port_option);
+    parser.addOption(can_port_option);
     parser.process(a);
-    uint16_t port = parser.value(portOption).toUShort();
+    uint16_t port = parser.value(port_option).toUShort();
+    QString can_port = parser.value(can_port_option);
 
     // Initialize the logger
     init_logger();
 
     // The server starts in this thread
     spdlog::info("Starting server");
-    Simulators simulators(port);
+    Simulators simulators(port, can_port);
 
     return a.exec();
 }
