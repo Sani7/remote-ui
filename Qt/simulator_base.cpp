@@ -456,14 +456,14 @@ void SimulatorBase::process_ui_can(json& uiItem)
     }
 
     can_ui->clear();
-    for (auto& send_item : uiItem["can_send_messages"])
+    for (auto& send_item : uiItem["send_msgs"])
     {
-        can_ui->add_send_item(send_item["id"], send_item["dlc"], send_item["bytes"]);
+        can_ui->add_send_item(send_item["id"], send_item["dlc"], send_item["payload"]);
     }
 
-    for (auto& recvd_item : uiItem["can_received_messages"])
+    for (auto& recvd_item : uiItem["rcvd_msgs"])
     {
-        can_ui->add_receive_item(recvd_item["id"], recvd_item["dlc"], recvd_item["bytes"]);
+        can_ui->add_receive_item(recvd_item["id"], recvd_item["dlc"], recvd_item["payload"]);
     }
 
 }
