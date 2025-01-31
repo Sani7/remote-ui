@@ -49,16 +49,12 @@ void Can_Transceive::add_send_item(uint32_t id, uint8_t dlc, std::array<uint8_t,
     size_t rc = ui->send_list->rowCount();
     ui->send_list->setRowCount(rc + 1);
 
-    ui->send_list->setItem(rc, 0, new QTableWidgetItem(QString("%0").arg(id)));
+    ui->send_list->setItem(rc, 0, new QTableWidgetItem(QString().setNum(id, 16)));
     ui->send_list->setItem(rc, 1, new QTableWidgetItem(QString("%0").arg(dlc)));
-    ui->send_list->setItem(rc, 2, new QTableWidgetItem(QString("%0").arg(payload[0])));
-    ui->send_list->setItem(rc, 3, new QTableWidgetItem(QString("%0").arg(payload[1])));
-    ui->send_list->setItem(rc, 4, new QTableWidgetItem(QString("%0").arg(payload[2])));
-    ui->send_list->setItem(rc, 5, new QTableWidgetItem(QString("%0").arg(payload[3])));
-    ui->send_list->setItem(rc, 6, new QTableWidgetItem(QString("%0").arg(payload[4])));
-    ui->send_list->setItem(rc, 7, new QTableWidgetItem(QString("%0").arg(payload[5])));
-    ui->send_list->setItem(rc, 8, new QTableWidgetItem(QString("%0").arg(payload[6])));
-    ui->send_list->setItem(rc, 9, new QTableWidgetItem(QString("%0").arg(payload[7])));
+    for (size_t i = 0; i < 8; i++)
+    {
+        ui->send_list->setItem(rc, 2 + i, new QTableWidgetItem(QString().setNum(payload[i], 16)));
+    }
     ui->send_list->resizeColumnsToContents();
 }
 
@@ -67,15 +63,11 @@ void Can_Transceive::add_receive_item(uint32_t id, uint8_t dlc, std::array<uint8
     size_t rc = ui->recvd_list->rowCount();
     ui->recvd_list->setRowCount(rc + 1);
 
-    ui->recvd_list->setItem(rc, 0, new QTableWidgetItem(QString("%0").arg(id)));
+    ui->recvd_list->setItem(rc, 0, new QTableWidgetItem(QString().setNum(id, 16)));
     ui->recvd_list->setItem(rc, 1, new QTableWidgetItem(QString("%0").arg(dlc)));
-    ui->recvd_list->setItem(rc, 2, new QTableWidgetItem(QString("%0").arg(payload[0])));
-    ui->recvd_list->setItem(rc, 3, new QTableWidgetItem(QString("%0").arg(payload[1])));
-    ui->recvd_list->setItem(rc, 4, new QTableWidgetItem(QString("%0").arg(payload[2])));
-    ui->recvd_list->setItem(rc, 5, new QTableWidgetItem(QString("%0").arg(payload[3])));
-    ui->recvd_list->setItem(rc, 6, new QTableWidgetItem(QString("%0").arg(payload[4])));
-    ui->recvd_list->setItem(rc, 7, new QTableWidgetItem(QString("%0").arg(payload[5])));
-    ui->recvd_list->setItem(rc, 8, new QTableWidgetItem(QString("%0").arg(payload[6])));
-    ui->recvd_list->setItem(rc, 9, new QTableWidgetItem(QString("%0").arg(payload[7])));
+    for (size_t i = 0; i < 8; i++)
+    {
+        ui->recvd_list->setItem(rc, 2 + i, new QTableWidgetItem(QString().setNum(payload[i], 16)));
+    }
     ui->recvd_list->resizeColumnsToContents();
 }
