@@ -78,29 +78,6 @@ void SimulatorBase::push_ui_item(QWidget* item)
     setup_ui_item(item, m_ui_lookup.size() - 1);
 }
 
-void SimulatorBase::button_update(size_t lookup)
-{
-    m_web_socket->send_event(Web_socket_wrapper::Event::clicked, lookup);
-}
-
-void SimulatorBase::slider_update(size_t lookup)
-{
-    QwtSlider* slider = qobject_cast<QwtSlider*>(m_ui_lookup.at(lookup));
-    if (slider == nullptr)
-        return;
-    m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, lookup,
-                             slider->value());
-}
-
-void SimulatorBase::combobox_update(size_t lookup)
-{
-    QComboBox* combobox = qobject_cast<QComboBox*>(m_ui_lookup.at(lookup));
-    if (combobox == nullptr)
-        return;
-    m_web_socket->send_event(Web_socket_wrapper::Event::selected, lookup,
-                             combobox->currentText());
-}
-
 void SimulatorBase::UI_item_parser(json& input)
 {
     for (auto& uiItem : input["UI_items"])
@@ -469,7 +446,7 @@ void SimulatorBase::setup_button(QWidget* item, size_t index)
     QPushButton* button = qobject_cast<QPushButton*>(item);
     if (button == nullptr)
         return;
-    connect(button, &QPushButton::clicked, this, [=, this]{button_update(index);});
+    connect(button, &QPushButton::clicked, this, [=, this]{m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index);});
 }
 
 void SimulatorBase::setup_combobox(QWidget* item, size_t index)
@@ -478,7 +455,9 @@ void SimulatorBase::setup_combobox(QWidget* item, size_t index)
     if (combobox == nullptr)
         return;
 
-    connect(combobox, &QComboBox::currentIndexChanged, this, [=, this]{combobox_update(index);});
+    connect(combobox, &QComboBox::currentIndexChanged, this, [=, this]{
+        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index,
+                                 combobox->currentText());});
 }
 
 void SimulatorBase::setup_dial(QWidget* item, size_t index)
@@ -496,5 +475,7 @@ void SimulatorBase::setup_slider(QWidget* item, size_t index)
     if (slider == nullptr)
         return;
 
-    connect(slider, &QwtSlider::sliderMoved, this, [=, this]{slider_update(index);});
+    connect(slider, &QwtSlider::sliderMoved, this, [=, this]{
+        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index,
+                                 slider->value());});
 }

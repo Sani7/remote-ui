@@ -32,10 +32,6 @@ class SimulatorBase : public QMainWindow {
 
     void push_ui_item(QWidget* item);
 
-    void button_update(size_t lookup);
-    void slider_update(size_t lookup);
-    void combobox_update(size_t lookup);
-
     void UI_item_parser(json& input);
     virtual void process_ui_label(json& uiItem);
     virtual void process_ui_slider(json& uiItem);
