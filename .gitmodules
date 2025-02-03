@@ -7,3 +7,6 @@
 [submodule "external/cpp-templates"]
 	path = external/cpp-templates
 	url = https://github.com/Sani7/cpp-templates.git
+[submodule "external/qwt"]
+	path = external/qwt
+	url = https://github.com/Sani7/qwt.git
