@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include "web_socket_wrapper.h"
 #include "networkerror.h"
-#include "simulatorbase.h"
+#include "simulator_base.h"
 
 namespace Ui {
 class MainWindow;

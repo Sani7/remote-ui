@@ -1,4 +1,4 @@
-#include "simulatorbase.h"
+#include "simulator_base.h"
 
 SimulatorBase::SimulatorBase(Web_socket_wrapper* web_socket, QWidget* parent) :
       QMainWindow{parent},

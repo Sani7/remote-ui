@@ -2,7 +2,7 @@
 #define SIM_CAN_DEBUGGER_H
 
 #include <QMainWindow>
-#include "simulatorbase.h"
+#include "simulator_base.h"
 
 namespace Ui {
 class Can_Debugger;

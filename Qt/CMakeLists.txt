@@ -38,8 +38,8 @@ set(PROJECT_SOURCES
         simulators/sim-test.cpp
         simulators/sim-test.ui
 
-        simulatorbase.h
-        simulatorbase.cpp
+        simulator_base.h
+        simulator_base.cpp
         helpers.h
         helpers.cpp
         IterableEnum.hpp

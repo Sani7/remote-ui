@@ -2,7 +2,7 @@
 #define SIM_TEST_H
 
 #include <QMainWindow>
-#include "simulatorbase.h"
+#include "simulator_base.h"
 #include "web_socket_wrapper.h"
 
 namespace Ui {

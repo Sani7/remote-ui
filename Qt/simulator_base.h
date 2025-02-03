@@ -1,5 +1,5 @@
-#ifndef SIMULATORBASE_H
-#define SIMULATORBASE_H
+#ifndef SIMULATOR_BASE_H
+#define SIMULATOR_BASE_H
 
 #include <QMainWindow>
 #include <QWidget>
@@ -66,4 +66,4 @@ class SimulatorBase : public QMainWindow {
     std::vector<QWidget*>m_ui_lookup;
 };
 
-#endif // SIMULATORBASE_H
+#endif // SIMULATOR_BASE_H
