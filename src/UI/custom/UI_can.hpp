@@ -5,6 +5,19 @@
 
 #define UI_CAN_TYPE std::string("UI_can")
 
+class CanFrame
+{
+  public:
+    CanFrame(uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload)
+        : m_SID(sid), m_DLC(dlc), m_payload(payload)
+    {
+
+    }
+    uint32_t m_SID;
+    uint8_t m_DLC;
+    std::array<uint8_t, 8> m_payload;
+};
+
 class UI_can : public UI_item
 {
     Q_OBJECT
@@ -25,6 +38,6 @@ class UI_can : public UI_item
   signals:
     void on_send(QCanBusFrame msg);
   private:
-    std::vector<QCanBusFrame> m_can_send_messages;
-    std::vector<QCanBusFrame> m_can_received_messages;
+    std::vector<CanFrame> m_can_send_messages;
+    std::vector<CanFrame> m_can_received_messages;
 };

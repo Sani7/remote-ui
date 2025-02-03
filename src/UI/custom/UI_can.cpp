@@ -24,13 +24,15 @@ UI_can::UI_can(const json &j, QObject *parent) : UI_item(UI_CAN_TYPE, parent)
 
 void UI_can::add_send_message(QCanBusFrame msg)
 {
-    m_can_send_messages.push_back(msg);
+    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(), ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
+    m_can_send_messages.push_back(frame);
     emit value_changed();
 }
 
 void UI_can::add_received_message(QCanBusFrame msg)
 {
-    m_can_received_messages.push_back(msg);
+    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(), ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
+    m_can_received_messages.push_back(frame);
     emit value_changed();
 }
 
@@ -59,16 +61,12 @@ void UI_can::from_json(const json &j)
     m_can_received_messages.clear();
     for (const auto &msg : j.at("send_msgs"))
     {
-        QCanBusFrame can_msg;
-        can_msg.setFrameId(msg.at("id"));
-        can_msg.setPayload(QByteArray(msg.at("payload"), msg.at("dlc")));
+        CanFrame can_msg(msg.at("id"), msg.at("dlc"), msg.at("payload"));
         m_can_send_messages.push_back(can_msg);
     }
     for (const auto &msg : j.at("rcvd_msgs"))
     {
-        QCanBusFrame can_msg;
-        can_msg.setFrameId(msg.at("id"));
-        can_msg.setPayload(QByteArray(msg.at("payload"), msg.at("dlc")));
+        CanFrame can_msg(msg.at("id"), msg.at("dlc"), msg.at("payload"));
         m_can_received_messages.push_back(can_msg);
     }
 }
@@ -81,9 +79,9 @@ json UI_can::to_json(size_t id) const
     for (const auto &msg : m_can_send_messages)
     {
         json can_msg;
-        can_msg["id"] = (uint32_t)msg.frameId();
-        can_msg["dlc"] = msg.payload().size();
-        can_msg["payload"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
+        can_msg["id"] = (uint32_t)msg.m_SID;
+        can_msg["dlc"] = msg.m_DLC;
+        can_msg["payload"] = msg.m_payload;
 
         can_send_messages.push_back(can_msg);
     }
@@ -91,9 +89,9 @@ json UI_can::to_json(size_t id) const
     for (const auto &msg : m_can_received_messages)
     {
         json can_msg;
-        can_msg["id"] = (uint32_t)msg.frameId();
-        can_msg["dlc"] = msg.payload().size();
-        can_msg["payload"] = ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload());
+        can_msg["id"] = (uint32_t)msg.m_SID;
+        can_msg["dlc"] = msg.m_DLC;
+        can_msg["payload"] = msg.m_payload;
 
         can_received_messages.push_back(can_msg);
     }
