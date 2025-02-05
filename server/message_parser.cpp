@@ -29,27 +29,27 @@ json Simulators::command_parser(json command)
         switch (cmd)
         {
         case Command::get_UI_element:
-            spdlog::info("Command {}: {}", type, (size_t)command.at("id"));
+            SPDLOG_INFO("Command {}: {}", type, (size_t)command.at("id"));
             j["response"]["type"] = type;
             j["response"]["UI_item"] = invoke_active_simulator()->get_UI_item(command.at("id"))->to_json(command.at("id"));
             break;
         case Command::get_UI_elements:
-            spdlog::info("Command {}", type);
+            SPDLOG_INFO("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["UI_items"] = invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
         case Command::switch_simulator:
-            spdlog::info("Command {} to {}", type, std::string(command.at("name")));
+            SPDLOG_INFO("Command {} to {}", type, std::string(command.at("name")));
             switch_simulator(command.at("name"));
             j["response"]["type"] = type;
             break;
         case Command::get_active_simulator_name:
-            spdlog::info("Command {}", type);
+            SPDLOG_INFO("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["name"] = active_simulator_name();
             break;
         case Command::get_simulators:
-            spdlog::info("Command {}", type);
+            SPDLOG_INFO("Command {}", type);
             j["response"]["type"] = type;
             j["response"]["simulators"] = list_simulators();
             break;
@@ -59,7 +59,7 @@ json Simulators::command_parser(json command)
     }
     catch (const json::exception &e)
     {
-        spdlog::error("{} {}", __FUNCTION__, e.what());
+        SPDLOG_ERROR("{} {}", __FUNCTION__, e.what());
     }
 
     return j;
@@ -73,45 +73,45 @@ void Simulators::event_handler(json event)
         Event e = magic_enum::enum_cast<Event>(type).value_or(Event::end);
         if (invoke_active_simulator() == nullptr)
         {
-            spdlog::error("Event got called but there is no active simulator");
+            SPDLOG_ERROR("Event got called but there is no active simulator");
             return;
         }
 
         switch (e)
         {
         case Event::clicked: {
-            spdlog::debug("Event {}: {}", type, (size_t)event.at("id"));
+            SPDLOG_DEBUG("Event {}: {}", type, (size_t)event.at("id"));
             invoke_active_simulator()->get_UI_item(event.at("id"))->click();
             break;
         }
         case Event::value_changed: {
-            spdlog::debug("Event {}: {} {}", type, (size_t)event.at("id"), (double)(event["value"]));
+            SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), (double)(event["value"]));
             invoke_active_simulator()->get_UI_item(event.at("id"))->set_value((double)event.at("value"));
             break;
         }
         case Event::text_changed: {
-            spdlog::debug("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("text")));
+            SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("text")));
             invoke_active_simulator()
                 ->get_UI_item(event.at("id"))
                 ->set_text(std::string(event.at("text")));
             break;
         }
         case Event::selected: {
-            spdlog::debug("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("selected")));
+            SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("selected")));
             invoke_active_simulator()
                 ->get_UI_item(event.at("id"))
                 ->set_selected(std::string(event.at("selected")));
             break;
         }
         case Event::can_send: {
-            spdlog::debug("Event {}: {}", type, (size_t)event.at("id"));
+            SPDLOG_DEBUG("Event {}: {}", type, (size_t)event.at("id"));
             invoke_active_simulator()
                 ->get_UI_item(event.at("id"))
                 ->can_send((uint32_t)event.at("sid"), (uint8_t)event.at("dlc"), (std::array<uint8_t, 8>)event.at("payload"));
             break;
         }
         case Event::can_clear: {
-            spdlog::debug("Event {}: {}", type, (size_t)event.at("id"));
+            SPDLOG_DEBUG("Event {}: {}", type, (size_t)event.at("id"));
             invoke_active_simulator()->get_UI_item(event.at("id"))->can_clear();
             break;
         }
@@ -122,6 +122,6 @@ void Simulators::event_handler(json event)
     }
     catch (const json::exception &e)
     {
-        spdlog::error("{} {}", __FUNCTION__, e.what());
+        SPDLOG_ERROR("{} {}", __FUNCTION__, e.what());
     }
 }

@@ -6,7 +6,7 @@ CAN_Interface::CAN_Interface(QString dev, QObject *parent)
     : QObject(parent)
 {
     if (!QCanBus::instance()->plugins().contains(QStringLiteral("socketcan"))) {
-        spdlog::critical("Runtime error: CAN Interface: socketcan plugin not found");
+        SPDLOG_CRITICAL("Runtime error: CAN Interface: socketcan plugin not found");
         throw std::runtime_error("CAN Interface: socketcan plugin not found");
     }
     QString errorString;
@@ -14,7 +14,7 @@ CAN_Interface::CAN_Interface(QString dev, QObject *parent)
     if (!m_canDevice)
     {
         // Error handling goes here
-        spdlog::critical("Runtime error: CAN Interface: {}", errorString.toStdString());
+        SPDLOG_CRITICAL("Runtime error: CAN Interface: {}", errorString.toStdString());
         throw std::runtime_error("CAN Interface: " + errorString.toStdString());
     }
 
@@ -50,7 +50,7 @@ void CAN_Interface::processErrors(QCanBusDevice::CanBusError error) const
     case QCanBusDevice::ConnectionError:
     case QCanBusDevice::ConfigurationError:
     case QCanBusDevice::UnknownError:
-        spdlog::critical("CAN Interface: {} {}", magic_enum::enum_name<QCanBusDevice::CanBusError>(error), m_canDevice->errorString().toStdString());
+        SPDLOG_CRITICAL("CAN Interface: {} {}", magic_enum::enum_name<QCanBusDevice::CanBusError>(error), m_canDevice->errorString().toStdString());
         break;
     default:
         break;

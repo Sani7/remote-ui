@@ -44,7 +44,7 @@ void Test_Sim::timer()
 void Test_Sim::run_at_startup()
 {
     // Run at startup
-    spdlog::info("Test_Sim started");
+    SPDLOG_INFO("Test_Sim started");
 }
 
 void Test_Sim::button_clicked(UI_button* id)
@@ -64,7 +64,7 @@ void Test_Sim::slider_changed(UI_slider* id, double value)
 {
     if (id == &this->m_slider)
     {
-        spdlog::info("Test slider changed to {}", value);
+        SPDLOG_INFO("Test slider changed to {}", value);
         this->m_label.set_text(std::to_string(value));
         this->m_dial.set_value(value);
         this->m_thermo.set_value(value);

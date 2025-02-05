@@ -30,12 +30,12 @@ void Simulators::run()
 {
     if (this->m_simulators.empty())
     {
-        spdlog::warn("no simulators found");
+        SPDLOG_WARN("no simulators found");
         return;
     }
     if (this->m_current_simulator.empty())
     {
-        spdlog::warn("no active simulator");
+        SPDLOG_WARN("no active simulator");
         return;
     }
 
@@ -47,12 +47,12 @@ void Simulators::stop()
 {
     if (this->m_simulators.empty())
     {
-        spdlog::warn("no simulators found");
+        SPDLOG_WARN("no simulators found");
         return;
     }
     if (this->m_current_simulator.empty())
     {
-        spdlog::warn("no active simulator");
+        SPDLOG_WARN("no active simulator");
         return;
     }
 
@@ -63,18 +63,18 @@ void Simulators::switch_simulator(std::string name)
 {
     if (this->m_simulators.empty())
     {
-        spdlog::warn("no simulators found");
+        SPDLOG_WARN("no simulators found");
         return;
     }
     if (!this->m_current_simulator.empty())
     {
-        spdlog::info("stopping current simulator {} and switching to {}", m_current_simulator, name);
+        SPDLOG_INFO("stopping current simulator {} and switching to {}", m_current_simulator, name);
         this->m_simulators.at(m_current_simulator)->stop();
     }
 
     if (this->m_simulators.find(name) == this->m_simulators.end())
     {
-        spdlog::warn("simulator {} not found", name);
+        SPDLOG_WARN("simulator {} not found", name);
         return;
     }
 
@@ -160,7 +160,7 @@ json Simulators::changed_UI_items()
     }
     catch (const std::exception &e)
     {
-        spdlog::error(e.what());
+        SPDLOG_ERROR(e.what());
     }
 
     m_before = after;

@@ -9,7 +9,7 @@ Websocket::Websocket(uint16_t port, QObject *parent)
 {
     if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
-        spdlog::debug("Server listening on port {}", port);
+        SPDLOG_DEBUG("Server listening on port {}", port);
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
         connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
     }
@@ -32,7 +32,7 @@ void Websocket::broadcast(QString message)
 void Websocket::send(QWebSocket *conn, QString message)
 {
     conn->sendTextMessage(message);
-    spdlog::trace("sending message: {}", message.toStdString());
+    SPDLOG_TRACE("sending message: {}", message.toStdString());
 }
 
 void Websocket::onNewConnection()
@@ -44,20 +44,20 @@ void Websocket::onNewConnection()
     connect(pSocket, &QWebSocket::disconnected, this, &Websocket::socketDisconnected);
 
     m_clients << pSocket;
-    spdlog::debug("socket connected");
+    SPDLOG_DEBUG("socket connected");
 }
 
 void Websocket::processTextMessage(QString message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    spdlog::trace("Message received: {}", message.toStdString());
+    SPDLOG_TRACE("Message received: {}", message.toStdString());
     emit on_message(pClient, message);
 }
 
 void Websocket::processBinaryMessage(QByteArray message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    spdlog::trace("Binary Message received: {}", message.data());
+    SPDLOG_TRACE("Binary Message received: {}", message.data());
     Q_UNUSED(message);
     Q_UNUSED(pClient);
 }
@@ -65,7 +65,7 @@ void Websocket::processBinaryMessage(QByteArray message)
 void Websocket::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    spdlog::debug("socket Disconnected");
+    SPDLOG_DEBUG("socket Disconnected");
     if (pClient)
     {
         m_clients.removeAll(pClient);
