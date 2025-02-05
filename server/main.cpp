@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     init_logger();
 
     // The server starts in this thread
-    spdlog::info("Starting server");
+    SPDLOG_INFO("Starting server");
     Simulators simulators(port, can_port);
 
     return a.exec();
