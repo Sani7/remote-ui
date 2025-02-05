@@ -13,6 +13,7 @@ class Websocket : public QObject
 
   public:
     Websocket(uint16_t port, QObject *parent = nullptr);
+    Websocket(uint16_t port, QString key_file, QString cert_file, QObject *parent = nullptr);
     ~Websocket();
 
     void broadcast(QString message);

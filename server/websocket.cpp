@@ -1,12 +1,40 @@
 #include "websocket.hpp"
 #include "QtWebSockets/qwebsocket.h"
 #include "QtWebSockets/qwebsocketserver.h"
+#include <QtCore/QFile>
+#include <QtNetwork/QSslCertificate>
+#include <QtNetwork/QSslKey>
 #include <spdlog/spdlog.h>
 
 Websocket::Websocket(uint16_t port, QObject *parent)
     : QObject(parent),
-      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"), QWebSocketServer::NonSecureMode, this))
+      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"), QWebSocketServer::NonSecureMode, parent))
 {
+    if (m_pWebSocketServer->listen(QHostAddress::Any, port))
+    {
+        SPDLOG_DEBUG("Server listening on port {}", port);
+        connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
+        connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
+    }
+}
+
+Websocket::Websocket(uint16_t port, QString key_file, QString cert_file, QObject *parent)
+    : QObject(parent),
+      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"), QWebSocketServer::SecureMode, parent))
+{
+    QSslConfiguration sslConfiguration;
+    QFile certFile(cert_file);
+    QFile keyFile(key_file);
+    certFile.open(QIODevice::ReadOnly);
+    keyFile.open(QIODevice::ReadOnly);
+    QSslCertificate certificate(&certFile, QSsl::Pem);
+    QSslKey sslKey(&keyFile, QSsl::Rsa, QSsl::Pem);
+    certFile.close();
+    keyFile.close();
+    sslConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+    sslConfiguration.setLocalCertificate(certificate);
+    sslConfiguration.setPrivateKey(sslKey);
+    m_pWebSocketServer->setSslConfiguration(sslConfiguration);
     if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
         SPDLOG_DEBUG("Server listening on port {}", port);
