@@ -19,8 +19,12 @@ QWidget* SimulatorBase::id_to_ui(size_t id)
 void SimulatorBase::showEvent( QShowEvent* event )
 {
     QWidget::showEvent( event );
-    QD << "Connecting callbacks";
-    setup_cb();
+    SPDLOG_DEBUG("Connecting callbacks");
+
+    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json& j){on_cmd_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json& j){on_event_cb(j);});
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this]{m_error_dialog->open();});
+
     m_web_socket->send_command(Web_socket_wrapper::Command::get_UI_elements);
     this->m_timer_update->start(m_refresh_rate);
     m_open = true;
@@ -30,20 +34,13 @@ void SimulatorBase::closeEvent(QCloseEvent* event)
 {
     if (m_open == true)
     {
-        QD << "Disconnecting callbacks";
+        SPDLOG_DEBUG("Disconnecting callbacks");
         QWidget::closeEvent(event);
         m_timer_update->stop();
         disconnect(m_web_socket, nullptr, nullptr, nullptr);
         m_open = false;
         this->parentWidget()->show();
     }
-}
-
-void SimulatorBase::setup_cb(void)
-{
-    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json& j){on_cmd_cb(j);});
-    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json& j){on_event_cb(j);});
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this]{m_error_dialog->open();});
 }
 
 void SimulatorBase::on_cmd_cb(json& j)
@@ -141,14 +138,14 @@ void SimulatorBase::process_ui_label(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto label = qobject_cast<QLabel*>(widget);
     if (label == nullptr)
     {
-        QD << "widget is not of type QLabel";
+        SPDLOG_WARN("widget is not of type QLabel");
         return;
     }
 
@@ -166,14 +163,14 @@ void SimulatorBase::process_ui_slider(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto slider = qobject_cast<QwtSlider*>(widget);
     if (slider == nullptr)
     {
-        QD << "widget is not of type QwtSlider";
+        SPDLOG_WARN("widget is not of type QwtSlider");
         return;
     }
 
@@ -210,14 +207,14 @@ void SimulatorBase::process_ui_dial(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto dial = qobject_cast<QwtDial*>(widget);
     if (dial == nullptr)
     {
-        QD << "widget is not of type QwtDial";
+        SPDLOG_WARN("widget is not of type QwtDial");
         return;
     }
 
@@ -248,14 +245,14 @@ void SimulatorBase::process_ui_thermo(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto thermo = qobject_cast<QwtThermo*>(widget);
     if (thermo == nullptr)
     {
-        QD << "widget is not of type QwtThermo";
+        SPDLOG_WARN("widget is not of type QwtThermo");
         return;
     }
 
@@ -282,8 +279,7 @@ void SimulatorBase::process_ui_thermo(json& uiItem)
 
 void SimulatorBase::process_ui_textbox(json& uiItem)
 {
-    QD << "Not implemented";
-    emit quit();
+    SPDLOG_CRITICAL("Not implemented");
 }
 
 void SimulatorBase::process_ui_combobox(json& uiItem)
@@ -291,14 +287,14 @@ void SimulatorBase::process_ui_combobox(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto combobox = qobject_cast<QComboBox*>(widget);
     if (combobox == nullptr)
     {
-        QD << "widget is not of type QComboBox";
+        SPDLOG_WARN("widget is not of type QComboBox");
         return;
     }
 
@@ -318,8 +314,7 @@ void SimulatorBase::process_ui_combobox(json& uiItem)
 
 void SimulatorBase::process_ui_radiobutton(json& uiItem)
 {
-    QD << "Not implemented";
-    emit quit();
+    SPDLOG_CRITICAL("Not implemented");
 }
 
 void SimulatorBase::process_ui_button(json& uiItem)
@@ -328,14 +323,14 @@ void SimulatorBase::process_ui_button(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto button = qobject_cast<QPushButton*>(widget);
     if (button == nullptr)
     {
-        QD << "widget is not of type QPushButton";
+        SPDLOG_WARN("widget is not of type QPushButton");
         return;
     }
 
@@ -389,14 +384,14 @@ void SimulatorBase::process_ui_led(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto led = qobject_cast<Led*>(widget);
     if (led == nullptr)
     {
-        QD << "widget is not of type led";
+        SPDLOG_WARN("widget is not of type led");
         return;
     }
 
@@ -444,14 +439,14 @@ void SimulatorBase::process_ui_can(json& uiItem)
     QWidget* widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
     {
-        QD << "id_to_ui returned null on " << QString::number((size_t)uiItem["id"]);
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
         return;
     }
 
     auto can_ui = qobject_cast<Can_Transceive*>(widget);
     if (can_ui == nullptr)
     {
-        QD << "widget is not of type led";
+        SPDLOG_WARN("widget is not of type led");
         return;
     }
 

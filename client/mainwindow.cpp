@@ -85,7 +85,7 @@ void MainWindow::open_sim(QString sim_name)
     }
     catch (const std::out_of_range& ex)
     {
-        QD << "out_of_range::what(): " << ex.what();
+        SPDLOG_CRITICAL("out_of_range: {}", ex.what());
         return;
     }
 
@@ -102,21 +102,21 @@ void MainWindow::check_active_sim(QString name)
 {
         if (name == "")
         {
-            QD << "Name not set";
+            SPDLOG_DEBUG("Name not set");
             m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, m_selected_sim_name);
             return;
         }
 
-         QD << "Current sim:" << name;
+        SPDLOG_DEBUG("Current sim:", name);
 
         if (name == m_selected_sim_name)
         {
-            QD << "Name set and the same";
+            SPDLOG_DEBUG("Name set and the same");
             open_sim_window();
             return;
         }
 
-        QD << "Name set and wrong";
+        SPDLOG_DEBUG("Name set and wrong");
         m_web_socket->send_command(Web_socket_wrapper::Command::switch_simulator, m_selected_sim_name);
 }
 

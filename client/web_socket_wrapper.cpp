@@ -1,4 +1,5 @@
 #include "web_socket_wrapper.h"
+#include "spdlog/spdlog.h"
 #include "magic_enum.hpp"
 
 Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent) :
@@ -185,7 +186,7 @@ void Web_socket_wrapper::m_on_pong(quint64 elapsedTime)
 
 void Web_socket_wrapper::m_on_pong_timeout()
 {
-    qDebug() << "Pong timeout";
+    SPDLOG_CRITICAL("Pong timeout");
     m_web_socket->close();
     emit on_closed();
 }

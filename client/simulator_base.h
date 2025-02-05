@@ -9,17 +9,14 @@
 #include "led.h"
 #include <magic_enum.hpp>
 #include "IterableEnum.hpp"
-
+#include "spdlog/spdlog.h"
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
-
-#define QD qDebug() << "Debug:" << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << ":"
 
 class SimulatorBase : public QMainWindow {
     Q_OBJECT
   public:
     explicit SimulatorBase(Web_socket_wrapper* api, QWidget* parent = nullptr);
-    void setup_cb(void);
     void sim_update(void);
     QWidget* id_to_ui(size_t id);
     virtual QLabel* id_to_label(size_t name) {return nullptr;}
