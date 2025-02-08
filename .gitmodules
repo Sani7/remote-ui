@@ -1,9 +1,9 @@
 [submodule "external/color"]
 	path = external/color
-	url = git@github.com:Sani7/cpp_color_lib.git
+	url = https://github.com/Sani7/cpp_color_lib.git
 [submodule "external/spdlog"]
 	path = external/spdlog
-	url = git@github.com:gabime/spdlog.git
+	url = https://github.com/gabime/spdlog.git
 [submodule "external/cpp-templates"]
 	path = external/cpp-templates
 	url = https://github.com/Sani7/cpp-templates.git
