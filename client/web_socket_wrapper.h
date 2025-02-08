@@ -1,8 +1,8 @@
 #ifndef WEB_SOCKET_WRAPPER_H
 #define WEB_SOCKET_WRAPPER_H
 
-#include <QtWebSockets/QWebSocket>
 #include <QTimer>
+#include <QtWebSockets/QWebSocket>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -33,6 +33,7 @@ class Web_socket_wrapper : public QObject
         end,
         begin = 0
     };
+
   public:
     explicit Web_socket_wrapper(const QUrl &url, QObject *parent = nullptr);
     ~Web_socket_wrapper();
@@ -47,8 +48,8 @@ class Web_socket_wrapper : public QObject
   Q_SIGNALS:
     void on_connected();
     void on_closed();
-    void on_command_cb(json& data);
-    void on_event_cb(json& data);
+    void on_command_cb(json &data);
+    void on_event_cb(json &data);
 
   private Q_SLOTS:
     void m_on_connected();
@@ -58,9 +59,9 @@ class Web_socket_wrapper : public QObject
 
   private:
     bool m_connected = false;
-    QWebSocket* m_web_socket;
-    QTimer* m_ping_timer;
-    QTimer* m_pong_timer;
+    QWebSocket *m_web_socket;
+    QTimer *m_ping_timer;
+    QTimer *m_pong_timer;
 };
 
 #endif // WEB_SOCKET_WRAPPER_H

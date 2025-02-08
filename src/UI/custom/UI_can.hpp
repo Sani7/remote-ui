@@ -8,10 +8,8 @@
 class CanFrame
 {
   public:
-    CanFrame(uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload)
-        : m_SID(sid), m_DLC(dlc), m_payload(payload)
+    CanFrame(uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload) : m_SID(sid), m_DLC(dlc), m_payload(payload)
     {
-
     }
     uint32_t m_SID;
     uint8_t m_DLC;
@@ -37,6 +35,7 @@ class UI_can : public UI_item
     void can_clear() override;
   signals:
     void on_send(QCanBusFrame msg);
+
   private:
     std::vector<CanFrame> m_can_send_messages;
     std::vector<CanFrame> m_can_received_messages;

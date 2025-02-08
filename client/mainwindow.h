@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <map>
-#include <QMainWindow>
-#include "web_socket_wrapper.h"
 #include "networkerror.h"
 #include "simulator_base.h"
+#include "web_socket_wrapper.h"
+#include <QMainWindow>
+#include <map>
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -20,7 +21,7 @@ class MainWindow : public QMainWindow
     ~MainWindow();
 
     void defaultSim(QString name);
-    void pase_sim_names(json& sims);
+    void pase_sim_names(json &sims);
     void open_sim_window(void);
     void check_active_sim(QString name);
     void open_sim(QString sim_name);
@@ -28,20 +29,21 @@ class MainWindow : public QMainWindow
 
   signals:
     void quit(void);
-  private:
-    void showEvent(QShowEvent* event);
-    void hideEvent(QHideEvent* event);
 
-    void on_cmd_cb(json& j);
+  private:
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+
+    void on_cmd_cb(json &j);
 
     bool m_default_sim = false;
     QString m_selected_sim_name;
-    QMainWindow* m_selected_sim;
-    Ui::MainWindow* ui;
+    QMainWindow *m_selected_sim;
+    Ui::MainWindow *ui;
     Web_socket_wrapper *m_web_socket;
-    NetworkError* m_error_dialog;
+    NetworkError *m_error_dialog;
 
-    std::map<QString, SimulatorBase*> m_sims;
+    std::map<QString, SimulatorBase *> m_sims;
 };
 
 #endif // MAINWINDOW_H

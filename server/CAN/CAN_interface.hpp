@@ -1,8 +1,8 @@
 #pragma once
-#include <QObject>
 #include <QCanBus>
 #include <QCanBusDevice>
 #include <QCanBusFrame>
+#include <QObject>
 
 class CAN_Interface : public QObject
 {

@@ -1,17 +1,15 @@
 #include "web_socket_wrapper.h"
-#include "spdlog/spdlog.h"
 #include "magic_enum.hpp"
+#include "spdlog/spdlog.h"
 
-Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent) :
-      QObject(parent),
-      m_web_socket(new QWebSocket("", QWebSocketProtocol::VersionLatest, this)),
-      m_ping_timer(new QTimer(this)),
-      m_pong_timer(new QTimer(this))
+Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
+    : QObject(parent), m_web_socket(new QWebSocket("", QWebSocketProtocol::VersionLatest, this)),
+      m_ping_timer(new QTimer(this)), m_pong_timer(new QTimer(this))
 {
     connect(m_web_socket, &QWebSocket::connected, this, &Web_socket_wrapper::m_on_connected);
     connect(m_web_socket, &QWebSocket::disconnected, this, &Web_socket_wrapper::on_closed);
     connect(m_web_socket, &QWebSocket::pong, this, &Web_socket_wrapper::m_on_pong);
-    connect(m_ping_timer, &QTimer::timeout, this, [=, this]{
+    connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
         m_web_socket->ping();
         m_pong_timer->start(500);
     });
@@ -31,25 +29,25 @@ void Web_socket_wrapper::send_command(Command command, size_t id)
     json j;
     switch (command)
     {
-        case Command::get_UI_element:
-            j["command"]["type"] = magic_enum::enum_name(command).data();
-            j["command"]["id"] = id;
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        case Command::get_UI_elements:
-            j["command"]["type"] = magic_enum::enum_name(command).data();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        case Command::get_active_simulator_name:
-            j["command"]["type"] = magic_enum::enum_name(command).data();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        case Command::get_simulators:
-            j["command"]["type"] = magic_enum::enum_name(command).data();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        default:
-            break;
+    case Command::get_UI_element:
+        j["command"]["type"] = magic_enum::enum_name(command).data();
+        j["command"]["id"] = id;
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    case Command::get_UI_elements:
+        j["command"]["type"] = magic_enum::enum_name(command).data();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    case Command::get_active_simulator_name:
+        j["command"]["type"] = magic_enum::enum_name(command).data();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    case Command::get_simulators:
+        j["command"]["type"] = magic_enum::enum_name(command).data();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -58,13 +56,13 @@ void Web_socket_wrapper::send_command(Command command, QString id)
     json j;
     switch (command)
     {
-        case Command::switch_simulator:
-            j["command"]["type"] = magic_enum::enum_name(command).data();
-            j["command"]["name"] = id.toStdString();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        default:
-            break;
+    case Command::switch_simulator:
+        j["command"]["type"] = magic_enum::enum_name(command).data();
+        j["command"]["name"] = id.toStdString();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -73,14 +71,14 @@ void Web_socket_wrapper::send_event(Event event, size_t id)
     json j;
     switch (event)
     {
-        case Event::clicked:
-        case Event::can_clear:
-            j["event"]["type"] = magic_enum::enum_name(event).data();
-            j["event"]["id"] = id;
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;            
-        default:
-            break;
+    case Event::clicked:
+    case Event::can_clear:
+        j["event"]["type"] = magic_enum::enum_name(event).data();
+        j["event"]["id"] = id;
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -89,14 +87,14 @@ void Web_socket_wrapper::send_event(Event event, size_t id, double val)
     json j;
     switch (event)
     {
-        case Event::value_changed:
-            j["event"]["type"] = magic_enum::enum_name(event).data();
-            j["event"]["id"] = id;
-            j["event"]["value"] = val;
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        default:
-            break;
+    case Event::value_changed:
+        j["event"]["type"] = magic_enum::enum_name(event).data();
+        j["event"]["id"] = id;
+        j["event"]["value"] = val;
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -105,20 +103,20 @@ void Web_socket_wrapper::send_event(Event event, size_t id, QString val)
     json j;
     switch (event)
     {
-        case Event::text_changed:
-            j["event"]["type"] = magic_enum::enum_name(event).data();
-            j["event"]["id"] = id;
-            j["event"]["text"] = val.toStdString();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        case Event::selected:
-            j["event"]["type"] = magic_enum::enum_name(event).data();
-            j["event"]["id"] = id;
-            j["event"]["selected"] = val.toStdString();
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        default:
-            break;
+    case Event::text_changed:
+        j["event"]["type"] = magic_enum::enum_name(event).data();
+        j["event"]["id"] = id;
+        j["event"]["text"] = val.toStdString();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    case Event::selected:
+        j["event"]["type"] = magic_enum::enum_name(event).data();
+        j["event"]["id"] = id;
+        j["event"]["selected"] = val.toStdString();
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -127,16 +125,16 @@ void Web_socket_wrapper::send_event(Event event, size_t id, uint32_t sid, uint8_
     json j;
     switch (event)
     {
-        case Event::can_send:
-            j["event"]["type"] = magic_enum::enum_name(event).data();
-            j["event"]["id"] = id;
-            j["event"]["sid"] = sid;
-            j["event"]["dlc"] = dlc;
-            j["event"]["payload"] = payload;
-            m_web_socket->sendTextMessage(QString(j.dump().data()));
-            break;
-        default:
-            break;
+    case Event::can_send:
+        j["event"]["type"] = magic_enum::enum_name(event).data();
+        j["event"]["id"] = id;
+        j["event"]["sid"] = sid;
+        j["event"]["dlc"] = dlc;
+        j["event"]["payload"] = payload;
+        m_web_socket->sendTextMessage(QString(j.dump().data()));
+        break;
+    default:
+        break;
     }
 }
 
@@ -149,8 +147,7 @@ void Web_socket_wrapper::close()
 void Web_socket_wrapper::m_on_connected()
 {
     m_connected = true;
-    connect(m_web_socket, &QWebSocket::textMessageReceived,
-            this, &Web_socket_wrapper::m_on_received);
+    connect(m_web_socket, &QWebSocket::textMessageReceived, this, &Web_socket_wrapper::m_on_received);
 
     m_ping_timer->start(1000);
 

@@ -4,8 +4,8 @@ UI_combobox::UI_combobox(QObject *parent) : UI_x_boxes(UI_COMBOBOX_TYPE, parent)
 {
 }
 
-UI_combobox::UI_combobox(Color fg_color, Color bg_color,
-                         std::vector<std::string> options, size_t selected, QObject *parent)
+UI_combobox::UI_combobox(Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected,
+                         QObject *parent)
     : UI_x_boxes(UI_COMBOBOX_TYPE, "", fg_color, bg_color, options, parent), m_selected(selected)
 {
 }

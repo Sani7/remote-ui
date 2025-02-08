@@ -2,17 +2,17 @@
 
 UI_slider::UI_slider(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parent)
-    : UI_item(UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value), m_unit(unit)
+    : UI_item(UI_SLIDER_TYPE, text, 12, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value),
+      m_unit(unit)
 {
 }
 
 UI_slider::UI_slider(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
-              QObject *parent)
-              : UI_slider(text, "", fg_color, bg_color, min, max, value, parent)
+                     QObject *parent)
+    : UI_slider(text, "", fg_color, bg_color, min, max, value, parent)
 {
-
 }
-              
+
 UI_slider::UI_slider(const json &j, QObject *parent) : UI_item(UI_SLIDER_TYPE, parent)
 {
     from_json(j);

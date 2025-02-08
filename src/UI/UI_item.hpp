@@ -6,8 +6,8 @@
 #include <string>
 #include <thread>
 
-#include <QObject>
 #include <QCanBusFrame>
+#include <QObject>
 using json = nlohmann::json;
 
 #define UNUSED(x) (void)(x)
@@ -17,8 +17,8 @@ class UI_item : public QObject
     Q_OBJECT
   public:
     explicit UI_item(std::string type, QObject *parent = nullptr);
-    explicit UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color,
-                     Color bg_color, QObject *parent = nullptr);
+    explicit UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color,
+                     QObject *parent = nullptr);
     explicit UI_item(const json &j, QObject *parent = nullptr);
     ~UI_item();
 

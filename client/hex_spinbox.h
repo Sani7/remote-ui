@@ -1,9 +1,9 @@
 #ifndef _HEXSPINBOX_H_
 #define _HEXSPINBOX_H_
 
-#include <QSpinBox>
 #include <QLineEdit>
 #include <QRegularExpressionValidator>
+#include <QSpinBox>
 
 // NOTE: Since QSpinBox uses int as the storage type, the effective editing range
 //   is +/- 0x7FFF FFFF, so it can't handle a full unsigned int.
@@ -13,9 +13,7 @@ class HexSpinBox : public QSpinBox
     Q_OBJECT
 
   public:
-    HexSpinBox(QWidget *parent = nullptr,
-               bool showPrefix = false,
-               const QString &format = QStringLiteral("%X"));
+    HexSpinBox(QWidget *parent = nullptr, bool showPrefix = false, const QString &format = QStringLiteral("%X"));
 
   public slots:
     void setShowPrefix(bool show);

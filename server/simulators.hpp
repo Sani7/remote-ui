@@ -3,6 +3,7 @@
 #include <memory>
 #include <mutex>
 
+#include "CAN_wrapper.hpp"
 #include "simulator_base.hpp"
 #include "websocket.hpp"
 

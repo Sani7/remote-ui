@@ -31,7 +31,8 @@ json Simulators::command_parser(json command)
         case Command::get_UI_element:
             SPDLOG_INFO("Command {}: {}", type, (size_t)command.at("id"));
             j["response"]["type"] = type;
-            j["response"]["UI_item"] = invoke_active_simulator()->get_UI_item(command.at("id"))->to_json(command.at("id"));
+            j["response"]["UI_item"] =
+                invoke_active_simulator()->get_UI_item(command.at("id"))->to_json(command.at("id"));
             break;
         case Command::get_UI_elements:
             SPDLOG_INFO("Command {}", type);
@@ -91,23 +92,20 @@ void Simulators::event_handler(json event)
         }
         case Event::text_changed: {
             SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("text")));
-            invoke_active_simulator()
-                ->get_UI_item(event.at("id"))
-                ->set_text(std::string(event.at("text")));
+            invoke_active_simulator()->get_UI_item(event.at("id"))->set_text(std::string(event.at("text")));
             break;
         }
         case Event::selected: {
             SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("selected")));
-            invoke_active_simulator()
-                ->get_UI_item(event.at("id"))
-                ->set_selected(std::string(event.at("selected")));
+            invoke_active_simulator()->get_UI_item(event.at("id"))->set_selected(std::string(event.at("selected")));
             break;
         }
         case Event::can_send: {
             SPDLOG_DEBUG("Event {}: {}", type, (size_t)event.at("id"));
             invoke_active_simulator()
                 ->get_UI_item(event.at("id"))
-                ->can_send((uint32_t)event.at("sid"), (uint8_t)event.at("dlc"), (std::array<uint8_t, 8>)event.at("payload"));
+                ->can_send((uint32_t)event.at("sid"), (uint8_t)event.at("dlc"),
+                           (std::array<uint8_t, 8>)event.at("payload"));
             break;
         }
         case Event::can_clear: {

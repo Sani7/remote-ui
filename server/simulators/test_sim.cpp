@@ -28,7 +28,8 @@ m_led("Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
     this->add_UI_item(&this->m_checkbox);
 
     QObject::connect(&m_button, &UI_button::on_click, this, [=, this] { button_clicked(&m_button); });
-    QObject::connect(&m_slider, &UI_slider::on_change, this, [=, this](double value) { slider_changed(&m_slider, value); });
+    QObject::connect(&m_slider, &UI_slider::on_change, this,
+                     [=, this](double value) { slider_changed(&m_slider, value); });
 }
 
 void Test_Sim::timer()
@@ -47,20 +48,20 @@ void Test_Sim::run_at_startup()
     SPDLOG_INFO("Test_Sim started");
 }
 
-void Test_Sim::button_clicked(UI_button* id)
+void Test_Sim::button_clicked(UI_button *id)
 {
     if (id == &this->m_button)
     {
         bool state = this->m_button.bg_color() == Color(Color::Red) ? true : false;
         this->m_button.set_bg_color(state ? Color(Color::Green) : Color(Color::Red));
         this->m_button.set_text(state ? "On" : "Off");
-        
+
         this->m_led.set_led_color(state ? Color(Color::Green) : Color(Color::Red));
         return;
     }
 }
 
-void Test_Sim::slider_changed(UI_slider* id, double value)
+void Test_Sim::slider_changed(UI_slider *id, double value)
 {
     if (id == &this->m_slider)
     {

@@ -9,8 +9,7 @@ class UI_checkbox : public UI_item
     Q_OBJECT
   public:
     UI_checkbox(QObject *parent = nullptr);
-    UI_checkbox(std::string text, Color fg_color, Color bg_color,
-                QObject *parent = nullptr);
+    UI_checkbox(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     UI_checkbox(const json &j, QObject *parent = nullptr);
 
     void toggle_selected();

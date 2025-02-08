@@ -1,18 +1,20 @@
 #ifndef CAN_TRANSCEIVE_H
 #define CAN_TRANSCEIVE_H
 
-#include <QWidget>
 #include "hex_spinbox.h"
+#include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class Can_Transceive;
 }
 
-class Can_Transceive : public QWidget {
+class Can_Transceive : public QWidget
+{
     Q_OBJECT
 
   public:
-    explicit Can_Transceive(QWidget* parent = nullptr);
+    explicit Can_Transceive(QWidget *parent = nullptr);
     ~Can_Transceive();
     void enable_can_send_data();
     void clear();
@@ -24,8 +26,8 @@ class Can_Transceive : public QWidget {
     void can_clear();
 
   private:
-    Ui::Can_Transceive* ui;
-    std::vector<HexSpinBox*> can_send_hexspinboxes;
+    Ui::Can_Transceive *ui;
+    std::vector<HexSpinBox *> can_send_hexspinboxes;
 };
 
 #endif // CAN_TRANSCEIVE_H

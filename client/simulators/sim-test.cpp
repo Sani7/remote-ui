@@ -1,9 +1,8 @@
 #include "sim-test.h"
 #include "ui_sim-test.h"
 
-Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
-      SimulatorBase(web_socket, parent),
-      ui(new Ui::Test_Sim)
+Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
+    : SimulatorBase(web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
     this->setWindowTitle("Test Sim");
@@ -18,13 +17,14 @@ Test_Sim::Test_Sim(Web_socket_wrapper* web_socket, QWidget* parent) :
     push_ui_item(ui->led);
 }
 
-Test_Sim::~Test_Sim() {
+Test_Sim::~Test_Sim()
+{
     delete ui;
 }
 
-QLabel* Test_Sim::id_to_label(size_t id)
+QLabel *Test_Sim::id_to_label(size_t id)
 {
-    QWidget* widget = id_to_ui(id);
+    QWidget *widget = id_to_ui(id);
     if (widget == ui->slider)
         return ui->slider_label;
     if (widget == ui->thermo)

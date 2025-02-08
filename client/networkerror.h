@@ -3,20 +3,22 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class NetworkError;
 }
 
-class NetworkError : public QDialog {
+class NetworkError : public QDialog
+{
     Q_OBJECT
 
   public:
-    explicit NetworkError(QWidget* parent = nullptr);
+    explicit NetworkError(QWidget *parent = nullptr);
     void set_error(QString error);
     ~NetworkError();
 
   private:
-    Ui::NetworkError* ui;
+    Ui::NetworkError *ui;
 };
 
 #endif // NETWORKERROR_H

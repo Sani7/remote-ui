@@ -1,10 +1,6 @@
 #include "hex_spinbox.h"
 
-HexSpinBox::HexSpinBox(QWidget *parent,
-           bool showPrefix,
-           const QString &format) :
-      QSpinBox(parent),
-      format(format)
+HexSpinBox::HexSpinBox(QWidget *parent, bool showPrefix, const QString &format) : QSpinBox(parent), format(format)
 {
     // Validates hex strings up to 8 chars with or w/out leading "0x" prefix.
     // For arbitrary prefix/suffix, the regex could be built dynamically

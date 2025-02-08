@@ -24,14 +24,16 @@ UI_can::UI_can(const json &j, QObject *parent) : UI_item(UI_CAN_TYPE, parent)
 
 void UI_can::add_send_message(QCanBusFrame msg)
 {
-    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(), ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
+    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
+                   ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
     m_can_send_messages.push_back(frame);
     emit value_changed();
 }
 
 void UI_can::add_received_message(QCanBusFrame msg)
 {
-    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(), ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
+    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
+                   ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
     m_can_received_messages.push_back(frame);
     emit value_changed();
 }
