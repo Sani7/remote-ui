@@ -31,7 +31,7 @@ class Simulator_base : public QObject
      *
      * @param item The UI item to add
      */
-    void add_UI_item(UI_item *item);
+    void push_ui_item(UI_item *item);
     /**
      * @brief Get the UI items object
      *

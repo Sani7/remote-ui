@@ -2,7 +2,7 @@
 
 TEST(UI_led, to_from_json)
 {
-    UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255), Color(255, 0, 0));
+    UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255));
     json j = led.to_json(0);
     UI_led led2(j);
     EXPECT_EQ(led.text(), led2.text());
@@ -13,7 +13,7 @@ TEST(UI_led, to_from_json)
 
 TEST(UI_led, set_led_color)
 {
-    UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255), Color(255, 0, 0));
-    led.set_led_color(Color(0, 255, 0));
-    EXPECT_EQ(led.led_color(), Color(0, 255, 0));
+    UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255));
+    led.set_bg_color(Color(0, 255, 0));
+    EXPECT_EQ(led.bg_color(), Color(0, 255, 0));
 }

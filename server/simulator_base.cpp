@@ -13,7 +13,7 @@ std::string Simulator_base::name() const
     return m_name;
 }
 
-void Simulator_base::add_UI_item(UI_item *item)
+void Simulator_base::push_ui_item(UI_item *item)
 {
     // Add a UI item to the simulator
     connect(item, &UI_item::value_changed, this, [this] { emit sim_changed(); });

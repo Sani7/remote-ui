@@ -11,21 +11,21 @@ m_dial("Dial", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_thermo("Thermo", "%", Color(Color::White), Color(Color::Black), 0, 100, 0),
 m_led("Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
 {
-    this->m_thermo.set_start_color(Color(Color::Red));
-    this->m_thermo.set_end_color(Color(Color::Red));
-    this->m_thermo.add_color_stop(0.10, Color(Color::Yellow));
-    this->m_thermo.add_color_stop(0.50, Color(Color::Green));
-    this->m_thermo.add_color_stop(0.60, Color(Color::Yellow));
-    this->m_thermo.add_color_stop(0.90, Color(Color::Red));
+    this->m_thermo.set_start_color(Color::Red);
+    this->m_thermo.set_end_color(Color::Red);
+    this->m_thermo.add_color_stop(0.10, Color::Yellow);
+    this->m_thermo.add_color_stop(0.50, Color::Green);
+    this->m_thermo.add_color_stop(0.60, Color::Yellow);
+    this->m_thermo.add_color_stop(0.90, Color::Red);
 
-    this->add_UI_item(&this->m_button);
-    this->add_UI_item(&this->m_combobox);
-    this->add_UI_item(&this->m_label);
-    this->add_UI_item(&this->m_slider);
-    this->add_UI_item(&this->m_dial);
-    this->add_UI_item(&this->m_thermo);
-    this->add_UI_item(&this->m_led);
-    this->add_UI_item(&this->m_checkbox);
+    this->push_ui_item(&this->m_button);
+    this->push_ui_item(&this->m_combobox);
+    this->push_ui_item(&this->m_label);
+    this->push_ui_item(&this->m_slider);
+    this->push_ui_item(&this->m_dial);
+    this->push_ui_item(&this->m_thermo);
+    this->push_ui_item(&this->m_led);
+    this->push_ui_item(&this->m_checkbox);
 
     QObject::connect(&m_button, &UI_button::on_click, this, [=, this] { button_clicked(&m_button); });
     QObject::connect(&m_slider, &UI_slider::on_change, this,
@@ -56,7 +56,7 @@ void Test_Sim::button_clicked(UI_button *id)
         this->m_button.set_bg_color(state ? Color(Color::Green) : Color(Color::Red));
         this->m_button.set_text(state ? "On" : "Off");
 
-        this->m_led.set_led_color(state ? Color(Color::Green) : Color(Color::Red));
+        this->m_led.set_bg_color(state ? Color(Color::Green) : Color(Color::Red));
         return;
     }
 }

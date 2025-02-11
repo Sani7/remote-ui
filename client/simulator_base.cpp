@@ -393,8 +393,8 @@ void SimulatorBase::process_ui_led(json &uiItem)
         return;
     }
 
-    QColor bg_color = QColor(QString::fromStdString(uiItem["led_color"]));
-    QColor color = QColor(~bg_color.red(), ~bg_color.green(), ~bg_color.blue());
+    QColor bg_color = QColor(QString::fromStdString(uiItem["bg_color"]));
+    QColor color = QColor(QString::fromStdString(uiItem["fg_color"]));
     QString text = QString::fromStdString(uiItem["text"]);
 
     if (text != led->text())
@@ -426,7 +426,7 @@ void SimulatorBase::process_ui_led(json &uiItem)
         return;
     }
 
-    if (bg_color != widget_bg_color(led))
+    if (bg_color != widget_bg_color(led) || color != widget_color(led))
     {
         set_widget_color(led, color, bg_color);
     }
