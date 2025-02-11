@@ -52,11 +52,11 @@ void Test_Sim::button_clicked(UI_button *id)
 {
     if (id == &this->m_button)
     {
-        bool state = this->m_button.bg_color() == Color(Color::Red) ? true : false;
-        this->m_button.set_bg_color(state ? Color(Color::Green) : Color(Color::Red));
+        bool state = this->m_button.bg_color() == Color::Red ? true : false;
+        this->m_button.set_bg_color(state ? Color::Green : Color::Red);
         this->m_button.set_text(state ? "On" : "Off");
 
-        this->m_led.set_bg_color(state ? Color(Color::Green) : Color(Color::Red));
+        this->m_led.set_bg_color(state ? Color::Green : Color::Red);
         return;
     }
 }
