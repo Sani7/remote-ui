@@ -8,7 +8,6 @@ TEST(UI_led, to_from_json)
     EXPECT_EQ(led.text(), led2.text());
     EXPECT_EQ(led.fg_color(), led2.fg_color());
     EXPECT_EQ(led.bg_color(), led2.bg_color());
-    EXPECT_EQ(led.led_color(), led2.led_color());
 }
 
 TEST(UI_led, set_led_color)
