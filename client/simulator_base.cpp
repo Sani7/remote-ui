@@ -179,12 +179,13 @@ void SimulatorBase::process_ui_slider(json &uiItem)
     bool visible = uiItem["visible"];
     QString unit = QString::fromStdString(uiItem.at("unit"));
 
+    if (label != nullptr)
+    {
+        label->setText(QString("%0 %1").arg(value).arg(unit));
+    }
+
     if (slider->value() != value)
     {
-        if (label != nullptr)
-        {
-            label->setText(QString("%0 %1").arg(value).arg(unit));
-        }
         slider->setValue(value);
     }
 
@@ -222,12 +223,13 @@ void SimulatorBase::process_ui_dial(json &uiItem)
     bool visible = uiItem["visible"];
     QString unit = QString::fromStdString(uiItem.at("unit"));
 
+    if (label != nullptr)
+    {
+        label->setText(QString("%0 %1").arg(value).arg(unit));
+    }
+
     if (dial->value() != value)
     {
-        if (label != nullptr)
-        {
-            label->setText(QString("%0 %1").arg(value).arg(unit));
-        }
         dial->setValue(value);
     }
 
@@ -259,12 +261,13 @@ void SimulatorBase::process_ui_thermo(json &uiItem)
     bool visible = uiItem["visible"];
     QString unit = QString::fromStdString(uiItem.at("unit"));
 
+    if (label != nullptr)
+    {
+        label->setText(QString("%0 %1").arg(value).arg(unit));
+    }
+
     if (thermo->value() != value)
     {
-        if (label != nullptr)
-        {
-            label->setText(QString("%0 %1").arg(value).arg(unit));
-        }
         thermo->setValue(value);
     }
 
