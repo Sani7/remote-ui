@@ -55,7 +55,7 @@ void Can_Transceive::add_send_item(uint32_t id, uint8_t dlc, std::array<uint8_t,
 
     ui->send_list->setItem(rc, 0, new QTableWidgetItem(QString().setNum(id, 16)));
     ui->send_list->setItem(rc, 1, new QTableWidgetItem(QString("%0").arg(dlc)));
-    for (size_t i = 0; i < 8; i++)
+    for (size_t i = 0; i < dlc; i++)
     {
         ui->send_list->setItem(rc, 2 + i, new QTableWidgetItem(QString().setNum(payload[i], 16)));
     }
@@ -69,7 +69,7 @@ void Can_Transceive::add_receive_item(uint32_t id, uint8_t dlc, std::array<uint8
 
     ui->recvd_list->setItem(rc, 0, new QTableWidgetItem(QString().setNum(id, 16)));
     ui->recvd_list->setItem(rc, 1, new QTableWidgetItem(QString("%0").arg(dlc)));
-    for (size_t i = 0; i < 8; i++)
+    for (size_t i = 0; i < dlc; i++)
     {
         ui->recvd_list->setItem(rc, 2 + i, new QTableWidgetItem(QString().setNum(payload[i], 16)));
     }
