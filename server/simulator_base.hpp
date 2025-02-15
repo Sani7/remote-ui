@@ -94,6 +94,8 @@ class Simulator_base : public QObject
 
     void shutdown();
     void reboot();
+
+    bool check_input_high(uint32_t data, uint16_t pinnummer);
   signals:
     void sim_changed();
 
