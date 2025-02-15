@@ -16,3 +16,12 @@ TEST(UI_led, set_led_color)
     led.set_bg_color(Color(0, 255, 0));
     EXPECT_EQ(led.bg_color(), Color(0, 255, 0));
 }
+
+TEST(UI_led, set_led)
+{
+    UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255));
+    led.set_led(false, Color::Green, Color::Red);
+    EXPECT_EQ(led.bg_color(), Color(Color::Red));
+    led.set_led(true, Color::Green, Color::Red);
+    EXPECT_EQ(led.bg_color(), Color(Color::Green));
+}
