@@ -10,3 +10,9 @@
 [submodule "external/qwt"]
 	path = external/qwt
 	url = https://github.com/Sani7/qwt.git
+[submodule "external/magic_enum"]
+	path = external/magic_enum
+	url = https://github.com/Neargye/magic_enum.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git

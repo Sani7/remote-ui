@@ -9,7 +9,7 @@
 #include "web_socket_wrapper.h"
 #include <QMainWindow>
 #include <QWidget>
-#include <magic_enum.hpp>
+#include <magic_enum/magic_enum.hpp>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 

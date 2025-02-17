@@ -9,11 +9,6 @@ find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus)
 qt_standard_project_setup()
 qt_add_executable(server)
 
-include(FetchContent)
-
-FetchContent_Declare(magic_enum URL https://github.com/Neargye/magic_enum/releases/download/v0.9.6/magic_enum-v0.9.6.tar.gz DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
-FetchContent_MakeAvailable(magic_enum)
-
 file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
 file(GLOB_RECURSE CAN_SOURCES "CAN/*.[hc]pp")
 

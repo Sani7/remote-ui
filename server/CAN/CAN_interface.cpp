@@ -1,6 +1,6 @@
 #include "CAN_interface.hpp"
-#include "magic_enum.hpp"
 #include "spdlog/spdlog.h"
+#include <magic_enum/magic_enum.hpp>
 
 CAN_Interface::CAN_Interface(QString dev, QObject *parent) : QObject(parent)
 {
