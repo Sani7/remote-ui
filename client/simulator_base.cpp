@@ -1,7 +1,7 @@
 #include "simulator_base.h"
 #include "can_transceive.h"
 
-SimulatorBase::SimulatorBase(Web_socket_wrapper *web_socket, QWidget *parent)
+Simulator_base::Simulator_base(Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
       m_web_socket(web_socket)
 {
@@ -9,12 +9,12 @@ SimulatorBase::SimulatorBase(Web_socket_wrapper *web_socket, QWidget *parent)
     m_ui_lookup.reserve(40);
 }
 
-QWidget *SimulatorBase::id_to_ui(size_t id)
+QWidget *Simulator_base::id_to_ui(size_t id)
 {
     return m_ui_lookup.at(id);
 }
 
-void SimulatorBase::showEvent(QShowEvent *event)
+void Simulator_base::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     SPDLOG_DEBUG("Connecting callbacks");
@@ -28,7 +28,7 @@ void SimulatorBase::showEvent(QShowEvent *event)
     m_open = true;
 }
 
-void SimulatorBase::closeEvent(QCloseEvent *event)
+void Simulator_base::closeEvent(QCloseEvent *event)
 {
     if (m_open == true)
     {
@@ -41,7 +41,7 @@ void SimulatorBase::closeEvent(QCloseEvent *event)
     }
 }
 
-void SimulatorBase::on_cmd_cb(json &j)
+void Simulator_base::on_cmd_cb(json &j)
 {
     auto response = magic_enum::enum_cast<Web_socket_wrapper::Command>(std::string(j.at("type")))
                         .value_or(Web_socket_wrapper::Command::end);
@@ -56,7 +56,7 @@ void SimulatorBase::on_cmd_cb(json &j)
     }
 }
 
-void SimulatorBase::on_event_cb(json &j)
+void Simulator_base::on_event_cb(json &j)
 {
     auto response = magic_enum::enum_cast<Web_socket_wrapper::Event>(std::string(j.at("type")))
                         .value_or(Web_socket_wrapper::Event::end);
@@ -70,13 +70,13 @@ void SimulatorBase::on_event_cb(json &j)
     }
 }
 
-void SimulatorBase::push_ui_item(QWidget *item)
+void Simulator_base::push_ui_item(QWidget *item)
 {
     m_ui_lookup.emplace_back(item);
     setup_ui_item(item, m_ui_lookup.size() - 1);
 }
 
-void SimulatorBase::UI_item_parser(json &input)
+void Simulator_base::UI_item_parser(json &input)
 {
     for (auto &uiItem : input["UI_items"])
     {
@@ -133,7 +133,7 @@ void SimulatorBase::UI_item_parser(json &input)
     }
 }
 
-void SimulatorBase::process_ui_label(json &uiItem)
+void Simulator_base::process_ui_label(json &uiItem)
 {
     QWidget *widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
@@ -157,7 +157,7 @@ void SimulatorBase::process_ui_label(json &uiItem)
     }
 }
 
-void SimulatorBase::process_ui_slider(json &uiItem)
+void Simulator_base::process_ui_slider(json &uiItem)
 {
     QLabel *label = id_to_label(uiItem["id"]);
     QWidget *widget = id_to_ui(uiItem["id"]);
@@ -202,7 +202,7 @@ void SimulatorBase::process_ui_slider(json &uiItem)
     return;
 }
 
-void SimulatorBase::process_ui_dial(json &uiItem)
+void Simulator_base::process_ui_dial(json &uiItem)
 {
     QLabel *label = id_to_label(uiItem["id"]);
     QWidget *widget = id_to_ui(uiItem["id"]);
@@ -240,7 +240,7 @@ void SimulatorBase::process_ui_dial(json &uiItem)
     return;
 }
 
-void SimulatorBase::process_ui_thermo(json &uiItem)
+void Simulator_base::process_ui_thermo(json &uiItem)
 {
     QLabel *label = id_to_label(uiItem["id"]);
     QWidget *widget = id_to_ui(uiItem["id"]);
@@ -278,12 +278,12 @@ void SimulatorBase::process_ui_thermo(json &uiItem)
     return;
 }
 
-void SimulatorBase::process_ui_textbox(json &uiItem)
+void Simulator_base::process_ui_textbox(json &uiItem)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void SimulatorBase::process_ui_combobox(json &uiItem)
+void Simulator_base::process_ui_combobox(json &uiItem)
 {
     QWidget *widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
@@ -313,12 +313,12 @@ void SimulatorBase::process_ui_combobox(json &uiItem)
     }
 }
 
-void SimulatorBase::process_ui_radiobutton(json &uiItem)
+void Simulator_base::process_ui_radiobutton(json &uiItem)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void SimulatorBase::process_ui_button(json &uiItem)
+void Simulator_base::process_ui_button(json &uiItem)
 {
     // TODO: fix bgcolor and color
     QWidget *widget = id_to_ui(uiItem["id"]);
@@ -380,7 +380,7 @@ void SimulatorBase::process_ui_button(json &uiItem)
     }
 }
 
-void SimulatorBase::process_ui_led(json &uiItem)
+void Simulator_base::process_ui_led(json &uiItem)
 {
     QWidget *widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
@@ -435,7 +435,7 @@ void SimulatorBase::process_ui_led(json &uiItem)
     }
 }
 
-void SimulatorBase::process_ui_can(json &uiItem)
+void Simulator_base::process_ui_can(json &uiItem)
 {
     QWidget *widget = id_to_ui(uiItem["id"]);
     if (widget == nullptr)
@@ -463,7 +463,7 @@ void SimulatorBase::process_ui_can(json &uiItem)
     }
 }
 
-void SimulatorBase::setup_ui_item(QWidget *item, size_t index)
+void Simulator_base::setup_ui_item(QWidget *item, size_t index)
 {
     setup_button(item, index);
     setup_combobox(item, index);
@@ -472,7 +472,7 @@ void SimulatorBase::setup_ui_item(QWidget *item, size_t index)
     setup_can_ui(item, index);
 }
 
-void SimulatorBase::setup_button(QWidget *item, size_t index)
+void Simulator_base::setup_button(QWidget *item, size_t index)
 {
     QPushButton *button = qobject_cast<QPushButton *>(item);
     if (button == nullptr)
@@ -481,7 +481,7 @@ void SimulatorBase::setup_button(QWidget *item, size_t index)
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index); });
 }
 
-void SimulatorBase::setup_combobox(QWidget *item, size_t index)
+void Simulator_base::setup_combobox(QWidget *item, size_t index)
 {
     QComboBox *combobox = qobject_cast<QComboBox *>(item);
     if (combobox == nullptr)
@@ -492,7 +492,7 @@ void SimulatorBase::setup_combobox(QWidget *item, size_t index)
     });
 }
 
-void SimulatorBase::setup_dial(QWidget *item, size_t index)
+void Simulator_base::setup_dial(QWidget *item, size_t index)
 {
     QwtDial *dial = qobject_cast<QwtDial *>(item);
     if (dial == nullptr)
@@ -501,7 +501,7 @@ void SimulatorBase::setup_dial(QWidget *item, size_t index)
     create_dial_needle(dial);
 }
 
-void SimulatorBase::setup_slider(QWidget *item, size_t index)
+void Simulator_base::setup_slider(QWidget *item, size_t index)
 {
     QwtSlider *slider = qobject_cast<QwtSlider *>(item);
     if (slider == nullptr)
@@ -511,7 +511,7 @@ void SimulatorBase::setup_slider(QWidget *item, size_t index)
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
 }
 
-void SimulatorBase::setup_can_ui(QWidget *item, size_t index)
+void Simulator_base::setup_can_ui(QWidget *item, size_t index)
 {
     Can_Transceive *can = qobject_cast<Can_Transceive *>(item);
     if (can == nullptr)

@@ -9,7 +9,7 @@ namespace Ui
 class Can_Debugger;
 }
 
-class Can_Debugger : public SimulatorBase
+class Can_Debugger : public Simulator_base
 {
     Q_OBJECT
 

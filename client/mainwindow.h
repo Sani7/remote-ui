@@ -43,7 +43,7 @@ class MainWindow : public QMainWindow
     Web_socket_wrapper *m_web_socket;
     NetworkError *m_error_dialog;
 
-    std::map<QString, SimulatorBase *> m_sims;
+    std::map<QString, Simulator_base *> m_sims;
 };
 
 #endif // MAINWINDOW_H

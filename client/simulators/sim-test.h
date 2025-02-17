@@ -10,7 +10,7 @@ namespace Ui
 class Test_Sim;
 }
 
-class Test_Sim : public SimulatorBase
+class Test_Sim : public Simulator_base
 {
     Q_OBJECT
 

@@ -2,7 +2,7 @@
 #include "ui_sim-test.h"
 
 Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
-    : SimulatorBase(web_socket, parent), ui(new Ui::Test_Sim)
+    : Simulator_base(web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
     this->setWindowTitle("Test Sim");

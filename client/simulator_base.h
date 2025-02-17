@@ -13,11 +13,11 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-class SimulatorBase : public QMainWindow
+class Simulator_base : public QMainWindow
 {
     Q_OBJECT
   public:
-    explicit SimulatorBase(Web_socket_wrapper *api, QWidget *parent = nullptr);
+    explicit Simulator_base(Web_socket_wrapper *api, QWidget *parent = nullptr);
     void sim_update(void);
     QWidget *id_to_ui(size_t id);
     virtual QLabel *id_to_label(size_t name)
