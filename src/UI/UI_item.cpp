@@ -7,8 +7,8 @@ UI_item::UI_item(std::string type, std::string text, uint8_t text_size, Color fg
 }
 
 UI_item::UI_item(std::string type, QObject *parent)
-    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Black),
-      m_bg_color(Color::White), enabled(true), visible(true)
+    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(""), m_text_size(12), m_fg_color(Color::Default),
+      m_bg_color(Color::Default), enabled(true), visible(true)
 {
 }
 
