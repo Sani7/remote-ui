@@ -8,11 +8,7 @@ Simulators::Simulators(uint16_t port, QObject *parent) : QObject(parent), m_serv
 {
     INSERT_SIMULATOR(Test_Sim);
     INSERT_SIMULATOR(Can_Debugger);
-    setup_connections();
-}
 
-void Simulators::setup_connections()
-{
     connect(m_server, &Websocket::on_message, this, [this](QWebSocket *conn, QString message) {
         QString response = message_parser(message);
         if (response.isEmpty() || response == "{}")
