@@ -7,7 +7,6 @@
 #include "spdlog/spdlog.h"
 
 #include "simulators.hpp"
-#include "websocket.hpp"
 
 void init_logger()
 {
@@ -29,7 +28,7 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("QtWebSockets example: echoserver");
+    parser.setApplicationDescription("Unisim server");
     parser.addHelpOption();
 
     QCommandLineOption port_option(QStringList() << "p"
