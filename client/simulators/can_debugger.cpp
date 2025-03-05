@@ -1,5 +1,5 @@
-#include "sim-can_debugger.h"
-#include "ui_sim-can_debugger.h"
+#include "can_debugger.hpp"
+#include "ui_can_debugger.h"
 
 Can_Debugger::Can_Debugger(Web_socket_wrapper *web_socket, QWidget *parent)
     : Simulator_base(web_socket, parent), ui(new Ui::Can_Debugger)

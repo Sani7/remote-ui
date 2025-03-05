@@ -1,5 +1,5 @@
-#include "sim-test.h"
-#include "ui_sim-test.h"
+#include "test.hpp"
+#include "ui_test.h"
 
 Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     : Simulator_base(web_socket, parent), ui(new Ui::Test_Sim)

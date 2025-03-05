@@ -1,10 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "sim-can_debugger.h"
-#include "sim-cvs_i10.h"
-#include "sim-scope_mux_tester.h"
-#include "sim-test.h"
+#include "can_debugger.hpp"
+#include "cvs_i10.hpp"
+#include "scope_mux_tester.hpp"
+#include "test.hpp"
 
 MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
