@@ -7,22 +7,12 @@ add_subdirectory(qwt)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
+file(GLOB_RECURSE SIM_UI "simulators/*.ui")
+
 set(PROJECT_SOURCES
-        simulators/sim-cvs_i10.h
-        simulators/sim-cvs_i10.cpp
-        simulators/sim-cvs_i10.ui
-
-        simulators/sim-can_debugger.h
-        simulators/sim-can_debugger.cpp
-        simulators/sim-can_debugger.ui
-
-        simulators/sim-scope_mux_tester.h
-        simulators/sim-scope_mux_tester.cpp
-        simulators/sim-scope_mux_tester.ui
-
-        simulators/sim-test.h
-        simulators/sim-test.cpp
-        simulators/sim-test.ui
+        ${SIM_SOURCES}
+        ${SIM_UI}
 
         simulator_base.h
         simulator_base.cpp
@@ -59,16 +49,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET Simulator-CVS_I10 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+# set_property(TARGET Simulator - CVS_I10 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+# ${CMAKE_CURRENT_SOURCE_DIR } / android)
+# For more information, see https: // doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
         add_library(Simulator-CVS_I10 SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+# set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(Simulator-CVS_I10
             ${PROJECT_SOURCES}
