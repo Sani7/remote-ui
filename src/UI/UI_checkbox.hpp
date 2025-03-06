@@ -11,17 +11,17 @@ class UI_checkbox : public UI_item
     UI_checkbox(QObject *parent = nullptr);
     UI_checkbox(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     UI_checkbox(const json &j, QObject *parent = nullptr);
-
-    void toggle_selected();
-    bool selected() const;
-    std::string selected_text() const;
+    
+    void clicked();
+    void set_state(bool state);
+    bool state() const;
 
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
 
   signals:
-    void on_change(std::string);
+    void on_change(bool);
 
   private:
-    bool m_selected;
+    bool m_checked;
 };

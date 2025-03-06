@@ -8,5 +8,5 @@ TEST(UI_checkbox, to_from_json)
     EXPECT_EQ(checkbox.text(), checkbox2.text());
     EXPECT_EQ(checkbox.fg_color(), checkbox2.fg_color());
     EXPECT_EQ(checkbox.bg_color(), checkbox2.bg_color());
-    EXPECT_EQ(checkbox.selected(), checkbox2.selected());
+    EXPECT_EQ(checkbox.state(), checkbox2.state());
 }
