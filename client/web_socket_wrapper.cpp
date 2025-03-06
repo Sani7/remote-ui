@@ -11,7 +11,7 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     connect(m_web_socket, &QWebSocket::pong, this, &Web_socket_wrapper::m_on_pong);
     connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
         m_web_socket->ping();
-        m_pong_timer->start(500);
+        m_pong_timer->start(1000);
     });
     connect(m_pong_timer, &QTimer::timeout, this, &Web_socket_wrapper::m_on_pong_timeout);
     m_ping_timer->setSingleShot(true);
@@ -149,7 +149,7 @@ void Web_socket_wrapper::m_on_connected()
     m_connected = true;
     connect(m_web_socket, &QWebSocket::textMessageReceived, this, &Web_socket_wrapper::m_on_received);
 
-    m_ping_timer->start(1000);
+    m_ping_timer->start(5000);
 
     emit on_connected();
 }
@@ -171,7 +171,7 @@ void Web_socket_wrapper::m_on_received(QString message)
 
 void Web_socket_wrapper::m_on_pong(quint64 elapsedTime)
 {
-    if (elapsedTime > 500)
+    if (elapsedTime > 1000)
     {
         m_web_socket->close();
         emit on_closed();
