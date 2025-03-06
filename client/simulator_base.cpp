@@ -120,9 +120,14 @@ void Simulator_base::UI_item_parser(json &input)
             process_ui_combobox(uiItem);
             continue;
         }
-        if (uiItem["type"] == "UIRadioButton")
+        if (uiItem["type"] == "UI_RadioButton")
         {
             process_ui_radiobutton(uiItem);
+            continue;
+        }
+        if (uiItem["type"] == "UI_checkbox")
+        {
+            process_ui_checkbox(uiItem);
             continue;
         }
         if (uiItem["type"] == "UI_can")
@@ -318,6 +323,73 @@ void Simulator_base::process_ui_radiobutton(json &uiItem)
     SPDLOG_CRITICAL("Not implemented");
 }
 
+void Simulator_base::process_ui_checkbox(json &uiItem)
+{
+    QWidget *widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
+        return;
+    }
+
+    auto checkbox = qobject_cast<QCheckBox *>(widget);
+    if (checkbox == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QCheckbox");
+        return;
+    }
+
+    QColor bg_color = QColor(QString::fromStdString(uiItem["bg_color"]));
+    QColor fg_color = QColor(QString::fromStdString(uiItem["fg_color"]));
+    QString text = QString::fromStdString(uiItem["text"]);
+    bool enabled = uiItem["enabled"];
+    bool checked = uiItem["checked"];
+
+    if (checkbox->isChecked() != checked)
+    {
+        checkbox->setChecked(checked);
+    }
+
+    if (checkbox->text() != text)
+    {
+        checkbox->setText(text);
+    }
+
+    if (checkbox->isEnabled() != enabled)
+    {
+        checkbox->setEnabled(enabled);
+    }
+
+    if (bg_color == QColor(0x83, 0x91, 0x92))
+    {
+        reset_widget_color(checkbox);
+        return;
+    }
+
+    if (bg_color == QColor(0xFF, 0x00, 0x00))
+    {
+        set_widget_color(checkbox, QString("black"), QString("darkred"));
+        return;
+    }
+
+    if (bg_color == QColor(0x00, 0xFF, 0x00))
+    {
+        set_widget_color(checkbox, QString("white"), QString("darkgreen"));
+        return;
+    }
+
+    if (bg_color == QColor(0xFF8800))
+    {
+        set_widget_color(checkbox, QString("darkred"), QString("darkorange"));
+        return;
+    }
+
+    if (bg_color != widget_bg_color(checkbox) || fg_color != widget_color(checkbox))
+    {
+        set_widget_color(checkbox, fg_color, bg_color);
+    }
+}
+
 void Simulator_base::process_ui_button(json &uiItem)
 {
     // TODO: fix bgcolor and color
@@ -467,6 +539,7 @@ void Simulator_base::setup_ui_item(QWidget *item, size_t index)
 {
     setup_button(item, index);
     setup_combobox(item, index);
+    setup_checkbox(item, index);
     setup_dial(item, index);
     setup_slider(item, index);
     setup_can_ui(item, index);
@@ -489,6 +562,17 @@ void Simulator_base::setup_combobox(QWidget *item, size_t index)
 
     connect(combobox, &QComboBox::currentIndexChanged, this, [=, this] {
         m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, combobox->currentText());
+    });
+}
+
+void Simulator_base::setup_checkbox(QWidget *item, size_t index)
+{
+    QCheckBox *checkbox = qobject_cast<QCheckBox *>(item);
+    if (checkbox == nullptr)
+        return;
+
+    connect(checkbox, &QCheckBox::clicked, this, [=, this] {
+        m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index);
     });
 }
 

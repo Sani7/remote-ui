@@ -42,6 +42,7 @@ class Simulator_base : public QMainWindow
     virtual void process_ui_textbox(json &uiItem);
     virtual void process_ui_combobox(json &uiItem);
     virtual void process_ui_radiobutton(json &uiItem);
+    virtual void process_ui_checkbox(json &uiItem);
     virtual void process_ui_button(json &uiItem);
     virtual void process_ui_led(json &uiItem);
     virtual void process_ui_can(json &uiItem);
@@ -49,6 +50,7 @@ class Simulator_base : public QMainWindow
     void setup_ui_item(QWidget *item, size_t index);
     void setup_button(QWidget *item, size_t index);
     void setup_combobox(QWidget *item, size_t index);
+    void setup_checkbox(QWidget *item, size_t index);
     void setup_dial(QWidget *item, size_t index);
     void setup_slider(QWidget *item, size_t index);
     void setup_can_ui(QWidget *item, size_t index);
