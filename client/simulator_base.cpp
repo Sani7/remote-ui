@@ -571,9 +571,8 @@ void Simulator_base::setup_checkbox(QWidget *item, size_t index)
     if (checkbox == nullptr)
         return;
 
-    connect(checkbox, &QCheckBox::clicked, this, [=, this] {
-        m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index);
-    });
+    connect(checkbox, &QCheckBox::clicked, this,
+            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index); });
 }
 
 void Simulator_base::setup_dial(QWidget *item, size_t index)
