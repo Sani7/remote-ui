@@ -15,6 +15,7 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     push_ui_item(ui->dial);
     push_ui_item(ui->thermo);
     push_ui_item(ui->led);
+    push_ui_item(ui->checkBox);
 }
 
 Test_Sim::~Test_Sim()

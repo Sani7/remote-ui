@@ -57,6 +57,7 @@ void Test_Sim::button_clicked(UI_button *id)
         this->m_button.set_text(state ? "On" : "Off");
 
         this->m_led.set_bg_color(state ? Color::Green : Color::Red);
+        this->m_checkbox.set_state(state);
         return;
     }
 }
