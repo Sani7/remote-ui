@@ -1,4 +1,5 @@
 #pragma once
+#include <QThread>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -52,6 +53,7 @@ class Simulators : public QObject
     void event_handler(json event);
 
   private:
+    QThread *m_server_thread;
     Websocket *m_server;
     std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
     std::string m_current_simulator = "";
