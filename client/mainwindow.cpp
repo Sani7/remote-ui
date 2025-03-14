@@ -6,9 +6,9 @@
 #include "scope_mux_tester.hpp"
 #include "test.hpp"
 
-MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent)
+MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      m_web_socket(new Web_socket_wrapper(QUrl("ws://" + host + ":" + QString::number(port)), this)),
+      m_web_socket(new Web_socket_wrapper(ws_url)),
       m_error_dialog(new NetworkError(this)), m_sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
                                                      {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
                                                      {"CVS_I10", new CVS_I10(m_web_socket, this)},
@@ -18,7 +18,7 @@ MainWindow::MainWindow(QString host, uint16_t port, QWidget *parent)
     this->setWindowTitle("Simulator Selector");
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
-    ui->connection->setText("Connected to ws://" + host + ":" + QString::number(port));
+    ui->connection->setText("Connected to " + ws_url.toString());
     // Default sim
     // defaultSim("CVS_I10");
 

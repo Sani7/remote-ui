@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
   public:
-    explicit MainWindow(QString host, uint16_t port, QWidget *parent = nullptr);
+    explicit MainWindow(QUrl ws_url, QWidget *parent = nullptr);
     ~MainWindow();
 
     void defaultSim(QString name);

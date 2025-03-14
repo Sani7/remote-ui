@@ -41,11 +41,12 @@ int main(int argc, char *argv[])
     parser.process(a);
     // Initialize the logger
     init_logger();
-    SPDLOG_INFO("Starting GUI");
 
-    QString host = parser.value(hostOption);
-    uint16_t port = parser.value(portOption).toUShort();
-    MainWindow w(host, port);
+    QUrl url;
+    url.setScheme("ws");
+    url.setHost(parser.value(hostOption));
+    url.setPort(parser.value(portOption).toInt());
+    MainWindow w(url);
     w.show();
     return a.exec();
 }
