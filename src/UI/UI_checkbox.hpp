@@ -12,7 +12,7 @@ class UI_checkbox : public UI_item
     UI_checkbox(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     UI_checkbox(const json &j, QObject *parent = nullptr);
 
-    void clicked();
+    void click() override;
     void set_state(bool state);
     bool state() const;
 

@@ -14,7 +14,7 @@ UI_checkbox::UI_checkbox(const json &j, QObject *parent) : UI_item(UI_CHECKBOX_T
     from_json(j);
 }
 
-void UI_checkbox::clicked()
+void UI_checkbox::click()
 {
     m_checked = !m_checked;
     emit value_changed();
