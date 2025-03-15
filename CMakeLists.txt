@@ -21,7 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
 set(PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # defines targets and sources
-add_subdirectory(src)
+add_subdirectory(UI)
 
 # contains an "external" library we will link to
 add_subdirectory(external)
