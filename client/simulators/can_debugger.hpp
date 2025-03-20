@@ -14,7 +14,7 @@ class Can_Debugger : public Simulator_base
     Q_OBJECT
 
   public:
-    explicit Can_Debugger(Web_socket_wrapper *web_socket, QWidget *parent = nullptr);
+    explicit Can_Debugger(Web_socket_wrapper *web_socket = nullptr, QWidget *parent = nullptr);
     ~Can_Debugger();
 
   private:

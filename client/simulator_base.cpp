@@ -1,9 +1,9 @@
 #include "simulator_base.h"
 #include "can_transceive.h"
 
-Simulator_base::Simulator_base(Web_socket_wrapper *web_socket, QWidget *parent)
+Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
-      m_web_socket(web_socket)
+      m_web_socket(web_socket), m_sim_name(sim_name)
 {
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     m_ui_lookup.reserve(40);
@@ -12,6 +12,11 @@ Simulator_base::Simulator_base(Web_socket_wrapper *web_socket, QWidget *parent)
 QWidget *Simulator_base::id_to_ui(size_t id)
 {
     return m_ui_lookup.at(id);
+}
+
+QString Simulator_base::sim_name() const
+{
+    return m_sim_name;
 }
 
 void Simulator_base::showEvent(QShowEvent *event)

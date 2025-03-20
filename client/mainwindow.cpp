@@ -8,14 +8,15 @@
 
 MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
-      m_error_dialog(new NetworkError(this)), m_sims{{"Cable Tester", new Cable_Tester(m_web_socket, this)},
-                                                     {"Can Debugger", new Can_Debugger(m_web_socket, this)},
-                                                     {"Scope Mux Tester", new Scope_Mux_Tester(m_web_socket, this)},
-                                                     {"CVS I10", new CVS_I10(m_web_socket, this)},
-                                                     {"Test Sim", new Test_Sim(m_web_socket, this)}}
+      m_error_dialog(new NetworkError(this))
 {
     ui->setupUi(this);
     this->setWindowTitle("Simulator Selector");
+    INSERT_SIMULATOR(Cable_Tester);
+    INSERT_SIMULATOR(Can_Debugger);
+    INSERT_SIMULATOR(Scope_Mux_Tester);
+    INSERT_SIMULATOR(CVS_I10);
+    INSERT_SIMULATOR(Test_Sim);
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     ui->connection->setText("Connected to " + ws_url.toString());
@@ -29,16 +30,14 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete m_web_socket;
-    delete m_error_dialog;
 }
 
 void MainWindow::setup_cb(void)
 {
-    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
-    connect(m_web_socket, &Web_socket_wrapper::on_connected, this,
+    connect(m_web_socket.get(), &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
+    connect(m_web_socket.get(), &Web_socket_wrapper::on_connected, this,
             [=, this] { m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators); });
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this] {
+    connect(m_web_socket.get(), &Web_socket_wrapper::on_closed, this, [=, this] {
         m_error_dialog->open();
         ui->connection->setText("Could not connect to the server");
     });
@@ -53,7 +52,7 @@ void MainWindow::showEvent(QShowEvent *event)
 void MainWindow::hideEvent(QHideEvent *event)
 {
     QWidget::hideEvent(event);
-    disconnect(m_web_socket, nullptr, nullptr, nullptr);
+    disconnect(m_web_socket.get(), nullptr, nullptr, nullptr);
 }
 
 void MainWindow::defaultSim(QString name)
@@ -82,7 +81,7 @@ void MainWindow::open_sim(QString sim_name)
 {
     try
     {
-        m_selected_sim = m_sims.at(sim_name);
+        m_selected_sim = m_sims.at(sim_name).get();
         this->m_selected_sim_name = sim_name;
     }
     catch (const std::out_of_range &ex)

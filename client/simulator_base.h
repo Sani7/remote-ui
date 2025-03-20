@@ -17,8 +17,9 @@ class Simulator_base : public QMainWindow
 {
     Q_OBJECT
   public:
-    explicit Simulator_base(Web_socket_wrapper *api, QWidget *parent = nullptr);
+    explicit Simulator_base(QString sim_name, Web_socket_wrapper *api, QWidget *parent = nullptr);
     void sim_update(void);
+    QString sim_name() const;
     QWidget *id_to_ui(size_t id);
     virtual QLabel *id_to_label(size_t name)
     {
@@ -60,6 +61,7 @@ class Simulator_base : public QMainWindow
 
   private:
     Web_socket_wrapper *m_web_socket;
+    QString m_sim_name;
 
     QTimer *m_timer_update;
     uint32_t m_refresh_rate;

@@ -7,6 +7,9 @@
 #include <QMainWindow>
 #include <map>
 
+#define INSERT_SIMULATOR(type)                                                                                         \
+    m_sims.insert(std::make_pair(type().sim_name(), std::make_unique<type>(m_web_socket.get(), this)))
+
 namespace Ui
 {
 class MainWindow;
@@ -40,10 +43,10 @@ class MainWindow : public QMainWindow
     QString m_selected_sim_name;
     QMainWindow *m_selected_sim;
     Ui::MainWindow *ui;
-    Web_socket_wrapper *m_web_socket;
-    NetworkError *m_error_dialog;
+    std::unique_ptr<Web_socket_wrapper> m_web_socket;
+    std::unique_ptr<NetworkError> m_error_dialog;
 
-    std::map<QString, Simulator_base *> m_sims;
+    std::map<QString, std::unique_ptr<Simulator_base>> m_sims;
 };
 
 #endif // MAINWINDOW_H
