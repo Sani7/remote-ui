@@ -11,7 +11,6 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
       m_error_dialog(new NetworkError(this))
 {
     ui->setupUi(this);
-    this->setWindowTitle("Simulator Selector");
     INSERT_SIMULATOR(Cable_Tester);
     INSERT_SIMULATOR(Can_Debugger);
     INSERT_SIMULATOR(Scope_Mux_Tester);
