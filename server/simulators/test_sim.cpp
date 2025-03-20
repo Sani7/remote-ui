@@ -1,15 +1,12 @@
 #include "test_sim.hpp"
 
-Test_Sim::Test_Sim(QObject* parent) :
-Simulator_base("Test_Sim", std::chrono::milliseconds(1000), parent),
-m_button("Off", Color(Color::White), Color(Color::Red)),
-m_combobox(Color(Color::White), Color(Color::Black), {"Option 1", "Option 2", "Option 3"}, 0),
-m_label("Label", Color(Color::White), Color(Color::Black)),
-m_checkbox("Option 1", Color(Color::White), Color(Color::Black)),
-m_slider("Slider", Color(Color::White), Color(Color::Black), 0, 100, 0),
-m_dial("Dial", Color(Color::White), Color(Color::Black), 0, 100, 0),
-m_thermo("Thermo", "%", Color(Color::White), Color(Color::Black), 0, 100, 0),
-m_led("Led", Color(Color::White), Color(Color::Black), Color(Color::Red))
+Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QObject *parent)
+    : Simulator_base("Test Sim", can_wrapper, std::chrono::milliseconds(1000), parent),
+      m_button("Off", Color::White, Color::Red),
+      m_combobox(Color::White, Color::Black, {"Option 1", "Option 2", "Option 3"}, 0),
+      m_label("Label", Color::White, Color::Black), m_checkbox("Option 1", Color::Default, Color::Default),
+      m_slider("Slider", Color::White, Color::Black, 0, 100, 0), m_dial("Dial", Color::White, Color::Black, 0, 100, 0),
+      m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red)
 {
     this->m_thermo.set_start_color(Color::Red);
     this->m_thermo.set_end_color(Color::Red);

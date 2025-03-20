@@ -1,7 +1,7 @@
 #include "can_debugger.hpp"
 
 Can_Debugger::Can_Debugger(CAN_Wrapper *can_wrapper, QObject *parent)
-    : Simulator_base("Can_Debugger", can_wrapper, std::chrono::milliseconds(100), parent), m_wrapper(can_wrapper),
+    : Simulator_base("Can Debugger", can_wrapper, std::chrono::milliseconds(100), parent), m_wrapper(can_wrapper),
       m_can_ui(Color::Black, Color::White)
 {
     this->push_ui_item(&this->m_can_ui);

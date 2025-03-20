@@ -8,10 +8,11 @@
 
 MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
-      m_error_dialog(new NetworkError(this)), m_sims{{"Can_Debugger", new Can_Debugger(m_web_socket, this)},
-                                                     {"Scope_Mux_Tester", new Scope_Mux_Tester(m_web_socket, this)},
-                                                     {"CVS_I10", new CVS_I10(m_web_socket, this)},
-                                                     {"Test_Sim", new Test_Sim(m_web_socket, this)}}
+      m_error_dialog(new NetworkError(this)), m_sims{{"Cable Tester", new Cable_Tester(m_web_socket, this)},
+                                                     {"Can Debugger", new Can_Debugger(m_web_socket, this)},
+                                                     {"Scope Mux Tester", new Scope_Mux_Tester(m_web_socket, this)},
+                                                     {"CVS I10", new CVS_I10(m_web_socket, this)},
+                                                     {"Test Sim", new Test_Sim(m_web_socket, this)}}
 {
     ui->setupUi(this);
     this->setWindowTitle("Simulator Selector");
