@@ -15,8 +15,8 @@ void init_logger()
     // auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log-sim_us.txt", 1024 * 1024 * 10,
     // 3);
     std::vector<spdlog::sink_ptr> sinks{stdout_sink /*, rotating_sink*/};
-    auto logger = std::make_shared<spdlog::async_logger>("unisim_cpp", sinks.begin(), sinks.end(), spdlog::thread_pool(),
-                                                         spdlog::async_overflow_policy::block);
+    auto logger = std::make_shared<spdlog::async_logger>("unisim_cpp", sinks.begin(), sinks.end(),
+                                                         spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
     spdlog::set_pattern("[%H:%M:%S %z] [%^---%L---%$] %s:%# %!: %v");
     spdlog::flush_every(std::chrono::seconds(3));
