@@ -8,7 +8,7 @@
 
 Websocket::Websocket(uint16_t port, QObject *parent)
     : QObject(parent),
-      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"), QWebSocketServer::NonSecureMode, parent))
+      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("unisim Server"), QWebSocketServer::NonSecureMode, parent))
 {
     if (m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
@@ -20,7 +20,7 @@ Websocket::Websocket(uint16_t port, QObject *parent)
 
 Websocket::Websocket(uint16_t port, QString key_file, QString cert_file, QObject *parent)
     : QObject(parent),
-      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("sim_us Server"), QWebSocketServer::SecureMode, parent))
+      m_pWebSocketServer(new QWebSocketServer(QStringLiteral("unisim Server"), QWebSocketServer::SecureMode, parent))
 {
     QSslConfiguration sslConfiguration;
     QFile certFile(cert_file);
