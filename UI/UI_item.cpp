@@ -44,6 +44,12 @@ void UI_item::set_text(std::string text)
     }
 }
 
+void UI_item::append_text(std::string text)
+{
+    m_text.append(text);
+    emit value_changed();
+}
+
 std::string UI_item::text() const
 {
     return m_text;

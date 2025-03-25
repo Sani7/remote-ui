@@ -23,5 +23,5 @@ json UI_button::to_json(size_t id) const
 
 void UI_button::click()
 {
-    emit on_click();
+    emit clicked();
 }

@@ -14,9 +14,10 @@ UI_led::UI_led(const json &j, QObject *parent) : UI_item(UI_LED_TYPE, parent)
     from_json(j);
 }
 
-void UI_led::set_led(bool state, Color on, Color off)
+bool UI_led::set_led(bool state, Color on, Color off)
 {
     set_bg_color(state ? on : off);
+    return state;
 }
 
 void UI_led::from_json(const json &j)

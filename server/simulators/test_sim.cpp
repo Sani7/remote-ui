@@ -24,7 +24,7 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QObject *parent)
     this->push_ui_item(&this->m_led);
     this->push_ui_item(&this->m_checkbox);
 
-    QObject::connect(&m_button, &UI_button::on_click, this, [=, this] { button_clicked(&m_button); });
+    QObject::connect(&m_button, &UI_button::clicked, this, [=, this] { button_clicked(&m_button); });
     QObject::connect(&m_slider, &UI_slider::on_change, this,
                      [=, this](double value) { slider_changed(&m_slider, value); });
 }

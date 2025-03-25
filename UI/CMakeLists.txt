@@ -1,4 +1,4 @@
-add_library(UI)
+add_library(UI STATIC)
 
 find_package(Qt6 REQUIRED COMPONENTS Core SerialBus)
 

@@ -23,7 +23,7 @@ class UI_combobox : public UI_x_boxes
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
   signals:
-    void on_change(std::string selected);
+    void changed(std::string selected);
 
   private:
     size_t m_selected;

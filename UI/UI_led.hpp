@@ -12,7 +12,7 @@ class UI_led : public UI_item
     UI_led(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     UI_led(const json &j, QObject *parent = nullptr);
 
-    void set_led(bool state, Color on, Color off);
+    bool set_led(bool state, Color on, Color off);
 
     void from_json(const json &j) override;
     json to_json(size_t id) const override;

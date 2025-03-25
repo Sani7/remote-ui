@@ -26,6 +26,7 @@ class UI_item : public QObject
     bool is_type(json j);
 
     virtual void set_text(std::string text);
+    void append_text(std::string text);
     std::string text() const;
 
     void set_text_size(uint8_t text_size);

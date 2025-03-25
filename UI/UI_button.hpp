@@ -17,5 +17,5 @@ class UI_button : public UI_item
     void click() override;
 
   signals:
-    void on_click();
+    void clicked();
 };

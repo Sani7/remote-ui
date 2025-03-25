@@ -6,9 +6,19 @@ UI_dial::UI_dial(std::string text, std::string unit, Color fg_color, Color bg_co
 {
 }
 
+UI_dial::UI_dial(std::string text, std::string unit, double min, double max, double value, QObject *parent)
+    : UI_dial(text, unit, Color::Default, Color::Default, min, max, value, parent)
+{
+}
+
 UI_dial::UI_dial(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
                  QObject *parent)
     : UI_dial(text, "", fg_color, bg_color, min, max, value, parent)
+{
+}
+
+UI_dial::UI_dial(std::string text, double min, double max, double value, QObject *parent)
+    : UI_dial(text, "", Color::Default, Color::Default, min, max, value, parent)
 {
 }
 
