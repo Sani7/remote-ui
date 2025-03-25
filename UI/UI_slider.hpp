@@ -24,7 +24,7 @@ class UI_slider : public UI_item
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
   signals:
-    void on_change(double value);
+    void changed(double value);
 
   private:
     double m_min;
