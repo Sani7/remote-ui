@@ -1,5 +1,6 @@
 #include "simulators.hpp"
 #include "can_debugger.hpp"
+#include "cvs_i10.hpp"
 #include "test_sim.hpp"
 #include <unordered_set>
 
