@@ -39,6 +39,12 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
     });
 }
 
+Simulators::~Simulators()
+{
+    if (m_serial->isOpen())
+        m_serial->close();
+}
+
 std::string Simulators::active_simulator_name() const
 {
     return this->m_current_simulator;

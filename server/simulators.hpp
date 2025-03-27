@@ -40,6 +40,7 @@ class Simulators : public QObject
     };
 
     Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent = nullptr);
+    ~Simulators();
     std::string active_simulator_name() const;
     void run();
     void stop();
