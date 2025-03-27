@@ -8,8 +8,9 @@ class CAN_Interface : public QObject
 {
     Q_OBJECT
   public:
-    CAN_Interface(QString dev, QObject *parent = nullptr);
+    CAN_Interface(QObject *parent = nullptr);
     ~CAN_Interface();
+    void connect_to_dev(QString dev);
 
     void send_frame(const QCanBusFrame frame);
   signals:

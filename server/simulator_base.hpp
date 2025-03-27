@@ -2,6 +2,7 @@
 
 #include "UI.hpp"
 #include "spdlog/spdlog.h"
+#include <QSerialPort>
 #include <QTimer>
 
 class Simulator_base : public QObject
@@ -14,8 +15,8 @@ class Simulator_base : public QObject
      * @param name The name of the simulator
      * @param interval The interval of the timer (default is 100ms)
      */
-    Simulator_base(std::string name, std::chrono::milliseconds interval = std::chrono::milliseconds(100),
-                   QObject *parent = nullptr);
+    Simulator_base(std::string name, CAN_Wrapper *can_wrapper = nullptr, QSerialPort *serial = nullptr,
+                   std::chrono::milliseconds interval = std::chrono::milliseconds(100), QObject *parent = nullptr);
 
     /**
      * @brief Returns the name of the simulator
@@ -104,4 +105,6 @@ class Simulator_base : public QObject
     std::vector<UI_item *> m_UI_items;
     QTimer *m_timer;
     std::chrono::milliseconds m_interval;
+    CAN_Wrapper *m_can_wrapper;
+    QSerialPort *m_serial;
 };

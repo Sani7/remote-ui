@@ -1,7 +1,9 @@
 #include "simulator_base.hpp"
 
-Simulator_base::Simulator_base(std::string name, std::chrono::milliseconds interval, QObject *parent)
-    : QObject(parent), m_name(name), m_timer(new QTimer(this)), m_interval(interval)
+Simulator_base::Simulator_base(std::string name, CAN_Wrapper *can_wrapper, QSerialPort *serial,
+                               std::chrono::milliseconds interval, QObject *parent)
+    : QObject(parent), m_name(name), m_timer(new QTimer(this)), m_interval(interval), m_can_wrapper(can_wrapper),
+      m_serial(serial)
 {
     connect(m_timer, &QTimer::timeout, this, [this] { timer(); });
     m_UI_items.reserve(50);

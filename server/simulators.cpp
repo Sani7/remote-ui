@@ -3,12 +3,30 @@
 #include "test_sim.hpp"
 #include <unordered_set>
 
-Simulators::Simulators(uint16_t port, QString can_dev, QObject *parent)
-    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, parent)),
-      m_can_wrapper(new CAN_Wrapper(new CAN_Interface(can_dev, parent), parent))
+Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
+    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, this)),
+      m_can_wrapper(new CAN_Wrapper(new CAN_Interface(this), this)), m_serial(new QSerialPort(this))
 {
     m_server->moveToThread(m_server_thread);
     m_server_thread->start();
+    if (!can_dev.isEmpty())
+    {
+        m_can_wrapper->connect_to_dev(can_dev);
+    }
+    if (!uart_dev.isEmpty())
+    {
+        m_serial->setPortName(uart_dev);
+        m_serial->setBaudRate(QSerialPort::Baud115200);
+        m_serial->setDataBits(QSerialPort::Data8);
+        m_serial->setParity(QSerialPort::NoParity);
+        m_serial->setStopBits(QSerialPort::OneStop);
+        m_serial->setFlowControl(QSerialPort::NoFlowControl);
+
+        if (!m_serial->open(QIODevice::ReadWrite))
+        {
+            SPDLOG_CRITICAL("Error {}", m_serial->errorString().toStdString());
+        }
+    }
 
     INSERT_SIMULATOR(Test_Sim);
     INSERT_SIMULATOR(Can_Debugger);

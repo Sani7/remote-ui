@@ -37,20 +37,26 @@ int main(int argc, char *argv[])
                                    QCoreApplication::translate("main", "port"), QLatin1String("9002"));
     QCommandLineOption can_port_option(QStringList() << "c"
                                                      << "can",
-                                       QCoreApplication::translate("main", "CAN device [default: can0]."),
-                                       QCoreApplication::translate("main", "can device"), QLatin1String("can0"));
+                                       QCoreApplication::translate("main", "CAN device."),
+                                       QCoreApplication::translate("main", "can device"));
+    QCommandLineOption uart_port_option(QStringList() << "u"
+                                                      << "uart",
+                                        QCoreApplication::translate("main", "uart device."),
+                                        QCoreApplication::translate("main", "uart device"));
     parser.addOption(port_option);
     parser.addOption(can_port_option);
+    parser.addOption(uart_port_option);
     parser.process(a);
     uint16_t port = parser.value(port_option).toUShort();
     QString can_port = parser.value(can_port_option);
+    QString uart_port = parser.value(uart_port_option);
 
     // Initialize the logger
     init_logger();
 
     // The server starts in this thread
     SPDLOG_INFO("Starting server");
-    Simulators simulators(port, can_port);
+    Simulators simulators(port, can_port, uart_port);
 
     return a.exec();
 }

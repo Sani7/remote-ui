@@ -4,10 +4,10 @@
 class Test_Sim : public Simulator_base
 {
     Q_OBJECT
-    public:
-        Test_Sim(QObject* parent = nullptr);
-        void timer() override;
-        void run_at_startup() override;
+  public:
+    explicit Test_Sim(CAN_Wrapper *can_wrapper = nullptr, QSerialPort *serial = nullptr, QObject *parent = nullptr);
+    void timer() override;
+    void run_at_startup() override;
 
   private:
     void button_clicked(UI_button *id);

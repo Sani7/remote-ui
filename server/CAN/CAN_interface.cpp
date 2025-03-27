@@ -2,13 +2,23 @@
 #include "spdlog/spdlog.h"
 #include <magic_enum/magic_enum.hpp>
 
-CAN_Interface::CAN_Interface(QString dev, QObject *parent) : QObject(parent)
+CAN_Interface::CAN_Interface(QObject *parent) : QObject(parent)
 {
     if (!QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")))
     {
         SPDLOG_CRITICAL("Runtime error: CAN Interface: socketcan plugin not found");
         throw std::runtime_error("CAN Interface: socketcan plugin not found");
     }
+}
+
+CAN_Interface::~CAN_Interface()
+{
+    m_canDevice->disconnectDevice();
+    delete m_canDevice;
+}
+
+void CAN_Interface::connect_to_dev(QString dev)
+{
     QString errorString;
     m_canDevice = QCanBus::instance()->createDevice(QStringLiteral("socketcan"), dev, &errorString);
     if (!m_canDevice)
@@ -28,12 +38,6 @@ CAN_Interface::CAN_Interface(QString dev, QObject *parent) : QObject(parent)
             emit frame_received(frame);
         }
     });
-}
-
-CAN_Interface::~CAN_Interface()
-{
-    m_canDevice->disconnectDevice();
-    delete m_canDevice;
 }
 
 void CAN_Interface::send_frame(const QCanBusFrame frame)

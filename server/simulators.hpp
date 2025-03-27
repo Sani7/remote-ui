@@ -8,7 +8,8 @@
 #include "simulator_base.hpp"
 #include "websocket.hpp"
 
-#define INSERT_SIMULATOR(type) m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>()));
+#define INSERT_SIMULATOR(type)                                                                                         \
+    m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>(m_can_wrapper, m_serial, this)));
 
 class Simulators : public QObject
 {
@@ -38,7 +39,7 @@ class Simulators : public QObject
         begin = 0
     };
 
-    Simulators(uint16_t port, QString can_dev, QObject *parent = nullptr);
+    Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent = nullptr);
     std::string active_simulator_name() const;
     void run();
     void stop();
@@ -55,6 +56,8 @@ class Simulators : public QObject
   private:
     QThread *m_server_thread;
     Websocket *m_server;
+    CAN_Wrapper *m_can_wrapper;
+    QSerialPort *m_serial;
     std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
     std::string m_current_simulator = "";
     std::mutex m_mutex;
