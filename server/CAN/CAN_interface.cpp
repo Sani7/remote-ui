@@ -2,7 +2,7 @@
 #include "spdlog/spdlog.h"
 #include <magic_enum/magic_enum.hpp>
 
-CAN_Interface::CAN_Interface(QObject *parent) : QObject(parent)
+CAN_Interface::CAN_Interface(QObject *parent) : QObject(parent), m_canDevice(nullptr)
 {
     if (!QCanBus::instance()->plugins().contains(QStringLiteral("socketcan")))
     {
@@ -42,6 +42,8 @@ void CAN_Interface::connect_to_dev(QString dev)
 
 void CAN_Interface::send_frame(const QCanBusFrame frame)
 {
+    if (m_canDevice == nullptr)
+        return;
     m_canDevice->writeFrame(frame);
     emit frame_send(frame);
 }
