@@ -535,11 +535,35 @@ void Simulator_base::process_ui_plot(json &uiItem)
     }
 
     QString text = QString::fromStdString(uiItem["text"]);
+    QString x_label = QString::fromStdString(uiItem["x_label"]);
+    QString y_label = QString::fromStdString(uiItem["y_label"]);
+    std::vector<double> x_vals = (std::vector<double>)uiItem.at("x_vals");
+    std::vector<double> y_vals = (std::vector<double>)uiItem.at("x_vals");
 
     if (text != plot->title().text())
     {
         plot->setTitle(text);
     }
+
+    if (x_label != plot->axisTitle(QwtAxis::XBottom).text())
+    {
+        plot->setAxisTitle(QwtAxis::XBottom, x_label);
+    }
+
+    if (y_label != plot->axisTitle(QwtAxis::YLeft).text())
+    {
+        plot->setAxisTitle(QwtAxis::YLeft, y_label);
+    }
+
+    plot->curve()->setRawSamples(
+        x_vals.data(),
+        y_vals.data(),
+        x_vals.capacity()
+        );
+    plot->setAxisScale( QwtAxis::XBottom,
+                              x_vals[x_vals.capacity() - 1], x_vals[0] );
+    //            plot_time[0], plot_time[api.get_plot_size() - 1] );
+    plot->replot();
 }
 
 void Simulator_base::process_ui_can(json &uiItem)
