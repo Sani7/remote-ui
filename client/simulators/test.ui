@@ -15,35 +15,28 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="3">
+    <item row="2" column="4">
      <widget class="QPushButton" name="button">
       <property name="text">
        <string>PushButton</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="3">
+    <item row="1" column="4">
      <widget class="Led" name="led">
       <property name="text">
        <string>PushButton</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLabel" name="slider_label">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QwtSlider" name="slider"/>
-      </item>
-     </layout>
+    <item row="1" column="2">
+     <widget class="QCheckBox" name="checkBox">
+      <property name="text">
+       <string>CheckBox</string>
+      </property>
+     </widget>
     </item>
-    <item row="4" column="3">
+    <item row="4" column="4">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QLabel" name="dial_label">
@@ -70,7 +63,28 @@
       </item>
      </layout>
     </item>
+    <item row="0" column="4">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
     <item row="4" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="slider_label">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QwtSlider" name="slider"/>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="2">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QLabel" name="thermo_label">
@@ -84,20 +98,16 @@
       </item>
      </layout>
     </item>
-    <item row="3" column="3">
+    <item row="3" column="4">
      <widget class="QComboBox" name="combobox"/>
     </item>
-    <item row="0" column="3">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>TextLabel</string>
+    <item row="5" column="1">
+     <widget class="Plot_wrapper" name="plot">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
       </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QCheckBox" name="checkBox">
-      <property name="text">
-       <string>CheckBox</string>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
      </widget>
     </item>
@@ -135,6 +145,12 @@
    <class>Led</class>
    <extends>QPushButton</extends>
    <header>led.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Plot_wrapper</class>
+   <extends>QFrame</extends>
+   <header location="global">plot_wrapper.hpp</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

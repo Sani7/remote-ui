@@ -1,5 +1,6 @@
 #include "simulator_base.hpp"
 #include "can_transceive.hpp"
+#include "plot_wrapper.hpp"
 
 Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
@@ -133,6 +134,11 @@ void Simulator_base::UI_item_parser(json &input)
         if (uiItem["type"] == "UI_checkbox")
         {
             process_ui_checkbox(uiItem);
+            continue;
+        }
+        if (uiItem["type"] == "UI_plot")
+        {
+            process_ui_plot(uiItem);
             continue;
         }
         if (uiItem["type"] == "UI_can")
@@ -512,6 +518,30 @@ void Simulator_base::process_ui_led(json &uiItem)
     }
 }
 
+void Simulator_base::process_ui_plot(json &uiItem)
+{
+    QWidget *widget = id_to_ui(uiItem["id"]);
+    if (widget == nullptr)
+    {
+        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)uiItem["id"]).toStdString());
+        return;
+    }
+
+    auto plot = qobject_cast<Plot_wrapper *>(widget);
+    if (plot == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QwtPlot");
+        return;
+    }
+
+    QString text = QString::fromStdString(uiItem["text"]);
+
+    if (text != plot->title().text())
+    {
+        plot->setTitle(text);
+    }
+}
+
 void Simulator_base::process_ui_can(json &uiItem)
 {
     QWidget *widget = id_to_ui(uiItem["id"]);
@@ -547,6 +577,7 @@ void Simulator_base::setup_ui_item(QWidget *item, size_t index)
     setup_checkbox(item, index);
     setup_dial(item, index);
     setup_slider(item, index);
+    setup_qwtplot(item, index);
     setup_can_ui(item, index);
 }
 
@@ -597,6 +628,13 @@ void Simulator_base::setup_slider(QWidget *item, size_t index)
 
     connect(slider, &QwtSlider::sliderMoved, this,
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
+}
+
+void Simulator_base::setup_qwtplot(QWidget *item, size_t index)
+{
+    auto *plot = qobject_cast<QwtPlot *>(item);
+    if (plot == nullptr)
+        return;
 }
 
 void Simulator_base::setup_can_ui(QWidget *item, size_t index)
