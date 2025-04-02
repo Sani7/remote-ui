@@ -14,32 +14,11 @@ target_compile_options(UI PRIVATE $<$<CONFIG:Debug>:
     >)
 
 file(GLOB_RECURSE CUSTOM_UI_SOURCES "custom/*.?pp")
+file(GLOB_RECURSE UI_SOURCES "*.?pp")
 
 target_sources(UI
   PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/UI_item.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_item.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_button.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_button.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_checkbox.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_checkbox.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_combobox.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_combobox.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_dial.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_dial.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_label.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_label.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_led.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_led.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_slider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_slider.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_textbox.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_textbox.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_thermo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_thermo.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/UI_x_boxes.hpp
-
+    ${UI_SOURCES}
     ${CUSTOM_UI_SOURCES}
 )
 
