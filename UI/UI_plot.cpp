@@ -1,22 +1,20 @@
 #include "UI_plot.hpp"
 
-UI_plot::UI_plot(QObject* parent)
-    : UI_item{UI_PLOT_TYPE, parent}
+UI_plot::UI_plot(QObject *parent) : UI_item{UI_PLOT_TYPE, parent}
 {
 }
 
 UI_plot::UI_plot(std::string text, std::string x_label, std::string y_label, QObject *parent)
-    : UI_item(UI_PLOT_TYPE, parent) , m_x_label(x_label), m_y_label(y_label)
+    : UI_item(UI_PLOT_TYPE, parent), m_x_label(x_label), m_y_label(y_label)
 {
     set_text(text);
 }
 
-UI_plot::UI_plot(const json &j, QObject *parent)
-    : UI_item{UI_PLOT_TYPE, parent}
+UI_plot::UI_plot(const json &j, QObject *parent) : UI_item{UI_PLOT_TYPE, parent}
 {
     from_json(j);
 }
-\
+
 void UI_plot::set_x_label(std::string name)
 {
     m_x_label = name;

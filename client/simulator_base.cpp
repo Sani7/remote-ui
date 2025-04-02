@@ -555,13 +555,8 @@ void Simulator_base::process_ui_plot(json &uiItem)
         plot->setAxisTitle(QwtAxis::YLeft, y_label);
     }
 
-    plot->curve()->setRawSamples(
-        x_vals.data(),
-        y_vals.data(),
-        x_vals.capacity()
-        );
-    plot->setAxisScale( QwtAxis::XBottom,
-                              x_vals[x_vals.capacity() - 1], x_vals[0] );
+    plot->curve()->setRawSamples(x_vals.data(), y_vals.data(), x_vals.capacity());
+    plot->setAxisScale(QwtAxis::XBottom, x_vals[x_vals.capacity() - 1], x_vals[0]);
     //            plot_time[0], plot_time[api.get_plot_size() - 1] );
     plot->replot();
 }
