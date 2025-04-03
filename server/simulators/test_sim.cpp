@@ -6,7 +6,8 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
       m_combobox(Color::White, Color::Black, {"Option 1", "Option 2", "Option 3"}, 0),
       m_label("Label", Color::White, Color::Black), m_checkbox("Option 1", Color::Default, Color::Default),
       m_slider("Slider", Color::White, Color::Black, 0, 100, 0), m_dial("Dial", Color::White, Color::Black, 0, 100, 0),
-      m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red)
+      m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red),
+      m_table(4, 4, {"Row 1", "Row 2", "Row 3", "Row 4"}, {"Column 1", "Column 2", "Column 3", "Column 4"})
 {
     this->m_thermo.set_start_color(Color::Red);
     this->m_thermo.set_end_color(Color::Red);
@@ -24,6 +25,12 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
     this->push_ui_item(&this->m_led);
     this->push_ui_item(&this->m_checkbox);
     this->push_ui_item(&this->m_plot);
+    this->push_ui_item(&this->m_table);
+
+    for (size_t i = 0; i < m_table.capacity(); i++)
+    {
+        m_table.insert_item(i / 4, i % 4, QString("%0 %1").arg(i / 4).arg(i % 4).toStdString());
+    }
 
     QObject::connect(&m_button, &UI_button::clicked, this, [=, this] { button_clicked(&m_button); });
     QObject::connect(&m_slider, &UI_slider::changed, this,
