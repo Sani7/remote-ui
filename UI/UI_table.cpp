@@ -1,18 +1,26 @@
-#include "ui_table.hpp"
+#include "UI_table.hpp"
 
-UI_table::UI_table(QObject* parent)
-    : UI_item(UI_TABLE_TYPE, parent), m_row_count(0), m_column_count(0)
+UI_table::UI_table(QObject *parent) : UI_item(UI_TABLE_TYPE, parent), m_row_count(0), m_column_count(0)
 {
 }
 
-UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels, std::vector<std::string> column_labels, QObject* parent)
-    : UI_item(UI_TABLE_TYPE, parent), m_row_count(row_count), m_column_count(column_count), m_row_labels(row_labels), m_column_labels(column_labels)
+UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels,
+                   std::vector<std::string> column_labels, QObject *parent)
+    : UI_item(UI_TABLE_TYPE, parent), m_row_count(row_count), m_column_count(column_count), m_row_labels(row_labels),
+      m_column_labels(column_labels), m_valid(), m_table()
 {
+    m_table.resize(m_column_count * m_row_count);
+    m_valid.resize(m_column_count * m_row_count);
 }
 
 void UI_table::set_row_count(size_t count)
 {
     m_row_count = count;
+    if (m_row_count != 0 || m_column_count != 0)
+    {
+        m_table.resize(m_column_count * m_row_count);
+        m_valid.resize(m_column_count * m_row_count);
+    }
 
     emit value_changed();
 }
@@ -25,6 +33,11 @@ size_t UI_table::row_count() const
 void UI_table::set_column_count(size_t count)
 {
     m_column_count = count;
+    if (m_row_count != 0 || m_column_count != 0)
+    {
+        m_table.resize(m_column_count * m_row_count);
+        m_valid.resize(m_column_count * m_row_count);
+    }
 
     emit value_changed();
 }
@@ -32,6 +45,11 @@ void UI_table::set_column_count(size_t count)
 size_t UI_table::column_count() const
 {
     return m_column_count;
+}
+
+size_t UI_table::capacity() const
+{
+    return m_row_count * m_column_count;
 }
 
 void UI_table::set_row_label(size_t index, std::string label)
@@ -84,10 +102,18 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
     {
         return;
     }
+    if (capacity() > m_table.capacity())
+    {
+        m_table.resize(capacity());
+    }
+    if (capacity() > m_valid.capacity())
+    {
+        m_valid.resize(capacity());
+    }
     size_t index = row * m_column_count + column;
 
-    m_table[index] = text;
-    m_valid[index] = true;
+    m_table.at(index) = text;
+    m_valid.at(index) = true;
 
     emit value_changed();
 }
