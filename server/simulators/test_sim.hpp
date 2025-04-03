@@ -22,4 +22,5 @@ class Test_Sim : public Simulator_base
     UI_dial m_dial;
     UI_thermo m_thermo;
     UI_led m_led;
+    UI_plot m_plot;
 };

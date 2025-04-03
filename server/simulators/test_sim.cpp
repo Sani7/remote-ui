@@ -23,6 +23,7 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
     this->push_ui_item(&this->m_thermo);
     this->push_ui_item(&this->m_led);
     this->push_ui_item(&this->m_checkbox);
+    this->push_ui_item(&this->m_plot);
 
     QObject::connect(&m_button, &UI_button::clicked, this, [=, this] { button_clicked(&m_button); });
     QObject::connect(&m_slider, &UI_slider::changed, this,
@@ -67,6 +68,7 @@ void Test_Sim::slider_changed(UI_slider *id, double value)
         this->m_label.set_text(std::to_string(value));
         this->m_dial.set_value(value);
         this->m_thermo.set_value(value);
+        this->m_plot.add_value(value, value);
         return;
     }
 }
