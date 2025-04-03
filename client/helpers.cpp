@@ -1,4 +1,4 @@
-#include "helpers.h"
+#include "helpers.hpp"
 
 void create_dial_needle(QwtDial *dial)
 {

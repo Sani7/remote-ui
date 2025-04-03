@@ -1,7 +1,7 @@
 #ifndef SIM_CAN_DEBUGGER_H
 #define SIM_CAN_DEBUGGER_H
 
-#include "simulator_base.h"
+#include "simulator_base.hpp"
 #include <QMainWindow>
 
 namespace Ui

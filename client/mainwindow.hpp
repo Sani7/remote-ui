@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "networkerror.h"
-#include "simulator_base.h"
-#include "web_socket_wrapper.h"
+#include "networkerror.hpp"
+#include "simulator_base.hpp"
+#include "web_socket_wrapper.hpp"
 #include <QMainWindow>
 #include <map>
 

@@ -7,40 +7,16 @@ add_subdirectory(qwt)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+file(GLOB_RECURSE SOURCES "*.[hc]pp")
+file(GLOB_RECURSE UI_SOURCES "*.ui")
 file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
 file(GLOB_RECURSE SIM_UI "simulators/*.ui")
 
 set(PROJECT_SOURCES
+        ${SOURCES}
+        ${UI_SOURCES}
         ${SIM_SOURCES}
         ${SIM_UI}
-
-        simulator_base.h
-        simulator_base.cpp
-        helpers.h
-        helpers.cpp
-        IterableEnum.hpp
-        hex_spinbox.h
-        hex_spinbox.cpp
-        better_radiobutton.h
-        better_radiobutton.cpp
-        led.h
-        led.cpp
-        
-        can_transceive.h
-        can_transceive.cpp
-        can_transceive.ui
-
-        networkerror.h
-        networkerror.cpp
-        networkerror.ui
-
-        web_socket_wrapper.h
-        web_socket_wrapper.cpp
-
-        mainwindow.h
-        mainwindow.cpp
-        mainwindow.ui
-        main.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

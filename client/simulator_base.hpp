@@ -2,11 +2,11 @@
 #define SIMULATOR_BASE_H
 
 #include "IterableEnum.hpp"
-#include "helpers.h"
-#include "led.h"
-#include "networkerror.h"
+#include "helpers.hpp"
+#include "led.hpp"
+#include "networkerror.hpp"
 #include "spdlog/spdlog.h"
-#include "web_socket_wrapper.h"
+#include "web_socket_wrapper.hpp"
 #include <QMainWindow>
 #include <QWidget>
 #include <magic_enum/magic_enum.hpp>

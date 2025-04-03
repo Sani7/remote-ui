@@ -1,8 +1,8 @@
 #ifndef SIM_TEST_H
 #define SIM_TEST_H
 
-#include "simulator_base.h"
-#include "web_socket_wrapper.h"
+#include "simulator_base.hpp"
+#include "web_socket_wrapper.hpp"
 #include <QMainWindow>
 
 namespace Ui

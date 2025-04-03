@@ -1,7 +1,7 @@
 #ifndef CAN_TRANSCEIVE_H
 #define CAN_TRANSCEIVE_H
 
-#include "hex_spinbox.h"
+#include "hex_spinbox.hpp"
 #include <QWidget>
 
 namespace Ui

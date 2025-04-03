@@ -1,4 +1,4 @@
-#include "can_transceive.h"
+#include "can_transceive.hpp"
 #include "ui_can_transceive.h"
 
 Can_Transceive::Can_Transceive(QWidget *parent) : QWidget(parent), ui(new Ui::Can_Transceive)

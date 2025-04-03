@@ -134,7 +134,7 @@
   <customwidget>
    <class>Led</class>
    <extends>QPushButton</extends>
-   <header>led.h</header>
+   <header>led.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

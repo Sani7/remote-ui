@@ -1,4 +1,4 @@
-#include "better_radiobutton.h"
+#include "better_radiobutton.hpp"
 
 Better_Radiobutton::Better_Radiobutton(QWidget *parent) : QWidget{parent}, m_radiobuttons{}
 {

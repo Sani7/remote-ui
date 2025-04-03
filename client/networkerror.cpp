@@ -1,4 +1,4 @@
-#include "networkerror.h"
+#include "networkerror.hpp"
 #include "ui_networkerror.h"
 
 NetworkError::NetworkError(QWidget *parent) : QDialog(parent), ui(new Ui::NetworkError)

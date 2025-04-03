@@ -1,4 +1,4 @@
-#include "hex_spinbox.h"
+#include "hex_spinbox.hpp"
 
 HexSpinBox::HexSpinBox(QWidget *parent, bool showPrefix, const QString &format) : QSpinBox(parent), format(format)
 {

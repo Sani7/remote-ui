@@ -1,5 +1,5 @@
-#include "simulator_base.h"
-#include "can_transceive.h"
+#include "simulator_base.hpp"
+#include "can_transceive.hpp"
 
 Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),

@@ -1,4 +1,4 @@
-#include "web_socket_wrapper.h"
+#include "web_socket_wrapper.hpp"
 #include "spdlog/spdlog.h"
 #include <magic_enum/magic_enum.hpp>
 
