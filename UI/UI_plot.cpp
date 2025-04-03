@@ -35,6 +35,12 @@ std::string UI_plot::y_label() const
     return m_y_label;
 }
 
+void UI_plot::add_value(double y)
+{
+    m_x_vals.push_back((double)m_x_vals.size());
+    m_y_vals.push_back(y);
+}
+
 void UI_plot::add_value(double x, double y)
 {
     m_x_vals.push_back(x);

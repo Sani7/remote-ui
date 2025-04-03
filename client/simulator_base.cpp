@@ -535,10 +535,13 @@ void Simulator_base::process_ui_plot(json &uiItem)
     }
 
     QString text = QString::fromStdString(uiItem["text"]);
+    QColor bg_color = QColor(QString::fromStdString(uiItem["bg_color"]));
+    QColor color = QColor(QString::fromStdString(uiItem["fg_color"]));
     QString x_label = QString::fromStdString(uiItem["x_label"]);
     QString y_label = QString::fromStdString(uiItem["y_label"]);
+
     std::vector<double> x_vals = (std::vector<double>)uiItem.at("x_vals");
-    std::vector<double> y_vals = (std::vector<double>)uiItem.at("x_vals");
+    std::vector<double> y_vals = (std::vector<double>)uiItem.at("y_vals");
 
     if (text != plot->title().text())
     {
@@ -555,9 +558,19 @@ void Simulator_base::process_ui_plot(json &uiItem)
         plot->setAxisTitle(QwtAxis::YLeft, y_label);
     }
 
-    plot->curve()->setRawSamples(x_vals.data(), y_vals.data(), x_vals.capacity());
-    plot->setAxisScale(QwtAxis::XBottom, x_vals[x_vals.capacity() - 1], x_vals[0]);
-    //            plot_time[0], plot_time[api.get_plot_size() - 1] );
+    if (color != plot->curve()->pen().color())
+    {
+        plot->curve()->setPen(QPen(color));
+    }
+
+    if (color == QColor(0x83, 0x91, 0x92))
+    {
+        plot->curve()->setPen(QPen(Qt::red));
+    }
+
+    plot->curve()->setSamples(x_vals.data(), y_vals.data(), x_vals.size());
+    if (x_vals.size() > 0)
+        plot->setAxisScale(QwtAxis::XBottom, x_vals[0], x_vals[x_vals.size() - 1]);
     plot->replot();
 }
 

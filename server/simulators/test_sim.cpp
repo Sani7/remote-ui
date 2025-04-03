@@ -68,7 +68,7 @@ void Test_Sim::slider_changed(UI_slider *id, double value)
         this->m_label.set_text(std::to_string(value));
         this->m_dial.set_value(value);
         this->m_thermo.set_value(value);
-        this->m_plot.add_value(value, value);
+        this->m_plot.add_value(value);
         return;
     }
 }

@@ -20,6 +20,7 @@ class UI_plot : public UI_item
     bool x_label_enabled() const;
     void set_y_label_enabled(bool enabled);
     bool y_label_enabled() const;
+    void add_value(double y);
     void add_value(double x, double y);
     void clean_vals();
 
