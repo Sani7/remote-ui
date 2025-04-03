@@ -8,6 +8,7 @@
 #include "UI_led.hpp"
 #include "UI_plot.hpp"
 #include "UI_slider.hpp"
+#include "ui_table.hpp"
 #include "UI_textbox.hpp"
 #include "UI_thermo.hpp"
 
