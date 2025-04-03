@@ -13,6 +13,8 @@ UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::strin
 void UI_table::set_row_count(size_t count)
 {
     m_row_count = count;
+
+    emit value_changed();
 }
 
 size_t UI_table::row_count() const
@@ -23,6 +25,8 @@ size_t UI_table::row_count() const
 void UI_table::set_column_count(size_t count)
 {
     m_column_count = count;
+
+    emit value_changed();
 }
 
 size_t UI_table::column_count() const
@@ -38,6 +42,8 @@ void UI_table::set_row_label(size_t index, std::string label)
     }
 
     m_row_labels[index] = label;
+
+    emit value_changed();
 }
 
 std::string UI_table::row_label(size_t index) const
@@ -58,6 +64,8 @@ void UI_table::set_column_label(size_t index, std::string label)
     }
 
     m_column_labels[index] = label;
+
+    emit value_changed();
 }
 
 std::string UI_table::column_label(size_t index) const
@@ -80,6 +88,8 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
 
     m_table[index] = text;
     m_valid[index] = true;
+
+    emit value_changed();
 }
 
 void UI_table::empty_item(size_t row, size_t column)
@@ -88,6 +98,8 @@ void UI_table::empty_item(size_t row, size_t column)
 
     m_table[index] = "";
     m_valid[index] = false;
+
+    emit value_changed();
 }
 
 void UI_table::from_json(const json &j)
