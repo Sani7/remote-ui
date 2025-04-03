@@ -631,9 +631,13 @@ void Simulator_base::process_ui_table(json &ui_item)
     {
         size_t row = i / column_count;
         size_t column = i % column_count;
+        if (valid[i] && table->item(row, column) == nullptr)
+        {
+            table->setItem(row, column, new QTableWidgetItem());
+        }
         if (valid[i])
         {
-            table->setItem(row, column, new QTableWidgetItem(QString::fromStdString(table_data[i])));
+            table->item(row, column)->setText(QString::fromStdString(table_data[i]));
         }
     }
     // table->
