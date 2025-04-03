@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
-    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, this)),
+    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, nullptr)),
       m_can_wrapper(new CAN_Wrapper(new CAN_Interface(this), this)), m_serial(new QSerialPort(this))
 {
     m_server->moveToThread(m_server_thread);
