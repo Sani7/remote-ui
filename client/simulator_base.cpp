@@ -2,7 +2,7 @@
 #include "can_transceive.hpp"
 #include "plot_wrapper.hpp"
 
-Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget* parent)
+Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
       m_web_socket(web_socket), m_sim_name(sim_name)
 {
@@ -602,6 +602,9 @@ void Simulator_base::process_ui_table(json &ui_item)
     std::vector<bool> valid = (std::vector<bool>)ui_item["valid"];
     std::vector<std::string> table_data = (std::vector<std::string>)ui_item["table"];
 
+    table->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
+    table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
     if (table->rowCount() != row_count)
     {
         table->setRowCount(row_count);
@@ -612,15 +615,19 @@ void Simulator_base::process_ui_table(json &ui_item)
     }
     for (size_t i = 0; i < row_labels.size(); i++)
     {
+        if (table->horizontalHeaderItem(i) == nullptr)
+            table->setHorizontalHeaderItem(i, new QTableWidgetItem());
         if (row_labels[i] != table->horizontalHeaderItem(i)->text())
-        table->horizontalHeaderItem(i)->setText(QString::fromStdString(row_labels[i]));
+            table->horizontalHeaderItem(i)->setText(QString::fromStdString(row_labels[i]));
     }
     for (size_t i = 0; i < column_labels.size(); i++)
     {
+        if (table->verticalHeaderItem(i) == nullptr)
+            table->setVerticalHeaderItem(i, new QTableWidgetItem());
         if (column_labels[i] != table->verticalHeaderItem(i)->text())
             table->verticalHeaderItem(i)->setText(QString::fromStdString(column_labels[i]));
     }
-    for (size_t i = 0; i < table_data.size(); i ++)
+    for (size_t i = 0; i < table_data.size(); i++)
     {
         size_t row = i / column_count;
         size_t column = i % column_count;
@@ -629,7 +636,7 @@ void Simulator_base::process_ui_table(json &ui_item)
             table->setItem(row, column, new QTableWidgetItem(QString::fromStdString(table_data[i])));
         }
     }
-    //table->
+    // table->
 }
 
 void Simulator_base::process_ui_can(json &ui_item)
