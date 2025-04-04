@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     QCommandLineOption port_option(QStringList() << "p"
                                                  << "port",
-                                   QCoreApplication::translate("main", "Port for echoserver [default: 9002]."),
+                                   QCoreApplication::translate("main", "Port for the unisim server [default: 9002]."),
                                    QCoreApplication::translate("main", "port"), QLatin1String("9002"));
     QCommandLineOption can_port_option(QStringList() << "c"
                                                      << "can",
