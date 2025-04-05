@@ -35,7 +35,7 @@ void UI_dial::set_value(double value)
         return;
 
     this->m_value = value;
-    emit value_changed();
+    emit ui_changed();
 }
 
 double UI_dial::value() const

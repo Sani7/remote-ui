@@ -40,14 +40,14 @@ void UI_item::set_text(std::string text)
     if (this->m_text != text)
     {
         this->m_text = text;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 
 void UI_item::append_text(std::string text)
 {
     m_text.append(text);
-    emit value_changed();
+    emit ui_changed();
 }
 
 std::string UI_item::text() const
@@ -60,7 +60,7 @@ void UI_item::set_text_size(uint8_t text_size)
     if (this->m_text_size != text_size)
     {
         this->m_text_size = text_size;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 
@@ -74,7 +74,7 @@ void UI_item::set_fg_color(Color fg_color)
     if (this->m_fg_color != fg_color)
     {
         this->m_fg_color = fg_color;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 
@@ -88,7 +88,7 @@ void UI_item::set_bg_color(Color bg_color)
     if (this->m_bg_color != bg_color)
     {
         this->m_bg_color = bg_color;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 
@@ -102,7 +102,7 @@ void UI_item::set_enabled(bool enabled)
     if (this->enabled != enabled)
     {
         this->enabled = enabled;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 
@@ -116,7 +116,7 @@ void UI_item::set_visible(bool visible)
     if (this->visible != visible)
     {
         this->visible = visible;
-        emit value_changed();
+        emit ui_changed();
     }
 }
 

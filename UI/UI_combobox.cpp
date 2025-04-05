@@ -20,7 +20,7 @@ void UI_combobox::set_selected(size_t selected)
     if (selected == m_selected)
         return;
     m_selected = selected;
-    emit value_changed();
+    emit ui_changed();
     emit changed(selected_text());
 }
 

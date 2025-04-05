@@ -27,7 +27,7 @@ void UI_can::add_send_message(QCanBusFrame msg)
     CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
                    ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
     m_can_send_messages.push_back(frame);
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_can::add_received_message(QCanBusFrame msg)
@@ -35,19 +35,19 @@ void UI_can::add_received_message(QCanBusFrame msg)
     CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
                    ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
     m_can_received_messages.push_back(frame);
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_can::clear_send_buffer()
 {
     m_can_send_messages.clear();
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_can::clear_receive_buffer()
 {
     m_can_received_messages.clear();
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_can::can_clear()

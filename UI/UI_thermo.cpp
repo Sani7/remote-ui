@@ -36,7 +36,7 @@ void UI_thermo::set_value(double value)
         return;
 
     this->m_value = value;
-    emit value_changed();
+    emit ui_changed();
 }
 
 double UI_thermo::value() const
@@ -57,13 +57,13 @@ double UI_thermo::max() const
 void UI_thermo::set_start_color(Color color)
 {
     this->m_color_map[0] = color;
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::set_end_color(Color color)
 {
     this->m_color_map[1] = color;
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::add_color_stop(double value, Color color)
@@ -72,7 +72,7 @@ void UI_thermo::add_color_stop(double value, Color color)
         return;
 
     this->m_color_map[value] = color;
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::add_color_stop_normalized(double value, Color color)
@@ -82,7 +82,7 @@ void UI_thermo::add_color_stop_normalized(double value, Color color)
 
     double normalized = (value - m_min) / (m_max - m_min);
     this->m_color_map[normalized] = color;
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::remove_color_stop(double value)
@@ -91,7 +91,7 @@ void UI_thermo::remove_color_stop(double value)
         return;
 
     this->m_color_map.erase(value);
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::remove_color_stop_normalized(double value)
@@ -101,7 +101,7 @@ void UI_thermo::remove_color_stop_normalized(double value)
 
     double normalized = (value - m_min) / (m_max - m_min);
     this->m_color_map.erase(normalized);
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_thermo::from_json(const json &j)

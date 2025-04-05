@@ -15,14 +15,14 @@ void UI_textbox::set_text(std::string text)
     if (text == m_text)
         return;
     m_text = text;
-    emit value_changed();
+    emit ui_changed();
     emit on_change(m_text);
 }
 
 void UI_textbox::set_hint(std::string hint)
 {
     m_hint = hint;
-    emit value_changed();
+    emit ui_changed();
 }
 
 std::string UI_textbox::hint() const

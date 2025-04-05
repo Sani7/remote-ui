@@ -36,7 +36,7 @@ void UI_slider::set_value(double value)
         return;
 
     this->m_value = value;
-    emit value_changed();
+    emit ui_changed();
     emit changed(m_value);
 }
 

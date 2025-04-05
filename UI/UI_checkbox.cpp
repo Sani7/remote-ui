@@ -17,14 +17,14 @@ UI_checkbox::UI_checkbox(const json &j, QObject *parent) : UI_item(UI_CHECKBOX_T
 void UI_checkbox::click()
 {
     m_checked = !m_checked;
-    emit value_changed();
+    emit ui_changed();
     emit on_change(m_checked);
 }
 
 void UI_checkbox::set_state(bool state)
 {
     m_checked = state;
-    emit value_changed();
+    emit ui_changed();
     emit on_change(m_checked);
 }
 

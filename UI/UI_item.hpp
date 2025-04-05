@@ -55,7 +55,7 @@ class UI_item : public QObject
     virtual void can_clear();
 
   signals:
-    void value_changed();
+    void ui_changed();
 
   protected:
     size_t m_id;

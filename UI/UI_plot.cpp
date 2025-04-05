@@ -19,7 +19,7 @@ void UI_plot::set_x_label(std::string name)
 {
     m_x_label = name;
 
-    emit value_changed();
+    emit ui_changed();
 }
 
 std::string UI_plot::x_label() const
@@ -31,7 +31,7 @@ void UI_plot::set_y_label(std::string name)
 {
     m_y_label = name;
 
-    emit value_changed();
+    emit ui_changed();
 }
 
 std::string UI_plot::y_label() const
@@ -44,7 +44,7 @@ void UI_plot::add_value(double y)
     m_x_vals.push_back((double)m_x_vals.size());
     m_y_vals.push_back(y);
 
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_plot::add_value(double x, double y)
@@ -52,7 +52,7 @@ void UI_plot::add_value(double x, double y)
     m_x_vals.push_back(x);
     m_y_vals.push_back(y);
 
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_plot::clean_vals()
@@ -60,7 +60,7 @@ void UI_plot::clean_vals()
     m_x_vals.clear();
     m_y_vals.clear();
 
-    emit value_changed();
+    emit ui_changed();
 }
 
 void UI_plot::from_json(const json &j)
