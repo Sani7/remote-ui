@@ -64,6 +64,8 @@ GPIO::~GPIO()
 void GPIO::set_value(bool value)
 {
 #if __aarch64__
+    if (!m_request)
+        return;
     gpiod_line_request_set_value(m_request, m_offset, (enum gpiod_line_value)value);
 #endif
 }
@@ -71,6 +73,8 @@ void GPIO::set_value(bool value)
 bool GPIO::value()
 {
 #if __aarch64__
+    if (!m_request)
+        return;
     return (bool)gpiod_line_request_get_value(m_request, m_offset);
 #else
     return 0;
