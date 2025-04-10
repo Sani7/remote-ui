@@ -57,12 +57,18 @@ GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject* parent)
 
 void GPIO::set_value(bool value)
 {
+#if __aarch64__
     gpiod_line_request_set_value(m_request, m_offset, (enum gpiod_line_value)value);
+#endif
 }
 
 bool GPIO::value()
 {
+#if __aarch64__
     return (bool)gpiod_line_request_get_value(m_request, m_offset);
+#else
+    return 0;
+#endif
 }
 
 struct gpiod_line_request *
