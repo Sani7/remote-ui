@@ -25,7 +25,9 @@ target_include_directories(server
     ${CMAKE_CURRENT_LIST_DIR}/simulators
     PRIVATE
 )
-
+if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
+    set(GPIOD_LIB "gpiod")
+endif()
 target_link_libraries(server PRIVATE
     Qt::WebSockets
     Qt::SerialBus
@@ -33,4 +35,5 @@ target_link_libraries(server PRIVATE
     spdlog
     UI
     cpp_templates
+    ${GPIOD_LIB}
 )
