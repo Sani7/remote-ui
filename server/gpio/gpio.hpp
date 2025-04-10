@@ -37,6 +37,7 @@ class GPIO : public QObject {
         Output
     };
     explicit GPIO(Direction dir, uint8_t gpio, bool state = false, QObject* parent = nullptr);
+    ~GPIO();
     void set_value(bool val);
     bool value();
 

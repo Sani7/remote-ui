@@ -27,6 +27,7 @@ int gpiod_line_request_set_value(struct gpiod_line_request *request,
 enum gpiod_line_value
 gpiod_line_request_get_value(struct gpiod_line_request *request,
                              unsigned int offset) {}
+void gpiod_line_request_release(struct gpiod_line_request *request) {}
 void gpiod_request_config_free(struct gpiod_request_config *config){}
 void gpiod_line_config_free(struct gpiod_line_config *config){}
 void gpiod_line_settings_free(struct gpiod_line_settings *settings){}
@@ -53,6 +54,11 @@ GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject* parent)
                     strerror(errno));
         }
     }
+}
+
+GPIO::~GPIO()
+{
+    gpiod_line_request_release(m_request);
 }
 
 void GPIO::set_value(bool value)
