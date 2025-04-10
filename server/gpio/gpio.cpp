@@ -39,7 +39,7 @@ GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject* parent)
 {
     if (dir == Direction::Output)
     {
-        m_request = request_output_line("/dev/gpiochip0", gpio, (enum gpiod_line_value)state, "Consumer");
+        m_request = request_output_line("/dev/gpiochip0", gpio, (enum gpiod_line_value)state, "unisim_cpp");
         if (!m_request) {
             SPDLOG_ERROR("failed to request line: {}",
                 strerror(errno));
@@ -48,7 +48,7 @@ GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject* parent)
     }
     if (dir == Direction::Input)
     {
-        m_request = request_input_line("/dev/gpiochip0", gpio, "get-line-value");
+        m_request = request_input_line("/dev/gpiochip0", gpio, "unisim_cpp");
         if (!m_request) {
             fprintf(stderr, "failed to request line: %s\n",
                     strerror(errno));
