@@ -18,6 +18,8 @@ GPIO::~GPIO()
 
 void GPIO::configure_pin(Direction dir, uint8_t gpio)
 {
+    if (m_request.get() != nullptr)
+        return;
     std::filesystem::path chip_path("/dev/gpiochip0");
     m_offset = gpio;
     if (dir == Direction::Output)
@@ -38,6 +40,7 @@ void GPIO::configure_pin(Direction dir, uint8_t gpio)
                 .add_line_settings(m_offset, ::gpiod::line_settings().set_direction(::gpiod::line::direction::INPUT))
                 .do_request());
     }
+
 }
 void GPIO::set_value(bool value)
 {
