@@ -9,20 +9,10 @@ find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus)
 qt_standard_project_setup()
 qt_add_executable(server)
 
-file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
-file(GLOB_RECURSE CAN_SOURCES "CAN/*.[hc]pp")
+file(GLOB_RECURSE SOURCES "*.[hc]pp")
 
 target_sources(server PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/message_parser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/simulator_base.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/simulator_base.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/simulators.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/simulators.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/websocket.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/websocket.hpp
-    ${SIM_SOURCES}
-    ${CAN_SOURCES}
+    ${SOURCES}
 )
 
 target_compile_options(server PRIVATE $<$<CONFIG:Debug>:

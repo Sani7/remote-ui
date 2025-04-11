@@ -9,14 +9,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB_RECURSE SOURCES "*.[hc]pp")
 file(GLOB_RECURSE UI_SOURCES "*.ui")
-file(GLOB_RECURSE SIM_SOURCES "simulators/*.[hc]pp")
-file(GLOB_RECURSE SIM_UI "simulators/*.ui")
 
 set(PROJECT_SOURCES
         ${SOURCES}
         ${UI_SOURCES}
-        ${SIM_SOURCES}
-        ${SIM_UI}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
