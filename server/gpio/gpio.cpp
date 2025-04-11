@@ -40,7 +40,6 @@ void GPIO::configure_pin(Direction dir, uint8_t gpio)
                 .add_line_settings(m_offset, ::gpiod::line_settings().set_direction(::gpiod::line::direction::INPUT))
                 .do_request());
     }
-
 }
 void GPIO::set_value(bool value)
 {
