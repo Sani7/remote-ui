@@ -12,6 +12,8 @@ GPIO::GPIO(QObject *parent) : QObject(parent), m_offset(0)
 
 GPIO::~GPIO()
 {
+    if (!m_request.get())
+        return;
     m_request->release();
 }
 
@@ -47,8 +49,8 @@ void GPIO::configure_pin(Direction dir, uint8_t gpio)
 void GPIO::set_value(bool value)
 {
 #if defined(__aarch64__) || defined(__x86_64__)
-if (!m_request.get())
-    return;
+    if (!m_request.get())
+        return;
     m_request->set_value(m_offset, (gpiod::line::value)value);
 #endif
 }
