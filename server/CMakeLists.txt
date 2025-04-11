@@ -25,8 +25,12 @@ target_include_directories(server
     ${CMAKE_CURRENT_LIST_DIR}/simulators
     PRIVATE
 )
-if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "aarch64")
-    set(GPIOD_LIB "gpiod")
+
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+if (LINUX)
+    set(GPIOD_LIB "gpiodcxx")
 endif()
 target_link_libraries(server PRIVATE
     Qt::WebSockets
