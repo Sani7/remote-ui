@@ -61,8 +61,19 @@ void gpiod_chip_close(struct gpiod_chip *chip)
 }
 #endif
 
-GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject *parent) : QObject(parent), m_offset(gpio)
+GPIO::GPIO(QObject *parent) : QObject(parent), m_offset(0)
 {
+    
+}
+
+GPIO::~GPIO()
+{
+    gpiod_line_request_release(m_request);
+}
+
+void GPIO::configure_pin(Direction dir, uint8_t gpio, bool state = false)
+{
+    m_offset = gpio;
     if (dir == Direction::Output)
     {
         m_request = request_output_line("/dev/gpiochip0", gpio, (enum gpiod_line_value)state, "unisim_cpp");
@@ -81,12 +92,6 @@ GPIO::GPIO(Direction dir, uint8_t gpio, bool state, QObject *parent) : QObject(p
         }
     }
 }
-
-GPIO::~GPIO()
-{
-    gpiod_line_request_release(m_request);
-}
-
 void GPIO::set_value(bool value)
 {
 #if __aarch64__

@@ -50,8 +50,9 @@ class GPIO : public QObject
         Input,
         Output
     };
-    explicit GPIO(Direction dir, uint8_t gpio, bool state = false, QObject *parent = nullptr);
+    explicit GPIO(QObject *parent = nullptr);
     ~GPIO();
+    void configure_pin(Direction dir, uint8_t gpio, bool state = false);
     void set_value(bool val);
     bool value();
 
