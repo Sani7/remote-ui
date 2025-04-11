@@ -8,16 +8,16 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     this->setWindowTitle("Test Sim");
     this->setWindowState(Qt::WindowMaximized);
 
-    push_ui_item(ui->button);
-    push_ui_item(ui->combobox);
-    push_ui_item(ui->label);
-    push_ui_item(ui->slider);
-    push_ui_item(ui->dial);
-    push_ui_item(ui->thermo);
-    push_ui_item(ui->led);
-    push_ui_item(ui->checkBox);
-    push_ui_item(ui->plot);
-    push_ui_item(ui->table);
+    PUSH_UI_ITEM(button);
+    PUSH_UI_ITEM(combobox);
+    PUSH_UI_ITEM(label);
+    PUSH_UI_ITEM(slider);
+    PUSH_UI_ITEM(dial);
+    PUSH_UI_ITEM(thermo);
+    PUSH_UI_ITEM(led);
+    PUSH_UI_ITEM(checkBox);
+    PUSH_UI_ITEM(plot);
+    PUSH_UI_ITEM(table);
 }
 
 Test_Sim::~Test_Sim()

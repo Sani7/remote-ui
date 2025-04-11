@@ -4,7 +4,7 @@ Can_Debugger::Can_Debugger(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObjec
     : Simulator_base("Can Debugger", can_wrapper, serial, std::chrono::milliseconds(100), parent),
       m_wrapper(can_wrapper), m_can_ui(Color::Black, Color::White)
 {
-    this->push_ui_item(&this->m_can_ui);
+    PUSH_UI_ITEM(m_can_ui);
 
     connect(&m_can_ui, &UI_can::on_send, this, [=, this](QCanBusFrame frame) { m_wrapper->send_can_message(frame); });
 }

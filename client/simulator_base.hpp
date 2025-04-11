@@ -13,6 +13,8 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+#define PUSH_UI_ITEM(item) push_ui_item(ui->item)
+
 class Simulator_base : public QMainWindow
 {
     Q_OBJECT

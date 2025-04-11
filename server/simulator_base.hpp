@@ -5,6 +5,8 @@
 #include <QSerialPort>
 #include <QTimer>
 
+#define PUSH_UI_ITEM(item) push_ui_item(&item)
+
 class Simulator_base : public QObject
 {
     Q_OBJECT

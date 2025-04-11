@@ -6,7 +6,7 @@ Can_Debugger::Can_Debugger(Web_socket_wrapper *web_socket, QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->push_ui_item(ui->can_transceive);
+    this->PUSH_UI_ITEM(can_transceive);
 }
 
 Can_Debugger::~Can_Debugger()

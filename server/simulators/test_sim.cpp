@@ -9,23 +9,23 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
       m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red),
       m_table(4, 4, {"Row 1", "Row 2", "Row 3", "Row 4"}, {"Column 1", "Column 2", "Column 3", "Column 4"})
 {
-    this->m_thermo.set_start_color(Color::Red);
-    this->m_thermo.set_end_color(Color::Red);
-    this->m_thermo.add_color_stop(0.10, Color::Yellow);
-    this->m_thermo.add_color_stop(0.50, Color::Green);
-    this->m_thermo.add_color_stop(0.60, Color::Yellow);
-    this->m_thermo.add_color_stop(0.90, Color::Red);
+    m_thermo.set_start_color(Color::Red);
+    m_thermo.set_end_color(Color::Red);
+    m_thermo.add_color_stop(0.10, Color::Yellow);
+    m_thermo.add_color_stop(0.50, Color::Green);
+    m_thermo.add_color_stop(0.60, Color::Yellow);
+    m_thermo.add_color_stop(0.90, Color::Red);
 
-    this->push_ui_item(&this->m_button);
-    this->push_ui_item(&this->m_combobox);
-    this->push_ui_item(&this->m_label);
-    this->push_ui_item(&this->m_slider);
-    this->push_ui_item(&this->m_dial);
-    this->push_ui_item(&this->m_thermo);
-    this->push_ui_item(&this->m_led);
-    this->push_ui_item(&this->m_checkbox);
-    this->push_ui_item(&this->m_plot);
-    this->push_ui_item(&this->m_table);
+    PUSH_UI_ITEM(m_button);
+    PUSH_UI_ITEM(m_combobox);
+    PUSH_UI_ITEM(m_label);
+    PUSH_UI_ITEM(m_slider);
+    PUSH_UI_ITEM(m_dial);
+    PUSH_UI_ITEM(m_thermo);
+    PUSH_UI_ITEM(m_led);
+    PUSH_UI_ITEM(m_checkbox);
+    PUSH_UI_ITEM(m_plot);
+    PUSH_UI_ITEM(m_table);
 
     for (size_t i = 0; i < m_table.capacity(); i++)
     {
@@ -39,12 +39,12 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
 
 void Test_Sim::timer()
 {
-    this->m_button.click();
-    if (this->m_slider.value() == this->m_slider.max())
+    m_button.click();
+    if (m_slider.value() == m_slider.max())
     {
-        this->m_slider.set_value(0);
+        m_slider.set_value(0);
     }
-    this->m_slider.set_value(this->m_slider.value() + 1);
+    m_slider.set_value(m_slider.value() + 1);
 }
 
 void Test_Sim::run_at_startup()
@@ -55,27 +55,27 @@ void Test_Sim::run_at_startup()
 
 void Test_Sim::button_clicked(UI_button *id)
 {
-    if (id == &this->m_button)
+    if (id == &m_button)
     {
-        bool state = this->m_button.bg_color() == Color::Red ? true : false;
-        this->m_button.set_bg_color(state ? Color::Green : Color::Red);
-        this->m_button.set_text(state ? "On" : "Off");
+        bool state = m_button.bg_color() == Color::Red ? true : false;
+        m_button.set_bg_color(state ? Color::Green : Color::Red);
+        m_button.set_text(state ? "On" : "Off");
 
-        this->m_led.set_bg_color(state ? Color::Green : Color::Red);
-        this->m_checkbox.set_state(state);
+        m_led.set_bg_color(state ? Color::Green : Color::Red);
+        m_checkbox.set_state(state);
         return;
     }
 }
 
 void Test_Sim::slider_changed(UI_slider *id, double value)
 {
-    if (id == &this->m_slider)
+    if (id == &m_slider)
     {
         SPDLOG_INFO("Test slider changed to {}", value);
-        this->m_label.set_text(std::to_string(value));
-        this->m_dial.set_value(value);
-        this->m_thermo.set_value(value);
-        this->m_plot.add_value(value);
+        m_label.set_text(std::to_string(value));
+        m_dial.set_value(value);
+        m_thermo.set_value(value);
+        m_plot.add_value(value);
         return;
     }
 }
