@@ -7,7 +7,6 @@
 
 GPIO::GPIO(QObject *parent) : QObject(parent), m_offset(0)
 {
-    
 }
 
 GPIO::~GPIO()
@@ -27,23 +26,17 @@ void GPIO::configure_pin(Direction dir, uint8_t gpio)
             ::gpiod::chip(chip_path)
                 .prepare_request()
                 .set_consumer("unisim_cpp")
-                .add_line_settings(
-                    m_offset,
-                    ::gpiod::line_settings().set_direction(
-                        ::gpiod::line::direction::OUTPUT))
+                .add_line_settings(m_offset, ::gpiod::line_settings().set_direction(::gpiod::line::direction::OUTPUT))
                 .do_request());
     }
     if (dir == Direction::Input)
     {
         m_request = std::make_unique<gpiod::line_request>(
-                    ::gpiod::chip(chip_path)
-			       .prepare_request()
-			       .set_consumer("get-line-value")
-			       .add_line_settings(
-				       m_offset,
-				       ::gpiod::line_settings().set_direction(
-					       ::gpiod::line::direction::INPUT))
-			       .do_request());
+            ::gpiod::chip(chip_path)
+                .prepare_request()
+                .set_consumer("get-line-value")
+                .add_line_settings(m_offset, ::gpiod::line_settings().set_direction(::gpiod::line::direction::INPUT))
+                .do_request());
     }
 }
 void GPIO::set_value(bool value)
