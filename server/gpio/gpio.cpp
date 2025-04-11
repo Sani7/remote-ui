@@ -100,7 +100,7 @@ bool GPIO::value()
 {
 #if __aarch64__
     if (!m_request)
-        return;
+        return false;
     return (bool)gpiod_line_request_get_value(m_request, m_offset);
 #else
     return 0;
