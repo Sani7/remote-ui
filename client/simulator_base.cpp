@@ -6,6 +6,10 @@ Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket,
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
       m_web_socket(web_socket), m_sim_name(sim_name)
 {
+    if (windowTitle() != m_sim_name)
+    {
+        setWindowTitle(m_sim_name);
+    }
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     m_ui_lookup.reserve(40);
 }
