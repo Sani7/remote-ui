@@ -56,8 +56,7 @@ void CAN_Interface::processErrors(QCanBusDevice::CanBusError error) const
     case QCanBusDevice::ConnectionError:
     case QCanBusDevice::ConfigurationError:
     case QCanBusDevice::UnknownError:
-        SPDLOG_CRITICAL("CAN Interface: {} {}", qt_getEnumName(error),
-                        m_canDevice->errorString().toStdString());
+        SPDLOG_CRITICAL("CAN Interface: {} {}", qt_getEnumName(error), m_canDevice->errorString().toStdString());
         break;
     default:
         break;
