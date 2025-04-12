@@ -1,0 +1,1 @@
+gtest-devel cmake git ninja qt6-qttools-devel qt6-qtsvg-devel qt6-qtwebsockets-devel qt6-qtserialport-devel libsocketcan qt6-qtserialbus-devel libgpio-devel
