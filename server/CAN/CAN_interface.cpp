@@ -1,6 +1,5 @@
 #include "CAN_interface.hpp"
 #include "spdlog/spdlog.h"
-#include <magic_enum/magic_enum.hpp>
 
 CAN_Interface::CAN_Interface(QObject *parent) : QObject(parent), m_canDevice(nullptr)
 {
@@ -57,7 +56,7 @@ void CAN_Interface::processErrors(QCanBusDevice::CanBusError error) const
     case QCanBusDevice::ConnectionError:
     case QCanBusDevice::ConfigurationError:
     case QCanBusDevice::UnknownError:
-        SPDLOG_CRITICAL("CAN Interface: {} {}", magic_enum::enum_name<QCanBusDevice::CanBusError>(error),
+        SPDLOG_CRITICAL("CAN Interface: {} {}", qt_getEnumName(error),
                         m_canDevice->errorString().toStdString());
         break;
     default:
