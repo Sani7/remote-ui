@@ -32,7 +32,7 @@ void CAN_Interface::connect_to_dev(QString dev)
 
     m_canDevice->connectDevice();
     connect(m_canDevice, &QCanBusDevice::framesReceived, this, [this] {
-        for (const QCanBusFrame &frame : m_canDevice->readAllFrames())
+        for (QCanBusFrame &frame : m_canDevice->readAllFrames())
         {
             emit frame_received(frame);
         }
