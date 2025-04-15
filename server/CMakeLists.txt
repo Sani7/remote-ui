@@ -4,7 +4,7 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus)
+find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus Network)
 
 qt_standard_project_setup()
 qt_add_executable(server)
@@ -35,6 +35,7 @@ endif()
 target_link_libraries(server PRIVATE
     Qt::WebSockets
     Qt::SerialBus
+    Qt::Network
     magic_enum::magic_enum
     spdlog
     UI
