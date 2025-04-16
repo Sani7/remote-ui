@@ -24,4 +24,7 @@ class Test_Sim : public Simulator_base
     UI_led m_led;
     UI_plot m_plot;
     UI_table m_table;
+    UI_spinbox m_spinbox;
+    UI_double_spinbox m_double_spinbox;
+    UI_hex_spinbox m_hex_spinbox;
 };

@@ -48,6 +48,9 @@ class Simulator_base : public QMainWindow
     virtual void process_ui_checkbox(json &ui_item, QWidget* widget);
     virtual void process_ui_button(json &ui_item, QWidget* widget);
     virtual void process_ui_led(json &ui_item, QWidget* widget);
+    virtual void process_ui_spinbox(json &ui_item, QWidget* widget);
+    virtual void process_ui_double_spinbox(json &ui_item, QWidget* widget);
+    virtual void process_ui_hex_spinbox(json &ui_item, QWidget* widget);
     virtual void process_ui_plot(json &ui_item, QWidget* widget);
     virtual void process_ui_table(json &ui_item, QWidget* widget);
     virtual void process_ui_can(json &ui_item, QWidget* widget);
@@ -58,6 +61,9 @@ class Simulator_base : public QMainWindow
     void setup_checkbox(QWidget *item, size_t index);
     void setup_dial(QWidget *item, size_t index);
     void setup_slider(QWidget *item, size_t index);
+    void setup_spinbox(QWidget *item, size_t index);
+    void setup_double_spinbox(QWidget *item, size_t index);
+    void setup_hex_spinbox(QWidget *item, size_t index);
     void setup_qwtplot(QWidget *item, size_t index);
     void setup_can_ui(QWidget *item, size_t index);
 

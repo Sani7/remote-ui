@@ -18,6 +18,9 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     PUSH_UI_ITEM(checkBox);
     PUSH_UI_ITEM(plot);
     PUSH_UI_ITEM(table);
+    PUSH_UI_ITEM(spinBox);
+    PUSH_UI_ITEM(doubleSpinBox);
+    PUSH_UI_ITEM(hexSpinBox);
 }
 
 Test_Sim::~Test_Sim()

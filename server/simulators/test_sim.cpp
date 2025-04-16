@@ -7,7 +7,8 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
       m_label("Label", Color::White, Color::Black), m_checkbox("Option 1", Color::Default, Color::Default),
       m_slider("Slider", Color::White, Color::Black, 0, 100, 0), m_dial("Dial", Color::White, Color::Black, 0, 100, 0),
       m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red),
-      m_table(4, 4, {"Row 1", "Row 2", "Row 3", "Row 4"}, {"Column 1", "Column 2", "Column 3", "Column 4"})
+      m_table(4, 4, {"Row 1", "Row 2", "Row 3", "Row 4"}, {"Column 1", "Column 2", "Column 3", "Column 4"}),
+      m_spinbox(0, 255, 0), m_double_spinbox(0, 255, 0), m_hex_spinbox(0, 255, 0)
 {
     m_thermo.set_start_color(Color::Red);
     m_thermo.set_end_color(Color::Red);
@@ -26,6 +27,9 @@ Test_Sim::Test_Sim(CAN_Wrapper *can_wrapper, QSerialPort *serial, QObject *paren
     PUSH_UI_ITEM(m_checkbox);
     PUSH_UI_ITEM(m_plot);
     PUSH_UI_ITEM(m_table);
+    PUSH_UI_ITEM(m_spinbox);
+    PUSH_UI_ITEM(m_double_spinbox);
+    PUSH_UI_ITEM(m_hex_spinbox);
 
     for (size_t i = 0; i < m_table.capacity(); i++)
     {
@@ -76,6 +80,9 @@ void Test_Sim::slider_changed(UI_slider *id, double value)
         m_dial.set_value(value);
         m_thermo.set_value(value);
         m_plot.add_value(value);
+        m_spinbox.set_value(value);
+        m_double_spinbox.set_value(value);
+        m_hex_spinbox.set_value(value);
         return;
     }
 }

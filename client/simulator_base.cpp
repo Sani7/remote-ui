@@ -147,6 +147,21 @@ void Simulator_base::UI_item_parser(json &input)
             process_ui_checkbox(ui_item, widget);
             continue;
         }
+        if (ui_item["type"] == "ui_spinbox")
+        {
+            process_ui_spinbox(ui_item, widget);
+            continue;
+        }
+        if (ui_item["type"] == "ui_double_spinbox")
+        {
+            process_ui_double_spinbox(ui_item, widget);
+            continue;
+        }
+        if (ui_item["type"] == "ui_hex_spinbox")
+        {
+            process_ui_hex_spinbox(ui_item, widget);
+            continue;
+        }
         if (ui_item["type"] == "ui_plot")
         {
             process_ui_plot(ui_item, widget);
@@ -480,6 +495,87 @@ void Simulator_base::process_ui_led(json &ui_item, QWidget* widget)
     }
 }
 
+void Simulator_base::process_ui_spinbox(json &ui_item, QWidget* widget)
+{
+    auto spinbox = qobject_cast<QSpinBox *>(widget);
+    if (spinbox == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QSpinBox");
+        return;
+    }
+
+    double min = ui_item["min"];
+    double max = ui_item["max"];
+    double value = ui_item["value"];
+
+    if (min != spinbox->minimum())
+    {
+        spinbox->setMinimum(min);
+    }
+    if (max != spinbox->maximum())
+    {
+        spinbox->setMaximum(max);
+    }
+    if (value != spinbox->value())
+    {
+        spinbox->setValue((int)value);
+    }
+}
+
+void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget* widget)
+{
+    auto spinbox = qobject_cast<QDoubleSpinBox *>(widget);
+    if (spinbox == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QDoubleSpinBox");
+        return;
+    }
+
+    double min = ui_item["min"];
+    double max = ui_item["max"];
+    double value = ui_item["value"];
+
+    if (min != spinbox->minimum())
+    {
+        spinbox->setMinimum(min);
+    }
+    if (max != spinbox->maximum())
+    {
+        spinbox->setMaximum(max);
+    }
+    if (value != spinbox->value())
+    {
+        spinbox->setValue(value);
+    }
+}
+
+void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget* widget)
+{
+    auto spinbox = qobject_cast<HexSpinBox *>(widget);
+    if (spinbox == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type HexSpinBox");
+        return;
+    }
+
+    double min = ui_item["min"];
+    double max = ui_item["max"];
+    double value = ui_item["value"];
+
+    if (min != spinbox->minimum())
+    {
+        spinbox->setMinimum(min);
+    }
+    if (max != spinbox->maximum())
+    {
+        spinbox->setMaximum(max);
+    }
+    if (value != spinbox->value())
+    {
+        spinbox->setValue((int)value);
+    }
+}
+
 void Simulator_base::process_ui_plot(json &ui_item, QWidget* widget)
 {
     auto plot = qobject_cast<Plot_wrapper *>(widget);
@@ -614,6 +710,9 @@ void Simulator_base::setup_ui_item(QWidget *item, size_t index)
     setup_checkbox(item, index);
     setup_dial(item, index);
     setup_slider(item, index);
+    setup_spinbox(item, index);
+    setup_double_spinbox(item, index);
+    setup_hex_spinbox(item, index);
     setup_qwtplot(item, index);
     setup_can_ui(item, index);
 }
@@ -665,6 +764,36 @@ void Simulator_base::setup_slider(QWidget *item, size_t index)
 
     connect(slider, &QwtSlider::sliderMoved, this,
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
+}
+
+void Simulator_base::setup_spinbox(QWidget *item, size_t index)
+{
+    QSpinBox *spinbox = qobject_cast<QSpinBox *>(item);
+    if (spinbox == nullptr)
+        return;
+
+    connect(spinbox, &QSpinBox::valueChanged, this,
+            [=, this](int value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value); });
+}
+
+void Simulator_base::setup_double_spinbox(QWidget *item, size_t index)
+{
+    QDoubleSpinBox *spinbox = qobject_cast<QDoubleSpinBox *>(item);
+    if (spinbox == nullptr)
+        return;
+
+    connect(spinbox, &QDoubleSpinBox::valueChanged, this,
+            [=, this](double value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, value); });
+}
+
+void Simulator_base::setup_hex_spinbox(QWidget *item, size_t index)
+{
+    HexSpinBox *spinbox = qobject_cast<HexSpinBox *>(item);
+    if (spinbox == nullptr)
+        return;
+
+    connect(spinbox, &HexSpinBox::valueChanged, this,
+            [=, this](int value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value); });
 }
 
 void Simulator_base::setup_qwtplot(QWidget *item, size_t index)
