@@ -4,7 +4,7 @@ TEST(UI_label, to_from_json)
 {
     UI_label label("label_text", Color(0, 0, 0), Color(255, 255, 255));
     json j = label.to_json(0);
-    EXPECT_EQ(j["type"], "UI_label");
+    EXPECT_EQ(j["type"], "ui_label");
     EXPECT_EQ(j["id"], 0);
     EXPECT_EQ(j["text"], "label_text");
     EXPECT_EQ(j["text_size"], 12);

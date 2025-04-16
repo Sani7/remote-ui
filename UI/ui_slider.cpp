@@ -1,4 +1,4 @@
-#include "UI_slider.hpp"
+#include "ui_slider.hpp"
 
 UI_slider::UI_slider(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parent)

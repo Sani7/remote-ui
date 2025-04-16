@@ -1,8 +1,8 @@
 #ifndef UI_PLOT_H
 #define UI_PLOT_H
 
-#include "UI_item.hpp"
-#define UI_PLOT_TYPE std::string("UI_plot")
+#include "ui_item.hpp"
+#define UI_PLOT_TYPE std::string("ui_plot")
 
 class UI_plot : public UI_item
 {

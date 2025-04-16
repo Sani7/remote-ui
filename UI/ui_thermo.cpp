@@ -1,4 +1,4 @@
-#include "UI_thermo.hpp"
+#include "ui_thermo.hpp"
 
 UI_thermo::UI_thermo(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                      double value, QObject *parent)

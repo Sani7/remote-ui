@@ -1,8 +1,8 @@
 #pragma once
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 #include <string>
 
-#define UI_LABEL_TYPE std::string("UI_label")
+#define UI_LABEL_TYPE std::string("ui_label")
 
 class UI_label : public UI_item
 {

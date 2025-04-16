@@ -1,7 +1,7 @@
 #pragma once
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 
-#define UI_THERMO_TYPE std::string("UI_thermo")
+#define UI_THERMO_TYPE std::string("ui_thermo")
 
 // TODO: Add color scale
 class UI_thermo : public UI_item

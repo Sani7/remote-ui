@@ -1,4 +1,4 @@
-#include "UI_button.hpp"
+#include "ui_button.hpp"
 
 UI_button::UI_button(std::string text, Color fg_color, Color bg_color, QObject *parent)
     : UI_item(UI_BUTTON_TYPE, text, 12, fg_color, bg_color, parent)

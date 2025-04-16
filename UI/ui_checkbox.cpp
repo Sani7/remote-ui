@@ -1,4 +1,4 @@
-#include "UI_checkbox.hpp"
+#include "ui_checkbox.hpp"
 
 UI_checkbox::UI_checkbox(QObject *parent) : UI_item(UI_CHECKBOX_TYPE, parent), m_checked()
 {

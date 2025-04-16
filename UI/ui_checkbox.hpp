@@ -1,8 +1,8 @@
 #pragma once
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 #include <cstdint>
 
-#define UI_CHECKBOX_TYPE std::string("UI_checkbox")
+#define UI_CHECKBOX_TYPE std::string("ui_checkbox")
 
 class UI_checkbox : public UI_item
 {

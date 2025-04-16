@@ -1,8 +1,8 @@
 #pragma once
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 #include <string>
 
-#define UI_TEXTBOX_TYPE std::string("UI_textbox")
+#define UI_TEXTBOX_TYPE std::string("ui_textbox")
 
 class UI_textbox : public UI_item
 {

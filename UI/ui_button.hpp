@@ -1,8 +1,8 @@
 #pragma once
 
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 
-#define UI_BUTTON_TYPE std::string("UI_button")
+#define UI_BUTTON_TYPE std::string("ui_button")
 
 class UI_button : public UI_item
 {

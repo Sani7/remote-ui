@@ -1,4 +1,4 @@
-#include "UI_label.hpp"
+#include "ui_label.hpp"
 
 UI_label::UI_label(std::string text, Color fg_color, Color bg_color, QObject *parent)
     : UI_item(UI_LABEL_TYPE, text, 12, fg_color, bg_color, parent)

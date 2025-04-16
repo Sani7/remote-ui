@@ -1,4 +1,4 @@
-#include "UI_table.hpp"
+#include "ui_table.hpp"
 
 UI_table::UI_table(QObject *parent) : UI_item(UI_TABLE_TYPE, parent), m_row_count(0), m_column_count(0)
 {

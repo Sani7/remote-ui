@@ -1,8 +1,8 @@
 #ifndef UI_TABLE_HPP
 #define UI_TABLE_HPP
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 
-#define UI_TABLE_TYPE std::string("UI_table")
+#define UI_TABLE_TYPE std::string("ui_table")
 
 class UI_table : public UI_item
 {

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 #include <QCanBusFrame>
 
-#define UI_CAN_TYPE std::string("UI_can")
+#define UI_CAN_TYPE std::string("ui_can")
 
 class CanFrame
 {

@@ -1,4 +1,4 @@
-#include "UI_x_boxes.hpp"
+#include "ui_x_boxes.hpp"
 
 UI_x_boxes::UI_x_boxes(std::string type, QObject *parent) : UI_item(type, parent), m_options()
 {

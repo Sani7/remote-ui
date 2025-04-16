@@ -1,4 +1,4 @@
-#include "UI_combobox.hpp"
+#include "ui_combobox.hpp"
 
 UI_combobox::UI_combobox(QObject *parent) : UI_x_boxes(UI_COMBOBOX_TYPE, parent)
 {

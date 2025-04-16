@@ -1,7 +1,7 @@
 #pragma once
-#include "UI_item.hpp"
+#include "ui_item.hpp"
 
-#define UI_DIAL_TYPE std::string("UI_dial")
+#define UI_DIAL_TYPE std::string("ui_dial")
 
 class UI_dial : public UI_item
 {

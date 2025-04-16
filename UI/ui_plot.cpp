@@ -1,4 +1,4 @@
-#include "UI_plot.hpp"
+#include "ui_plot.hpp"
 
 UI_plot::UI_plot(QObject *parent) : UI_item{UI_PLOT_TYPE, parent}
 {

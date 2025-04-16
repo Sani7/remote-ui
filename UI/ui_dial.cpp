@@ -1,4 +1,4 @@
-#include "UI_dial.hpp"
+#include "ui_dial.hpp"
 
 UI_dial::UI_dial(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
                  double value, QObject *parent)

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "UI_item.hpp"
-#include "UI_x_boxes.hpp"
+#include "ui_item.hpp"
+#include "ui_x_boxes.hpp"
 #include <functional>
 
-#define UI_COMBOBOX_TYPE std::string("UI_combobox")
+#define UI_COMBOBOX_TYPE std::string("ui_combobox")
 
 class UI_combobox : public UI_x_boxes
 {

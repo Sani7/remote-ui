@@ -97,67 +97,67 @@ void Simulator_base::UI_item_parser(json &input)
             return;
         }
 
-        if (ui_item["type"] == "UI_button")
+        if (ui_item["type"] == "ui_button")
         {
             process_ui_button(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_led")
+        if (ui_item["type"] == "ui_led")
         {
             process_ui_led(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_slider")
+        if (ui_item["type"] == "ui_slider")
         {
             process_ui_slider(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_dial")
+        if (ui_item["type"] == "ui_dial")
         {
             process_ui_dial(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_thermo")
+        if (ui_item["type"] == "ui_thermo")
         {
             process_ui_thermo(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_textbox")
+        if (ui_item["type"] == "ui_textbox")
         {
             process_ui_textbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_label")
+        if (ui_item["type"] == "ui_label")
         {
             process_ui_label(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_combobox")
+        if (ui_item["type"] == "ui_combobox")
         {
             process_ui_combobox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_RadioButton")
+        if (ui_item["type"] == "ui_RadioButton")
         {
             process_ui_radiobutton(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_checkbox")
+        if (ui_item["type"] == "ui_checkbox")
         {
             process_ui_checkbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_plot")
+        if (ui_item["type"] == "ui_plot")
         {
             process_ui_plot(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_table")
+        if (ui_item["type"] == "ui_table")
         {
             process_ui_table(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "UI_can")
+        if (ui_item["type"] == "ui_can")
         {
             process_ui_can(ui_item, widget);
             continue;
