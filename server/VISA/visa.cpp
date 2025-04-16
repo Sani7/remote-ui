@@ -1,7 +1,8 @@
 #include "visa.hpp"
 #include <QCoreApplication>
 
-Visa::Visa(QObject *parent) : QObject(parent), m_connected(false), m_reconnect(false), m_data_ready(false)
+Visa::Visa(QObject *parent)
+    : QObject(parent), m_tcp_socket(new QTcpSocket(this)), m_connected(false), m_reconnect(false), m_data_ready(false)
 {
     QObject::connect(&m_client, &Tcp_client::connected, this, [=, this] {
         m_connected = true;
