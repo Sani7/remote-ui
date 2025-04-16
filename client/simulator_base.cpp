@@ -90,83 +90,83 @@ void Simulator_base::UI_item_parser(json &input)
 {
     for (auto &ui_item : input["UI_items"])
     {
+        auto widget = id_to_ui(ui_item["id"]);
+        if (widget == nullptr)
+        {
+            SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
+            return;
+        }
+
         if (ui_item["type"] == "UI_button")
         {
-            process_ui_button(ui_item);
+            process_ui_button(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_led")
         {
-            process_ui_led(ui_item);
+            process_ui_led(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_slider")
         {
-            process_ui_slider(ui_item);
+            process_ui_slider(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_dial")
         {
-            process_ui_dial(ui_item);
+            process_ui_dial(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_thermo")
         {
-            process_ui_thermo(ui_item);
+            process_ui_thermo(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_textbox")
         {
-            process_ui_textbox(ui_item);
+            process_ui_textbox(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_label")
         {
-            process_ui_label(ui_item);
+            process_ui_label(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_combobox")
         {
-            process_ui_combobox(ui_item);
+            process_ui_combobox(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_RadioButton")
         {
-            process_ui_radiobutton(ui_item);
+            process_ui_radiobutton(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_checkbox")
         {
-            process_ui_checkbox(ui_item);
+            process_ui_checkbox(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_plot")
         {
-            process_ui_plot(ui_item);
+            process_ui_plot(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_table")
         {
-            process_ui_table(ui_item);
+            process_ui_table(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "UI_can")
         {
-            process_ui_can(ui_item);
+            process_ui_can(ui_item, widget);
             continue;
         }
     }
 }
 
-void Simulator_base::process_ui_label(json &ui_item)
+void Simulator_base::process_ui_label(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto label = qobject_cast<QLabel *>(widget);
     if (label == nullptr)
     {
@@ -182,15 +182,9 @@ void Simulator_base::process_ui_label(json &ui_item)
     }
 }
 
-void Simulator_base::process_ui_slider(json &ui_item)
+void Simulator_base::process_ui_slider(json &ui_item, QWidget* widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
 
     auto slider = qobject_cast<QwtSlider *>(widget);
     if (slider == nullptr)
@@ -227,15 +221,9 @@ void Simulator_base::process_ui_slider(json &ui_item)
     return;
 }
 
-void Simulator_base::process_ui_dial(json &ui_item)
+void Simulator_base::process_ui_dial(json &ui_item, QWidget* widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
 
     auto dial = qobject_cast<QwtDial *>(widget);
     if (dial == nullptr)
@@ -265,15 +253,9 @@ void Simulator_base::process_ui_dial(json &ui_item)
     return;
 }
 
-void Simulator_base::process_ui_thermo(json &ui_item)
+void Simulator_base::process_ui_thermo(json &ui_item, QWidget* widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
 
     auto thermo = qobject_cast<QwtThermo *>(widget);
     if (thermo == nullptr)
@@ -303,20 +285,13 @@ void Simulator_base::process_ui_thermo(json &ui_item)
     return;
 }
 
-void Simulator_base::process_ui_textbox(json &ui_item)
+void Simulator_base::process_ui_textbox(json &ui_item, QWidget* widget)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void Simulator_base::process_ui_combobox(json &ui_item)
+void Simulator_base::process_ui_combobox(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto combobox = qobject_cast<QComboBox *>(widget);
     if (combobox == nullptr)
     {
@@ -338,20 +313,13 @@ void Simulator_base::process_ui_combobox(json &ui_item)
     }
 }
 
-void Simulator_base::process_ui_radiobutton(json &ui_item)
+void Simulator_base::process_ui_radiobutton(json &ui_item, QWidget* widget)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void Simulator_base::process_ui_checkbox(json &ui_item)
+void Simulator_base::process_ui_checkbox(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto checkbox = qobject_cast<QCheckBox *>(widget);
     if (checkbox == nullptr)
     {
@@ -410,16 +378,8 @@ void Simulator_base::process_ui_checkbox(json &ui_item)
     }
 }
 
-void Simulator_base::process_ui_button(json &ui_item)
+void Simulator_base::process_ui_button(json &ui_item, QWidget* widget)
 {
-    // TODO: fix bgcolor and color
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto button = qobject_cast<QPushButton *>(widget);
     if (button == nullptr)
     {
@@ -472,15 +432,8 @@ void Simulator_base::process_ui_button(json &ui_item)
     }
 }
 
-void Simulator_base::process_ui_led(json &ui_item)
+void Simulator_base::process_ui_led(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto led = qobject_cast<Led *>(widget);
     if (led == nullptr)
     {
@@ -527,15 +480,8 @@ void Simulator_base::process_ui_led(json &ui_item)
     }
 }
 
-void Simulator_base::process_ui_plot(json &ui_item)
+void Simulator_base::process_ui_plot(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto plot = qobject_cast<Plot_wrapper *>(widget);
     if (plot == nullptr)
     {
@@ -583,15 +529,8 @@ void Simulator_base::process_ui_plot(json &ui_item)
     plot->replot();
 }
 
-void Simulator_base::process_ui_table(json &ui_item)
+void Simulator_base::process_ui_table(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto table = qobject_cast<QTableWidget *>(widget);
     if (table == nullptr)
     {
@@ -647,15 +586,8 @@ void Simulator_base::process_ui_table(json &ui_item)
     // table->
 }
 
-void Simulator_base::process_ui_can(json &ui_item)
+void Simulator_base::process_ui_can(json &ui_item, QWidget* widget)
 {
-    auto widget = id_to_ui(ui_item["id"]);
-    if (widget == nullptr)
-    {
-        SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
-        return;
-    }
-
     auto can_ui = qobject_cast<Can_Transceive *>(widget);
     if (can_ui == nullptr)
     {
