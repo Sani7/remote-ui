@@ -38,22 +38,22 @@ class Simulator_base : public QMainWindow
     void push_ui_item(QWidget *item);
 
     void UI_item_parser(json &input);
-    virtual void process_ui_label(json &ui_item, QWidget* widget);
-    virtual void process_ui_slider(json &ui_item, QWidget* widget);
-    virtual void process_ui_dial(json &ui_item, QWidget* widget);
-    virtual void process_ui_thermo(json &ui_item, QWidget* widget);
-    virtual void process_ui_textbox(json &ui_item, QWidget* widget);
-    virtual void process_ui_combobox(json &ui_item, QWidget* widget);
-    virtual void process_ui_radiobutton(json &ui_item, QWidget* widget);
-    virtual void process_ui_checkbox(json &ui_item, QWidget* widget);
-    virtual void process_ui_button(json &ui_item, QWidget* widget);
-    virtual void process_ui_led(json &ui_item, QWidget* widget);
-    virtual void process_ui_spinbox(json &ui_item, QWidget* widget);
-    virtual void process_ui_double_spinbox(json &ui_item, QWidget* widget);
-    virtual void process_ui_hex_spinbox(json &ui_item, QWidget* widget);
-    virtual void process_ui_plot(json &ui_item, QWidget* widget);
-    virtual void process_ui_table(json &ui_item, QWidget* widget);
-    virtual void process_ui_can(json &ui_item, QWidget* widget);
+    virtual void process_ui_label(json &ui_item, QWidget *widget);
+    virtual void process_ui_slider(json &ui_item, QWidget *widget);
+    virtual void process_ui_dial(json &ui_item, QWidget *widget);
+    virtual void process_ui_thermo(json &ui_item, QWidget *widget);
+    virtual void process_ui_textbox(json &ui_item, QWidget *widget);
+    virtual void process_ui_combobox(json &ui_item, QWidget *widget);
+    virtual void process_ui_radiobutton(json &ui_item, QWidget *widget);
+    virtual void process_ui_checkbox(json &ui_item, QWidget *widget);
+    virtual void process_ui_button(json &ui_item, QWidget *widget);
+    virtual void process_ui_led(json &ui_item, QWidget *widget);
+    virtual void process_ui_spinbox(json &ui_item, QWidget *widget);
+    virtual void process_ui_double_spinbox(json &ui_item, QWidget *widget);
+    virtual void process_ui_hex_spinbox(json &ui_item, QWidget *widget);
+    virtual void process_ui_plot(json &ui_item, QWidget *widget);
+    virtual void process_ui_table(json &ui_item, QWidget *widget);
+    virtual void process_ui_can(json &ui_item, QWidget *widget);
 
     void setup_ui_item(QWidget *item, size_t index);
     void setup_button(QWidget *item, size_t index);

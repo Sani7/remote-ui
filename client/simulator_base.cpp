@@ -180,7 +180,7 @@ void Simulator_base::UI_item_parser(json &input)
     }
 }
 
-void Simulator_base::process_ui_label(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_label(json &ui_item, QWidget *widget)
 {
     auto label = qobject_cast<QLabel *>(widget);
     if (label == nullptr)
@@ -197,7 +197,7 @@ void Simulator_base::process_ui_label(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_slider(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
 
@@ -236,7 +236,7 @@ void Simulator_base::process_ui_slider(json &ui_item, QWidget* widget)
     return;
 }
 
-void Simulator_base::process_ui_dial(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
 
@@ -268,7 +268,7 @@ void Simulator_base::process_ui_dial(json &ui_item, QWidget* widget)
     return;
 }
 
-void Simulator_base::process_ui_thermo(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_thermo(json &ui_item, QWidget *widget)
 {
     QLabel *label = id_to_label(ui_item["id"]);
 
@@ -300,12 +300,12 @@ void Simulator_base::process_ui_thermo(json &ui_item, QWidget* widget)
     return;
 }
 
-void Simulator_base::process_ui_textbox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_textbox(json &ui_item, QWidget *widget)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void Simulator_base::process_ui_combobox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_combobox(json &ui_item, QWidget *widget)
 {
     auto combobox = qobject_cast<QComboBox *>(widget);
     if (combobox == nullptr)
@@ -328,12 +328,12 @@ void Simulator_base::process_ui_combobox(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_radiobutton(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_radiobutton(json &ui_item, QWidget *widget)
 {
     SPDLOG_CRITICAL("Not implemented");
 }
 
-void Simulator_base::process_ui_checkbox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_checkbox(json &ui_item, QWidget *widget)
 {
     auto checkbox = qobject_cast<QCheckBox *>(widget);
     if (checkbox == nullptr)
@@ -393,7 +393,7 @@ void Simulator_base::process_ui_checkbox(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_button(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_button(json &ui_item, QWidget *widget)
 {
     auto button = qobject_cast<QPushButton *>(widget);
     if (button == nullptr)
@@ -447,7 +447,7 @@ void Simulator_base::process_ui_button(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_led(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_led(json &ui_item, QWidget *widget)
 {
     auto led = qobject_cast<Led *>(widget);
     if (led == nullptr)
@@ -495,7 +495,7 @@ void Simulator_base::process_ui_led(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_spinbox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_spinbox(json &ui_item, QWidget *widget)
 {
     auto spinbox = qobject_cast<QSpinBox *>(widget);
     if (spinbox == nullptr)
@@ -522,7 +522,7 @@ void Simulator_base::process_ui_spinbox(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
 {
     auto spinbox = qobject_cast<QDoubleSpinBox *>(widget);
     if (spinbox == nullptr)
@@ -549,7 +549,7 @@ void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
 {
     auto spinbox = qobject_cast<HexSpinBox *>(widget);
     if (spinbox == nullptr)
@@ -576,7 +576,7 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget* widget)
     }
 }
 
-void Simulator_base::process_ui_plot(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)
 {
     auto plot = qobject_cast<Plot_wrapper *>(widget);
     if (plot == nullptr)
@@ -625,7 +625,7 @@ void Simulator_base::process_ui_plot(json &ui_item, QWidget* widget)
     plot->replot();
 }
 
-void Simulator_base::process_ui_table(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_table(json &ui_item, QWidget *widget)
 {
     auto table = qobject_cast<QTableWidget *>(widget);
     if (table == nullptr)
@@ -682,7 +682,7 @@ void Simulator_base::process_ui_table(json &ui_item, QWidget* widget)
     // table->
 }
 
-void Simulator_base::process_ui_can(json &ui_item, QWidget* widget)
+void Simulator_base::process_ui_can(json &ui_item, QWidget *widget)
 {
     auto can_ui = qobject_cast<Can_Transceive *>(widget);
     if (can_ui == nullptr)
@@ -772,8 +772,9 @@ void Simulator_base::setup_spinbox(QWidget *item, size_t index)
     if (spinbox == nullptr)
         return;
 
-    connect(spinbox, &QSpinBox::valueChanged, this,
-            [=, this](int value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value); });
+    connect(spinbox, &QSpinBox::valueChanged, this, [=, this](int value) {
+        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value);
+    });
 }
 
 void Simulator_base::setup_double_spinbox(QWidget *item, size_t index)
@@ -782,8 +783,9 @@ void Simulator_base::setup_double_spinbox(QWidget *item, size_t index)
     if (spinbox == nullptr)
         return;
 
-    connect(spinbox, &QDoubleSpinBox::valueChanged, this,
-            [=, this](double value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, value); });
+    connect(spinbox, &QDoubleSpinBox::valueChanged, this, [=, this](double value) {
+        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, value);
+    });
 }
 
 void Simulator_base::setup_hex_spinbox(QWidget *item, size_t index)
@@ -792,8 +794,9 @@ void Simulator_base::setup_hex_spinbox(QWidget *item, size_t index)
     if (spinbox == nullptr)
         return;
 
-    connect(spinbox, &HexSpinBox::valueChanged, this,
-            [=, this](int value) { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value); });
+    connect(spinbox, &HexSpinBox::valueChanged, this, [=, this](int value) {
+        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value);
+    });
 }
 
 void Simulator_base::setup_qwtplot(QWidget *item, size_t index)

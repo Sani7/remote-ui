@@ -5,11 +5,12 @@
 
 #define UI_SPINBOX_TYPE std::string("ui_spinbox")
 
-class UI_spinbox : public UI_item {
+class UI_spinbox : public UI_item
+{
     Q_OBJECT
   public:
-    explicit UI_spinbox(QObject* parent = nullptr);
-    UI_spinbox(double min, double max, double value, QObject* parent = nullptr);
+    explicit UI_spinbox(QObject *parent = nullptr);
+    UI_spinbox(double min, double max, double value, QObject *parent = nullptr);
 
     void set_value(double value) override;
     double value() const;

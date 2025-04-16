@@ -1,9 +1,11 @@
 #include "ui_hex_spinbox.hpp"
 
-UI_hex_spinbox::UI_hex_spinbox(QObject* parent) : UI_item(UI_HEX_SPINBOX_TYPE, parent) {
+UI_hex_spinbox::UI_hex_spinbox(QObject *parent) : UI_item(UI_HEX_SPINBOX_TYPE, parent)
+{
 }
 
-UI_hex_spinbox::UI_hex_spinbox(double min, double max, double value, QObject* parent) : UI_item(UI_HEX_SPINBOX_TYPE, parent)
+UI_hex_spinbox::UI_hex_spinbox(double min, double max, double value, QObject *parent)
+    : UI_item(UI_HEX_SPINBOX_TYPE, parent)
 {
     m_min = min;
     m_max = max;

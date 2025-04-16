@@ -2,6 +2,7 @@
 
 #include "UI.hpp"
 #include "spdlog/spdlog.h"
+#include "ui.hpp"
 #include <QSerialPort>
 #include <QTimer>
 
