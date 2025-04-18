@@ -4,6 +4,7 @@
 #include "spdlog/spdlog.h"
 #include "ui.hpp"
 #include <QSerialPort>
+#include <QThread>
 #include <QTimer>
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
