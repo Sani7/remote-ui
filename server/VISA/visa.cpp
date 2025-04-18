@@ -17,9 +17,10 @@ Visa::Visa(QObject *parent)
             m_reconnect = false;
         }
     });
-    QObject::connect(&m_client, &Tcp_client::data_ready, this, [=, this](QString data) {
-        m_data = data;
+    QObject::connect(m_tcp_socket, &QTcpSocket::readyRead, this, [=, this] {
+        m_data = QString::fromUtf8(m_tcp_socket->read(1024));
         m_data_ready = true;
+        emit s_data_ready(m_data);
     });
 }
 Visa::~Visa()
@@ -53,7 +54,9 @@ bool Visa::connected() const
 
 void Visa::send(QString data)
 {
-    m_client.tcp_send(data);
+    data.append('\n');
+    m_tcp_socket->write(data.toUtf8());
+    m_tcp_socket->waitForBytesWritten();
 }
 
 QString Visa::querry(QString data)

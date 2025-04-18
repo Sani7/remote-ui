@@ -21,6 +21,7 @@ class Visa : public QObject
   signals:
     void s_disconnected();
     void s_connected();
+    void s_data_ready(QString data);
 
   private:
     Tcp_client m_client;
