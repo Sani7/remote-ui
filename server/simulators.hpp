@@ -9,7 +9,7 @@
 #include "websocket.hpp"
 
 #define INSERT_SIMULATOR(type)                                                                                         \
-    m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>(m_can_wrapper, m_serial, this)));
+    m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>(&m_com, this)));
 
 class Simulators : public QObject
 {
@@ -59,6 +59,7 @@ class Simulators : public QObject
     Websocket *m_server;
     CAN_Wrapper *m_can_wrapper;
     QSerialPort *m_serial;
+    Communication m_com;
     std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
     std::string m_current_simulator = "";
     std::mutex m_mutex;

@@ -7,6 +7,15 @@
 #include <QTimer>
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
+struct Communication
+{
+    CAN_Wrapper* c_if1 = nullptr;
+    CAN_Wrapper* c_if2 = nullptr;
+    QSerialPort* s_if1 = nullptr;
+    QSerialPort* s_if2 = nullptr;
+    QSerialPort* s_if3 = nullptr;
+    QSerialPort* s_if4 = nullptr;
+};
 
 class Simulator_base : public QObject
 {
@@ -18,7 +27,7 @@ class Simulator_base : public QObject
      * @param name The name of the simulator
      * @param interval The interval of the timer (default is 100ms)
      */
-    Simulator_base(std::string name, CAN_Wrapper *can_wrapper = nullptr, QSerialPort *serial = nullptr,
+    Simulator_base(std::string name, Communication* comms,
                    std::chrono::milliseconds interval = std::chrono::milliseconds(100), QObject *parent = nullptr);
 
     /**
@@ -108,6 +117,5 @@ class Simulator_base : public QObject
     std::vector<UI_item *> m_UI_items;
     QTimer *m_timer;
     std::chrono::milliseconds m_interval;
-    CAN_Wrapper *m_can_wrapper;
-    QSerialPort *m_serial;
+    Communication* m_com;
 };

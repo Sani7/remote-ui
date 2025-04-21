@@ -28,6 +28,8 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
             SPDLOG_CRITICAL("Error {}", m_serial->errorString().toStdString());
         }
     }
+    m_com.c_if1 = m_can_wrapper;
+    m_com.s_if1 = m_serial;
 
     INSERT_SIMULATOR(Test_Sim);
     INSERT_SIMULATOR(Can_Debugger);
