@@ -1,6 +1,6 @@
 #include "test_sim.hpp"
 
-Test_Sim::Test_Sim(Communication* com, QObject *parent)
+Test_Sim::Test_Sim(Communication *com, QObject *parent)
     : Simulator_base("Test Sim", com, std::chrono::milliseconds(1000), parent),
       m_button("Off", Color::White, Color::Red),
       m_combobox(Color::White, Color::Black, {"Option 1", "Option 2", "Option 3"}, 0),

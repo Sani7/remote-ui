@@ -5,7 +5,7 @@ class Test_Sim : public Simulator_base
 {
     Q_OBJECT
   public:
-    explicit Test_Sim(Communication* comms = nullptr, QObject *parent = nullptr);
+    explicit Test_Sim(Communication *comms = nullptr, QObject *parent = nullptr);
     void timer() override;
     void run_at_startup() override;
 

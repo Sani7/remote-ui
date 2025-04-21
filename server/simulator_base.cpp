@@ -1,7 +1,7 @@
 #include "simulator_base.hpp"
 
-Simulator_base::Simulator_base(std::string name, Communication* com,
-                               std::chrono::milliseconds interval, QObject *parent)
+Simulator_base::Simulator_base(std::string name, Communication *com, std::chrono::milliseconds interval,
+                               QObject *parent)
     : QObject(parent), m_name(name), m_timer(new QTimer(this)), m_interval(interval), m_com(com)
 {
     connect(m_timer, &QTimer::timeout, this, [this] { timer(); });

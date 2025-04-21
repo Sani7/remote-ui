@@ -8,8 +8,7 @@
 #include "simulator_base.hpp"
 #include "websocket.hpp"
 
-#define INSERT_SIMULATOR(type)                                                                                         \
-    m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>(&m_com, this)));
+#define INSERT_SIMULATOR(type) m_simulators.insert(std::make_pair(type().name(), std::make_unique<type>(&m_com, this)));
 
 class Simulators : public QObject
 {
