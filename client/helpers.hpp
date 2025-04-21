@@ -1,7 +1,6 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#include <QNetworkReply>
 #include <QtWidgets>
 #include <qwt_color_map.h>
 #include <qwt_dial.h>
@@ -19,6 +18,5 @@ void set_widget_color(QWidget *widget, QString color, QString bg);
 QColor widget_bg_color(QWidget *widget);
 QColor widget_color(QWidget *widget);
 void reset_widget_color(QWidget *widget);
-QString network_reply_to_fix(QNetworkReply::NetworkError error);
 
 #endif // HELPERS_H

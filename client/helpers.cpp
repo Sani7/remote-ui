@@ -68,22 +68,3 @@ void reset_widget_color(QWidget *widget)
 {
     widget->setStyleSheet("");
 }
-
-QString network_reply_to_fix(QNetworkReply::NetworkError error)
-{
-    switch (error)
-    {
-    case QNetworkReply::NetworkError::ConnectionRefusedError:
-        return "Make sure the server is started ($ systemctl status unocan_server)";
-        break;
-    case QNetworkReply::NetworkError::HostNotFoundError:
-        return "Make sure the simulator is turned on";
-        break;
-    case QNetworkReply::NetworkError::InternalServerError:
-        return "Server had an oopsie, restart the client and if it fails again restart the server";
-        break;
-    default:
-        return "";
-        break;
-    }
-}
