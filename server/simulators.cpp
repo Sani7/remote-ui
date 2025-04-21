@@ -1,7 +1,4 @@
 #include "simulators.hpp"
-#include "can_debugger.hpp"
-#include "cvs_i10.hpp"
-#include "test_sim.hpp"
 #include <unordered_set>
 
 Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
@@ -31,8 +28,8 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
     m_com.c_if1 = m_can_wrapper;
     m_com.s_if1 = m_serial;
 
-    INSERT_SIMULATOR(Test_Sim);
-    INSERT_SIMULATOR(Can_Debugger);
+    // Insert Debug sims here
+    // INSERT_SIMULATOR(TEST_SIM);
 
     connect(m_server, &Websocket::on_message, this, [this](QWebSocket *conn, QString message) {
         QString response = message_parser(message);
