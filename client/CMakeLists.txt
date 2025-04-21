@@ -7,13 +7,46 @@ add_subdirectory(qwt)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-file(GLOB_RECURSE SOURCES "*.[hc]pp")
-file(GLOB_RECURSE UI_SOURCES "*.ui")
+file(GLOB_RECURSE ui "ui/*.[hc]pp")
 
 set(PROJECT_SOURCES
-        ${SOURCES}
-        ${UI_SOURCES}
+    ${ui}
+    helpers.cpp
+    helpers.hpp
+    IterableEnum.hpp
+    main.cpp
+    mainwindow.cpp
+    mainwindow.hpp
+    mainwindow.ui
+    networkerror.cpp
+    networkerror.hpp
+    networkerror.ui
+    simulator_base.cpp
+    simulator_base.hpp
+    web_socket_wrapper.cpp
+    web_socket_wrapper.hpp
 )
+
+file(GLOB_RECURSE sims "simulators/*.cpp")
+
+# Loop through each .cpp file and create a library for it
+foreach(sim ${sims})
+    # Extract the base name of the file (without the directory and extension)
+    get_filename_component(LIB_NAME ${sim} NAME_WE)
+
+    # Create a library for each .cpp file
+    add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui simulator_base.cpp)
+    target_link_libraries(ui_${LIB_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets qwt magic_enum::magic_enum nlohmann_json::nlohmann_json)
+    target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${PROJECT_BINARY_DIR}/)
+
+    set_target_properties(
+        ui_${LIB_NAME}
+        PROPERTIES
+            AUTOUIC ON
+            AUTOMOC ON
+            AUTORCC ON
+    )
+endforeach()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Simulator-CVS_I10

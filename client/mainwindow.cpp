@@ -1,21 +1,31 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
-#include "can_debugger.hpp"
-#include "cvs_i10.hpp"
-#include "scope_mux_tester.hpp"
-#include "test.hpp"
+typedef Simulator_base *(*Get_UI)(Web_socket_wrapper*, QWidget*);
 
 MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
       m_error_dialog(new NetworkError(this))
 {
     ui->setupUi(this);
-    INSERT_SIMULATOR(Cable_Tester);
-    INSERT_SIMULATOR(Can_Debugger);
-    INSERT_SIMULATOR(Scope_Mux_Tester);
-    INSERT_SIMULATOR(CVS_I10);
-    INSERT_SIMULATOR(Test_Sim);
+    QLibrary lib;
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext())
+    {
+        lib.setFileName(it.next());
+        lib.load();
+        auto loaded_ui = Get_UI(lib.resolve("get_ui"));
+        if (loaded_ui == nullptr)
+        {
+            SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
+            continue;
+        }
+        auto widget = loaded_ui(m_web_socket.get(), this);
+        m_sims.insert(std::make_pair(widget->sim_name(), widget));
+        lib.unload();
+    }
+    // Insert debug sims here
+    //INSERT_SIMULATOR(SIM_NAME);
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     ui->connection->setText("Connected to " + ws_url.toString());

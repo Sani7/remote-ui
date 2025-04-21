@@ -14,6 +14,8 @@
 using json = nlohmann::json;
 
 #define PUSH_UI_ITEM(item) push_ui_item(ui->item)
+#define EXPORT_UI(client) \
+extern "C" Q_DECL_EXPORT Simulator_base* get_ui(Web_socket_wrapper *api, QWidget *parent) { return new client(api, parent); }
 
 class Simulator_base : public QMainWindow
 {
