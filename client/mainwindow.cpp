@@ -1,7 +1,7 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
-typedef Simulator_base *(*Get_UI)(Web_socket_wrapper*, QWidget*);
+typedef Simulator_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 
 MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
@@ -9,7 +9,8 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
 {
     ui->setupUi(this);
     QLibrary lib;
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
+                    QDirIterator::Subdirectories);
     while (it.hasNext())
     {
         lib.setFileName(it.next());
@@ -25,7 +26,7 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
         lib.unload();
     }
     // Insert debug sims here
-    //INSERT_SIMULATOR(SIM_NAME);
+    // INSERT_SIMULATOR(SIM_NAME);
 
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     ui->connection->setText("Connected to " + ws_url.toString());
