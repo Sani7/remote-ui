@@ -1,5 +1,9 @@
 #include "simulators.hpp"
+#include <QDirIterator>
+#include <QLibrary>
 #include <unordered_set>
+
+typedef Simulator_base *(*Get_Sim)(Communication *, QObject *);
 
 Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
     : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, nullptr)),
@@ -27,6 +31,24 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
     }
     m_com.c_if1 = m_can_wrapper;
     m_com.s_if1 = m_serial;
+
+    QLibrary lib;
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext())
+    {
+        lib.setFileName(it.next());
+        lib.load();
+        auto loaded_ui = Get_Sim(lib.resolve("get_sim"));
+        if (loaded_ui == nullptr)
+        {
+            SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
+            continue;
+        }
+        auto widget = loaded_ui(&m_com, this);
+        m_simulators.insert(std::make_pair(widget->name(), widget));
+        lib.unload();
+    }
 
     // Insert Debug sims here
     // INSERT_SIMULATOR(TEST_SIM);

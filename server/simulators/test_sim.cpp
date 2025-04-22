@@ -1,5 +1,7 @@
 #include "test_sim.hpp"
 
+EXPORT_SIM(Test_Sim);
+
 Test_Sim::Test_Sim(Communication *com, QObject *parent)
     : Simulator_base("Test Sim", com, std::chrono::milliseconds(1000), parent),
       m_button("Off", Color::White, Color::Red),

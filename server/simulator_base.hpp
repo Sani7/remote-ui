@@ -8,6 +8,12 @@
 #include <QTimer>
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
+#define EXPORT_SIM(sim)                                                                                                \
+    extern "C" Q_DECL_EXPORT Simulator_base *get_ui(Communication *com, QObject *parent)                               \
+    {                                                                                                                  \
+        return new sim(com, parent);                                                                                   \
+    }
+
 struct Communication
 {
     CAN_Wrapper *c_if1 = nullptr;
