@@ -9,7 +9,7 @@
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
 #define EXPORT_SIM(sim)                                                                                                \
-    extern "C" Q_DECL_EXPORT Simulator_base *get_sim(Communication *com, QObject *parent)                               \
+    extern "C" Q_DECL_EXPORT Simulator_base *get_sim(Communication *com, QObject *parent)                              \
     {                                                                                                                  \
         return new sim(com, parent);                                                                                   \
     }
