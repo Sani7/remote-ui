@@ -16,9 +16,13 @@ set_target_properties(
 )
 
 file(GLOB_RECURSE CANSOURCES "CAN/*.[hc]pp")
+file(GLOB_RECURSE VISASOURCES "VISA/*.[hc]pp")
+file(GLOB_RECURSE GPIOSOURCES "gpio/*.[hc]pp")
 
 target_sources(server PRIVATE
     ${CANSOURCES}
+    ${VISASOURCES}
+    ${GPIOSOURCES}
     main.cpp
     message_parser.cpp
     simulator_base.cpp
@@ -37,6 +41,9 @@ target_include_directories(server
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/simulators
+    ${CMAKE_CURRENT_LIST_DIR}/CAN
+    ${CMAKE_CURRENT_LIST_DIR}/VISA
+    ${CMAKE_CURRENT_LIST_DIR}/gpio
     PRIVATE
 )
 
@@ -68,5 +75,5 @@ foreach(sim ${sims})
     # Create a library for each .cpp file
     add_library(sim_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp)
     target_link_libraries(sim_${LIB_NAME} PRIVATE Qt::SerialBus magic_enum::magic_enum nlohmann_json::nlohmann_json)
-    target_include_directories(sim_${LIB_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/CAN ${CMAKE_SOURCE_DIR}/UI ${CMAKE_SOURCE_DIR}/external/color)
+    target_include_directories(sim_${LIB_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/CAN ${CMAKE_SOURCE_DIR}/VISA ${CMAKE_SOURCE_DIR}/GPIO ${CMAKE_SOURCE_DIR}/UI ${CMAKE_SOURCE_DIR}/external/color)
 endforeach()
