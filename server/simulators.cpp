@@ -39,13 +39,13 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
     {
         lib.setFileName(it.next());
         lib.load();
-        auto loaded_ui = Get_Sim(lib.resolve("get_sim"));
-        if (loaded_ui == nullptr)
+        auto loaded_sim = Get_Sim(lib.resolve("get_sim"));
+        if (loaded_sim == nullptr)
         {
             SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
             continue;
         }
-        auto widget = loaded_ui(&m_com, this);
+        auto widget = loaded_sim(&m_com, this);
         m_simulators.insert(std::make_pair(widget->name(), widget));
         lib.unload();
     }
