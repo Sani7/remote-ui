@@ -19,6 +19,7 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
         if (loaded_ui == nullptr)
         {
             SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
+            lib.unload();
             continue;
         }
         auto widget = loaded_ui(m_web_socket.get(), this);

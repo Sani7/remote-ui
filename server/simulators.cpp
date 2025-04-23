@@ -43,6 +43,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
         if (loaded_sim == nullptr)
         {
             SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
+            lib.unload();
             continue;
         }
         auto widget = loaded_sim(&m_com, this);
