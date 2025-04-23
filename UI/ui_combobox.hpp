@@ -2,7 +2,6 @@
 
 #include "ui_item.hpp"
 #include "ui_x_boxes.hpp"
-#include <functional>
 
 #define UI_COMBOBOX_TYPE std::string("ui_combobox")
 

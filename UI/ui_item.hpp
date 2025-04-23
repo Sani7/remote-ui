@@ -1,10 +1,8 @@
 #pragma once
 #include "color.hpp"
 #include <cstdint>
-#include <functional>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <thread>
 
 #include <QCanBusFrame>
 #include <QObject>
