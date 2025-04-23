@@ -504,9 +504,15 @@ void Simulator_base::process_ui_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
+    bool enabled = ui_item["enabled"];
     double min = ui_item["min"];
     double max = ui_item["max"];
     double value = ui_item["value"];
+
+    if (enabled != spinbox->isEnabled())
+    {
+        spinbox->setEnabled(enabled);
+    }
 
     if (min != spinbox->minimum())
     {
@@ -531,9 +537,15 @@ void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
+    bool enabled = ui_item["enabled"];
     double min = ui_item["min"];
     double max = ui_item["max"];
     double value = ui_item["value"];
+
+    if (enabled != spinbox->isEnabled())
+    {
+        spinbox->setEnabled(enabled);
+    }
 
     if (min != spinbox->minimum())
     {
@@ -558,9 +570,15 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
+    bool enabled = ui_item["enabled"];
     double min = ui_item["min"];
     double max = ui_item["max"];
     double value = ui_item["value"];
+
+    if (enabled != spinbox->isEnabled())
+    {
+        spinbox->setEnabled(enabled);
+    }
 
     if (min != spinbox->minimum())
     {
