@@ -1,5 +1,9 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
+#include <QDirIterator>
+#include <QLibrary>
+#include <QThread>
+#include <magic_enum/magic_enum.hpp>
 
 typedef Simulator_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 

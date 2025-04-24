@@ -1,16 +1,16 @@
 #ifndef SIMULATOR_BASE_H
 #define SIMULATOR_BASE_H
 
-#include "IterableEnum.hpp"
-#include "helpers.hpp"
-#include "led.hpp"
-#include "networkerror.hpp"
 #include "spdlog/spdlog.h"
-#include "web_socket_wrapper.hpp"
 #include <QMainWindow>
 #include <QWidget>
-#include <magic_enum/magic_enum.hpp>
 #include <nlohmann/json.hpp>
+
+Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
+Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
+Q_FORWARD_DECLARE_OBJC_CLASS(NetworkError);
+Q_FORWARD_DECLARE_OBJC_CLASS(QLabel);
+
 using json = nlohmann::json;
 
 #define PUSH_UI_ITEM(item) push_ui_item(ui->item)

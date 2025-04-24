@@ -1,6 +1,11 @@
 #include "simulator_base.hpp"
 #include "can_transceive.hpp"
+#include "helpers.hpp"
+#include "led.hpp"
+#include "networkerror.hpp"
 #include "plot_wrapper.hpp"
+#include "web_socket_wrapper.hpp"
+#include <magic_enum/magic_enum.hpp>
 
 Simulator_base::Simulator_base(QString sim_name, Web_socket_wrapper *web_socket, QWidget *parent)
     : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
