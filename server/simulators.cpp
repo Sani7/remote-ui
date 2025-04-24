@@ -1,13 +1,18 @@
 #include "simulators.hpp"
+#include "CAN_wrapper.hpp"
+#include "simulator_base.hpp"
+#include "websocket.hpp"
 #include <QDirIterator>
 #include <QLibrary>
+#include <QThread>
 #include <unordered_set>
 
 typedef Simulator_base *(*Get_Sim)(Communication *, QObject *);
 
 Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
     : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, nullptr)),
-      m_can_wrapper(new CAN_Wrapper(new CAN_Interface(this), this)), m_serial(new QSerialPort(this))
+      m_can_wrapper(new CAN_Wrapper(new CAN_Interface(this), this)), m_serial(new QSerialPort(this)),
+      m_com(new Communication)
 {
     m_server->moveToThread(m_server_thread);
     m_server_thread->start();
@@ -29,8 +34,8 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
             SPDLOG_CRITICAL("Error {}", m_serial->errorString().toStdString());
         }
     }
-    m_com.c_if1 = m_can_wrapper;
-    m_com.s_if1 = m_serial;
+    m_com->c_if1 = m_can_wrapper;
+    m_com->s_if1 = m_serial;
 
     QLibrary lib;
     QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
@@ -46,7 +51,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
             lib.unload();
             continue;
         }
-        auto widget = loaded_sim(&m_com, this);
+        auto widget = loaded_sim(m_com, this);
         m_simulators.insert(std::make_pair(widget->name(), widget));
         lib.unload();
     }

@@ -1,15 +1,21 @@
 #pragma once
-#include <QThread>
+#include <QObject>
 #include <map>
 #include <memory>
 #include <mutex>
-
-#include "CAN_wrapper.hpp"
-#include "simulator_base.hpp"
-#include "websocket.hpp"
+#include <nlohmann/json.hpp>
 
 #define INSERT_SIMULATOR(type)                                                                                         \
     m_simulators.insert(std::make_pair(type(&m_com).name(), std::make_unique<type>(&m_com, this)));
+
+Q_FORWARD_DECLARE_OBJC_CLASS(QThread);
+Q_FORWARD_DECLARE_OBJC_CLASS(Websocket);
+Q_FORWARD_DECLARE_OBJC_CLASS(CAN_Wrapper);
+Q_FORWARD_DECLARE_OBJC_CLASS(QSerialPort);
+Q_FORWARD_DECLARE_OBJC_CLASS(Simulator_base);
+Q_FORWARD_DECLARE_OBJC_CLASS(Communication);
+
+using json = nlohmann::json;
 
 class Simulators : public QObject
 {
@@ -59,7 +65,7 @@ class Simulators : public QObject
     Websocket *m_server;
     CAN_Wrapper *m_can_wrapper;
     QSerialPort *m_serial;
-    Communication m_com;
+    Communication *m_com;
     std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
     std::string m_current_simulator = "";
     std::mutex m_mutex;
