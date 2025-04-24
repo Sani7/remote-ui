@@ -20,10 +20,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
   public:
-    explicit MainWindow(QUrl ws_url, QWidget *parent = nullptr);
+    explicit MainWindow(QUrl ws_url, QString sim, QWidget *parent = nullptr);
     ~MainWindow();
 
-    void defaultSim(QString name);
+    void default_sim(QString name);
     void pase_sim_names(json &sims);
     void open_sim_window(void);
     void check_active_sim(QString name);

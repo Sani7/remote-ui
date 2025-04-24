@@ -28,17 +28,23 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("unisim_cpp client");
     parser.addHelpOption();
 
-    QCommandLineOption hostOption(QStringList() << "s"
-                                                << "server",
-                                  QCoreApplication::translate("main", "sim-us server host [default: localhost]."),
-                                  QCoreApplication::translate("main", "host"), QLatin1String("localhost"));
-    parser.addOption(hostOption);
+    QCommandLineOption host_option(QStringList() << "s"
+                                                 << "server",
+                                   QCoreApplication::translate("main", "unisim_cpp server host [default: localhost]."),
+                                   QCoreApplication::translate("main", "host"), QLatin1String("localhost"));
+    parser.addOption(host_option);
 
-    QCommandLineOption portOption(QStringList() << "p"
-                                                << "port",
-                                  QCoreApplication::translate("main", "Port for echoserver [default: 9002]."),
-                                  QCoreApplication::translate("main", "port"), QLatin1String("9002"));
-    parser.addOption(portOption);
+    QCommandLineOption port_option(QStringList() << "p"
+                                                 << "port",
+                                   QCoreApplication::translate("main", "Port for unisim_cpp [default: 9002]."),
+                                   QCoreApplication::translate("main", "port"), QLatin1String("9002"));
+    parser.addOption(port_option);
+
+    QCommandLineOption default_sim_option(QStringList() << "d"
+                                                        << "default",
+                                          QCoreApplication::translate("main", "Default sim that loads on startup."),
+                                          QCoreApplication::translate("main", "default"), QLatin1String(""));
+    parser.addOption(default_sim_option);
 
     parser.process(a);
     // Initialize the logger
@@ -46,9 +52,10 @@ int main(int argc, char *argv[])
 
     QUrl url;
     url.setScheme("ws");
-    url.setHost(parser.value(hostOption));
-    url.setPort(parser.value(portOption).toInt());
-    MainWindow w(url);
+    url.setHost(parser.value(host_option));
+    url.setPort(parser.value(port_option).toInt());
+    QString default_sim = parser.value(default_sim_option);
+    MainWindow w(url, default_sim);
     w.show();
     return a.exec();
 }

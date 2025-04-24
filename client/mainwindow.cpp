@@ -7,7 +7,7 @@
 
 typedef Simulator_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 
-MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
+MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
       m_error_dialog(new NetworkError(this))
 {
@@ -36,7 +36,8 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     ui->connection->setText("Connected to " + ws_url.toString());
     // Default sim
-    // defaultSim("CVS_I10");
+    if (!sim.isEmpty())
+        default_sim(sim);
 
     connect(ui->pushButton, &QPushButton::clicked, this, [=, this] { open_sim(ui->comboBox->currentText()); });
     connect(this, &MainWindow::quit, this, &QCoreApplication::quit, Qt::QueuedConnection);
@@ -70,7 +71,7 @@ void MainWindow::hideEvent(QHideEvent *event)
     disconnect(m_web_socket.get(), nullptr, nullptr, nullptr);
 }
 
-void MainWindow::defaultSim(QString name)
+void MainWindow::default_sim(QString name)
 {
     this->m_selected_sim_name = name;
     this->m_default_sim = true;
