@@ -27,7 +27,7 @@ MainWindow::MainWindow(QUrl ws_url, QWidget *parent)
             continue;
         }
         auto widget = loaded_ui(m_web_socket.get(), this);
-        m_sims.insert(std::make_pair(widget->sim_name(), widget));
+        m_sims.insert(std::make_pair(widget->name(), widget));
         lib.unload();
     }
     // Insert debug sims here
