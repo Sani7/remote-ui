@@ -8,9 +8,11 @@ add_subdirectory(qwt)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB_RECURSE ui "ui/*.[hc]pp")
+file(GLOB_RECURSE ui_ui "ui/*.ui")
 
 set(PROJECT_SOURCES
     ${ui}
+    ${ui_ui}
     helpers.cpp
     helpers.hpp
     IterableEnum.hpp

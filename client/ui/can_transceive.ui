@@ -354,6 +354,22 @@
    <header>hex_spinbox.hpp</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>s_can_send_sid</tabstop>
+  <tabstop>c_can_send_dlc</tabstop>
+  <tabstop>s_can_send_data0</tabstop>
+  <tabstop>s_can_send_data1</tabstop>
+  <tabstop>s_can_send_data2</tabstop>
+  <tabstop>s_can_send_data3</tabstop>
+  <tabstop>s_can_send_data4</tabstop>
+  <tabstop>s_can_send_data5</tabstop>
+  <tabstop>s_can_send_data6</tabstop>
+  <tabstop>s_can_send_data7</tabstop>
+  <tabstop>b_can_send_send</tabstop>
+  <tabstop>b_clear</tabstop>
+  <tabstop>send_list</tabstop>
+  <tabstop>recvd_list</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
