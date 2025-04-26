@@ -154,6 +154,11 @@
    <header>qwt_thermo.h</header>
   </customwidget>
   <customwidget>
+   <class>HexSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>hex_spinbox.hpp</header>
+  </customwidget>
+  <customwidget>
    <class>Led</class>
    <extends>QPushButton</extends>
    <header>led.hpp</header>
@@ -164,12 +169,19 @@
    <header>plot_wrapper.hpp</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>HexSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>hex_spinbox.hpp</header>
-  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>spinBox</tabstop>
+  <tabstop>doubleSpinBox</tabstop>
+  <tabstop>hexSpinBox</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>slider</tabstop>
+  <tabstop>table</tabstop>
+  <tabstop>led</tabstop>
+  <tabstop>button</tabstop>
+  <tabstop>combobox</tabstop>
+  <tabstop>dial</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
