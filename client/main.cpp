@@ -6,6 +6,11 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+#include <emscripten/val.h>
+#endif
+
 void init_logger()
 {
     spdlog::init_thread_pool(8192, 1);
@@ -52,7 +57,12 @@ int main(int argc, char *argv[])
 
     QUrl url;
     url.setScheme("ws");
+#ifdef EMSCRIPTEN
+    emscripten::val location = emscripten::val::global("location");
+    url.setHost(QString::fromStdString(location["href"].as<std::string>()));
+#else
     url.setHost(parser.value(host_option));
+#endif
     url.setPort(parser.value(port_option).toInt());
     QString default_sim = parser.value(default_sim_option);
     MainWindow w(url, default_sim);
