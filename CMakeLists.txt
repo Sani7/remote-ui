@@ -21,14 +21,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
 set(PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # defines targets and sources
+if(NOT EMSCRIPTEN)
 add_subdirectory(UI)
+endif()
 
 # contains an "external" library we will link to
 add_subdirectory(external)
 
 # defines the executable
-add_subdirectory(tools)
+if(NOT EMSCRIPTEN)
+add_subdirectory(server)
+endif()
 
 # enable testing and define tests
+if(NOT EMSCRIPTEN)
 enable_testing()
 add_subdirectory(tests)
+endif()
