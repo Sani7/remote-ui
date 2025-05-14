@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
+#include <QProcess>
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
@@ -62,6 +63,28 @@ int main(int argc, char *argv[])
     url.setHost(QString::fromStdString(location["href"].as<std::string>()));
 #else
     url.setHost(parser.value(host_option));
+    if (parser.value(host_option).endsWith(".local"))
+    {
+        QProcess p;
+        p.start("avahi-resolve", {"-4", "--name", parser.value(host_option)});
+        p.waitForFinished(-1);
+        QString stdout = p.readAllStandardOutput();
+        QString stderr = p.readAllStandardError();
+        if (!stderr.isEmpty())
+        {
+            SPDLOG_CRITICAL("Unable to resolve {}", parser.value(host_option).toStdString());
+            return -1;
+        }
+
+        auto ret = stdout.split(u'\t', Qt::SkipEmptyParts);
+        if (ret.count() < 2)
+        {
+            SPDLOG_CRITICAL("Unable to resolve {}: not enough paramteters", parser.value(host_option).toStdString());
+        }
+
+        ret[1].removeLast();
+        url.setHost(ret[1]);
+    }
 #endif
     url.setPort(parser.value(port_option).toInt());
     QString default_sim = parser.value(default_sim_option);
