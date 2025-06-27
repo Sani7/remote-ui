@@ -33,11 +33,13 @@ void Simulator_base::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     SPDLOG_DEBUG("Connecting callbacks");
+    m_first_load = true;
 
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
     connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json &j) { on_event_cb(j); });
     connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this] { m_error_dialog->open(); });
 
+    m_web_socket->inhibit_events(true);
     m_web_socket->send_command(Web_socket_wrapper::Command::get_UI_elements);
     this->m_timer_update->start(m_refresh_rate);
     m_open = true;
@@ -68,6 +70,11 @@ void Simulator_base::on_cmd_cb(json &j)
         break;
     default:
         break;
+    }
+    if (m_first_load)
+    {
+        m_web_socket->inhibit_events(false);
+        m_first_load = false;
     }
 }
 

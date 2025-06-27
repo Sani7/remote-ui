@@ -44,6 +44,7 @@ class Web_socket_wrapper : public QObject
     void send_event(Event event, size_t id, QString val);
     void send_event(Event event, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload);
     void close();
+    void inhibit_events(bool inhibit);
 
   Q_SIGNALS:
     void on_connected();
@@ -59,6 +60,7 @@ class Web_socket_wrapper : public QObject
 
   private:
     bool m_connected = false;
+    bool m_inhibit_events = false;
     QWebSocket *m_web_socket;
     QTimer *m_ping_timer;
     QTimer *m_pong_timer;

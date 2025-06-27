@@ -70,6 +70,8 @@ void Web_socket_wrapper::send_command(Command command, QString id)
 
 void Web_socket_wrapper::send_event(Event event, size_t id)
 {
+    if (m_inhibit_events)
+        return;
     json j;
     switch (event)
     {
@@ -86,6 +88,8 @@ void Web_socket_wrapper::send_event(Event event, size_t id)
 
 void Web_socket_wrapper::send_event(Event event, size_t id, double val)
 {
+    if (m_inhibit_events)
+        return;
     json j;
     switch (event)
     {
@@ -102,6 +106,8 @@ void Web_socket_wrapper::send_event(Event event, size_t id, double val)
 
 void Web_socket_wrapper::send_event(Event event, size_t id, QString val)
 {
+    if (m_inhibit_events)
+        return;
     json j;
     switch (event)
     {
@@ -124,6 +130,8 @@ void Web_socket_wrapper::send_event(Event event, size_t id, QString val)
 
 void Web_socket_wrapper::send_event(Event event, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload)
 {
+    if (m_inhibit_events)
+        return;
     json j;
     switch (event)
     {
@@ -188,4 +196,9 @@ void Web_socket_wrapper::m_on_pong_timeout()
     SPDLOG_CRITICAL("Pong timeout");
     m_web_socket->close();
     emit on_closed();
+}
+
+void Web_socket_wrapper::inhibit_events(bool inhibit)
+{
+    m_inhibit_events = inhibit;
 }

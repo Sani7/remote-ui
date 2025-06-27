@@ -83,6 +83,7 @@ class Simulator_base : public QMainWindow
     uint32_t m_refresh_rate;
     NetworkError *m_error_dialog;
     bool m_open = false;
+    bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;
 };
 
