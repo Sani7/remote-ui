@@ -762,7 +762,7 @@ void Simulator_base::setup_combobox(QWidget *item, size_t index)
     if (combobox == nullptr)
         return;
 
-    connect(combobox, &QComboBox::currentIndexChanged, this, [=, this] {
+    connect(combobox, &QComboBox::activated, this, [=, this] {
         m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, combobox->currentText());
     });
 }
