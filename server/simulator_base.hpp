@@ -14,8 +14,9 @@
         return new sim(com, parent);                                                                                   \
     }
 
-struct Communication
+class Communication
 {
+  public:
     CAN_Wrapper *c_if1 = nullptr;
     CAN_Wrapper *c_if2 = nullptr;
     QSerialPort *s_if1 = nullptr;

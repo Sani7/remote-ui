@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
     url.setHost(QString::fromStdString(location["href"].as<std::string>()));
 #else
     url.setHost(parser.value(host_option));
+#if defined(__linux__)
     if (parser.value(host_option).endsWith(".local"))
     {
         QProcess p;
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
         ret[1].removeLast();
         url.setHost(ret[1]);
     }
+#endif
 #endif
     url.setPort(parser.value(port_option).toInt());
     QString default_sim = parser.value(default_sim_option);

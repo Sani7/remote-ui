@@ -2,7 +2,7 @@
 #define GPIO_HPP
 
 #include <QObject>
-#if defined(__aarch64__) || defined(__x86_64__)
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
 #include <gpiod.hpp>
 #else
 
@@ -24,7 +24,9 @@ class GPIO : public QObject
     bool value();
 
   private:
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     std::unique_ptr<gpiod::line_request> m_request;
+#endif
     unsigned int m_offset;
 };
 

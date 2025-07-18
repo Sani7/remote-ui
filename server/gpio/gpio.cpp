@@ -1,9 +1,6 @@
 #include "gpio.hpp"
 #include "spdlog/spdlog.h"
 #include <filesystem>
-#if __aarch64__
-#else
-#endif
 
 GPIO::GPIO(QObject *parent) : QObject(parent), m_offset(0)
 {
@@ -11,13 +8,16 @@ GPIO::GPIO(QObject *parent) : QObject(parent), m_offset(0)
 
 GPIO::~GPIO()
 {
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     if (!m_request.get())
         return;
     m_request->release();
+#endif
 }
 
 void GPIO::configure_pin(Direction dir, uint8_t gpio)
 {
+    #if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     if (m_request.get() != nullptr)
         return;
     std::filesystem::path chip_path("/dev/gpiochip0");
@@ -56,19 +56,25 @@ void GPIO::configure_pin(Direction dir, uint8_t gpio)
             SPDLOG_CRITICAL("Could not set gpio {} as input, run binary as root", gpio);
         }
     }
+#else
+    Q_UNUSED(dir);
+    Q_UNUSED(gpio);
+#endif
 }
 void GPIO::set_value(bool value)
 {
-#if defined(__aarch64__) || defined(__x86_64__)
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     if (!m_request.get())
         return;
     m_request->set_value(m_offset, (gpiod::line::value)value);
+#else
+    Q_UNUSED(value);
 #endif
 }
 
 bool GPIO::value()
 {
-#if defined(__aarch64__) || defined(__x86_64__)
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     if (!m_request.get())
         return false;
     return (bool)m_request->get_value(m_offset);

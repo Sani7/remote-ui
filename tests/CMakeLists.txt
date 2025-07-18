@@ -1,5 +1,5 @@
 # Third Party
-find_package(GTest REQUIRED)
+find_package(GTest)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -7,7 +7,9 @@ set(CMAKE_AUTORCC ON)
 
 # tests
 file(GLOB_RECURSE TEST_SOURCES "*.[hc]pp")
-add_executable(tests ${TEST_SOURCES})
+file(GLOB_RECURSE CAN "../server/CAN/to_id.cpp")
+if (GTest_FOUND)
+add_executable(tests ${TEST_SOURCES} ${CAN})
 
 target_compile_options(tests PRIVATE $<$<CONFIG:Debug>:
     -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion
@@ -31,3 +33,4 @@ target_include_directories(tests
 
 include(GoogleTest)
 gtest_discover_tests(tests)
+endif()
