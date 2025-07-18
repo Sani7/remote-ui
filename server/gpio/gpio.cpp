@@ -17,7 +17,7 @@ GPIO::~GPIO()
 
 void GPIO::configure_pin(Direction dir, uint8_t gpio)
 {
-    #if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
+#if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
     if (m_request.get() != nullptr)
         return;
     std::filesystem::path chip_path("/dev/gpiochip0");
