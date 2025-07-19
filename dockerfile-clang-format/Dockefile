@@ -1,0 +1,3 @@
+FROM fedora:latest
+RUN dnf upgrade -y
+RUN dnf install -y git clang-tools-extra
