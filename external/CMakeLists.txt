@@ -1,5 +1,6 @@
 add_subdirectory(color)
 add_subdirectory(cpp-templates)
+add_subdirectory(git_tag_cpp)
 add_subdirectory(json)
 add_subdirectory(magic_enum)
 add_subdirectory(spdlog)

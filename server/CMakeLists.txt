@@ -62,6 +62,7 @@ target_link_libraries(server PRIVATE
     UI
     cpp_templates
     ${GPIOD_LIB}
+    git_tag
 )
 
 

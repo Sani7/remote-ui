@@ -7,6 +7,7 @@
 #include "spdlog/spdlog.h"
 
 #include "simulators.hpp"
+#include "git_version.h"
 
 void init_logger()
 {
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp server");
+    parser.setApplicationDescription("unisim_cpp server - version: " + QString::fromStdString(Git_version::shortSha1) + QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
     QCommandLineOption port_option(QStringList() << "p"
