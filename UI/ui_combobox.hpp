@@ -14,8 +14,8 @@ class UI_combobox : public UI_x_boxes
                 QObject *parent = nullptr);
     UI_combobox(const json &j, QObject *parent = nullptr);
 
-    void set_selected(size_t selected);
-    void set_selected(std::string selected) override;
+    void set_selected(size_t selected) override;
+    void set_selected(std::string selected);
     size_t selected() const;
     std::string selected_text() const;
 

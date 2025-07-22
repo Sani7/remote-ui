@@ -37,12 +37,13 @@ class Web_socket_wrapper : public QObject
   public:
     explicit Web_socket_wrapper(const QUrl &url, QObject *parent = nullptr);
     ~Web_socket_wrapper();
-    void send_command(Command command, size_t id = 0);
-    void send_command(Command command, QString id);
-    void send_event(Event event, size_t id);
-    void send_event(Event event, size_t id, double val);
-    void send_event(Event event, size_t id, QString val);
-    void send_event(Event event, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload);
+    void send_command(Command c, size_t id = 0);
+    void send_command(Command c, QString val);
+    void send_event(Event e, size_t id);
+    void send_event(Event e, size_t id, size_t val);
+    void send_event(Event e, size_t id, double val);
+    void send_event(Event e, size_t id, QString val);
+    void send_event(Event e, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload);
     void close();
     void inhibit_events(bool inhibit);
 

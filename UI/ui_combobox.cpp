@@ -49,20 +49,12 @@ std::string UI_combobox::selected_text() const
 void UI_combobox::from_json(const json &j)
 {
     UI_x_boxes::from_json(j);
-    std::string selected_str = j.at("selected");
-    for (size_t i = 0; i < m_options.size(); i++)
-    {
-        if (m_options[i] == selected_str)
-        {
-            m_selected = i;
-            break;
-        }
-    }
+    m_selected = j.at("selected");
 }
 
 json UI_combobox::to_json(size_t id) const
 {
     json j = UI_x_boxes::to_json(id);
-    j["selected"] = m_options[m_selected];
+    j["selected"] = m_selected;
     return j;
 }

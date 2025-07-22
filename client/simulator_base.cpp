@@ -326,7 +326,7 @@ void Simulator_base::process_ui_combobox(json &ui_item, QWidget *widget)
         return;
     }
 
-    QString selected = QString::fromStdString(ui_item["selected"]);
+    size_t selected = ui_item["selected"];
 
     for (json &item : ui_item["options"])
     {
@@ -334,9 +334,9 @@ void Simulator_base::process_ui_combobox(json &ui_item, QWidget *widget)
             combobox->addItem(QString::fromStdString(item));
     }
 
-    if (combobox->currentText() != selected)
+    if (combobox->currentIndex() != selected)
     {
-        combobox->setCurrentText(selected);
+        combobox->setCurrentIndex(selected);
     }
 }
 
@@ -763,7 +763,7 @@ void Simulator_base::setup_combobox(QWidget *item, size_t index)
         return;
 
     connect(combobox, &QComboBox::activated, this, [=, this] {
-        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, combobox->currentText());
+        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)combobox->currentIndex());
     });
 }
 

@@ -158,7 +158,7 @@ json UI_item::to_json(size_t id) const
 
 void UI_item::click() {};
 
-void UI_item::set_selected(std::string selected)
+void UI_item::set_selected(size_t selected)
 {
     UNUSED(selected);
 };
