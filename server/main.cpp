@@ -6,8 +6,8 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
-#include "simulators.hpp"
 #include "git_version.h"
+#include "simulators.hpp"
 
 void init_logger()
 {
@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp server - version: " + QString::fromStdString(Git_version::shortSha1) + QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
+    parser.setApplicationDescription("unisim_cpp server - version: " + QString::fromStdString(Git_version::shortSha1) +
+                                     QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
     QCommandLineOption port_option(QStringList() << "p"

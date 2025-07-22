@@ -1,3 +1,4 @@
+#include "git_version.h"
 #include "mainwindow.hpp"
 #include "spdlog/async.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -6,7 +7,6 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QProcess>
-#include "git_version.h"
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp client - version: " + QString::fromStdString(Git_version::shortSha1) + QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
+    parser.setApplicationDescription("unisim_cpp client - version: " + QString::fromStdString(Git_version::shortSha1) +
+                                     QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
     QCommandLineOption host_option(QStringList() << "s"
