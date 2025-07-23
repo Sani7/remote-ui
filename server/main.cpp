@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp server - version: " + QString::fromStdString(Git_version::shortSha1) +
+    parser.setApplicationDescription("unisim_cpp server\n\tversion: " + QString::fromStdString(Git_version::branch) +
+                                     "-" + QString::fromStdString(Git_version::shortSha1) +
                                      QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
