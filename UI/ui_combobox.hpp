@@ -1,11 +1,10 @@
 #pragma once
 
 #include "ui_item.hpp"
-#include "ui_x_boxes.hpp"
 
 #define UI_COMBOBOX_TYPE std::string("ui_combobox")
 
-class UI_combobox : public UI_x_boxes
+class UI_combobox : public UI_item
 {
     Q_OBJECT
   public:
@@ -25,5 +24,6 @@ class UI_combobox : public UI_x_boxes
     void changed(std::string selected);
 
   private:
+    std::vector<std::string> m_options;
     size_t m_selected;
 };
