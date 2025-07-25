@@ -1,9 +1,10 @@
 #ifndef WEB_SOCKET_WRAPPER_H
 #define WEB_SOCKET_WRAPPER_H
 
-#include <QTimer>
-#include <QtWebSockets/QWebSocket>
 #include <nlohmann/json.hpp>
+#include <QObject>
+Q_FORWARD_DECLARE_OBJC_CLASS(QWebSocket);
+Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 using json = nlohmann::json;
 
 class Web_socket_wrapper : public QObject

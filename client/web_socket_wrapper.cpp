@@ -1,6 +1,8 @@
 #include "web_socket_wrapper.hpp"
 #include "spdlog/spdlog.h"
 #include <magic_enum/magic_enum.hpp>
+#include <QTimer>
+#include <QtWebSockets/QWebSocket>
 
 Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     : QObject(parent), m_web_socket(new QWebSocket("", QWebSocketProtocol::VersionLatest, this)),

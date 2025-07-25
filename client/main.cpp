@@ -7,6 +7,7 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QProcess>
+#include <QUrl>
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
