@@ -7,10 +7,10 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core WebSockets SerialBus Network)
 
 qt_standard_project_setup()
-qt_add_executable(server)
+qt_add_executable(unisim_server)
 
 set_target_properties(
-    server
+    unisim_server
     PROPERTIES
         LINK_FLAGS "-Wl,--export-dynamic"
 )
@@ -19,7 +19,7 @@ file(GLOB_RECURSE CANSOURCES "CAN/*.[hc]pp")
 file(GLOB_RECURSE VISASOURCES "VISA/*.[hc]pp")
 file(GLOB_RECURSE GPIOSOURCES "gpio/*.[hc]pp")
 
-target_sources(server PRIVATE
+target_sources(unisim_server PRIVATE
     ${CANSOURCES}
     ${VISASOURCES}
     ${GPIOSOURCES}
@@ -33,11 +33,11 @@ target_sources(server PRIVATE
     websocket.hpp
 )
 
-target_compile_options(server PRIVATE $<$<CONFIG:Debug>:
+target_compile_options(unisim_server PRIVATE $<$<CONFIG:Debug>:
     -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion
     >)
 
-target_include_directories(server
+target_include_directories(unisim_server
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/simulators
@@ -53,7 +53,7 @@ endif()
 if (LINUX)
     set(GPIOD_LIB "gpiodcxx")
 endif()
-target_link_libraries(server PRIVATE
+target_link_libraries(unisim_server PRIVATE
     Qt::WebSockets
     Qt::SerialBus
     Qt::Network

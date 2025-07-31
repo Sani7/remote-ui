@@ -52,7 +52,7 @@ else()
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Simulator-CVS_I10
+    qt_add_executable(unisim_client
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         $<$<BOOL:${EMSCRIPTEN}>:${sims}>
@@ -63,20 +63,20 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https: // doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(Simulator-CVS_I10 SHARED
+        add_library(unisim_client SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(Simulator-CVS_I10
+        add_executable(unisim_client
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
 set_target_properties(
-    client
+    unisim_client
     PROPERTIES
         AUTOMOC ON
         AUTORCC ON
@@ -84,7 +84,7 @@ set_target_properties(
         LINK_FLAGS "-Wl,--export-dynamic"
 )
 
-target_include_directories(client
+target_include_directories(unisim_client
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/simulators
@@ -92,7 +92,7 @@ target_include_directories(client
     ${PROJECT_BINARY_DIR}/
 )
 
-target_link_libraries(client PRIVATE qwt spdlog Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json git_tag)
+target_link_libraries(unisim_client PRIVATE qwt spdlog Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json git_tag)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
@@ -116,5 +116,5 @@ install(TARGETS Simulator-CVS_I10
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(Simulator-CVS_I10)
+    qt_finalize_executable(unisim_client)
 endif()
