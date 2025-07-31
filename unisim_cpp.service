@@ -1,6 +1,6 @@
 [Unit]
 Description=start unisim_cpp
 [Service]
-ExecStart=/usr/local/sbin/server -c can0 
+ExecStart=/usr/local/bin/unisim_server -c can0 
 [Install]
 WantedBy=multi-user.target
