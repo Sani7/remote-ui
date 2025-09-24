@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.5)
-
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Svg WebSockets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
 
