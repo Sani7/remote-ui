@@ -7,6 +7,7 @@ UI_tab_widget::UI_tab_widget(QObject *parent) : UI_item(UI_TAB_WIDGET_TYPE, pare
 UI_tab_widget::UI_tab_widget(std::vector<std::string> tab_names, size_t selected, QObject *parent)
     : UI_item(UI_TAB_WIDGET_TYPE, parent), m_selected_tab(selected), m_tab_names(tab_names)
 {
+    m_tab_visible.resize(m_tab_names.size(), true);
 }
 
 void UI_tab_widget::set_selected(size_t selected)
@@ -40,12 +41,25 @@ void UI_tab_widget::set_tab_name(size_t index, std::string name)
     {
         m_tab_names.resize(index + 1);
     }
+    if (index >= m_tab_visible.size())
+    {
+        m_tab_visible.resize(index + 1, true);
+    }
     m_tab_names.at(index) = name;
     emit ui_changed();
 }
 std::string UI_tab_widget::tab_name(size_t index) const
 {
     return m_tab_names.at(index);
+}
+
+void UI_tab_widget::advance_tab()
+{
+    if (m_tab_names.size() == 0)
+        return;
+    m_selected_tab = (m_selected_tab + 1) % m_tab_names.size();
+    emit ui_changed();
+    emit this->selected(m_selected_tab);
 }
 
 void UI_tab_widget::from_json(const json &j)

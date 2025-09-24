@@ -174,6 +174,11 @@ void Simulator_base::UI_item_parser(json &input)
             process_ui_hex_spinbox(ui_item, widget);
             continue;
         }
+        if (ui_item["type"] == "ui_tab_widget")
+        {
+            process_ui_tab_widget(ui_item, widget);
+            continue;
+        }
         if (ui_item["type"] == "ui_plot")
         {
             process_ui_plot(ui_item, widget);
@@ -614,6 +619,29 @@ void Simulator_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
         SPDLOG_WARN("widget is not of type QTabWidget");
         return;
     }
+
+    if (tab_widget->count() != ui_item.at("tab_names").size())
+    {
+        SPDLOG_ERROR("QTabWidget has not the same amount of tabs as the server");
+        return;
+    }
+    auto tab_names = ui_item.at("tab_names");
+    for (size_t i = 0; i < tab_names.size(); i++)
+    {
+        if (tab_widget->tabText(i) != QString::fromStdString(tab_names[i]))
+        {
+            tab_widget->setTabText(i, QString::fromStdString(tab_names[i]));
+        }
+        if (tab_widget->isVisible() != ui_item.at("tab_visible")[i])
+        {
+            tab_widget->setTabVisible(i, ui_item.at("tab_visible")[i]);
+        }
+    }
+
+    if (tab_widget->currentIndex() != ui_item.at("selected"))
+    {
+        tab_widget->setCurrentIndex(ui_item.at("selected"));
+    }
 }
 
 void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)
@@ -753,6 +781,7 @@ void Simulator_base::setup_ui_item(QWidget *item, size_t index)
     setup_spinbox(item, index);
     setup_double_spinbox(item, index);
     setup_hex_spinbox(item, index);
+    setup_tab_widget(item, index);
     setup_qwtplot(item, index);
     setup_can_ui(item, index);
 }
@@ -836,6 +865,17 @@ void Simulator_base::setup_hex_spinbox(QWidget *item, size_t index)
 
     connect(spinbox, &HexSpinBox::valueChanged, this, [=, this](int value) {
         m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value);
+    });
+}
+
+void Simulator_base::setup_tab_widget(QWidget *item, size_t index)
+{
+    QTabWidget *tab_widget = qobject_cast<QTabWidget *>(item);
+    if (tab_widget == nullptr)
+        return;
+
+    connect(tab_widget, &QTabWidget::currentChanged, this, [=, this](int index) {
+        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)index);
     });
 }
 

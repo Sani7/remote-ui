@@ -21,6 +21,8 @@ class UI_tab_widget : public UI_item
     void set_tab_name(size_t index, std::string name);
     std::string tab_name(size_t index) const;
 
+    void advance_tab();
+
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
   signals:
