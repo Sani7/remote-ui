@@ -10,8 +10,7 @@ class UI_tab_widget : public UI_item
     Q_OBJECT
   public:
     explicit UI_tab_widget(QObject *parent = nullptr);
-    UI_tab_widget(std::vector<std::string> tab_names, size_t selected = 0,
-                  QObject *parent = nullptr);
+    UI_tab_widget(std::vector<std::string> tab_names, size_t selected = 0, QObject *parent = nullptr);
 
     void set_selected(size_t selected) override;
     size_t selected() const;
@@ -26,6 +25,7 @@ class UI_tab_widget : public UI_item
     json to_json(size_t id) const override;
   signals:
     void selected(size_t index);
+
   private:
     size_t m_selected_tab;
     std::vector<std::string> m_tab_names;

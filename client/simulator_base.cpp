@@ -614,8 +614,6 @@ void Simulator_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
         SPDLOG_WARN("widget is not of type QTabWidget");
         return;
     }
-
-
 }
 
 void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)

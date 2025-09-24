@@ -1,15 +1,12 @@
 #include "ui_tab_widget.hpp"
 
-UI_tab_widget::UI_tab_widget(QObject *parent)
-    : UI_item(UI_TAB_WIDGET_TYPE, parent)
+UI_tab_widget::UI_tab_widget(QObject *parent) : UI_item(UI_TAB_WIDGET_TYPE, parent)
 {
 }
 
-UI_tab_widget::UI_tab_widget(std::vector<std::string> tab_names, size_t selected,
-              QObject *parent)
+UI_tab_widget::UI_tab_widget(std::vector<std::string> tab_names, size_t selected, QObject *parent)
     : UI_item(UI_TAB_WIDGET_TYPE, parent), m_selected_tab(selected), m_tab_names(tab_names)
 {
-
 }
 
 void UI_tab_widget::set_selected(size_t selected)
@@ -25,7 +22,8 @@ size_t UI_tab_widget::selected() const
 
 void UI_tab_widget::set_visible(size_t index, bool visible)
 {
-    if (index >= m_tab_visible.size()) {
+    if (index >= m_tab_visible.size())
+    {
         m_tab_visible.resize(index + 1);
     }
     m_tab_visible.at(index) = visible;
@@ -38,7 +36,8 @@ bool UI_tab_widget::visible(size_t index) const
 
 void UI_tab_widget::set_tab_name(size_t index, std::string name)
 {
-    if (index >= m_tab_names.size()) {
+    if (index >= m_tab_names.size())
+    {
         m_tab_names.resize(index + 1);
     }
     m_tab_names.at(index) = name;

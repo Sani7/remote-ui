@@ -11,8 +11,8 @@
 #include "ui_plot.hpp"
 #include "ui_slider.hpp"
 #include "ui_spinbox.hpp"
-#include "ui_table.hpp"
 #include "ui_tab_widget.hpp"
+#include "ui_table.hpp"
 #include "ui_textbox.hpp"
 #include "ui_thermo.hpp"
 
