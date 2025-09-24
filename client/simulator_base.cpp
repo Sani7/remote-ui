@@ -606,6 +606,18 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
     }
 }
 
+void Simulator_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
+{
+    auto tab_widget = qobject_cast<QTabWidget *>(widget);
+    if (tab_widget == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QTabWidget");
+        return;
+    }
+
+
+}
+
 void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)
 {
     auto plot = qobject_cast<Plot_wrapper *>(widget);

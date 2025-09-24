@@ -23,6 +23,7 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     PUSH_UI_ITEM(spinBox);
     PUSH_UI_ITEM(doubleSpinBox);
     PUSH_UI_ITEM(hexSpinBox);
+    PUSH_UI_ITEM(tabWidget);
 }
 
 Test_Sim::~Test_Sim()
