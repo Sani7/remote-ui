@@ -17,6 +17,7 @@ class UI_stacked_widget : public UI_item
 
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
+
   private:
     size_t m_tab_count;
     size_t m_current_tab;
