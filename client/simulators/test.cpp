@@ -7,8 +7,6 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     : Simulator_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Test Sim");
-    this->setWindowState(Qt::WindowMaximized);
 
     PUSH_UI_ITEM(button);
     PUSH_UI_ITEM(combobox);
@@ -24,6 +22,7 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     PUSH_UI_ITEM(doubleSpinBox);
     PUSH_UI_ITEM(hexSpinBox);
     PUSH_UI_ITEM(tabWidget);
+    PUSH_UI_ITEM(stackedWidget);
 }
 
 Test_Sim::~Test_Sim()

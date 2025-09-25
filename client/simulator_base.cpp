@@ -15,6 +15,7 @@ Simulator_base::Simulator_base(QString name, Web_socket_wrapper *web_socket, QWi
     {
         setWindowTitle(m_name);
     }
+    this->setWindowState(Qt::WindowMaximized);
     m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     m_ui_lookup.reserve(40);
 }
@@ -177,6 +178,11 @@ void Simulator_base::UI_item_parser(json &input)
         if (ui_item["type"] == "ui_tab_widget")
         {
             process_ui_tab_widget(ui_item, widget);
+            continue;
+        }
+        if (ui_item["type"] == "ui_stacked_widget")
+        {
+            process_ui_stacked_widget(ui_item, widget);
             continue;
         }
         if (ui_item["type"] == "ui_plot")
@@ -641,6 +647,27 @@ void Simulator_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
     if (tab_widget->currentIndex() != ui_item.at("selected"))
     {
         tab_widget->setCurrentIndex(ui_item.at("selected"));
+    }
+}
+
+void Simulator_base::process_ui_stacked_widget(json &ui_item, QWidget *widget)
+{
+    auto stacked_widget = qobject_cast<QStackedWidget *>(widget);
+    if (stacked_widget == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QStackedWidget");
+        return;
+    }
+
+    if (stacked_widget->count() != ui_item.at("tab_count"))
+    {
+        SPDLOG_ERROR("QStackedWidget has not the same amount of tabs as the server");
+        return;
+    }
+
+    if (stacked_widget->currentIndex() != ui_item.at("current_tab"))
+    {
+        stacked_widget->setCurrentIndex(ui_item.at("current_tab"));
     }
 }
 

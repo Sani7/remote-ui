@@ -11,7 +11,7 @@ Test_Sim::Test_Sim(Communication *com, QObject *parent)
       m_thermo("Thermo", "%", Color::White, Color::Black, 0, 100, 0), m_led("Led", Color::White, Color::Red),
       m_table(4, 4, {"Row 1", "Row 2", "Row 3", "Row 4"}, {"Column 1", "Column 2", "Column 3", "Column 4"}),
       m_spinbox(0, 255, 0), m_double_spinbox(0, 255, 0), m_hex_spinbox(0, 255, 0),
-      m_tab_widget({"Tab 1", "Tab 2", "Tab 3"}, 0, this)
+      m_tab_widget({"Tab 1", "Tab 2", "Tab 3"}, 0), m_stacked_widget(3, 0)
 {
     m_thermo.set_start_color(Color::Red);
     m_thermo.set_end_color(Color::Red);
@@ -34,6 +34,7 @@ Test_Sim::Test_Sim(Communication *com, QObject *parent)
     PUSH_UI_ITEM(m_double_spinbox);
     PUSH_UI_ITEM(m_hex_spinbox);
     PUSH_UI_ITEM(m_tab_widget);
+    PUSH_UI_ITEM(m_stacked_widget);
 
     for (size_t i = 0; i < m_table.capacity(); i++)
     {
@@ -54,6 +55,7 @@ void Test_Sim::timer()
     }
     m_slider.set_value(m_slider.value() + 1);
     m_tab_widget.advance_tab();
+    m_stacked_widget.advance_tab();
 }
 
 void Test_Sim::run_at_startup()
