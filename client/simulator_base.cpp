@@ -101,101 +101,101 @@ void Simulator_base::push_ui_item(QWidget *item)
 
 void Simulator_base::UI_item_parser(json &input)
 {
-    for (auto &ui_item : input["UI_items"])
+    for (auto &ui_item : input.at("UI_items"))
     {
-        auto widget = id_to_ui(ui_item["id"]);
+        auto widget = id_to_ui(ui_item.at("id"));
         if (widget == nullptr)
         {
-            SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item["id"]).toStdString());
+            SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item.at("id")).toStdString());
             return;
         }
 
-        if (ui_item["type"] == "ui_button")
+        if (ui_item.at("type") == "ui_button")
         {
             process_ui_button(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_led")
+        if (ui_item.at("type") == "ui_led")
         {
             process_ui_led(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_slider")
+        if (ui_item.at("type") == "ui_slider")
         {
             process_ui_slider(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_dial")
+        if (ui_item.at("type") == "ui_dial")
         {
             process_ui_dial(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_thermo")
+        if (ui_item.at("type") == "ui_thermo")
         {
             process_ui_thermo(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_textbox")
+        if (ui_item.at("type") == "ui_textbox")
         {
             process_ui_textbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_label")
+        if (ui_item.at("type") == "ui_label")
         {
             process_ui_label(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_combobox")
+        if (ui_item.at("type") == "ui_combobox")
         {
             process_ui_combobox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_RadioButton")
+        if (ui_item.at("type") == "ui_RadioButton")
         {
             process_ui_radiobutton(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_checkbox")
+        if (ui_item.at("type") == "ui_checkbox")
         {
             process_ui_checkbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_spinbox")
+        if (ui_item.at("type") == "ui_spinbox")
         {
             process_ui_spinbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_double_spinbox")
+        if (ui_item.at("type") == "ui_double_spinbox")
         {
             process_ui_double_spinbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_hex_spinbox")
+        if (ui_item.at("type") == "ui_hex_spinbox")
         {
             process_ui_hex_spinbox(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_tab_widget")
+        if (ui_item.at("type") == "ui_tab_widget")
         {
             process_ui_tab_widget(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_stacked_widget")
+        if (ui_item.at("type") == "ui_stacked_widget")
         {
             process_ui_stacked_widget(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_plot")
+        if (ui_item.at("type") == "ui_plot")
         {
             process_ui_plot(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_table")
+        if (ui_item.at("type") == "ui_table")
         {
             process_ui_table(ui_item, widget);
             continue;
         }
-        if (ui_item["type"] == "ui_can")
+        if (ui_item.at("type") == "ui_can")
         {
             process_ui_can(ui_item, widget);
             continue;
@@ -212,7 +212,7 @@ void Simulator_base::process_ui_label(json &ui_item, QWidget *widget)
         return;
     }
 
-    QString value = QString::fromStdString(ui_item["text"]);
+    QString value = QString::fromStdString(ui_item.at("text"));
 
     if (label->text() != value)
     {
@@ -222,7 +222,7 @@ void Simulator_base::process_ui_label(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item["id"]);
+    QLabel *label = id_to_label(ui_item.at("id"));
 
     auto slider = qobject_cast<QwtSlider *>(widget);
     if (slider == nullptr)
@@ -231,9 +231,9 @@ void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
         return;
     }
 
-    double value = ui_item["value"];
-    bool enable = ui_item["enabled"];
-    bool visible = ui_item["visible"];
+    double value = ui_item.at("value");
+    bool enable = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
     QString unit = QString::fromStdString(ui_item.at("unit"));
 
     if (label != nullptr)
@@ -261,7 +261,7 @@ void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item["id"]);
+    QLabel *label = id_to_label(ui_item.at("id"));
 
     auto dial = qobject_cast<QwtDial *>(widget);
     if (dial == nullptr)
@@ -270,8 +270,8 @@ void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
         return;
     }
 
-    double value = ui_item["value"];
-    bool visible = ui_item["visible"];
+    double value = ui_item.at("value");
+    bool visible = ui_item.at("visible");
     QString unit = QString::fromStdString(ui_item.at("unit"));
 
     if (label != nullptr)
@@ -293,7 +293,7 @@ void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_thermo(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item["id"]);
+    QLabel *label = id_to_label(ui_item.at("id"));
 
     auto thermo = qobject_cast<QwtThermo *>(widget);
     if (thermo == nullptr)
@@ -302,8 +302,8 @@ void Simulator_base::process_ui_thermo(json &ui_item, QWidget *widget)
         return;
     }
 
-    double value = ui_item["value"];
-    bool visible = ui_item["visible"];
+    double value = ui_item.at("value");
+    bool visible = ui_item.at("visible");
     QString unit = QString::fromStdString(ui_item.at("unit"));
 
     if (label != nullptr)
@@ -337,9 +337,9 @@ void Simulator_base::process_ui_combobox(json &ui_item, QWidget *widget)
         return;
     }
 
-    size_t selected = ui_item["selected"];
+    size_t selected = ui_item.at("selected");
 
-    for (json &item : ui_item["options"])
+    for (json &item : ui_item.at("options"))
     {
         if (combobox->findText(QString::fromStdString(item)) == -1)
             combobox->addItem(QString::fromStdString(item));
@@ -365,11 +365,11 @@ void Simulator_base::process_ui_checkbox(json &ui_item, QWidget *widget)
         return;
     }
 
-    QColor bg_color = QColor(QString::fromStdString(ui_item["bg_color"]));
-    QColor fg_color = QColor(QString::fromStdString(ui_item["fg_color"]));
-    QString text = QString::fromStdString(ui_item["text"]);
-    bool enabled = ui_item["enabled"];
-    bool checked = ui_item["checked"];
+    QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
+    QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
+    QString text = QString::fromStdString(ui_item.at("text"));
+    bool enabled = ui_item.at("enabled");
+    bool checked = ui_item.at("checked");
 
     if (checkbox->isChecked() != checked)
     {
@@ -425,10 +425,10 @@ void Simulator_base::process_ui_button(json &ui_item, QWidget *widget)
         return;
     }
 
-    QColor bg_color = QColor(QString::fromStdString(ui_item["bg_color"]));
-    QColor fg_color = QColor(QString::fromStdString(ui_item["fg_color"]));
-    QString text = QString::fromStdString(ui_item["text"]);
-    bool enabled = ui_item["enabled"];
+    QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
+    QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
+    QString text = QString::fromStdString(ui_item.at("text"));
+    bool enabled = ui_item.at("enabled");
 
     if (button->text() != text)
     {
@@ -479,9 +479,9 @@ void Simulator_base::process_ui_led(json &ui_item, QWidget *widget)
         return;
     }
 
-    QColor bg_color = QColor(QString::fromStdString(ui_item["bg_color"]));
-    QColor color = QColor(QString::fromStdString(ui_item["fg_color"]));
-    QString text = QString::fromStdString(ui_item["text"]);
+    QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
+    QColor color = QColor(QString::fromStdString(ui_item.at("fg_color")));
+    QString text = QString::fromStdString(ui_item.at("text"));
 
     if (text != led->text())
     {
@@ -527,10 +527,10 @@ void Simulator_base::process_ui_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
-    bool enabled = ui_item["enabled"];
-    double min = ui_item["min"];
-    double max = ui_item["max"];
-    double value = ui_item["value"];
+    bool enabled = ui_item.at("enabled");
+    double min = ui_item.at("min");
+    double max = ui_item.at("max");
+    double value = ui_item.at("value");
 
     if (enabled != spinbox->isEnabled())
     {
@@ -560,10 +560,10 @@ void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
-    bool enabled = ui_item["enabled"];
-    double min = ui_item["min"];
-    double max = ui_item["max"];
-    double value = ui_item["value"];
+    bool enabled = ui_item.at("enabled");
+    double min = ui_item.at("min");
+    double max = ui_item.at("max");
+    double value = ui_item.at("value");
 
     if (enabled != spinbox->isEnabled())
     {
@@ -593,10 +593,10 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
         return;
     }
 
-    bool enabled = ui_item["enabled"];
-    double min = ui_item["min"];
-    double max = ui_item["max"];
-    double value = ui_item["value"];
+    bool enabled = ui_item.at("enabled");
+    double min = ui_item.at("min");
+    double max = ui_item.at("max");
+    double value = ui_item.at("value");
 
     if (enabled != spinbox->isEnabled())
     {
@@ -680,11 +680,11 @@ void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)
         return;
     }
 
-    QString text = QString::fromStdString(ui_item["text"]);
-    QColor bg_color = QColor(QString::fromStdString(ui_item["bg_color"]));
-    QColor color = QColor(QString::fromStdString(ui_item["fg_color"]));
-    QString x_label = QString::fromStdString(ui_item["x_label"]);
-    QString y_label = QString::fromStdString(ui_item["y_label"]);
+    QString text = QString::fromStdString(ui_item.at("text"));
+    QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
+    QColor color = QColor(QString::fromStdString(ui_item.at("fg_color")));
+    QString x_label = QString::fromStdString(ui_item.at("x_label"));
+    QString y_label = QString::fromStdString(ui_item.at("y_label"));
 
     std::vector<double> x_vals = (std::vector<double>)ui_item.at("x_vals");
     std::vector<double> y_vals = (std::vector<double>)ui_item.at("y_vals");
@@ -729,12 +729,12 @@ void Simulator_base::process_ui_table(json &ui_item, QWidget *widget)
         return;
     }
 
-    size_t row_count = ui_item["row_count"];
-    std::vector<std::string> row_labels = (std::vector<std::string>)ui_item["row_labels"];
-    size_t column_count = ui_item["column_count"];
-    std::vector<std::string> column_labels = (std::vector<std::string>)ui_item["column_labels"];
-    std::vector<bool> valid = (std::vector<bool>)ui_item["valid"];
-    std::vector<std::string> table_data = (std::vector<std::string>)ui_item["table"];
+    size_t row_count = ui_item.at("row_count");
+    std::vector<std::string> row_labels = (std::vector<std::string>)ui_item.at("row_labels");
+    size_t column_count = ui_item.at("column_count");
+    std::vector<std::string> column_labels = (std::vector<std::string>)ui_item.at("column_labels");
+    std::vector<bool> valid = (std::vector<bool>)ui_item.at("valid");
+    std::vector<std::string> table_data = (std::vector<std::string>)ui_item.at("table");
 
     table->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
     table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
@@ -787,14 +787,14 @@ void Simulator_base::process_ui_can(json &ui_item, QWidget *widget)
     }
 
     can_ui->clear();
-    for (auto &send_item : ui_item["send_msgs"])
+    for (auto &send_item : ui_item.at("send_msgs"))
     {
-        can_ui->add_send_item(send_item["id"], send_item["dlc"], send_item["payload"]);
+        can_ui->add_send_item(send_item.at("id"), send_item.at("dlc"), send_item.at("payload"));
     }
 
-    for (auto &recvd_item : ui_item["rcvd_msgs"])
+    for (auto &recvd_item : ui_item.at("rcvd_msgs"))
     {
-        can_ui->add_receive_item(recvd_item["id"], recvd_item["dlc"], recvd_item["payload"]);
+        can_ui->add_receive_item(recvd_item.at("id"), recvd_item.at("dlc"), recvd_item.at("payload"));
     }
 }
 
