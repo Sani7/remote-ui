@@ -2,11 +2,13 @@
 
 UI_tab_widget::UI_tab_widget(QObject *parent) : UI_item(UI_TAB_WIDGET_TYPE, parent)
 {
+    setup_item(false, false, false);
 }
 
 UI_tab_widget::UI_tab_widget(std::vector<std::string> tab_names, size_t selected, QObject *parent)
     : UI_item(UI_TAB_WIDGET_TYPE, parent), m_selected_tab(selected), m_tab_names(tab_names)
 {
+    setup_item(false, false, false);
     m_tab_visible.resize(m_tab_names.size(), true);
 }
 

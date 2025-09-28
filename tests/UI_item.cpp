@@ -14,13 +14,6 @@ TEST(UI_item, set_text)
     EXPECT_EQ(item.text(), "text");
 }
 
-TEST(UI_item, text_size)
-{
-    UI_item item(std::string("item"));
-    item.set_text_size(12);
-    EXPECT_EQ(item.text_size(), 12);
-}
-
 TEST(UI_item, set_fg_color)
 {
     UI_item item(std::string("item"));
@@ -56,19 +49,17 @@ TEST(UI_item, from_json)
 
     item.from_json(j);
     EXPECT_EQ(item.text(), "item_text");
-    EXPECT_EQ(item.text_size(), 12);
     EXPECT_EQ(item.fg_color(), Color(255, 255, 255));
     EXPECT_EQ(item.bg_color(), Color(0, 0, 0));
 }
 
 TEST(UI_item, to_json)
 {
-    UI_item item("item", "item_text", 12, Color(255, 255, 255), Color(0, 0, 0));
+    UI_item item("item", "item_text", Color(255, 255, 255), Color(0, 0, 0));
     json j = item.to_json(0);
     EXPECT_EQ(j.at("type"), "item");
     EXPECT_EQ(j.at("id"), 0);
     EXPECT_EQ(j.at("text"), "item_text");
-    EXPECT_EQ(j.at("text_size"), 12);
     EXPECT_EQ(j.at("fg_color"), Color(255, 255, 255).to_hex());
     EXPECT_EQ(j.at("bg_color"), Color(0, 0, 0).to_hex());
 }

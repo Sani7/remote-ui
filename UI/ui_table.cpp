@@ -2,6 +2,7 @@
 
 UI_table::UI_table(QObject *parent) : UI_item(UI_TABLE_TYPE, parent), m_row_count(0), m_column_count(0)
 {
+    setup_item(false, false, false);
 }
 
 UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels,
@@ -9,6 +10,7 @@ UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::strin
     : UI_item(UI_TABLE_TYPE, parent), m_row_count(row_count), m_column_count(column_count), m_row_labels(row_labels),
       m_column_labels(column_labels), m_valid(), m_table()
 {
+    setup_item(false, false, false);
     m_table.resize(m_column_count * m_row_count);
     m_valid.resize(m_column_count * m_row_count);
 }

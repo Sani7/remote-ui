@@ -2,10 +2,12 @@
 
 UI_spinbox::UI_spinbox(QObject *parent) : UI_item(UI_SPINBOX_TYPE, parent)
 {
+    setup_item(false, false, false);
 }
 
 UI_spinbox::UI_spinbox(double min, double max, double value, QObject *parent) : UI_item(UI_SPINBOX_TYPE, parent)
 {
+    setup_item(false, false, false);
     m_min = min;
     m_max = max;
     m_value = value;

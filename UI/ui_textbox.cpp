@@ -1,7 +1,7 @@
 #include "ui_textbox.hpp"
 
 UI_textbox::UI_textbox(std::string hint, Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_TEXTBOX_TYPE, "", 0, fg_color, bg_color, parent), m_hint(hint)
+    : UI_item(UI_TEXTBOX_TYPE, "", fg_color, bg_color, parent), m_hint(hint)
 {
 }
 

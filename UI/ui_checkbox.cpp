@@ -5,7 +5,7 @@ UI_checkbox::UI_checkbox(QObject *parent) : UI_item(UI_CHECKBOX_TYPE, parent), m
 }
 
 UI_checkbox::UI_checkbox(std::string text, Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_CHECKBOX_TYPE, text, 0, fg_color, bg_color, parent), m_checked(false)
+    : UI_item(UI_CHECKBOX_TYPE, text, fg_color, bg_color, parent), m_checked(false)
 {
 }
 

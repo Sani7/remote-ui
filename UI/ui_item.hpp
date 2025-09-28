@@ -15,8 +15,7 @@ class UI_item : public QObject
     Q_OBJECT
   public:
     explicit UI_item(std::string type, QObject *parent = nullptr);
-    explicit UI_item(std::string type, std::string text, uint8_t text_size, Color fg_color, Color bg_color,
-                     QObject *parent = nullptr);
+    explicit UI_item(std::string type, std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     explicit UI_item(const json &j, QObject *parent = nullptr);
     ~UI_item();
 
@@ -26,9 +25,6 @@ class UI_item : public QObject
     virtual void set_text(std::string text);
     void append_text(std::string text);
     std::string text() const;
-
-    void set_text_size(uint8_t text_size);
-    uint8_t text_size() const;
 
     void set_fg_color(Color fg_color);
     Color fg_color() const;
@@ -56,12 +52,16 @@ class UI_item : public QObject
     void ui_changed();
 
   protected:
+    void setup_item(bool text, bool fg_color, bool bg_color);
+
     size_t m_id;
     std::string m_type;
     std::string m_text;
-    uint8_t m_text_size;
+    bool m_text_enabled = true;
     Color m_fg_color;
+    bool m_fg_color_enabled = true;
     Color m_bg_color;
-    bool enabled;
-    bool visible;
+    bool m_bg_color_enabled = true;
+    bool m_enabled;
+    bool m_visible;
 };
