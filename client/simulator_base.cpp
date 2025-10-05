@@ -213,6 +213,18 @@ void Simulator_base::process_ui_label(json &ui_item, QWidget *widget)
     }
 
     QString value = QString::fromStdString(ui_item.at("text"));
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (label->isEnabled() != enabled)
+    {
+        label->setEnabled(enabled);
+    }
+
+    if (label->isVisible() != visible)
+    {
+        label->setVisible(visible);
+    }
 
     if (label->text() != value)
     {
@@ -338,6 +350,18 @@ void Simulator_base::process_ui_combobox(json &ui_item, QWidget *widget)
     }
 
     size_t selected = ui_item.at("selected");
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (combobox->isEnabled() != enabled)
+    {
+        combobox->setEnabled(enabled);
+    }
+
+    if (combobox->isVisible() != visible)
+    {
+        combobox->setVisible(visible);
+    }
 
     for (json &item : ui_item.at("options"))
     {
@@ -369,6 +393,7 @@ void Simulator_base::process_ui_checkbox(json &ui_item, QWidget *widget)
     QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
     QString text = QString::fromStdString(ui_item.at("text"));
     bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
     bool checked = ui_item.at("checked");
 
     if (checkbox->isChecked() != checked)
@@ -384,6 +409,11 @@ void Simulator_base::process_ui_checkbox(json &ui_item, QWidget *widget)
     if (checkbox->isEnabled() != enabled)
     {
         checkbox->setEnabled(enabled);
+    }
+
+    if (checkbox->isVisible() != visible)
+    {
+        checkbox->setVisible(visible);
     }
 
     if (bg_color == QColor(0x83, 0x91, 0x92))
@@ -429,15 +459,21 @@ void Simulator_base::process_ui_button(json &ui_item, QWidget *widget)
     QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
     QString text = QString::fromStdString(ui_item.at("text"));
     bool enabled = ui_item.at("enabled");
-
-    if (button->text() != text)
-    {
-        button->setText(text);
-    }
+    bool visible = ui_item.at("visible");
 
     if (button->isEnabled() != enabled)
     {
         button->setEnabled(enabled);
+    }
+
+    if (button->isVisible() != visible)
+    {
+        button->setVisible(visible);
+    }
+
+    if (button->text() != text)
+    {
+        button->setText(text);
     }
 
     if (bg_color == QColor(0x83, 0x91, 0x92))
@@ -482,6 +518,12 @@ void Simulator_base::process_ui_led(json &ui_item, QWidget *widget)
     QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
     QColor color = QColor(QString::fromStdString(ui_item.at("fg_color")));
     QString text = QString::fromStdString(ui_item.at("text"));
+    bool visible = ui_item.at("visible");
+
+    if (led->isVisible() != visible)
+    {
+        led->setVisible(visible);
+    }
 
     if (text != led->text())
     {
@@ -528,6 +570,7 @@ void Simulator_base::process_ui_spinbox(json &ui_item, QWidget *widget)
     }
 
     bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
     double min = ui_item.at("min");
     double max = ui_item.at("max");
     double value = ui_item.at("value");
@@ -535,6 +578,11 @@ void Simulator_base::process_ui_spinbox(json &ui_item, QWidget *widget)
     if (enabled != spinbox->isEnabled())
     {
         spinbox->setEnabled(enabled);
+    }
+
+    if (visible != spinbox->isVisible())
+    {
+        spinbox->setVisible(visible);
     }
 
     if (min != spinbox->minimum())
@@ -561,6 +609,7 @@ void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
     }
 
     bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
     double min = ui_item.at("min");
     double max = ui_item.at("max");
     double value = ui_item.at("value");
@@ -568,6 +617,11 @@ void Simulator_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
     if (enabled != spinbox->isEnabled())
     {
         spinbox->setEnabled(enabled);
+    }
+
+    if (visible != spinbox->isVisible())
+    {
+        spinbox->setVisible(visible);
     }
 
     if (min != spinbox->minimum())
@@ -594,6 +648,7 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
     }
 
     bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
     double min = ui_item.at("min");
     double max = ui_item.at("max");
     double value = ui_item.at("value");
@@ -601,6 +656,11 @@ void Simulator_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
     if (enabled != spinbox->isEnabled())
     {
         spinbox->setEnabled(enabled);
+    }
+
+    if (visible != spinbox->isVisible())
+    {
+        spinbox->setVisible(visible);
     }
 
     if (min != spinbox->minimum())
@@ -631,7 +691,21 @@ void Simulator_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
         SPDLOG_ERROR("QTabWidget has not the same amount of tabs as the server");
         return;
     }
+
     auto tab_names = ui_item.at("tab_names");
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (tab_widget->isEnabled() != enabled)
+    {
+        tab_widget->setEnabled(enabled);
+    }
+
+    if (tab_widget->isVisible() != visible)
+    {
+        tab_widget->setVisible(visible);
+    }
+
     for (size_t i = 0; i < tab_names.size(); i++)
     {
         if (tab_widget->tabText(i) != QString::fromStdString(tab_names[i]))
@@ -665,6 +739,19 @@ void Simulator_base::process_ui_stacked_widget(json &ui_item, QWidget *widget)
         return;
     }
 
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (stacked_widget->isEnabled() != enabled)
+    {
+        stacked_widget->setEnabled(enabled);
+    }
+
+    if (stacked_widget->isVisible() != visible)
+    {
+        stacked_widget->setVisible(visible);
+    }
+
     if (stacked_widget->currentIndex() != ui_item.at("current_tab"))
     {
         stacked_widget->setCurrentIndex(ui_item.at("current_tab"));
@@ -688,6 +775,19 @@ void Simulator_base::process_ui_plot(json &ui_item, QWidget *widget)
 
     std::vector<double> x_vals = (std::vector<double>)ui_item.at("x_vals");
     std::vector<double> y_vals = (std::vector<double>)ui_item.at("y_vals");
+
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (plot->isEnabled() != enabled)
+    {
+        plot->setEnabled(enabled);
+    }
+
+    if (plot->isVisible() != visible)
+    {
+        plot->setVisible(visible);
+    }
 
     if (text != plot->title().text())
     {
@@ -735,6 +835,18 @@ void Simulator_base::process_ui_table(json &ui_item, QWidget *widget)
     std::vector<std::string> column_labels = (std::vector<std::string>)ui_item.at("column_labels");
     std::vector<bool> valid = (std::vector<bool>)ui_item.at("valid");
     std::vector<std::string> table_data = (std::vector<std::string>)ui_item.at("table");
+    bool enabled = ui_item.at("enabled");
+    bool visible = ui_item.at("visible");
+
+    if (table->isEnabled() != enabled)
+    {
+        table->setEnabled(enabled);
+    }
+
+    if (table->isVisible() != visible)
+    {
+        table->setVisible(visible);
+    }
 
     table->setEditTriggers(QAbstractItemView::EditTrigger::NoEditTriggers);
     table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
