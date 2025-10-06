@@ -17,4 +17,4 @@
 #include "ui_textbox.hpp"
 #include "ui_thermo.hpp"
 
-#include "custom/ui_can.hpp"
+#include "ui_can.hpp"
