@@ -185,6 +185,11 @@ void Simulator_base::UI_item_parser(json &input)
             process_ui_stacked_widget(ui_item, widget);
             continue;
         }
+        if (ui_item.at("type") == "ui_status_bar")
+        {
+            process_ui_status_bar(ui_item, widget);
+            continue;
+        }
         if (ui_item.at("type") == "ui_plot")
         {
             process_ui_plot(ui_item, widget);
@@ -755,6 +760,21 @@ void Simulator_base::process_ui_stacked_widget(json &ui_item, QWidget *widget)
     if (stacked_widget->currentIndex() != ui_item.at("current_tab"))
     {
         stacked_widget->setCurrentIndex(ui_item.at("current_tab"));
+    }
+}
+
+void Simulator_base::process_ui_status_bar(json &ui_item, QWidget *widget)
+{
+    auto status_bar = qobject_cast<QStatusBar *>(widget);
+    if (status_bar == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QStatusBar");
+        return;
+    }
+
+    if (status_bar->currentMessage() != QString::fromStdString(ui_item.at("current_message")))
+    {
+        status_bar->showMessage(QString::fromStdString(ui_item.at("current_message")), ui_item.at("timeout"));
     }
 }
 

@@ -12,6 +12,7 @@
 #include "ui_slider.hpp"
 #include "ui_spinbox.hpp"
 #include "ui_stacked_widget.hpp"
+#include "ui_status_bar.hpp"
 #include "ui_tab_widget.hpp"
 #include "ui_table.hpp"
 #include "ui_textbox.hpp"

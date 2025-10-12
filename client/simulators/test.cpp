@@ -23,6 +23,7 @@ Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
     PUSH_UI_ITEM(hexSpinBox);
     PUSH_UI_ITEM(tabWidget);
     PUSH_UI_ITEM(stackedWidget);
+    PUSH_UI_ITEM(statusbar);
 }
 
 Test_Sim::~Test_Sim()

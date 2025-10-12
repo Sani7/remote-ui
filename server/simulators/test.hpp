@@ -29,4 +29,5 @@ class Test_Sim : public Simulator_base
     UI_hex_spinbox m_hex_spinbox;
     UI_tab_widget m_tab_widget;
     UI_stacked_widget m_stacked_widget;
+    UI_status_bar m_status_bar;
 };

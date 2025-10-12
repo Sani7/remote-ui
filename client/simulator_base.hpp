@@ -58,6 +58,7 @@ class Simulator_base : public QMainWindow
     virtual void process_ui_hex_spinbox(json &ui_item, QWidget *widget);
     virtual void process_ui_tab_widget(json &ui_item, QWidget *widget);
     virtual void process_ui_stacked_widget(json &ui_item, QWidget *widget);
+    virtual void process_ui_status_bar(json &ui_item, QWidget *widget);
     virtual void process_ui_plot(json &ui_item, QWidget *widget);
     virtual void process_ui_table(json &ui_item, QWidget *widget);
     virtual void process_ui_can(json &ui_item, QWidget *widget);
