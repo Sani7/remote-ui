@@ -52,6 +52,7 @@ class Simulators : public QObject
     void stop();
     void switch_simulator(std::string name);
     std::vector<std::string> list_simulators() const;
+    bool is_not_active() const;
     Simulator_base *invoke_active_simulator();
     json changed_UI_items();
 

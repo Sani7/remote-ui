@@ -151,6 +151,11 @@ std::vector<std::string> Simulators::list_simulators() const
     return names;
 }
 
+bool Simulators::is_not_active() const
+{
+    return this->m_current_simulator.empty();
+}
+
 Simulator_base *Simulators::invoke_active_simulator()
 {
     std::lock_guard<std::mutex> lock(m_mutex);

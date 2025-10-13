@@ -32,12 +32,22 @@ json Simulators::command_parser(json command)
         {
         case Command::get_UI_element:
             SPDLOG_INFO("Command {}: {}", type, (size_t)command.at("id"));
+            if (is_not_active())
+            {
+                SPDLOG_ERROR("Command got called but there is no active simulator");
+                return j;
+            }
             j["response"]["type"] = type;
             j["response"]["UI_item"] =
                 invoke_active_simulator()->get_UI_item(command.at("id"))->to_json(command.at("id"));
             break;
         case Command::get_UI_elements:
             SPDLOG_INFO("Command {}", type);
+            if (is_not_active())
+            {
+                SPDLOG_ERROR("Command got called but there is no active simulator");
+                return j;
+            }
             j["response"]["type"] = type;
             j["response"]["UI_items"] = invoke_active_simulator()->get_UI_items()["UI_items"];
             break;
