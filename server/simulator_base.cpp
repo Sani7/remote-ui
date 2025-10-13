@@ -1,4 +1,6 @@
+#define INTERNAL
 #include "simulator_base.hpp"
+#include "ui_item.hpp"
 
 Simulator_base::Simulator_base(std::string name, Communication *com, std::chrono::milliseconds interval,
                                QObject *parent)

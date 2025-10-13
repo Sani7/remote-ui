@@ -1,11 +1,20 @@
 #pragma once
 
-#include "UI.hpp"
 #include "spdlog/spdlog.h"
-#include "ui.hpp"
 #include <QSerialPort>
 #include <QThread>
 #include <QTimer>
+
+#ifndef INTERNAL
+#include "ui.hpp"
+#else
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
+Q_FORWARD_DECLARE_OBJC_CLASS(CAN_Wrapper);
+Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
+#endif
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
 #define EXPORT_SIM(sim)                                                                                                \
