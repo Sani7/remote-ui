@@ -1,5 +1,4 @@
 #pragma once
-
 #include "spdlog/spdlog.h"
 #include <QSerialPort>
 #include <QThread>

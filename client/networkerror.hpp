@@ -1,6 +1,4 @@
-#ifndef NETWORKERROR_H
-#define NETWORKERROR_H
-
+#pragma once
 #include <QDialog>
 
 namespace Ui
@@ -20,5 +18,3 @@ class NetworkError : public QDialog
   private:
     Ui::NetworkError *ui;
 };
-
-#endif // NETWORKERROR_H

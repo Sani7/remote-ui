@@ -1,6 +1,4 @@
-#ifndef GPIO_HPP
-#define GPIO_HPP
-
+#pragma once
 #include <QObject>
 #if defined(__linux__) && (defined(__aarch64__) || defined(__x86_64__))
 #include <gpiod.hpp>
@@ -29,5 +27,3 @@ class GPIO : public QObject
 #endif
     unsigned int m_offset;
 };
-
-#endif // GPIO_HPP

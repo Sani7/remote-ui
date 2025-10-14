@@ -1,6 +1,4 @@
-#ifndef UI_DOUBLE_SPINBOX_H
-#define UI_DOUBLE_SPINBOX_H
-
+#pragma once
 #include "ui_item.hpp"
 
 #define UI_DOUBLE_SPINBOX_TYPE std::string("ui_double_spinbox")
@@ -28,5 +26,3 @@ class UI_double_spinbox : public UI_item
     double m_max;
     double m_value;
 };
-
-#endif // UI_DOUBLE_SPINBOX_H

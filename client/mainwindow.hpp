@@ -1,6 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include "networkerror.hpp"
 #include "simulator_base.hpp"
 #include "web_socket_wrapper.hpp"
@@ -48,5 +46,3 @@ class MainWindow : public QMainWindow
 
     std::map<QString, std::unique_ptr<Simulator_base>> m_sims;
 };
-
-#endif // MAINWINDOW_H

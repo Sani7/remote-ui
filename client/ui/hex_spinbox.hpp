@@ -1,6 +1,4 @@
-#ifndef _HEXSPINBOX_H_
-#define _HEXSPINBOX_H_
-
+#pragma once
 #include <QLineEdit>
 #include <QRegularExpressionValidator>
 #include <QSpinBox>
@@ -28,5 +26,3 @@ class HexSpinBox : public QSpinBox
     QRegularExpressionValidator *validator;
     QString format;
 };
-
-#endif // _HEXSPINBOX_H_

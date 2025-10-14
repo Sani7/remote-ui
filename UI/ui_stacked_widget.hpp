@@ -1,6 +1,4 @@
-#ifndef UI_STACKED_WIDGET_HPP
-#define UI_STACKED_WIDGET_HPP
-
+#pragma once
 #include "ui_item.hpp"
 #define UI_STACKED_WIDGET_TYPE std::string("ui_stacked_widget")
 
@@ -22,5 +20,3 @@ class UI_stacked_widget : public UI_item
     size_t m_tab_count;
     size_t m_current_tab;
 };
-
-#endif // UI_STACKED_WIDGET_HPP

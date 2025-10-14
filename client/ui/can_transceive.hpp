@@ -1,6 +1,4 @@
-#ifndef CAN_TRANSCEIVE_H
-#define CAN_TRANSCEIVE_H
-
+#pragma once
 #include "hex_spinbox.hpp"
 #include <QWidget>
 
@@ -29,5 +27,3 @@ class Can_Transceive : public QWidget
     Ui::Can_Transceive *ui;
     std::vector<HexSpinBox *> can_send_hexspinboxes;
 };
-
-#endif // CAN_TRANSCEIVE_H

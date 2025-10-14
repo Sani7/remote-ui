@@ -1,6 +1,4 @@
-#ifndef UI_TAB_WIDGET_HPP
-#define UI_TAB_WIDGET_HPP
-
+#pragma once
 #include "ui_item.hpp"
 
 #define UI_TAB_WIDGET_TYPE std::string("ui_tab_widget")
@@ -33,5 +31,3 @@ class UI_tab_widget : public UI_item
     std::vector<std::string> m_tab_names;
     std::vector<bool> m_tab_visible;
 };
-
-#endif // UI_TAB_WIDGET_HPP

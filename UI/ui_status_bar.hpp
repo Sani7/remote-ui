@@ -1,6 +1,4 @@
-#ifndef UI_STATUS_BAR_HPP
-#define UI_STATUS_BAR_HPP
-
+#pragma once
 #include "ui_item.hpp"
 #define UI_STATUS_BAR_TYPE std::string("ui_status_bar")
 
@@ -21,5 +19,3 @@ class UI_status_bar : public UI_item
     std::string m_current_message;
     size_t m_timeout;
 };
-
-#endif // UI_STATUS_BAR_HPP

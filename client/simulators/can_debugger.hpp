@@ -1,6 +1,4 @@
-#ifndef SIM_CAN_DEBUGGER_H
-#define SIM_CAN_DEBUGGER_H
-
+#pragma once
 #include "simulator_base.hpp"
 #include <QMainWindow>
 
@@ -20,5 +18,3 @@ class Can_Debugger : public Simulator_base
   private:
     Ui::Can_Debugger *ui;
 };
-
-#endif // SIM_CAN_DEBUGGER_H

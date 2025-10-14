@@ -1,6 +1,4 @@
-#ifndef WEB_SOCKET_WRAPPER_H
-#define WEB_SOCKET_WRAPPER_H
-
+#pragma once
 #include <QObject>
 #include <nlohmann/json.hpp>
 Q_FORWARD_DECLARE_OBJC_CLASS(QWebSocket);
@@ -67,5 +65,3 @@ class Web_socket_wrapper : public QObject
     QTimer *m_ping_timer;
     QTimer *m_pong_timer;
 };
-
-#endif // WEB_SOCKET_WRAPPER_H

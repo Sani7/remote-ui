@@ -1,7 +1,4 @@
-#ifndef VISA_HPP
-#define VISA_HPP
-
-#include "tcp_client.hpp"
+#pragma once
 #include <QObject>
 
 class Visa : public QObject
@@ -32,5 +29,3 @@ class Visa : public QObject
     bool m_data_ready;
     QString m_data;
 };
-
-#endif // VISA_HPP

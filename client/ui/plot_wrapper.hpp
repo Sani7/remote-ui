@@ -1,6 +1,4 @@
-#ifndef PLOT_WRAPPER_HPP
-#define PLOT_WRAPPER_HPP
-
+#pragma once
 #include <QObject>
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -16,5 +14,3 @@ class Plot_wrapper : public QwtPlot
   private:
     QwtPlotCurve *m_curve;
 };
-
-#endif // PLOT_WRAPPER_HPP

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ui_item.hpp"
 #include <QCanBusFrame>
 

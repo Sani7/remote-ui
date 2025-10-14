@@ -1,5 +1,4 @@
 #pragma once
-
 #include "ui_item.hpp"
 
 #define UI_BUTTON_TYPE std::string("ui_button")

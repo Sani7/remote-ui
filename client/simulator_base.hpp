@@ -1,6 +1,4 @@
-#ifndef SIMULATOR_BASE_H
-#define SIMULATOR_BASE_H
-
+#pragma once
 #include "spdlog/spdlog.h"
 #include <QMainWindow>
 #include <QWidget>
@@ -90,5 +88,3 @@ class Simulator_base : public QMainWindow
     bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;
 };
-
-#endif // SIMULATOR_BASE_H

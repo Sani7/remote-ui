@@ -1,6 +1,4 @@
-#ifndef UI_PLOT_H
-#define UI_PLOT_H
-
+#pragma once
 #include "ui_item.hpp"
 #define UI_PLOT_TYPE std::string("ui_plot")
 
@@ -35,5 +33,3 @@ class UI_plot : public UI_item
     bool m_x_label_enabled;
     bool m_y_label_enabled;
 };
-
-#endif // UI_PLOT_H

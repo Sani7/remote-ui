@@ -1,6 +1,4 @@
-#ifndef SIM_TEST_H
-#define SIM_TEST_H
-
+#pragma once
 #include "simulator_base.hpp"
 #include "web_socket_wrapper.hpp"
 #include <QMainWindow>
@@ -23,5 +21,3 @@ class Test_Sim : public Simulator_base
   private:
     Ui::Test_Sim *ui;
 };
-
-#endif // SIM_TEST_H

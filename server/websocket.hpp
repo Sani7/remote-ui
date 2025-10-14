@@ -1,5 +1,4 @@
 #pragma once
-
 #include <QtCore/QByteArray>
 #include <QtCore/QList>
 #include <QtCore/QObject>

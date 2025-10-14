@@ -1,6 +1,4 @@
-#ifndef LED_H
-#define LED_H
-
+#pragma once
 #include "QPushButton"
 
 class Led : public QPushButton
@@ -16,5 +14,3 @@ class Led : public QPushButton
     bool is_read_only(QWidget *widget);
     void set_read_only(QWidget *widget, bool read_only);
 };
-
-#endif // LED_H

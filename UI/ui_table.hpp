@@ -1,5 +1,4 @@
-#ifndef UI_TABLE_HPP
-#define UI_TABLE_HPP
+#pragma once
 #include "ui_item.hpp"
 
 #define UI_TABLE_TYPE std::string("ui_table")
@@ -43,5 +42,3 @@ class UI_table : public UI_item
     std::vector<bool> m_valid;
     std::vector<std::string> m_table;
 };
-
-#endif // UI_TABLE_HPP

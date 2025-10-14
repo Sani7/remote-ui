@@ -1,6 +1,4 @@
-#ifndef BETTER_RADIOBUTTON_H
-#define BETTER_RADIOBUTTON_H
-
+#pragma once
 #include <QRadioButton>
 #include <QVBoxLayout>
 
@@ -23,5 +21,3 @@ class Better_Radiobutton : public QWidget
     std::vector<QRadioButton *> m_radiobuttons;
     QString m_checked;
 };
-
-#endif // BETTER_RADIOBUTTON_H
