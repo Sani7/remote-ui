@@ -25,30 +25,6 @@ set(PROJECT_SOURCES
     web_socket_wrapper.hpp
 )
 
-if (NOT EMSCRIPTEN)
-    file(GLOB_RECURSE sims "simulators/*.cpp")
-    # Loop through each .cpp file and create a library for it
-    foreach(sim ${sims})
-        # Extract the base name of the file (without the directory and extension)
-        get_filename_component(LIB_NAME ${sim} NAME_WE)
-
-        # Create a library for each .cpp file
-        add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui)
-        target_link_libraries(ui_${LIB_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets magic_enum::magic_enum nlohmann_json::nlohmann_json)
-        target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${CMAKE_SOURCE_DIR}/external/qwt/src ${CMAKE_SOURCE_DIR}/external/spdlog/include ${PROJECT_BINARY_DIR}/)
-
-        set_target_properties(
-            ui_${LIB_NAME}
-            PROPERTIES
-                AUTOUIC ON
-                AUTOMOC ON
-                AUTORCC ON
-        )
-    endforeach()
-else()
-    file(GLOB_RECURSE sims "simulators/*")
-endif()
-
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(unisim_client
         MANUAL_FINALIZATION
@@ -115,4 +91,33 @@ install(TARGETS Simulator-CVS_I10
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(unisim_client)
+endif()
+
+if (NOT EMSCRIPTEN)
+    file(GLOB_RECURSE sims "simulators/*.cpp")
+    # Loop through each .cpp file and create a library for it
+    foreach(sim ${sims})
+        # Extract the base name of the file (without the directory and extension)
+        get_filename_component(LIB_NAME ${sim} NAME_WE)
+
+        # Create a library for each .cpp file
+        add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui)
+        target_link_libraries(ui_${LIB_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets magic_enum::magic_enum nlohmann_json::nlohmann_json)
+        target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${CMAKE_SOURCE_DIR}/external/qwt/src ${CMAKE_SOURCE_DIR}/external/spdlog/include ${PROJECT_BINARY_DIR}/)
+
+        set_target_properties(
+            ui_${LIB_NAME}
+            PROPERTIES
+                AUTOUIC ON
+                AUTOMOC ON
+                AUTORCC ON
+        )
+
+        add_custom_command(TARGET ui_${LIB_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:ui_${LIB_NAME}>
+            $<TARGET_FILE_DIR:unisim_client>)
+    endforeach()
+else()
+    file(GLOB_RECURSE sims "simulators/*")
 endif()
