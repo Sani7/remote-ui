@@ -20,6 +20,7 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     connect(m_pong_timer, &QTimer::timeout, this, &Web_socket_wrapper::m_on_pong_timeout);
     m_ping_timer->setSingleShot(true);
     m_pong_timer->setSingleShot(true);
+    m_web_socket->setProxy(QNetworkProxy::NoProxy);
     m_web_socket->open(url);
 }
 
