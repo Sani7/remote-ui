@@ -1,14 +1,17 @@
 ## Server simulator
-To create a simulator server follow these steps
-1) Make sure the server folder is folded down
-2) Right click on unisim_server and select Add new
-3) Choose C/C++ in files and classes and then select C++ class + Choose
-4) Change the classname to the name of your sim use underscores as spaces, don't forget classnames always start with a capital letter
-5) Set as base Simulator_base and check "Add Q_Object"
-6) Select the path by clicking browse and make sure it is in the server/simulators folder + Next
-7) Set add to project to None + Finish
-8) Refresh CMake by right clicking on the project name + Run Cmake, it should show your sim as sim_ + filename
-9) Change the hpp file as following. This is an example out of test sim
+
+To create a simulator server follow these steps  
+
+1. Make sure the server folder is folded down  
+2. Right click on unisim_server and select Add new  
+3. Choose C/C++ in files and classes and then select C++ class + Choose  
+4. Change the classname to the name of your sim use underscores as spaces, don't forget classnames always start with a capital letter  
+5. Set as base Simulator_base and check "Add Q_Object"  
+6. Select the path by clicking browse and make sure it is in the server/simulators folder + Next  
+7. Set add to project to None + Finish  
+8. Refresh CMake by right clicking on the project name + Run Cmake, it should show your sim as sim_ + filename  
+9. Change the hpp file as following. This is an example out of test sim  
+
 ```cpp
 #pragma once
 #include "simulator_base.hpp"
