@@ -2,7 +2,7 @@
 {"command":{"type":"get_active_simulator_name"}}
 {"command":{"type":"get_simulators"}}
 {"command":{"type":"get_UI_elements"}}
-{"command":{"type":"get_UI_element", "id":"button"}}
-{"event":{"type":"clicked","id":"button"}}
-{"event":{"type":"selected","id":"combobox", "selected":"item1"}}
-{"event":{"type":"value_changed","id":"slider","value":0.5}}
+{"command":{"type":"get_UI_element", "id":0}}
+{"event":{"type":"clicked","id":0}}
+{"event":{"type":"selected","id":1, "selected":"item1"}}
+{"event":{"type":"value_changed","id":3,"value":0.5}}
