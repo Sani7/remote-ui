@@ -239,7 +239,7 @@ void Simulator_base::process_ui_label(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item.at("id"));
+    QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 
     auto slider = qobject_cast<QwtSlider *>(widget);
     if (slider == nullptr)
@@ -278,7 +278,7 @@ void Simulator_base::process_ui_slider(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item.at("id"));
+    QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 
     auto dial = qobject_cast<QwtDial *>(widget);
     if (dial == nullptr)
@@ -310,7 +310,7 @@ void Simulator_base::process_ui_dial(json &ui_item, QWidget *widget)
 
 void Simulator_base::process_ui_thermo(json &ui_item, QWidget *widget)
 {
-    QLabel *label = id_to_label(ui_item.at("id"));
+    QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 
     auto thermo = qobject_cast<QwtThermo *>(widget);
     if (thermo == nullptr)

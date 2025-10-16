@@ -26,8 +26,9 @@ class Simulator_base : public QMainWindow
     void sim_update(void);
     QString name() const;
     QWidget *id_to_ui(size_t id);
-    virtual QLabel *id_to_label(size_t name)
+    virtual QLabel *id_to_label(QWidget *widget)
     {
+        Q_UNUSED(widget);
         return nullptr;
     }
 

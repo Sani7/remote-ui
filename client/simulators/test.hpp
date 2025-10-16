@@ -16,7 +16,7 @@ class Test_Sim : public Simulator_base
     explicit Test_Sim(Web_socket_wrapper *web_socket = nullptr, QWidget *parent = nullptr);
     ~Test_Sim();
 
-    QLabel *id_to_label(size_t name) override;
+    QLabel *id_to_label(QWidget *widget) override;
 
   private:
     Ui::Test_Sim *ui;

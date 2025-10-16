@@ -31,9 +31,8 @@ Test_Sim::~Test_Sim()
     delete ui;
 }
 
-QLabel *Test_Sim::id_to_label(size_t id)
+QLabel *Test_Sim::id_to_label(QWidget *widget)
 {
-    QWidget *widget = id_to_ui(id);
     if (widget == ui->slider)
         return ui->slider_label;
     if (widget == ui->thermo)
