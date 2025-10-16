@@ -1,7 +1,8 @@
+MIT License
 
-The MIT License (MIT)
-
-Copyright (c) 2024 Sani7
+Copyright (c) 2024-2025 Sander Speetjens
+THIS CODE BASE IS NOT PROPERTY OF NMBS BECAUSE IT WAS WRITTEN MOSTLY ON MY OWN
+TIME AT HOME, ONLY SIMULATOR/UI CODE IS PROPERTY OF NMBS
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
