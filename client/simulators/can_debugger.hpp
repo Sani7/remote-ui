@@ -1,6 +1,5 @@
 #pragma once
 #include "simulator_base.hpp"
-#include <QMainWindow>
 
 namespace Ui
 {

@@ -1,7 +1,5 @@
 #pragma once
 #include "simulator_base.hpp"
-#include "web_socket_wrapper.hpp"
-#include <QMainWindow>
 
 namespace Ui
 {
