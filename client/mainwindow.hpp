@@ -26,8 +26,8 @@ class MainWindow : public QMainWindow
     ~MainWindow();
 
   private:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
     void default_sim(QString name);
     void pase_sim_names(json &sims);
