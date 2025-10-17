@@ -19,6 +19,11 @@ Change this setting in Qt creator
 > Edit > Preferences > C++ > File Naming > Sources > Suffix  
 > Change this to cpp
 
+### Line endings
+Change this setting in Qt creator
+> Edit > Preferences > Text Editor > Behavior > File Encodings > Default line endings   
+> Change this to Unix (LF)
+
 ### 3 How to write type names
 
 Use snake case and make the first letter a capital letter to show that it is a type name
