@@ -11,10 +11,6 @@ Simulator_base::Simulator_base(QString name, Web_socket_wrapper *web_socket, QWi
     : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_web_socket(web_socket),
       m_name(name)
 {
-    if (windowTitle() != m_name)
-    {
-        setWindowTitle(m_name);
-    }
     this->setWindowState(Qt::WindowMaximized);
     m_ui_lookup.reserve(40);
 
@@ -39,6 +35,7 @@ QString Simulator_base::name() const
 void Simulator_base::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
+    setWindowTitle(m_name);
     SPDLOG_DEBUG("Connecting callbacks");
     m_first_load = true;
 
