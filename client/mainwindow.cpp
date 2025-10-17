@@ -2,14 +2,15 @@
 #include "ui_mainwindow.h"
 #include <QDirIterator>
 #include <QLibrary>
+#include <QMessageBox>
 #include <QThread>
 #include <magic_enum/magic_enum.hpp>
 
 typedef Simulator_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 
 MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), m_web_socket(new Web_socket_wrapper(ws_url)),
-      m_error_dialog(new NetworkError(this))
+    : QMainWindow(parent), ui(new Ui::MainWindow), m_error(new QMessageBox()),
+      m_web_socket(new Web_socket_wrapper(ws_url))
 {
     ui->setupUi(this);
     QLibrary lib;
@@ -30,17 +31,22 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
         m_sims.insert(std::make_pair(widget->name(), widget));
         lib.unload();
     }
+
     // Insert debug sims here
     // INSERT_SIMULATOR(SIM_NAME);
 
-    m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
+    m_error->setIcon(QMessageBox::Critical);
+    m_error->setWindowTitle("Critical");
+    m_error->setText("Connection timed out\nCheck if the server is running");
+    QPushButton *exit_app = m_error->addButton("Exit Application", QMessageBox::AcceptRole);
+    m_error->addButton("Close", QMessageBox::RejectRole);
+    connect(exit_app, &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
     ui->connection->setText("Connected to " + ws_url.toString());
     // Default sim
     if (!sim.isEmpty())
         default_sim(sim);
 
     connect(ui->pushButton, &QPushButton::clicked, this, [=, this] { open_sim(ui->comboBox->currentText()); });
-    connect(this, &MainWindow::quit, this, &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -54,7 +60,7 @@ void MainWindow::setup_cb(void)
     connect(m_web_socket.get(), &Web_socket_wrapper::on_connected, this,
             [=, this] { m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators); });
     connect(m_web_socket.get(), &Web_socket_wrapper::on_closed, this, [=, this] {
-        m_error_dialog->open();
+        m_error->open();
         ui->connection->setText("Could not connect to the server");
     });
 }

@@ -16,9 +16,6 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     mainwindow.hpp
     mainwindow.ui
-    networkerror.cpp
-    networkerror.hpp
-    networkerror.ui
     simulator_base.cpp
     simulator_base.hpp
     web_socket_wrapper.cpp

@@ -6,8 +6,8 @@
 
 Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
-Q_FORWARD_DECLARE_OBJC_CLASS(NetworkError);
 Q_FORWARD_DECLARE_OBJC_CLASS(QLabel);
+Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
 
 using json = nlohmann::json;
 
@@ -84,7 +84,7 @@ class Simulator_base : public QMainWindow
 
     QTimer *m_timer_update;
     uint32_t m_refresh_rate;
-    NetworkError *m_error_dialog;
+    QMessageBox *m_error;
     bool m_open = false;
     bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;

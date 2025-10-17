@@ -2,22 +2,28 @@
 #include "can_transceive.hpp"
 #include "helpers.hpp"
 #include "led.hpp"
-#include "networkerror.hpp"
 #include "plot_wrapper.hpp"
 #include "web_socket_wrapper.hpp"
+#include <QMessageBox>
 #include <magic_enum/magic_enum.hpp>
 
 Simulator_base::Simulator_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
-    : QMainWindow{parent}, m_error_dialog(new NetworkError(this)), m_timer_update(new QTimer()),
-      m_web_socket(web_socket), m_name(name)
+    : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_web_socket(web_socket),
+      m_name(name)
 {
     if (windowTitle() != m_name)
     {
         setWindowTitle(m_name);
     }
     this->setWindowState(Qt::WindowMaximized);
-    m_error_dialog->set_error("Connection timed out\nCheck if the server is running");
     m_ui_lookup.reserve(40);
+
+    m_error->setIcon(QMessageBox::Critical);
+    m_error->setWindowTitle("Critical");
+    m_error->setText("Connection timed out\nCheck if the server is running");
+    QPushButton *exit_app = m_error->addButton("Exit Application", QMessageBox::AcceptRole);
+    m_error->addButton("Close", QMessageBox::RejectRole);
+    connect(exit_app, &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
 QWidget *Simulator_base::id_to_ui(size_t id)
@@ -38,7 +44,7 @@ void Simulator_base::showEvent(QShowEvent *event)
 
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
     connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json &j) { on_event_cb(j); });
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this] { m_error_dialog->open(); });
+    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this] { m_error->open(); });
 
     m_web_socket->inhibit_events(true);
     m_web_socket->send_command(Web_socket_wrapper::Command::get_UI_elements);

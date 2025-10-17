@@ -1,5 +1,4 @@
 #pragma once
-#include "networkerror.hpp"
 #include "simulator_base.hpp"
 #include "web_socket_wrapper.hpp"
 #include <QMainWindow>
@@ -7,6 +6,8 @@
 
 #define INSERT_SIMULATOR(type)                                                                                         \
     m_sims.insert(std::make_pair(type().sim_name(), std::make_unique<type>(m_web_socket.get(), this)))
+
+Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
 
 namespace Ui
 {
@@ -28,9 +29,6 @@ class MainWindow : public QMainWindow
     void open_sim(QString sim_name);
     void setup_cb(void);
 
-  signals:
-    void quit(void);
-
   private:
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
@@ -40,9 +38,8 @@ class MainWindow : public QMainWindow
     bool m_default_sim = false;
     QString m_selected_sim_name;
     QMainWindow *m_selected_sim;
+    QMessageBox *m_error;
     Ui::MainWindow *ui;
     std::unique_ptr<Web_socket_wrapper> m_web_socket;
-    std::unique_ptr<NetworkError> m_error_dialog;
-
     std::map<QString, std::unique_ptr<Simulator_base>> m_sims;
 };
