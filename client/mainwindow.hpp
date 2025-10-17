@@ -1,13 +1,16 @@
 #pragma once
-#include "simulator_base.hpp"
-#include "web_socket_wrapper.hpp"
+#include "nlohmann/json.hpp"
 #include <QMainWindow>
 #include <map>
+
+using json = nlohmann::json;
 
 #define INSERT_SIMULATOR(type)                                                                                         \
     m_sims.insert(std::make_pair(type().sim_name(), std::make_unique<type>(m_web_socket.get(), this)))
 
 Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
+Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
+Q_FORWARD_DECLARE_OBJC_CLASS(Simulator_base);
 
 namespace Ui
 {
@@ -22,16 +25,16 @@ class MainWindow : public QMainWindow
     explicit MainWindow(QUrl ws_url, QString sim, QWidget *parent = nullptr);
     ~MainWindow();
 
+  private:
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+
     void default_sim(QString name);
     void pase_sim_names(json &sims);
     void open_sim_window(void);
     void check_active_sim(QString name);
     void open_sim(QString sim_name);
     void setup_cb(void);
-
-  private:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
 
     void on_cmd_cb(json &j);
 

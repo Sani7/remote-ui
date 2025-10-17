@@ -1,5 +1,7 @@
 #include "mainwindow.hpp"
+#include "simulator_base.hpp"
 #include "ui_mainwindow.h"
+#include "web_socket_wrapper.hpp"
 #include <QDirIterator>
 #include <QLibrary>
 #include <QMessageBox>
