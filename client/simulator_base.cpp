@@ -1059,5 +1059,5 @@ void Simulator_base::setup_can_ui(QWidget *item, size_t index)
                 m_web_socket->send_event(Web_socket_wrapper::Event::can_send, index, id, dlc, payload);
             });
     connect(can, &Can_Transceive::can_clear, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::can_clear, index); });
+            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clear, index); });
 }

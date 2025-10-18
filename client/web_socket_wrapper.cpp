@@ -77,7 +77,7 @@ void Web_socket_wrapper::send_event(Event e, size_t id)
     switch (e)
     {
     case Event::clicked:
-    case Event::can_clear:
+    case Event::clear:
         j["event"]["id"] = id;
         m_web_socket->sendTextMessage(QString(j.dump().data()));
         break;

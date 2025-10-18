@@ -50,7 +50,7 @@ void UI_can::clear_receive_buffer()
     emit ui_changed();
 }
 
-void UI_can::can_clear()
+void UI_can::clear()
 {
     clear_send_buffer();
     clear_receive_buffer();

@@ -120,9 +120,9 @@ void Simulators::event_handler(json event)
                            (std::array<uint8_t, 8>)event.at("payload"));
             break;
         }
-        case Event::can_clear: {
+        case Event::clear: {
             SPDLOG_DEBUG("Event {}: {}", type, (size_t)event.at("id"));
-            invoke_active_simulator()->get_UI_item(event.at("id"))->can_clear();
+            invoke_active_simulator()->get_UI_item(event.at("id"))->clear();
             break;
         }
         default: {

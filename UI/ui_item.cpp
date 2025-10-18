@@ -168,7 +168,7 @@ void UI_item::can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
     UNUSED(payload);
 };
 
-void UI_item::can_clear()
+void UI_item::clear()
 {
 }
 

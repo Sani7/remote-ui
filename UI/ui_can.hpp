@@ -31,7 +31,7 @@ class UI_can : public UI_item
     json to_json(size_t id) const override;
 
     void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload) override;
-    void can_clear() override;
+    void clear() override;
   signals:
     void send(QCanBusFrame msg);
 
