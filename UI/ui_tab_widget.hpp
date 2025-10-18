@@ -24,7 +24,7 @@ class UI_tab_widget : public UI_item
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
   signals:
-    void selected(size_t index);
+    void changed(size_t index);
 
   private:
     size_t m_selected_tab;

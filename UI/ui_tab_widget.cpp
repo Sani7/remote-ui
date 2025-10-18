@@ -16,7 +16,7 @@ void UI_tab_widget::set_selected(size_t selected)
 {
     m_selected_tab = selected;
     emit ui_changed();
-    emit this->selected(m_selected_tab);
+    emit changed(m_selected_tab);
 }
 size_t UI_tab_widget::selected() const
 {
@@ -61,7 +61,7 @@ void UI_tab_widget::advance_tab()
         return;
     m_selected_tab = (m_selected_tab + 1) % m_tab_names.size();
     emit ui_changed();
-    emit this->selected(m_selected_tab);
+    emit changed(m_selected_tab);
 }
 
 void UI_tab_widget::from_json(const json &j)
