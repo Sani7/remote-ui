@@ -20,6 +20,7 @@ class UI_dial : public UI_item
 
     double min() const;
     double max() const;
+    std::string unit() const;
 
     void from_json(const json &j) override;
     json to_json(size_t id) const override;

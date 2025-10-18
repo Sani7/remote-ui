@@ -53,6 +53,11 @@ double UI_dial::max() const
     return m_max;
 }
 
+std::string UI_dial::unit() const
+{
+    return m_unit;
+}
+
 void UI_dial::from_json(const json &j)
 {
     UI_item::from_json(j);
