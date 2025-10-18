@@ -49,7 +49,7 @@ void UI_combobox::from_json(const json &j)
     if (j.contains("options"))
     {
         this->m_options.clear();
-        for (auto option : j["options"])
+        for (auto &option : j["options"])
         {
             this->m_options.push_back(option);
         }

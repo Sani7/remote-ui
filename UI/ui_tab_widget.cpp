@@ -70,7 +70,7 @@ void UI_tab_widget::from_json(const json &j)
     if (j.contains("tab_names"))
     {
         this->m_tab_names.clear();
-        for (auto option : j["tab_names"])
+        for (auto &option : j["tab_names"])
         {
             this->m_tab_names.push_back(option);
         }
@@ -78,7 +78,7 @@ void UI_tab_widget::from_json(const json &j)
     if (j.contains("tab_visible"))
     {
         this->m_tab_visible.clear();
-        for (auto option : j["tab_visible"])
+        for (auto &option : j["tab_visible"])
         {
             this->m_tab_visible.push_back(option);
         }
