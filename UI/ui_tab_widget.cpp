@@ -37,6 +37,10 @@ void UI_tab_widget::set_visible(size_t index, bool visible)
 }
 bool UI_tab_widget::visible(size_t index) const
 {
+    if (index >= m_tab_visible.size())
+    {
+        return false;
+    }
     return m_tab_visible.at(index);
 }
 
@@ -52,6 +56,10 @@ void UI_tab_widget::set_tab_name(size_t index, std::string name)
 }
 std::string UI_tab_widget::tab_name(size_t index) const
 {
+    if (index >= m_tab_names.size())
+    {
+        return "";
+    }
     return m_tab_names.at(index);
 }
 
