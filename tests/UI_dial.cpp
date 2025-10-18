@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_dial.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_dial, to_from_json)
 {

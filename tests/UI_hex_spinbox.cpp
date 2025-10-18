@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_hex_spinbox.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_hex_spinbox, to_from_json)
 {

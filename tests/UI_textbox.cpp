@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_textbox.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_textbox, to_from_json)
 {

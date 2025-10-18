@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_stacked_widget.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_stacked_widget, to_from_json)
 {

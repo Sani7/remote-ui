@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_status_bar.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_status_bar, to_from_json)
 {

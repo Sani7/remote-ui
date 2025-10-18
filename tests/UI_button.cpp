@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_button.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_button, to_from_json)
 {

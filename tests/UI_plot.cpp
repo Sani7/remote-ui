@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_plot.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_plot, to_from_json)
 {

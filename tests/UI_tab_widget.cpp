@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-#include <QSignalSpy>
 #include "ui_tab_widget.hpp"
+#include <QSignalSpy>
+#include <gtest/gtest.h>
 
 TEST(UI_tab_widget, to_from_json)
 {
