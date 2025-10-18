@@ -1,5 +1,4 @@
 #include "Test.hpp"
-#include <QObject>
 
 TEST(UI_button, to_from_json)
 {

@@ -10,6 +10,7 @@ TEST(UI_dial, to_from_json)
     EXPECT_EQ(dial.fg_color(), dial2.fg_color());
     EXPECT_EQ(dial.bg_color(), dial2.bg_color());
     EXPECT_EQ(dial.value(), dial2.value());
+    EXPECT_EQ(dial.unit(), dial2.unit());
 }
 
 TEST(UI_dial, set_value)
@@ -17,4 +18,10 @@ TEST(UI_dial, set_value)
     UI_dial dial("slider_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50);
     dial.set_value(75);
     EXPECT_EQ(dial.value(), 75);
+}
+
+TEST(UI_dial, unit)
+{
+    UI_dial dial("slider_text", "unit", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50);
+    EXPECT_EQ(dial.unit(), "unit");
 }

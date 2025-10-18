@@ -9,7 +9,7 @@ TEST(UI_textbox, to_from_json)
     EXPECT_EQ(textbox.text(), textbox2.text());
     EXPECT_EQ(textbox.fg_color(), textbox2.fg_color());
     EXPECT_EQ(textbox.bg_color(), textbox2.bg_color());
-    EXPECT_EQ(textbox.text(), textbox2.text());
+    EXPECT_EQ(textbox.hint(), textbox2.hint());
 }
 
 TEST(UI_textbox, set_text)
