@@ -153,7 +153,7 @@ void Simulator_base::UI_item_parser(json &input)
             process_ui_combobox(ui_item, widget);
             continue;
         }
-        if (ui_item.at("type") == "ui_RadioButton")
+        if (ui_item.at("type") == "ui_radiobutton")
         {
             process_ui_radiobutton(ui_item, widget);
             continue;
