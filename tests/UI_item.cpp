@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_item.hpp"
 
 TEST(UI_item, is_type)
 {

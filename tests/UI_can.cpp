@@ -1,5 +1,6 @@
-#include "Test.hpp"
 #include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_can.hpp"
 
 TEST(UI_can, add_clear_message)
 {

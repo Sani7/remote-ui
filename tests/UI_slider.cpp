@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_slider.hpp"
 
 TEST(UI_slider, to_from_json)
 {

@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_led.hpp"
 
 TEST(UI_led, to_from_json)
 {

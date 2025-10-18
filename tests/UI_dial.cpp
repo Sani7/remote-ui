@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_dial.hpp"
 
 TEST(UI_dial, to_from_json)
 {

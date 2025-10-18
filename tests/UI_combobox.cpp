@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_combobox.hpp"
 
 TEST(UI_combobox, to_from_json)
 {

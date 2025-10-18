@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_double_spinbox.hpp"
 
 TEST(UI_double_spinbox, to_from_json)
 {

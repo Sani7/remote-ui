@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_checkbox.hpp"
 
 TEST(UI_checkbox, to_from_json)
 {

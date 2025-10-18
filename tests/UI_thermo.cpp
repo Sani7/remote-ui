@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_thermo.hpp"
 
 TEST(UI_thermo, to_from_json)
 {

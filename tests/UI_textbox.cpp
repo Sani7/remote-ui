@@ -1,4 +1,6 @@
-#include "Test.hpp"
+#include <gtest/gtest.h>
+#include <QSignalSpy>
+#include "ui_textbox.hpp"
 
 TEST(UI_textbox, to_from_json)
 {
