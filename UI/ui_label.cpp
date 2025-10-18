@@ -5,9 +5,8 @@ UI_label::UI_label(std::string text, Color fg_color, Color bg_color, QObject *pa
 {
 }
 
-UI_label::UI_label(const json &j, QObject *parent) : UI_item(UI_LABEL_TYPE, parent)
+UI_label::UI_label(QObject *parent) : UI_item(UI_LABEL_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_label::from_json(const json &j)

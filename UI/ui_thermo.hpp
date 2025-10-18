@@ -14,7 +14,7 @@ class UI_thermo : public UI_item
     UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
               QObject *parent = nullptr);
     UI_thermo(std::string text, double min, double max, double value, QObject *parent = nullptr);
-    UI_thermo(const json &j, QObject *parent = nullptr);
+    UI_thermo(QObject *parent = nullptr);
 
     void set_value(double value) override;
     double value() const;

@@ -5,9 +5,8 @@ UI_button::UI_button(std::string text, Color fg_color, Color bg_color, QObject *
 {
 }
 
-UI_button::UI_button(const json &j, QObject *parent) : UI_item(UI_BUTTON_TYPE, parent)
+UI_button::UI_button(QObject *parent) : UI_item(UI_BUTTON_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_button::from_json(const json &j)

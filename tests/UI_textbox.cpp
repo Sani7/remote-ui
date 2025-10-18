@@ -4,7 +4,8 @@ TEST(UI_textbox, to_from_json)
 {
     UI_textbox textbox("hint", Color(0, 0, 0), Color(255, 255, 255));
     json j = textbox.to_json(0);
-    UI_textbox textbox2(j);
+    UI_textbox textbox2;
+    textbox2.from_json(j);
     EXPECT_EQ(textbox.text(), textbox2.text());
     EXPECT_EQ(textbox.fg_color(), textbox2.fg_color());
     EXPECT_EQ(textbox.bg_color(), textbox2.bg_color());

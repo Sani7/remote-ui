@@ -20,7 +20,7 @@ class UI_can : public UI_item
     Q_OBJECT
   public:
     UI_can(Color fg_color, Color bg_color, QObject *parent = nullptr);
-    UI_can(const json &j, QObject *parent = nullptr);
+    UI_can(QObject *parent = nullptr);
 
     void add_send_message(QCanBusFrame msg);
     void add_received_message(QCanBusFrame msg);

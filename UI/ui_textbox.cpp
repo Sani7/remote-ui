@@ -5,9 +5,8 @@ UI_textbox::UI_textbox(std::string hint, Color fg_color, Color bg_color, QObject
 {
 }
 
-UI_textbox::UI_textbox(const json &j, QObject *parent) : UI_item(UI_TEXTBOX_TYPE, parent)
+UI_textbox::UI_textbox(QObject *parent) : UI_item(UI_TEXTBOX_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_textbox::set_text(std::string text)

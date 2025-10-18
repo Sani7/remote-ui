@@ -4,7 +4,8 @@ TEST(UI_led, to_from_json)
 {
     UI_led led("led_text", Color(0, 0, 0), Color(255, 255, 255));
     json j = led.to_json(0);
-    UI_led led2(j);
+    UI_led led2;
+    led2.from_json(j);
     EXPECT_EQ(led.text(), led2.text());
     EXPECT_EQ(led.fg_color(), led2.fg_color());
     EXPECT_EQ(led.bg_color(), led2.bg_color());

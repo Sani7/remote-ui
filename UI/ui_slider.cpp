@@ -22,9 +22,8 @@ UI_slider::UI_slider(std::string text, double min, double max, double value, QOb
 {
 }
 
-UI_slider::UI_slider(const json &j, QObject *parent) : UI_item(UI_SLIDER_TYPE, parent)
+UI_slider::UI_slider(QObject *parent) : UI_item(UI_SLIDER_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_slider::set_value(double value)

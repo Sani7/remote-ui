@@ -8,7 +8,6 @@ class UI_plot : public UI_item
   public:
     explicit UI_plot(QObject *parent = nullptr);
     UI_plot(std::string text, std::string x_label, std::string y_label, QObject *parent = nullptr);
-    UI_plot(const json &j, QObject *parent = nullptr);
 
     void set_x_label(std::string name);
     std::string x_label() const;

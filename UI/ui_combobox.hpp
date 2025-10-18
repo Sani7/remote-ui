@@ -10,7 +10,6 @@ class UI_combobox : public UI_item
     UI_combobox(QObject *parent = nullptr);
     UI_combobox(Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected = 0,
                 QObject *parent = nullptr);
-    UI_combobox(const json &j, QObject *parent = nullptr);
 
     void set_selected(size_t selected) override;
     void set_selected(std::string selected);

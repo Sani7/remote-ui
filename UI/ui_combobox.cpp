@@ -12,12 +12,6 @@ UI_combobox::UI_combobox(Color fg_color, Color bg_color, std::vector<std::string
     setup_item(false, true, true);
 }
 
-UI_combobox::UI_combobox(const json &j, QObject *parent) : UI_item(UI_COMBOBOX_TYPE, parent)
-{
-    setup_item(false, true, true);
-    from_json(j);
-}
-
 void UI_combobox::set_selected(size_t selected)
 {
     if (selected == m_selected)

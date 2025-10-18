@@ -17,10 +17,9 @@ UI_can::UI_can(Color fg_color, Color bg_color, QObject *parent) : UI_item(UI_CAN
     setup_item(false, true, true);
 }
 
-UI_can::UI_can(const json &j, QObject *parent) : UI_item(UI_CAN_TYPE, parent)
+UI_can::UI_can(QObject *parent) : UI_item(UI_CAN_TYPE, parent)
 {
     setup_item(false, true, true);
-    from_json(j);
 }
 
 void UI_can::add_send_message(QCanBusFrame msg)

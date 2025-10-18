@@ -22,9 +22,8 @@ UI_dial::UI_dial(std::string text, double min, double max, double value, QObject
 {
 }
 
-UI_dial::UI_dial(const json &j, QObject *parent) : UI_item(UI_DIAL_TYPE, parent)
+UI_dial::UI_dial(QObject *parent) : UI_item(UI_DIAL_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_dial::set_value(double value)

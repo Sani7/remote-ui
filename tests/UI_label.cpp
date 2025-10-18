@@ -10,7 +10,8 @@ TEST(UI_label, to_from_json)
     EXPECT_EQ(j["fg_color"], "#000000FF");
     EXPECT_EQ(j["bg_color"], "#FFFFFFFF");
 
-    UI_label label2(j);
+    UI_label label2;
+    label2.from_json(j);
     EXPECT_EQ(label2.text(), "label_text");
     EXPECT_EQ(label2.fg_color(), Color(0, 0, 0));
     EXPECT_EQ(label2.bg_color(), Color(255, 255, 255));

@@ -22,9 +22,8 @@ UI_thermo::UI_thermo(std::string text, double min, double max, double value, QOb
 {
 }
 
-UI_thermo::UI_thermo(const json &j, QObject *parent) : UI_item(UI_THERMO_TYPE, parent)
+UI_thermo::UI_thermo(QObject *parent) : UI_item(UI_THERMO_TYPE, parent)
 {
-    from_json(j);
 }
 
 void UI_thermo::set_value(double value)

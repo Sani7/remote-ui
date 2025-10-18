@@ -10,7 +10,6 @@ class UI_led : public UI_item
   public:
     UI_led(QObject *parent = nullptr);
     UI_led(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
-    UI_led(const json &j, QObject *parent = nullptr);
 
     bool set_led(bool state, Color on, Color off);
 

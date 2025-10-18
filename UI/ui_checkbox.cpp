@@ -9,11 +9,6 @@ UI_checkbox::UI_checkbox(std::string text, Color fg_color, Color bg_color, QObje
 {
 }
 
-UI_checkbox::UI_checkbox(const json &j, QObject *parent) : UI_item(UI_CHECKBOX_TYPE, parent), m_checked()
-{
-    from_json(j);
-}
-
 void UI_checkbox::click()
 {
     m_checked = !m_checked;

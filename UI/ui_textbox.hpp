@@ -9,7 +9,7 @@ class UI_textbox : public UI_item
     Q_OBJECT
   public:
     UI_textbox(std::string hint, Color fg_color, Color bg_color, QObject *parent = nullptr);
-    UI_textbox(const json &j, QObject *parent = nullptr);
+    UI_textbox(QObject *parent = nullptr);
 
     void set_text(std::string text) override;
 
