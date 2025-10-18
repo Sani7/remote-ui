@@ -16,8 +16,10 @@ TEST(UI_dial, to_from_json)
 TEST(UI_dial, set_value)
 {
     UI_dial dial("slider_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50);
+    QSignalSpy spy(&dial, &UI_dial::ui_changed);
     dial.set_value(75);
     EXPECT_EQ(dial.value(), 75);
+    EXPECT_EQ(spy.count(), 1);
 }
 
 TEST(UI_dial, unit)

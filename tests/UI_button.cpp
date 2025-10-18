@@ -10,3 +10,11 @@ TEST(UI_button, to_from_json)
     EXPECT_EQ(button.fg_color(), button2.fg_color());
     EXPECT_EQ(button.bg_color(), button2.bg_color());
 }
+
+TEST(UI_button, signal)
+{
+    UI_button button("button_text", Color::Default, Color::Default);
+    QSignalSpy spy(&button, &UI_button::clicked);
+    button.click();
+    EXPECT_EQ(spy.count(), 1);
+}

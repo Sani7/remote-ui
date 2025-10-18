@@ -1,6 +1,6 @@
 # Third Party
 find_package(GTest QUIET)
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Test)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -23,6 +23,7 @@ if (GTest_FOUND)
         magic_enum::magic_enum
         GTest::gtest_main
         Qt::Core
+        Qt::Test
     )
 
     target_include_directories(tests

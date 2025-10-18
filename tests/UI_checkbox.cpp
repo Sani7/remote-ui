@@ -11,3 +11,11 @@ TEST(UI_checkbox, to_from_json)
     EXPECT_EQ(checkbox.bg_color(), checkbox2.bg_color());
     EXPECT_EQ(checkbox.state(), checkbox2.state());
 }
+
+TEST(UI_checkbox, signal)
+{
+    UI_checkbox checkbox("checkbox_text", Color::Default, Color::Default);
+    QSignalSpy spy(&checkbox, &UI_checkbox::changed);
+    checkbox.click();
+    EXPECT_EQ(spy.count(), 1);
+}

@@ -15,7 +15,21 @@ TEST(UI_textbox, to_from_json)
 TEST(UI_textbox, set_text)
 {
     UI_textbox textbox("hint", Color(0, 0, 0), Color(255, 255, 255));
+    QSignalSpy spy_ui(&textbox, &UI_textbox::ui_changed);
+    QSignalSpy spy_value(&textbox, &UI_textbox::changed);
     EXPECT_EQ(textbox.text(), "");
     textbox.set_text("random text");
     EXPECT_EQ(textbox.text(), "random text");
+    EXPECT_GE(spy_ui.count(), 0);
+    EXPECT_GE(spy_value.count(), 0);
+}
+
+TEST(UI_textbox, set_hint)
+{
+    UI_textbox textbox("hint", Color(0, 0, 0), Color(255, 255, 255));
+    QSignalSpy spy_ui(&textbox, &UI_textbox::ui_changed);
+    EXPECT_EQ(textbox.hint(), "hint");
+    textbox.set_hint("random text");
+    EXPECT_EQ(textbox.hint(), "random text");
+    EXPECT_EQ(spy_ui.count(), 1);
 }

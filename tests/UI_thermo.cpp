@@ -15,6 +15,8 @@ TEST(UI_thermo, to_from_json)
 TEST(UI_thermo, set_value)
 {
     UI_thermo thermo("thermo_text", Color(255, 255, 255), Color(0, 0, 0), 0, 100, 50);
+    QSignalSpy spy(&thermo, &UI_thermo::ui_changed);
     thermo.set_value(75);
     EXPECT_EQ(thermo.value(), 75);
+    EXPECT_EQ(spy.count(), 1);
 }
