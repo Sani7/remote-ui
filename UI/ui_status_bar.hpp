@@ -16,6 +16,5 @@ class UI_status_bar : public UI_item
     json to_json(size_t id) const override;
 
   private:
-    std::string m_current_message;
     size_t m_timeout;
 };

@@ -775,9 +775,9 @@ void Simulator_base::process_ui_status_bar(json &ui_item, QWidget *widget)
         return;
     }
 
-    if (status_bar->currentMessage() != QString::fromStdString(ui_item.at("current_message")))
+    if (status_bar->currentMessage() != QString::fromStdString(ui_item.at("text")))
     {
-        status_bar->showMessage(QString::fromStdString(ui_item.at("current_message")), ui_item.at("timeout"));
+        status_bar->showMessage(QString::fromStdString(ui_item.at("text")), ui_item.at("timeout"));
     }
 }
 
