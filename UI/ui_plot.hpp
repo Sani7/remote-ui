@@ -13,10 +13,6 @@ class UI_plot : public UI_item
     std::string x_label() const;
     void set_y_label(std::string name);
     std::string y_label() const;
-    void set_x_label_enabled(bool enabled);
-    bool x_label_enabled() const;
-    void set_y_label_enabled(bool enabled);
-    bool y_label_enabled() const;
     void add_value(double y);
     void add_value(double x, double y);
     void clean_vals();
@@ -29,6 +25,4 @@ class UI_plot : public UI_item
     std::vector<double> m_y_vals;
     std::string m_x_label;
     std::string m_y_label;
-    bool m_x_label_enabled;
-    bool m_y_label_enabled;
 };
