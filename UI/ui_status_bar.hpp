@@ -11,6 +11,7 @@ class UI_status_bar : public UI_item
 
     void show_message(std::string message, size_t timeout = 0);
     std::string message() const;
+    size_t timeout() const;
 
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
