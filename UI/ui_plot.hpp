@@ -15,6 +15,8 @@ class UI_plot : public UI_item
     std::string y_label() const;
     void add_value(double y);
     void add_value(double x, double y);
+    const std::vector<double> &x_vals() const;
+    const std::vector<double> &y_vals() const;
     void clean_vals();
 
     void from_json(const json &j) override;

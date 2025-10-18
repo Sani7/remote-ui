@@ -50,6 +50,16 @@ void UI_plot::add_value(double x, double y)
     emit ui_changed();
 }
 
+const std::vector<double> &UI_plot::x_vals() const
+{
+    return m_x_vals;
+}
+
+const std::vector<double> &UI_plot::y_vals() const
+{
+    return m_y_vals;
+}
+
 void UI_plot::clean_vals()
 {
     m_x_vals.clear();
