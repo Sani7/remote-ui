@@ -33,7 +33,7 @@ class UI_can : public UI_item
     void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload) override;
     void can_clear() override;
   signals:
-    void on_send(QCanBusFrame msg);
+    void send(QCanBusFrame msg);
 
   private:
     std::vector<CanFrame> m_can_send_messages;

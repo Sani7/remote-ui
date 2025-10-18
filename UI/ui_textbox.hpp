@@ -19,7 +19,7 @@ class UI_textbox : public UI_item
     void from_json(const json &j) override;
     json to_json(size_t id) const override;
   signals:
-    void on_change(std::string text);
+    void changed(std::string text);
 
   private:
     std::string m_hint;

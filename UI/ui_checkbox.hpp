@@ -19,7 +19,7 @@ class UI_checkbox : public UI_item
     json to_json(size_t id) const override;
 
   signals:
-    void on_change(bool);
+    void changed(bool);
 
   private:
     bool m_checked;

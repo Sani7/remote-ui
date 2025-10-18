@@ -108,5 +108,5 @@ void UI_can::can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
     frame.setFrameId(id);
     frame.setPayload(QByteArray::fromRawData((const char *)(payload.data()), dlc));
 
-    emit on_send(frame);
+    emit send(frame);
 }

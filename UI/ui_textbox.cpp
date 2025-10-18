@@ -16,7 +16,7 @@ void UI_textbox::set_text(std::string text)
         return;
     m_text = text;
     emit ui_changed();
-    emit on_change(m_text);
+    emit changed(m_text);
 }
 
 void UI_textbox::set_hint(std::string hint)

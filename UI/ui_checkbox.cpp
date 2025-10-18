@@ -18,14 +18,14 @@ void UI_checkbox::click()
 {
     m_checked = !m_checked;
     emit ui_changed();
-    emit on_change(m_checked);
+    emit changed(m_checked);
 }
 
 void UI_checkbox::set_state(bool state)
 {
     m_checked = state;
     emit ui_changed();
-    emit on_change(m_checked);
+    emit changed(m_checked);
 }
 
 bool UI_checkbox::state() const

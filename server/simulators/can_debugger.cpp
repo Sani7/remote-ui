@@ -8,7 +8,7 @@ Can_Debugger::Can_Debugger(Communication *com, QObject *parent)
 {
     PUSH_UI_ITEM(m_can_ui);
 
-    connect(&m_can_ui, &UI_can::on_send, this, [=, this](QCanBusFrame frame) { m_wrapper->send_can_message(frame); });
+    connect(&m_can_ui, &UI_can::send, this, [=, this](QCanBusFrame frame) { m_wrapper->send_can_message(frame); });
 }
 
 void Can_Debugger::timer()
