@@ -40,6 +40,5 @@ class UI_table : public UI_item
     std::vector<std::string> m_row_labels;
     std::vector<std::string> m_column_labels;
 
-    std::vector<bool> m_valid;
     std::vector<std::string> m_table;
 };

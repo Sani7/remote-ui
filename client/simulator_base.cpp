@@ -856,7 +856,6 @@ void Simulator_base::process_ui_table(json &ui_item, QWidget *widget)
     std::vector<std::string> row_labels = (std::vector<std::string>)ui_item.at("row_labels");
     size_t column_count = ui_item.at("column_count");
     std::vector<std::string> column_labels = (std::vector<std::string>)ui_item.at("column_labels");
-    std::vector<bool> valid = (std::vector<bool>)ui_item.at("valid");
     std::vector<std::string> table_data = (std::vector<std::string>)ui_item.at("table");
     bool enabled = ui_item.at("enabled");
     bool visible = ui_item.at("visible");
@@ -900,16 +899,13 @@ void Simulator_base::process_ui_table(json &ui_item, QWidget *widget)
     {
         size_t row = i / column_count;
         size_t column = i % column_count;
-        if (valid[i] && table->item(row, column) == nullptr)
+        if (table->item(row, column) == nullptr)
         {
             table->setItem(row, column, new QTableWidgetItem());
         }
-        if (valid[i])
-        {
-            table->item(row, column)->setText(QString::fromStdString(table_data[i]));
-        }
+        table->item(row, column)->setText(QString::fromStdString(table_data[i]));
     }
-    // table->
+    table->resizeColumnsToContents();
 }
 
 void Simulator_base::process_ui_can(json &ui_item, QWidget *widget)

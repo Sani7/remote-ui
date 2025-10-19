@@ -8,11 +8,10 @@ UI_table::UI_table(QObject *parent) : UI_item(UI_TABLE_TYPE, parent), m_row_coun
 UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels,
                    std::vector<std::string> column_labels, QObject *parent)
     : UI_item(UI_TABLE_TYPE, parent), m_row_count(row_count), m_column_count(column_count), m_row_labels(row_labels),
-      m_column_labels(column_labels), m_valid(), m_table()
+      m_column_labels(column_labels), m_table()
 {
     setup_item(false, false, false);
     m_table.resize(m_column_count * m_row_count);
-    m_valid.resize(m_column_count * m_row_count);
 }
 
 void UI_table::set_row_count(size_t count)
@@ -21,7 +20,6 @@ void UI_table::set_row_count(size_t count)
     if (m_row_count != 0 || m_column_count != 0)
     {
         m_table.resize(m_column_count * m_row_count);
-        m_valid.resize(m_column_count * m_row_count);
     }
 
     emit ui_changed();
@@ -38,7 +36,6 @@ void UI_table::set_column_count(size_t count)
     if (m_row_count != 0 || m_column_count != 0)
     {
         m_table.resize(m_column_count * m_row_count);
-        m_valid.resize(m_column_count * m_row_count);
     }
 
     emit ui_changed();
@@ -108,14 +105,10 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
     {
         m_table.resize(capacity());
     }
-    if (capacity() > m_valid.capacity())
-    {
-        m_valid.resize(capacity());
-    }
+
     size_t index = row * m_column_count + column;
 
     m_table.at(index) = text;
-    m_valid.at(index) = true;
 
     emit ui_changed();
 }
@@ -136,7 +129,6 @@ void UI_table::empty_item(size_t row, size_t column)
     size_t index = row * m_column_count + column;
 
     m_table[index] = "";
-    m_valid[index] = false;
 
     emit ui_changed();
 }
@@ -149,7 +141,6 @@ void UI_table::from_json(const json &j)
     this->m_row_labels = j.at("row_labels");
     this->m_column_count = j.at("column_count");
     this->m_column_labels = j.at("column_labels");
-    this->m_valid = (std::vector<bool>)j.at("valid");
     this->m_table = j.at("table");
 }
 
@@ -160,7 +151,6 @@ json UI_table::to_json(size_t id) const
     j["row_labels"] = m_row_labels;
     j["column_count"] = m_column_count;
     j["column_labels"] = m_column_labels;
-    j["valid"] = m_valid;
     j["table"] = m_table;
 
     return j;
