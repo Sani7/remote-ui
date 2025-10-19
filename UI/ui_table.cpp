@@ -120,6 +120,17 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
     emit ui_changed();
 }
 
+std::string UI_table::item(size_t row, size_t column) const
+{
+    if (m_column_count <= column || m_row_count <= row)
+    {
+        return "";
+    }
+    size_t index = row * m_column_count + column;
+
+    return m_table.at(index);
+}
+
 void UI_table::empty_item(size_t row, size_t column)
 {
     size_t index = row * m_column_count + column;

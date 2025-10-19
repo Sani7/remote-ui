@@ -22,6 +22,7 @@ class UI_table : public UI_item
     std::string column_label(size_t index) const;
 
     void insert_item(size_t row, size_t column, std::string text);
+    std::string item(size_t row, size_t column) const;
 
     /**
      * @brief empty_item This function clears the item and makes it invalid
