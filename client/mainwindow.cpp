@@ -16,7 +16,7 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
 {
     ui->setupUi(this);
     QLibrary lib;
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so", QDir::Files,
                     QDirIterator::Subdirectories);
     while (it.hasNext())
     {

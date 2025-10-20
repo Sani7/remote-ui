@@ -38,7 +38,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
     m_com->s_if1 = m_serial;
 
     QLibrary lib;
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so", QDir::Files,
                     QDirIterator::Subdirectories);
     while (it.hasNext())
     {
