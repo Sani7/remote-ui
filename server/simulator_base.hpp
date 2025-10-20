@@ -91,9 +91,9 @@ class Simulator_base : public QObject
     }
 
     /**
-     * @brief Run the simulator
+     * @brief Start the simulator
      */
-    void run();
+    void start();
 
     /**
      * @brief Stop the simulator

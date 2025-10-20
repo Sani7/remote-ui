@@ -78,7 +78,7 @@ std::string Simulators::active_simulator_name() const
     return this->m_current_simulator;
 }
 
-void Simulators::run()
+void Simulators::start()
 {
     if (this->m_simulators.empty())
     {
@@ -92,7 +92,7 @@ void Simulators::run()
     }
 
     m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
-    this->m_simulators.at(m_current_simulator)->run();
+    this->m_simulators.at(m_current_simulator)->start();
 }
 
 void Simulators::stop()
@@ -139,7 +139,7 @@ void Simulators::switch_simulator(std::string name)
                     m_server->broadcast(QString::fromStdString(json.dump()));
                 }
             }, Qt::QueuedConnection);
-    this->run();
+    this->start();
 }
 
 std::vector<std::string> Simulators::list_simulators() const

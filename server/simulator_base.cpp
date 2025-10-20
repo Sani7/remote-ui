@@ -46,7 +46,7 @@ UI_item *Simulator_base::get_UI_item(size_t id) const
     return nullptr;
 }
 
-void Simulator_base::run()
+void Simulator_base::start()
 {
     // Start the timer
     m_timer->start(m_interval);
