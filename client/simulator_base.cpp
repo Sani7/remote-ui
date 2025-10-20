@@ -51,10 +51,10 @@ void Simulator_base::showEvent(QShowEvent *event)
 
 void Simulator_base::closeEvent(QCloseEvent *event)
 {
+    QWidget::closeEvent(event);
     if (m_open == true)
     {
         SPDLOG_DEBUG("Disconnecting callbacks");
-        QWidget::closeEvent(event);
         m_timer_update->stop();
         disconnect(m_web_socket, nullptr, nullptr, nullptr);
         m_open = false;
