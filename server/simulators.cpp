@@ -62,7 +62,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
 
     connect(m_server, &Websocket::on_message, this, [this](QWebSocket *conn, QString message) {
         QString response = message_parser(message);
-        if (response.isEmpty() || response == "{}")
+        if (response == "{}")
             return;
         m_server->send(conn, response);
     });

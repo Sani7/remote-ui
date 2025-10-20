@@ -13,12 +13,8 @@ QString Simulators::message_parser(QString message)
     else if (j.contains("event"))
     {
         event_handler(j["event"]);
-        return "";
     }
-    else
-    {
-        return "";
-    }
+    return "{}";
 }
 
 json Simulators::command_parser(json command)
