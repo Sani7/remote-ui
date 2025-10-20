@@ -137,7 +137,12 @@ void Simulators::switch_simulator(std::string name)
     }
     this->m_current_simulator = name;
     connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
-            [this] { m_server->broadcast(QString::fromStdString(changed_UI_items().dump())); });
+            [this] {
+                auto json = changed_UI_items();
+                if (!json.empty()) {
+                    m_server->broadcast(QString::fromStdString(json.dump()));
+                }
+            }, Qt::QueuedConnection);
     this->run();
 }
 
