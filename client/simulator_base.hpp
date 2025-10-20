@@ -72,7 +72,6 @@ class Simulator_base : public QMainWindow
     void setup_double_spinbox(QWidget *item, size_t index);
     void setup_hex_spinbox(QWidget *item, size_t index);
     void setup_tab_widget(QWidget *item, size_t index);
-    void setup_qwtplot(QWidget *item, size_t index);
     void setup_can_ui(QWidget *item, size_t index);
 
     void showEvent(QShowEvent *event);

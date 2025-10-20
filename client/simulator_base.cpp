@@ -940,7 +940,6 @@ void Simulator_base::setup_ui_item(QWidget *item, size_t index)
     setup_double_spinbox(item, index);
     setup_hex_spinbox(item, index);
     setup_tab_widget(item, index);
-    setup_qwtplot(item, index);
     setup_can_ui(item, index);
 }
 
@@ -1035,13 +1034,6 @@ void Simulator_base::setup_tab_widget(QWidget *item, size_t index)
     connect(tab_widget, &QTabWidget::currentChanged, this, [=, this](int index) {
         m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)index);
     });
-}
-
-void Simulator_base::setup_qwtplot(QWidget *item, size_t index)
-{
-    auto *plot = qobject_cast<QwtPlot *>(item);
-    if (plot == nullptr)
-        return;
 }
 
 void Simulator_base::setup_can_ui(QWidget *item, size_t index)
