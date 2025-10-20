@@ -24,7 +24,6 @@ class Websocket : public QObject
   private slots:
     void onNewConnection();
     void processTextMessage(QString message);
-    void processBinaryMessage(QByteArray message);
     void socketDisconnected();
 
   private:
