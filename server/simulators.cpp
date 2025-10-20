@@ -118,23 +118,19 @@ void Simulators::switch_simulator(std::string name)
         SPDLOG_WARN("no simulators found");
         return;
     }
-    if (!this->m_current_simulator.empty())
-    {
-        SPDLOG_INFO("stopping current simulator {} and switching to {}", m_current_simulator, name);
-        this->m_simulators.at(m_current_simulator)->stop();
-    }
-
     if (this->m_simulators.find(name) == this->m_simulators.end())
     {
         SPDLOG_WARN("simulator {} not found", name);
         return;
     }
 
-    this->stop();
     if (!this->m_current_simulator.empty())
     {
+        SPDLOG_INFO("stopping current simulator {} and switching to {}", m_current_simulator, name);
+        this->m_simulators.at(m_current_simulator)->stop();
         disconnect(m_simulators.at(m_current_simulator).get());
     }
+
     this->m_current_simulator = name;
     connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
             [this] {
