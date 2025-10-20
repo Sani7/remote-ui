@@ -16,7 +16,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
 {
     m_server->moveToThread(m_server_thread);
     m_server_thread->start();
-    //TODO: Cleanup this code and make it possible to add multiple com devices
+    // TODO: Cleanup this code and make it possible to add multiple com devices
     if (!can_dev.isEmpty())
     {
         m_can_wrapper->connect_to_dev(can_dev);
@@ -133,13 +133,16 @@ void Simulators::switch_simulator(std::string name)
     }
 
     this->m_current_simulator = name;
-    connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
-            [this] {
-                auto json = changed_UI_items();
-                if (!json.empty()) {
-                    m_server->broadcast(QString::fromStdString(json.dump()));
-                }
-            }, Qt::QueuedConnection);
+    connect(
+        m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
+        [this] {
+            auto json = changed_UI_items();
+            if (!json.empty())
+            {
+                m_server->broadcast(QString::fromStdString(json.dump()));
+            }
+        },
+        Qt::QueuedConnection);
     this->start();
 }
 
