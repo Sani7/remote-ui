@@ -16,6 +16,7 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
 {
     m_server->moveToThread(m_server_thread);
     m_server_thread->start();
+    //TODO: Cleanup this code and make it possible to add multiple com devices
     if (!can_dev.isEmpty())
     {
         m_can_wrapper->connect_to_dev(can_dev);
@@ -82,12 +83,12 @@ void Simulators::start()
 {
     if (this->m_simulators.empty())
     {
-        SPDLOG_WARN("no simulators found");
+        SPDLOG_WARN("No simulators found");
         return;
     }
     if (this->m_current_simulator.empty())
     {
-        SPDLOG_WARN("no active simulator");
+        SPDLOG_WARN("No active simulator");
         return;
     }
 
@@ -99,12 +100,12 @@ void Simulators::stop()
 {
     if (this->m_simulators.empty())
     {
-        SPDLOG_WARN("no simulators found");
+        SPDLOG_WARN("No simulators found");
         return;
     }
     if (this->m_current_simulator.empty())
     {
-        SPDLOG_WARN("no active simulator");
+        SPDLOG_WARN("No active simulator");
         return;
     }
 
@@ -115,18 +116,18 @@ void Simulators::switch_simulator(std::string name)
 {
     if (this->m_simulators.empty())
     {
-        SPDLOG_WARN("no simulators found");
+        SPDLOG_WARN("No simulators found");
         return;
     }
     if (this->m_simulators.find(name) == this->m_simulators.end())
     {
-        SPDLOG_WARN("simulator {} not found", name);
+        SPDLOG_WARN("Simulator {} not found", name);
         return;
     }
 
     if (!this->m_current_simulator.empty())
     {
-        SPDLOG_INFO("stopping current simulator {} and switching to {}", m_current_simulator, name);
+        SPDLOG_INFO("Stopping current simulator {} and switching to {}", m_current_simulator, name);
         this->m_simulators.at(m_current_simulator)->stop();
         disconnect(m_simulators.at(m_current_simulator).get());
     }
