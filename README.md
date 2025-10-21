@@ -108,6 +108,5 @@ If you use can you could copy can_dev.service as well
 (Remove -c can0 if you don't use can)
 ```bash
 sudo cp unisim_cpp.service /etc/systemd/system
-sudo systemctl daemon-reload
 sudo systemctl enable --now unisim_cpp.service
 ```
