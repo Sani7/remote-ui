@@ -11,10 +11,34 @@ class HexSpinBox : public QSpinBox
     Q_OBJECT
 
   public:
-    HexSpinBox(QWidget *parent = nullptr, bool showPrefix = false, const QString &format = QStringLiteral("%X"));
+    /**
+     * @brief Construct a new Hex Spin Box object
+     *
+     * @param parent The parent QWidget
+     */
+    explicit HexSpinBox(QWidget *parent = nullptr);
+    /**
+     * @brief Construct a new Hex Spin Box object
+     *
+     * @param showPrefix Whether to show the "0x" prefix
+     * @param format The printf-style format string to use for displaying the value
+     * @param parent The parent QWidget
+     */
+    HexSpinBox(bool showPrefix = false, const QString &format = QStringLiteral("%X"), QWidget *parent = nullptr);
 
   public slots:
+    /**
+     * @brief Set the Show Prefix object
+     *
+     * @param show True to show the "0x" prefix, false to hide it
+     */
     void setShowPrefix(bool show);
+
+    /**
+     * @brief Set the Format object
+     *
+     * @param text The printf-style format string to use for displaying the value
+     */
     void setFormat(const QString &text);
 
   protected:
