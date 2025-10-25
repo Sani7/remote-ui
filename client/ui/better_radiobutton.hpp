@@ -13,8 +13,7 @@ class Better_Radiobutton : public QWidget
     QString isChecked() const;
 
   signals:
-    void toggled(QString name);
-    void checked(QString name);
+    void toggled(QString name, bool checked);
 
   private:
     QVBoxLayout *m_v_layout;

@@ -19,14 +19,8 @@ void Better_Radiobutton::add_radiobutton(QString name)
     m_radiobuttons.push_back(radiobutton);
     m_v_layout->addWidget(radiobutton);
 
-    connect(radiobutton, &QRadioButton::toggled, this, [this, name, radiobutton] {
-        emit toggled(name);
-        if (radiobutton->isChecked())
-        {
-            m_checked = name;
-            emit checked(name);
-        }
-    });
+    connect(radiobutton, &QRadioButton::toggled, this,
+            [this, name, radiobutton](bool checked) { emit toggled(name, checked); });
 }
 
 QString Better_Radiobutton::isChecked() const
