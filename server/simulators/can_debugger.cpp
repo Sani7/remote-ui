@@ -3,7 +3,7 @@
 EXPORT_SIM(Can_Debugger);
 
 Can_Debugger::Can_Debugger(Communication *com, QObject *parent)
-    : Simulator_base("Can Debugger", com, std::chrono::milliseconds(100), parent), m_wrapper(com->c_if1),
+    : Simulator_base("Can Debugger", com, std::chrono::milliseconds(100), parent), m_wrapper(com->can_if[0]),
       m_can_ui(Color::Black, Color::White)
 {
     PUSH_UI_ITEM(m_can_ui);

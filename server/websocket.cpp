@@ -24,8 +24,16 @@ Websocket::Websocket(uint16_t port, QString key_file, QString cert_file, QObject
     QSslConfiguration sslConfiguration;
     QFile certFile(cert_file);
     QFile keyFile(key_file);
-    certFile.open(QIODevice::ReadOnly);
-    keyFile.open(QIODevice::ReadOnly);
+    bool certFileOpened = certFile.open(QIODevice::ReadOnly);
+    if (!certFileOpened)
+    {
+        SPDLOG_CRITICAL("WebSocket: Unable to open certificate file: {}", cert_file.toStdString());
+    }
+    bool keyFileOpened = keyFile.open(QIODevice::ReadOnly);
+    if (!keyFileOpened)
+    {
+        SPDLOG_CRITICAL("WebSocket: Unable to open key file: {}", key_file.toStdString());
+    }
     QSslCertificate certificate(&certFile, QSsl::Pem);
     QSslKey sslKey(&keyFile, QSsl::Rsa, QSsl::Pem);
     certFile.close();

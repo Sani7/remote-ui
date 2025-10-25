@@ -17,10 +17,18 @@ Q_FORWARD_DECLARE_OBJC_CLASS(Communication);
 
 using json = nlohmann::json;
 
+/**
+ * @brief Class managing all simulators
+ *
+ */
 class Simulators : public QObject
 {
     Q_OBJECT
   public:
+    /**
+     * @brief Enumeration of commands
+     *
+     */
     enum class Command
     {
         get_UI_element,
@@ -32,6 +40,10 @@ class Simulators : public QObject
         begin = 0
     };
 
+    /**
+     * @brief Enumeration of events
+     *
+     */
     enum class Event
     {
         clicked,
@@ -45,20 +57,91 @@ class Simulators : public QObject
         begin = 0
     };
 
+    /**
+     * @brief Construct a new Simulators object
+     *
+     * @param port The port for the websocket server
+     * @param can_dev The CAN device path
+     * @param uart_dev The UART device path
+     * @param parent The parent QObject
+     */
     Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent = nullptr);
+    /**
+     * @brief Destroy the Simulators object
+     *
+     */
     ~Simulators();
+
+    /**
+     * @brief Get the name of the active simulator
+     *
+     * @return std::string The name of the active simulator
+     */
     std::string active_simulator_name() const;
+    /**
+     * @brief Start the active simulator
+     *
+     */
     void start();
+    /**
+     * @brief Stop the active simulator
+     *
+     */
     void stop();
+    /**
+     * @brief Switch to a different simulator
+     *
+     * @param name The name of the simulator to switch to
+     */
     void switch_simulator(std::string name);
+    /**
+     * @brief List all available simulators
+     *
+     * @return std::vector<std::string> A list of simulator names
+     */
     std::vector<std::string> list_simulators() const;
+    /**
+     * @brief Check if no simulator is active
+     *
+     * @return true If no simulator is active
+     * @return false If a simulator is active
+     */
     bool is_not_active() const;
+    /**
+     * @brief Get a pointer to the active simulator
+     *        Throws a lock on the simulators map
+     *
+     * @return Simulator_base* A pointer to the active simulator
+     */
     Simulator_base *invoke_active_simulator();
+    /**
+     * @brief Get the changed UI items in json format
+     *        Throws a lock on the simulators map
+     *
+     * @return json The changed UI items
+     */
     json changed_UI_items();
 
-    // parsing of websocket messages
+    // Functions in message_parser.cpp
+    /**
+     * @brief Parse a websocket message
+     *
+     * @param message The message to parse
+     * @return QString The parsed message
+     */
     QString message_parser(QString message);
+    /**
+     * @brief Parse a command in json format
+     *
+     * @param command The command to parse
+     * @return json The parsed command
+     */
     json command_parser(json command);
+    /**
+     * @brief Handle an event in json format
+     *
+     * @param event The event to handle
+     */
     void event_handler(json event);
 
   private:

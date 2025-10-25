@@ -22,17 +22,29 @@ Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
         return new sim(com, parent);                                                                                   \
     }
 
+/**
+ * @brief Struct holding all communication interfaces
+ *
+ */
 class Communication
 {
   public:
-    CAN_Wrapper *c_if1 = nullptr;
-    CAN_Wrapper *c_if2 = nullptr;
-    QSerialPort *s_if1 = nullptr;
-    QSerialPort *s_if2 = nullptr;
-    QSerialPort *s_if3 = nullptr;
-    QSerialPort *s_if4 = nullptr;
+    /**
+     * @brief Array of CAN interfaces
+     *
+     */
+    CAN_Wrapper *can_if[3] = {nullptr, nullptr, nullptr};
+    /**
+     * @brief Array of UART interfaces
+     *
+     */
+    QSerialPort *uart_if[4] = {nullptr, nullptr, nullptr, nullptr};
 };
 
+/**
+ * @brief Base class for all simulators
+ *
+ */
 class Simulator_base : public QObject
 {
     Q_OBJECT
@@ -41,7 +53,9 @@ class Simulator_base : public QObject
      * @brief Construct a new Simulator_base object
      *
      * @param name The name of the simulator
+     * @param comms The communication interfaces
      * @param interval The interval of the timer (default is 100ms)
+     * @param parent The parent QObject
      */
     Simulator_base(std::string name, Communication *comms,
                    std::chrono::milliseconds interval = std::chrono::milliseconds(100), QObject *parent = nullptr);
@@ -76,6 +90,12 @@ class Simulator_base : public QObject
      */
     UI_item *get_UI_item(size_t id) const;
 
+    /**
+     * @brief Get the id of a UI item by pointer
+     *
+     * @param ptr A pointer to the UI item
+     * @return size_t The id of the UI item, or -1 if not found
+     */
     size_t ptr_to_id(UI_item *ptr) const
     {
         size_t id = 0;
@@ -121,17 +141,57 @@ class Simulator_base : public QObject
      */
     virtual void run_at_stop() {};
 
+    /**
+     * @brief Shutdown the system
+     *
+     */
     void shutdown();
+    /**
+     * @brief Reboot the system
+     *
+     */
     void reboot();
 
+    /**
+     * @brief Check if a specific bit is high in the input data
+     *
+     * @param data The input data
+     * @param pinnummer The pin number to check
+     * @return true If the bit is high
+     * @return false If the bit is low
+     */
     bool check_input_high(uint32_t data, uint16_t pinnummer);
   signals:
+    /**
+     * @brief Signal emitted when the ui of the simulator changes
+     *
+     */
     void sim_changed();
 
   protected:
+    /**
+     * @brief The name of the simulator
+     *
+     */
     std::string m_name;
+    /**
+     * @brief The UI items of the simulator
+     *
+     */
     std::vector<UI_item *> m_UI_items;
+    /**
+     * @brief The timer for the simulator
+     *
+     */
     QTimer *m_timer;
+    /**
+     * @brief The interval of the timer
+     *
+     */
     std::chrono::milliseconds m_interval;
+    /**
+     * @brief The communication interface
+     *
+     */
     Communication *m_com;
 };

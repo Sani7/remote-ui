@@ -59,7 +59,7 @@ void Visa::send(QString data)
     m_tcp_socket->waitForBytesWritten();
 }
 
-QString Visa::querry(QString data)
+QString Visa::query(QString data)
 {
     uint32_t counter = 0;
     m_data.clear();
