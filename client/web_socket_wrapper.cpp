@@ -24,11 +24,6 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     m_web_socket->open(url);
 }
 
-Web_socket_wrapper::~Web_socket_wrapper()
-{
-    close();
-}
-
 void Web_socket_wrapper::send_command(Command c, size_t id)
 {
     json j;

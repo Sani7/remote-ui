@@ -35,7 +35,7 @@ class Web_socket_wrapper : public QObject
 
   public:
     explicit Web_socket_wrapper(const QUrl &url, QObject *parent = nullptr);
-    ~Web_socket_wrapper();
+
     void send_command(Command c, size_t id = 0);
     void send_command(Command c, QString val);
     void send_event(Event e, size_t id);
