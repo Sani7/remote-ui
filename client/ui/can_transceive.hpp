@@ -7,6 +7,10 @@ namespace Ui
 class Can_Transceive;
 }
 
+/**
+ * @brief Class representing a CAN transceive UI component
+ *
+ */
 class Can_Transceive : public QWidget
 {
     Q_OBJECT

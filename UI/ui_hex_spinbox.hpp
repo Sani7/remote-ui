@@ -3,6 +3,10 @@
 
 #define UI_HEX_SPINBOX_TYPE std::string("ui_hex_spinbox")
 
+/**
+ * @brief Class representing a UI hex spinbox
+ *
+ */
 class UI_hex_spinbox : public UI_item
 {
     Q_OBJECT

@@ -5,10 +5,17 @@ Q_FORWARD_DECLARE_OBJC_CLASS(QWebSocket);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 using json = nlohmann::json;
 
+/**
+ * @brief Class wrapping a WebSocket connection
+ *
+ */
 class Web_socket_wrapper : public QObject
 {
     Q_OBJECT
   public:
+    /**
+     * @brief Enumeration of commands
+     */ 
     enum class Command
     {
         get_UI_element,
@@ -20,6 +27,10 @@ class Web_socket_wrapper : public QObject
         begin = 0
     };
 
+    /**
+     * @brief Enumeration of events
+     *
+     */
     enum class Event
     {
         clicked,

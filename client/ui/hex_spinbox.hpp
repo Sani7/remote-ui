@@ -3,9 +3,12 @@
 #include <QRegularExpressionValidator>
 #include <QSpinBox>
 
-// NOTE: Since QSpinBox uses int as the storage type, the effective editing range
-//   is +/- 0x7FFF FFFF, so it can't handle a full unsigned int.
-// QDoubleSpinBox would be a more suitable base class if a wider range is needed.
+/**
+ * @brief Class representing a hexadecimal spin box
+ * @note Since QSpinBox uses int as the storage type, the effective editing range
+ *       is +/- 0x7FFF FFFF, so it can't handle a full unsigned int.
+ *       QDoubleSpinBox would be a more suitable base class if a wider range is needed.
+ */
 class HexSpinBox : public QSpinBox
 {
     Q_OBJECT
@@ -42,8 +45,27 @@ class HexSpinBox : public QSpinBox
     void setFormat(const QString &text);
 
   protected:
+    /**
+     * @brief Validate the input text
+     *
+     * @param text The input text
+     * @param pos The position of the cursor
+     * @return QValidator::State The validation state
+     */
     QValidator::State validate(QString &text, int &pos) const override;
+    /**
+     * @brief Convert text to value
+     *
+     * @param text The input text
+     * @return int The corresponding value
+     */
     int valueFromText(const QString &text) const override;
+    /**
+     * @brief Convert value to text
+     *
+     * @param value The input value
+     * @return QString The corresponding text
+     */
     QString textFromValue(int value) const override;
 
   private:

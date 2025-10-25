@@ -4,6 +4,10 @@
 #include <qwt_plot_curve.h>
 #include <qwt_text.h>
 
+/**
+ * @brief Class wrapping a QwtPlot for plotting data
+ *
+ */
 class Plot_wrapper : public QwtPlot
 {
     Q_OBJECT

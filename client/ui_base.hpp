@@ -18,6 +18,9 @@ using json = nlohmann::json;
         return new client(api, parent);                                                                                \
     }
 
+/**
+ * @brief Base class for UI components
+ */
 class UI_base : public QMainWindow
 {
     Q_OBJECT

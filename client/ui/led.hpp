@@ -1,6 +1,10 @@
 #pragma once
 #include "QPushButton"
 
+/**
+ * @brief Class representing an LED widget
+ *
+ */
 class Led : public QPushButton
 {
     Q_OBJECT

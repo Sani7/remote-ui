@@ -2,6 +2,10 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
+/**
+ * @brief Class representing a better radiobutton group
+ *
+ */
 class Better_Radiobutton : public QWidget
 {
     Q_OBJECT
