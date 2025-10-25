@@ -32,9 +32,6 @@ class UI_base : public QMainWindow
         return nullptr;
     }
 
-  signals:
-    void quit();
-
   protected:
     void on_event_cb(json &j);
     void on_cmd_cb(json &j);
