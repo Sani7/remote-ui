@@ -6,7 +6,7 @@ To create a simulator server follow these steps
 2. Right click on unisim_server and select Add new  
 3. Choose C/C++ in files and classes and then select C++ class + Choose  
 4. Change the classname to the name of your sim use underscores as spaces, don't forget classnames always start with a capital letter  
-5. Set as base Simulator_base and check "Add Q_Object"  
+5. Set as base UI_base and check "Add Q_Object"  
 6. Select the path by clicking browse and make sure it is in the server/simulators folder + Next  
 7. Set add to project to None + Finish  
 8. Refresh CMake by right clicking on the project name + Run Cmake, it should show your sim as sim_ + filename  
@@ -41,7 +41,7 @@ class Test_Sim : public Simulator_base
 EXPORT_SIM(Test_Sim);
 
 Test_Sim::Test_Sim(Communication *com, QObject *parent)
-    : Simulator_base("Test Sim", com, std::chrono::milliseconds(1000), parent),
+    : UI_base("Test Sim", com, std::chrono::milliseconds(1000), parent),
     // Put you're variable constructors here
       m_button("Off", Color::White, Color::Red)
 {

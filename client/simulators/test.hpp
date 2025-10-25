@@ -1,12 +1,12 @@
 #pragma once
-#include "simulator_base.hpp"
+#include "ui_base.hpp"
 
 namespace Ui
 {
 class Test_Sim;
 }
 
-class Test_Sim : public Simulator_base
+class Test_Sim : public UI_base
 {
     Q_OBJECT
 

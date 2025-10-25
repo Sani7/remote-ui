@@ -1,12 +1,12 @@
 #pragma once
-#include "simulator_base.hpp"
+#include "ui_base.hpp"
 
 namespace Ui
 {
 class Can_Debugger;
 }
 
-class Can_Debugger : public Simulator_base
+class Can_Debugger : public UI_base
 {
     Q_OBJECT
 

@@ -1,5 +1,5 @@
 #include "mainwindow.hpp"
-#include "simulator_base.hpp"
+#include "ui_base.hpp"
 #include "ui_mainwindow.h"
 #include "web_socket_wrapper.hpp"
 #include <QDirIterator>
@@ -8,7 +8,7 @@
 #include <QThread>
 #include <magic_enum/magic_enum.hpp>
 
-typedef Simulator_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
+typedef UI_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 
 MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_error(new QMessageBox()),

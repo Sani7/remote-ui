@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
 Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
-Q_FORWARD_DECLARE_OBJC_CLASS(Simulator_base);
+Q_FORWARD_DECLARE_OBJC_CLASS(UI_base);
 
 namespace Ui
 {
@@ -44,5 +44,5 @@ class MainWindow : public QMainWindow
     QMessageBox *m_error;
     Ui::MainWindow *ui;
     std::unique_ptr<Web_socket_wrapper> m_web_socket;
-    std::map<QString, std::unique_ptr<Simulator_base>> m_sims;
+    std::map<QString, std::unique_ptr<UI_base>> m_sims;
 };

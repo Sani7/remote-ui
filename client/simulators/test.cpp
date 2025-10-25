@@ -4,7 +4,7 @@
 EXPORT_UI(Test_Sim);
 
 Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
-    : Simulator_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
+    : UI_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
 

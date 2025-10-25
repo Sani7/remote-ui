@@ -16,8 +16,8 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     mainwindow.hpp
     mainwindow.ui
-    simulator_base.cpp
-    simulator_base.hpp
+    ui_base.cpp
+    ui_base.hpp
     web_socket_wrapper.cpp
     web_socket_wrapper.hpp
 )

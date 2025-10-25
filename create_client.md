@@ -14,14 +14,14 @@ To create a new simulator ui follow these steps
 OPTIONAL Add id_to_label is optional if you want to use value labels
 ```cpp
 #pragma once
-#include "simulator_base.hpp"
+#include "ui_base.hpp"
 
 namespace Ui
 {
 class Test_Sim;
 }
 
-class Test_Sim : public Simulator_base
+class Test_Sim : public UI_base
 {
     Q_OBJECT
 
@@ -44,7 +44,7 @@ OPTIONAL Add id_to_label is optional if you want to use value labels switch case
 EXPORT_UI(Test_Sim);
 
 Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
-    : Simulator_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
+    : UI_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
 
