@@ -56,8 +56,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setup_cb(void)
+void MainWindow::showEvent(QShowEvent *event)
 {
+    QWidget::showEvent(event);
     connect(m_web_socket.get(), &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
     connect(m_web_socket.get(), &Web_socket_wrapper::on_connected, this,
             [=, this] { m_web_socket->send_command(Web_socket_wrapper::Command::get_simulators); });
@@ -65,12 +66,6 @@ void MainWindow::setup_cb(void)
         m_error->open();
         ui->connection->setText("Could not connect to the server");
     });
-}
-
-void MainWindow::showEvent(QShowEvent *event)
-{
-    QWidget::showEvent(event);
-    setup_cb();
 }
 
 void MainWindow::hideEvent(QHideEvent *event)
