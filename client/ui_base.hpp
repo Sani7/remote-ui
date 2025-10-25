@@ -19,7 +19,7 @@ using json = nlohmann::json;
     }
 
 /**
- * @brief Base class for UI components
+ * @brief Base class for client UIs
  */
 class UI_base : public QMainWindow
 {
