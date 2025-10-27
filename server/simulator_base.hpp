@@ -11,7 +11,7 @@
 
 using json = nlohmann::json;
 
-Q_FORWARD_DECLARE_OBJC_CLASS(CAN_Wrapper);
+#include "CAN_wrapper.hpp"
 Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
 #endif
 
@@ -33,12 +33,12 @@ class Communication
      * @brief Array of CAN interfaces
      *
      */
-    CAN_Wrapper *can_if[3] = {nullptr, nullptr, nullptr};
+    std::unique_ptr<CAN_Wrapper> can_if[3] = {nullptr, nullptr, nullptr};
     /**
      * @brief Array of UART interfaces
      *
      */
-    QSerialPort *uart_if[4] = {nullptr, nullptr, nullptr, nullptr};
+    std::unique_ptr<QSerialPort> uart_if[4] = {nullptr, nullptr, nullptr, nullptr};
 };
 
 /**

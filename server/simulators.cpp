@@ -9,34 +9,44 @@
 
 typedef Simulator_base *(*Get_Sim)(Communication *, QObject *);
 
-Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent)
-    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, nullptr)),
-      m_can_wrapper(new CAN_Wrapper(new CAN_Interface(this), this)), m_serial(new QSerialPort(this)),
-      m_com(new Communication)
+Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_devs, QObject *parent)
+    : QObject(parent), m_server_thread(new QThread), m_server(new Websocket(port, nullptr)), m_com(new Communication)
 {
     m_server->moveToThread(m_server_thread);
     m_server_thread->start();
-    // TODO: Cleanup this code and make it possible to add multiple com devices
-    if (!can_dev.isEmpty())
-    {
-        m_can_wrapper->connect_to_dev(can_dev);
-    }
-    if (!uart_dev.isEmpty())
-    {
-        m_serial->setPortName(uart_dev);
-        m_serial->setBaudRate(QSerialPort::Baud115200);
-        m_serial->setDataBits(QSerialPort::Data8);
-        m_serial->setParity(QSerialPort::NoParity);
-        m_serial->setStopBits(QSerialPort::OneStop);
-        m_serial->setFlowControl(QSerialPort::NoFlowControl);
 
-        if (!m_serial->open(QIODevice::ReadWrite))
+    size_t count = 0;
+    for (const auto &can_dev : can_devs)
+    {
+        count++;
+        if (can_dev.isEmpty())
+            continue;
+        m_com->can_if[count - 1] = std::make_unique<CAN_Wrapper>(this);
+        m_com->can_if[count - 1]->connect_to_dev(can_dev);
+    }
+
+    count = 0;
+    for (const auto &uart_dev : uart_devs)
+    {
+        count++;
+        if (uart_dev.isEmpty())
+            continue;
+        m_com->uart_if[count - 1] = std::make_unique<QSerialPort>(this);
+
+        m_com->uart_if[count - 1]->setPortName("/dev/" + uart_dev);
+        m_com->uart_if[count - 1]->setBaudRate(QSerialPort::Baud115200);
+        m_com->uart_if[count - 1]->setDataBits(QSerialPort::Data8);
+        m_com->uart_if[count - 1]->setParity(QSerialPort::NoParity);
+        m_com->uart_if[count - 1]->setStopBits(QSerialPort::OneStop);
+        m_com->uart_if[count - 1]->setFlowControl(QSerialPort::NoFlowControl);
+
+        if (!m_com->uart_if[count - 1]->open(QIODevice::ReadWrite))
         {
-            SPDLOG_CRITICAL("Error {}", m_serial->errorString().toStdString());
+            SPDLOG_CRITICAL("UART: /dev/{} {}", m_com->uart_if[count - 1]->portName().toStdString(), m_com->uart_if[count - 1]->errorString().toStdString());
+            m_com->uart_if[count - 1]->deleteLater();
+            continue;
         }
     }
-    m_com->can_if[0] = m_can_wrapper;
-    m_com->uart_if[0] = m_serial;
 
     QLibrary lib;
     QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so", QDir::Files,
@@ -70,8 +80,6 @@ Simulators::Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject
 
 Simulators::~Simulators()
 {
-    if (m_serial->isOpen())
-        m_serial->close();
 }
 
 std::string Simulators::active_simulator_name() const

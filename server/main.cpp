@@ -38,28 +38,42 @@ int main(int argc, char *argv[])
                                                  << "port",
                                    QCoreApplication::translate("main", "Port for the unisim server [default: 9002]."),
                                    QCoreApplication::translate("main", "port"), QLatin1String("9002"));
-    QCommandLineOption can_port_option(QStringList() << "c"
-                                                     << "can",
-                                       QCoreApplication::translate("main", "CAN device."),
-                                       QCoreApplication::translate("main", "can device"));
-    QCommandLineOption uart_port_option(QStringList() << "u"
-                                                      << "uart",
-                                        QCoreApplication::translate("main", "uart device."),
-                                        QCoreApplication::translate("main", "uart device"));
+    QCommandLineOption can_port0_option(QStringList() << "c0", QCoreApplication::translate("main", "CAN device 0."),
+                                        QCoreApplication::translate("main", "can device 0."));
+    QCommandLineOption can_port1_option(QStringList() << "c1", QCoreApplication::translate("main", "CAN device 1."),
+                                        QCoreApplication::translate("main", "can device 1."));
+    QCommandLineOption can_port2_option(QStringList() << "c2", QCoreApplication::translate("main", "CAN device 2."),
+                                        QCoreApplication::translate("main", "can device 2."));
+    QCommandLineOption uart_port0_option(QStringList() << "u0", QCoreApplication::translate("main", "uart device 0."),
+                                         QCoreApplication::translate("main", "uart device 0."));
+    QCommandLineOption uart_port1_option(QStringList() << "u1", QCoreApplication::translate("main", "uart device 1."),
+                                         QCoreApplication::translate("main", "uart device 1."));
+    QCommandLineOption uart_port2_option(QStringList() << "u2", QCoreApplication::translate("main", "uart device 2."),
+                                         QCoreApplication::translate("main", "uart device 2."));
+    QCommandLineOption uart_port3_option(QStringList() << "u3", QCoreApplication::translate("main", "uart device 3."),
+                                         QCoreApplication::translate("main", "uart device 3."));
     parser.addOption(port_option);
-    parser.addOption(can_port_option);
-    parser.addOption(uart_port_option);
+    parser.addOption(can_port0_option);
+    parser.addOption(can_port1_option);
+    parser.addOption(can_port2_option);
+    parser.addOption(uart_port0_option);
+    parser.addOption(uart_port1_option);
+    parser.addOption(uart_port2_option);
+    parser.addOption(uart_port3_option);
     parser.process(a);
     uint16_t port = parser.value(port_option).toUShort();
-    QString can_port = parser.value(can_port_option);
-    QString uart_port = parser.value(uart_port_option);
+    QStringList can_ports;
+    QStringList uart_ports;
+    can_ports << parser.value(can_port0_option) << parser.value(can_port1_option) << parser.value(can_port2_option);
+    uart_ports << parser.value(uart_port0_option) << parser.value(uart_port1_option) << parser.value(uart_port2_option)
+               << parser.value(uart_port3_option);
 
     // Initialize the logger
     init_logger();
 
     // The server starts in this thread
     SPDLOG_INFO("Starting server");
-    Simulators simulators(port, can_port, uart_port);
+    Simulators simulators(port, can_ports, uart_ports);
 
     return a.exec();
 }

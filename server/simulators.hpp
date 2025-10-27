@@ -61,11 +61,11 @@ class Simulators : public QObject
      * @brief Construct a new Simulators object
      *
      * @param port The port for the websocket server
-     * @param can_dev The CAN device path
-     * @param uart_dev The UART device path
+     * @param can_devs The list of CAN device paths
+     * @param uart_devs The list of UART device paths
      * @param parent The parent QObject
      */
-    Simulators(uint16_t port, QString can_dev, QString uart_dev, QObject *parent = nullptr);
+    Simulators(uint16_t port, QStringList can_devs, QStringList uart_devs, QObject *parent = nullptr);
     /**
      * @brief Destroy the Simulators object
      *
@@ -147,8 +147,6 @@ class Simulators : public QObject
   private:
     QThread *m_server_thread;
     Websocket *m_server;
-    CAN_Wrapper *m_can_wrapper;
-    QSerialPort *m_serial;
     Communication *m_com;
     std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
     std::string m_current_simulator = "";
