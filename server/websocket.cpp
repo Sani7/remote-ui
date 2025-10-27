@@ -1,11 +1,11 @@
 #include "websocket.hpp"
 #include "QtWebSockets/qwebsocket.h"
 #include "QtWebSockets/qwebsocketserver.h"
+#include <QCoreApplication>
 #include <QtCore/QFile>
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslKey>
 #include <spdlog/spdlog.h>
-#include <QCoreApplication>
 
 Websocket::Websocket(uint16_t port, QObject *parent)
     : QObject(parent),

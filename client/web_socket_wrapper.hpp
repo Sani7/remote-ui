@@ -15,7 +15,7 @@ class Web_socket_wrapper : public QObject
   public:
     /**
      * @brief Enumeration of commands
-     */ 
+     */
     enum class Command
     {
         get_UI_element,
