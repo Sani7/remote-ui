@@ -5,16 +5,19 @@
 #include <QtNetwork/QSslCertificate>
 #include <QtNetwork/QSslKey>
 #include <spdlog/spdlog.h>
+#include <QCoreApplication>
 
 Websocket::Websocket(uint16_t port, QObject *parent)
     : QObject(parent),
       m_pWebSocketServer(new QWebSocketServer(QStringLiteral("unisim Server"), QWebSocketServer::NonSecureMode, parent))
 {
-    if (m_pWebSocketServer->listen(QHostAddress::Any, port))
+    if (!m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
-        connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
-        connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
+        SPDLOG_CRITICAL("Unable to bind websocket to port {}", port);
+        exit(-1);
     }
+    connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
+    connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
 }
 
 Websocket::Websocket(uint16_t port, QString key_file, QString cert_file, QObject *parent)
@@ -42,11 +45,13 @@ Websocket::Websocket(uint16_t port, QString key_file, QString cert_file, QObject
     sslConfiguration.setLocalCertificate(certificate);
     sslConfiguration.setPrivateKey(sslKey);
     m_pWebSocketServer->setSslConfiguration(sslConfiguration);
-    if (m_pWebSocketServer->listen(QHostAddress::Any, port))
+    if (!m_pWebSocketServer->listen(QHostAddress::Any, port))
     {
-        connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
-        connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
+        SPDLOG_CRITICAL("Unable to bind websocket to port {}", port);
+        exit(-1);
     }
+    connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Websocket::onNewConnection);
+    connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &Websocket::closed);
 }
 
 Websocket::~Websocket()
