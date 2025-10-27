@@ -42,7 +42,10 @@ void CAN_Interface::connect_to_dev(QString dev)
 void CAN_Interface::send_frame(const QCanBusFrame frame)
 {
     if (m_canDevice == nullptr)
+    {
+        SPDLOG_CRITICAL("CAN dev = nullptr");
         return;
+    }
     m_canDevice->writeFrame(frame);
     emit frame_send(frame);
 }
