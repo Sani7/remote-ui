@@ -21,7 +21,7 @@ Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_dev
         count++;
         if (can_dev.isEmpty())
             continue;
-        m_com->can_if[count - 1] = std::make_unique<CAN_Wrapper>(this);
+        m_com->can_if[count - 1] = std::make_unique<CAN_Interface>(this);
         m_com->can_if[count - 1]->connect_to_dev(can_dev);
     }
 
@@ -42,7 +42,8 @@ Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_dev
 
         if (!m_com->uart_if[count - 1]->open(QIODevice::ReadWrite))
         {
-            SPDLOG_CRITICAL("UART: /dev/{} {}", m_com->uart_if[count - 1]->portName().toStdString(), m_com->uart_if[count - 1]->errorString().toStdString());
+            SPDLOG_CRITICAL("UART: /dev/{} {}", m_com->uart_if[count - 1]->portName().toStdString(),
+                            m_com->uart_if[count - 1]->errorString().toStdString());
             m_com->uart_if[count - 1]->deleteLater();
             continue;
         }
