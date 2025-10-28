@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
                                                  << "port",
                                    QCoreApplication::translate("main", "Port for the unisim server [default: 9002]."),
                                    QCoreApplication::translate("main", "port"), QLatin1String("9002"));
-    QCommandLineOption can_port0_option(QStringList() << "c0", QCoreApplication::translate("main", "CAN device 0."),
+    QCommandLineOption can_port0_option(QStringList() << "c" << "c0",
+                                        QCoreApplication::translate("main", "CAN device 0."),
                                         QCoreApplication::translate("main", "can device 0."));
     QCommandLineOption can_port1_option(QStringList() << "c1", QCoreApplication::translate("main", "CAN device 1."),
                                         QCoreApplication::translate("main", "can device 1."));
