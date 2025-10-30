@@ -12,11 +12,6 @@ UI_item::UI_item(std::string type, QObject *parent)
 {
 }
 
-UI_item::UI_item(const json &j, QObject *parent) : QObject(parent)
-{
-    from_json(j);
-}
-
 std::string UI_item::type() const
 {
     return m_type;

@@ -35,13 +35,6 @@ class UI_item : public QObject
      * @param parent The parent QObject
      */
     explicit UI_item(std::string type, std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
-    /**
-     * @brief Construct a new UI item object from JSON
-     *
-     * @param j The JSON object
-     * @param parent The parent QObject
-     */
-    explicit UI_item(const json &j, QObject *parent = nullptr);
 
     /**
      * @brief Get the type of the UI item
