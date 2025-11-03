@@ -92,9 +92,11 @@ Append this to /boot/config.txt
 ```
 dtparam=spi=on
 dtoverlay=mcp2515-can0,spi0-0,oscillator=16000000,interrupt=22
+dtoverlay=mcp2515-can1,spi0-1,oscillator=16000000,interrupt=26
 dtoverlay=spi-bcm2835-overlay
 ```
 Copy can_dev.service to /etc/systemd/system. Reboot to apply changes.
+It could be that can0 is switched with can1.
 ```bash
 sudo cp can_dev.service /etc/systemd/system
 sudo systemctl enable can_dev.service

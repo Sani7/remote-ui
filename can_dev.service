@@ -1,6 +1,6 @@
 [Unit]
 Description=setup can device
 [Service]
-ExecStart=/usr/sbin/ip link set can0 up type can bitrate 1000000 
+ExecStart=/usr/bin/bash -c '/usr/sbin/ip link set can0 up type can bitrate 1000000 && /usr/sbin/ip link set can1 up type can bitrate 1000000' 
 [Install]
 WantedBy=multi-user.target
