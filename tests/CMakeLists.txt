@@ -11,6 +11,7 @@ file(GLOB_RECURSE CAN "../server/CAN/to_id.cpp")
 if (GTest_FOUND)
     message(STATUS "GTest found - building target tests")
     add_executable(tests ${TEST_SOURCES} ${CAN})
+    set_target_properties(tests PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
     target_compile_options(tests PRIVATE $<$<CONFIG:Debug>:
         -Wall -Wextra -pedantic-errors -Wconversion -Wsign-conversion

@@ -65,7 +65,6 @@ target_link_libraries(unisim_server PRIVATE
     git_tag
 )
 
-
 file(GLOB_RECURSE sims "simulators/*.cpp")
 
 # Loop through each .cpp file and create a library for it
