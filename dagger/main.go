@@ -117,6 +117,10 @@ func (m *UnisimCpp) Build(
 	// +defaultPath="/"
 	// +ignore=["build", "docs"]
 	src *dagger.Directory,
+	// List of CMake targets to build (e.g., "all", "myapp", "tests")
+    // +optional
+    // +default=["all"]
+    targets []string,
 ) (*dagger.Directory, error) {
 	ctr := dag.Container().From("quay.io/sani7/qt-build:latest")
 	output := ctr.
@@ -127,7 +131,7 @@ func (m *UnisimCpp) Build(
 		// execute build commands
 		WithExec([]string{"cmake", "-S", ".", "-B", "build", "-G", "Ninja"}).
 		// Flags after `--` are transmitted as-is to the build system (Ninja, here)
-		WithExec([]string{"cmake", "--build", "build", "--clean-first", "--target", "all"}).
+		WithExec(append([]string{"cmake", "--build", "build", "--target"}, targets...)).
 		Directory(".")
 	return output.Sync(ctx)
 }
