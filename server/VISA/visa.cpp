@@ -18,7 +18,7 @@ Visa::Visa(QObject *parent)
         }
     });
     QObject::connect(m_tcp_socket, &QTcpSocket::readyRead, this, [=, this] {
-        m_data = QString::fromUtf8(m_tcp_socket->read(1024));
+        m_data = QString::fromUtf8(m_tcp_socket->readAll());
         m_data_ready = true;
         emit s_data_ready(m_data);
     });
@@ -64,7 +64,7 @@ QString Visa::query(QString data)
     uint32_t counter = 0;
     m_data.clear();
     send(data);
-    while (!m_data_ready || counter > 1024)
+    while (!m_data_ready && counter < 1024)
     {
         QCoreApplication::processEvents();
         counter++;
