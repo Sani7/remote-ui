@@ -80,6 +80,4 @@ class Visa : public QObject
     quint16 m_port;
     bool m_connected;
     bool m_reconnect;
-    bool m_data_ready;
-    QString m_data;
 };

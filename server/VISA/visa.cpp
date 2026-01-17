@@ -2,7 +2,7 @@
 #include <QCoreApplication>
 
 Visa::Visa(QObject *parent)
-    : QObject(parent), m_tcp_socket(new QTcpSocket(this)), m_connected(false), m_reconnect(false), m_data_ready(false)
+    : QObject(parent), m_tcp_socket(new QTcpSocket(this)), m_connected(false), m_reconnect(false)
 {
     QObject::connect(&m_client, &Tcp_client::connected, this, [=, this] {
         m_connected = true;
@@ -18,9 +18,7 @@ Visa::Visa(QObject *parent)
         }
     });
     QObject::connect(m_tcp_socket, &QTcpSocket::readyRead, this, [=, this] {
-        m_data = QString::fromUtf8(m_tcp_socket->readAll());
-        m_data_ready = true;
-        emit s_data_ready(m_data);
+        emit s_data_ready(QString::fromUtf8(m_tcp_socket->readAll()));
     });
 }
 Visa::~Visa()
