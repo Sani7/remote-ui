@@ -15,14 +15,10 @@ set_target_properties(
         LINK_FLAGS "-Wl,--export-dynamic"
 )
 
-file(GLOB_RECURSE CANSOURCES "CAN/*.[hc]pp")
-file(GLOB_RECURSE VISASOURCES "VISA/*.[hc]pp")
-file(GLOB_RECURSE GPIOSOURCES "gpio/*.[hc]pp")
+file(GLOB_RECURSE EXTSOURCES "extensions/*.[hc]pp")
 
 target_sources(unisim_server PRIVATE
-    ${CANSOURCES}
-    ${VISASOURCES}
-    ${GPIOSOURCES}
+    ${EXTSOURCES}
     main.cpp
     message_parser.cpp
     simulator_base.cpp
@@ -41,9 +37,8 @@ target_include_directories(unisim_server
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/simulators
-    ${CMAKE_CURRENT_LIST_DIR}/CAN
-    ${CMAKE_CURRENT_LIST_DIR}/VISA
-    ${CMAKE_CURRENT_LIST_DIR}/gpio
+    ${CMAKE_CURRENT_LIST_DIR}/extensions/CAN
+    ${CMAKE_CURRENT_LIST_DIR}/extensions
     PRIVATE
 )
 

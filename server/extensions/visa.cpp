@@ -1,14 +1,15 @@
 #include "visa.hpp"
 #include <QCoreApplication>
+#include <QTcpSocket>
 
 Visa::Visa(QObject *parent)
     : QObject(parent), m_tcp_socket(new QTcpSocket(this)), m_connected(false), m_reconnect(false)
 {
-    QObject::connect(&m_client, &Tcp_client::connected, this, [=, this] {
+    QObject::connect(m_tcp_socket, &QTcpSocket::connected, this, [=, this] {
         m_connected = true;
         emit s_connected();
     });
-    QObject::connect(&m_client, &Tcp_client::disconnected, this, [=, this] {
+    QObject::connect(m_tcp_socket, &QTcpSocket::disconnected, this, [=, this] {
         m_connected = false;
         emit s_disconnected();
         if (m_reconnect)
@@ -24,25 +25,25 @@ Visa::Visa(QObject *parent)
 Visa::~Visa()
 {
     if (m_connected)
-        m_client.disconnect();
+        m_tcp_socket->disconnect();
 }
 
 void Visa::connect(QString ip, quint16 port)
 {
     if (m_connected)
     {
-        m_client.disconnect();
+        m_tcp_socket->disconnect();
         m_ip = ip;
         m_port = port;
         m_reconnect = true;
         return;
     }
-    m_client.tcp_connect(ip, port);
+    m_tcp_socket->connectToHost(ip, port);
 }
 
 void Visa::disconnect()
 {
-    m_client.tcp_disconnect();
+    m_tcp_socket->disconnect();
 }
 
 bool Visa::connected() const

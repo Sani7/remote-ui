@@ -1,6 +1,8 @@
 #pragma once
 #include <QObject>
 
+Q_FORWARD_DECLARE_OBJC_CLASS(QTcpSocket);
+
 /**
  * @brief Class representing a VISA interface also known as SCIPI over TCP/IP
  *
@@ -75,7 +77,7 @@ class Visa : public QObject
     void s_data_ready(QString data);
 
   private:
-    Tcp_client m_client;
+    QTcpSocket *m_tcp_socket;
     QString m_ip;
     quint16 m_port;
     bool m_connected;
