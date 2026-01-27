@@ -37,6 +37,7 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
     // Insert debug sims here
     // INSERT_SIMULATOR(SIM_NAME);
 
+    setWindowTitle("Unisim cpp client");
     m_error->setIcon(QMessageBox::Critical);
     m_error->setWindowTitle("Critical");
     m_error->setText("Connection timed out\nCheck if the server is running");
