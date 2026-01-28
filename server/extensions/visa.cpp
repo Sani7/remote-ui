@@ -57,17 +57,3 @@ void Visa::send(QString data)
     m_tcp_socket->write(data.toUtf8());
     m_tcp_socket->waitForBytesWritten();
 }
-
-QString Visa::query(QString data)
-{
-    uint32_t counter = 0;
-    m_data.clear();
-    send(data);
-    while (!m_data_ready && counter < 1024)
-    {
-        QCoreApplication::processEvents();
-        counter++;
-    }
-
-    return m_data;
-}

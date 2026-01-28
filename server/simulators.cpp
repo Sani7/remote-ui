@@ -1,5 +1,4 @@
 #include "simulators.hpp"
-#include "CAN_wrapper.hpp"
 #include "simulator_base.hpp"
 #include "websocket.hpp"
 #include <QDirIterator>

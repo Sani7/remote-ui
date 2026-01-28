@@ -72,7 +72,7 @@ void Simulator_base::reboot()
     system("reboot");
 }
 
-bool Simulator_base::check_input_high(uint32_t data, uint16_t pinnummer)
+constexpr bool Simulator_base::check_input_high(uint32_t data, uint16_t pinnummer)
 {
     return (data & (1 << pinnummer));
 }

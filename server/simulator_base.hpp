@@ -11,7 +11,7 @@
 
 using json = nlohmann::json;
 
-#include "CAN_interface.hpp"
+#include "extensions/CAN_interface.hpp"
 Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
 #endif
 
@@ -160,7 +160,7 @@ class Simulator_base : public QObject
      * @return true If the bit is high
      * @return false If the bit is low
      */
-    bool check_input_high(uint32_t data, uint16_t pinnummer);
+    constexpr bool check_input_high(uint32_t data, uint16_t pinnummer);
   signals:
     /**
      * @brief Signal emitted when the ui of the simulator changes

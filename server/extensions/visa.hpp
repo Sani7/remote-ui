@@ -50,13 +50,6 @@ class Visa : public QObject
      * @param data The data to send
      */
     void send(QString data);
-    /**
-     * @brief Query the VISA device
-     *
-     * @param data The query data
-     * @return QString The response from the device
-     */
-    QString query(QString data);
 
   signals:
     /**
