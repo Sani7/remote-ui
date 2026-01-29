@@ -11,6 +11,6 @@ class Can_Debugger : public Simulator_base
     void run_at_stop() override;
 
   private:
-    CAN_Wrapper *m_wrapper;
+    CAN_Interface *m_if;
     UI_can m_can_ui;
 };

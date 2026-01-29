@@ -3,12 +3,12 @@
 EXPORT_SIM(Can_Debugger);
 
 Can_Debugger::Can_Debugger(Communication *com, QObject *parent)
-    : Simulator_base("Can Debugger", com, std::chrono::milliseconds(100), parent),
-      m_wrapper(new CAN_Wrapper(com->can_if[0].get(), this)), m_can_ui(Color::Black, Color::White)
+    : Simulator_base("Can Debugger", com, std::chrono::milliseconds(100), parent), m_if(com->can_if[0].get()),
+      m_can_ui(Color::Black, Color::White)
 {
     PUSH_UI_ITEM(m_can_ui);
 
-    connect(&m_can_ui, &UI_can::send, this, [=, this](QCanBusFrame frame) { m_wrapper->send_can_message(frame); });
+    connect(&m_can_ui, &UI_can::send, this, [=, this](QCanBusFrame frame) { m_if->send_frame(frame); });
 }
 
 void Can_Debugger::timer()
@@ -18,13 +18,17 @@ void Can_Debugger::timer()
 
 void Can_Debugger::run_at_startup()
 {
-    connect(m_wrapper, &CAN_Wrapper::on_can_message, this,
+    if (!m_if)
+        return;
+    connect(m_if, &CAN_Interface::frame_received, this,
             [=, this](QCanBusFrame frame) { this->m_can_ui.add_received_message(frame); });
-    connect(m_wrapper, &CAN_Wrapper::on_can_send, this,
+    connect(m_if, &CAN_Interface::frame_send, this,
             [=, this](QCanBusFrame frame) { this->m_can_ui.add_send_message(frame); });
 }
 
 void Can_Debugger::run_at_stop()
 {
-    disconnect(m_wrapper, nullptr, nullptr, nullptr);
+    if (!m_if)
+        return;
+    disconnect(m_if, nullptr, nullptr, nullptr);
 }
