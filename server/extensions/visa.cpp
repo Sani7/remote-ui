@@ -18,9 +18,8 @@ Visa::Visa(QObject *parent)
             m_reconnect = false;
         }
     });
-    QObject::connect(m_tcp_socket, &QTcpSocket::readyRead, this, [=, this] {
-        emit s_data_ready(QString::fromUtf8(m_tcp_socket->readAll()));
-    });
+    QObject::connect(m_tcp_socket, &QTcpSocket::readyRead, this,
+                     [=, this] { emit s_data_ready(QString::fromUtf8(m_tcp_socket->readAll())); });
 }
 Visa::~Visa()
 {
