@@ -7,7 +7,7 @@ set(CMAKE_AUTORCC ON)
 
 # tests
 file(GLOB_RECURSE TEST_SOURCES "*.[hc]pp")
-file(GLOB_RECURSE CAN "../server/CAN/to_id.cpp")
+file(GLOB_RECURSE CAN "../server/extensions/CAN_R1/to_id.cpp")
 if (GTest_FOUND)
     message(STATUS "GTest found - building target tests")
     add_executable(tests ${TEST_SOURCES} ${CAN})
@@ -30,6 +30,7 @@ if (GTest_FOUND)
     target_include_directories(tests
         PUBLIC
         ${CMAKE_SOURCE_DIR}/external/cpp-templates
+        ${CMAKE_SOURCE_DIR}/server/extensions
         ${CMAKE_CURRENT_LIST_DIR}
         ${PROJECT_BINARY_DIR}
     )
