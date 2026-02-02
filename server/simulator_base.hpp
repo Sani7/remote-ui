@@ -4,6 +4,7 @@
 #include <QThread>
 #include <QTimer>
 
+#include "extensions/CAN_interface.hpp"
 #ifndef INTERNAL
 #include "ui.hpp"
 #else
@@ -11,7 +12,6 @@
 
 using json = nlohmann::json;
 
-#include "extensions/CAN_interface.hpp"
 Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
 #endif
 

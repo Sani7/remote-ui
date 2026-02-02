@@ -1,4 +1,5 @@
 #include "can_debugger.hpp"
+#include "extensions/CAN_interface.hpp"
 
 EXPORT_SIM(Can_Debugger);
 
