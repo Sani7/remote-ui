@@ -1,6 +1,8 @@
 #include "simulators.hpp"
+#define INTERNAL
 #include "simulator_base.hpp"
 #include "websocket.hpp"
+#include <QCoreApplication>
 #include <QDirIterator>
 #include <QLibrary>
 #include <QThread>
