@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
   
-project(sim_us_server LANGUAGES CXX)
+project(remote-ui LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -24,6 +24,8 @@ set(PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR})
 if(NOT EMSCRIPTEN)
 add_subdirectory(UI)
 endif()
+
+add_subdirectory(client)
 
 # contains an "external" library we will link to
 add_subdirectory(external)
