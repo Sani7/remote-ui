@@ -881,19 +881,25 @@ void UI_base::process_ui_table(json &ui_item, QWidget *widget)
     {
         table->setColumnCount(column_count);
     }
-    for (size_t i = 0; i < row_labels.size(); i++)
+    if (row_count != 0)
     {
-        if (table->horizontalHeaderItem(i) == nullptr)
-            table->setHorizontalHeaderItem(i, new QTableWidgetItem());
-        if (row_labels[i] != table->horizontalHeaderItem(i)->text())
-            table->horizontalHeaderItem(i)->setText(QString::fromStdString(row_labels[i]));
+        for (size_t i = 0; i < row_labels.size(); i++)
+        {
+            if (table->verticalHeaderItem(i) == nullptr)
+                table->setVerticalHeaderItem(i, new QTableWidgetItem());
+            if (row_labels[i] != table->verticalHeaderItem(i)->text())
+                table->verticalHeaderItem(i)->setText(QString::fromStdString(row_labels[i]));
+        }
     }
-    for (size_t i = 0; i < column_labels.size(); i++)
+    if (column_count != 0)
     {
-        if (table->verticalHeaderItem(i) == nullptr)
-            table->setVerticalHeaderItem(i, new QTableWidgetItem());
-        if (column_labels[i] != table->verticalHeaderItem(i)->text())
-            table->verticalHeaderItem(i)->setText(QString::fromStdString(column_labels[i]));
+        for (size_t i = 0; i < column_labels.size(); i++)
+        {
+            if (table->horizontalHeaderItem(i) == nullptr)
+                table->setHorizontalHeaderItem(i, new QTableWidgetItem());
+            if (column_labels[i] != table->horizontalHeaderItem(i)->text())
+                table->horizontalHeaderItem(i)->setText(QString::fromStdString(column_labels[i]));
+        }
     }
     for (size_t i = 0; i < table_data.size(); i++)
     {
