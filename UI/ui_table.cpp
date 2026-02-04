@@ -11,7 +11,9 @@ UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::strin
       m_column_labels(column_labels), m_table()
 {
     setup_item(false, false, false);
-    m_table.resize(m_column_count * m_row_count);
+    m_row_labels.reserve(100);
+    m_column_labels.reserve(100);
+    m_table.reserve(500);
 }
 
 void UI_table::set_row_count(size_t count)
@@ -21,6 +23,8 @@ void UI_table::set_row_count(size_t count)
     {
         m_table.resize(m_column_count * m_row_count);
     }
+
+    m_row_labels.resize(m_row_count);
 
     emit ui_changed();
 }
@@ -37,6 +41,7 @@ void UI_table::set_column_count(size_t count)
     {
         m_table.resize(m_column_count * m_row_count);
     }
+    m_column_labels.resize(m_column_count);
 
     emit ui_changed();
 }
@@ -58,7 +63,7 @@ void UI_table::set_row_label(size_t index, std::string label)
         return;
     }
 
-    m_row_labels[index] = label;
+    m_row_labels[index] = std::move(label);
 
     emit ui_changed();
 }
@@ -80,7 +85,7 @@ void UI_table::set_column_label(size_t index, std::string label)
         return;
     }
 
-    m_column_labels[index] = label;
+    m_column_labels[index] = std::move(label);
 
     emit ui_changed();
 }
@@ -101,7 +106,7 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
     {
         return;
     }
-    if (capacity() > m_table.capacity())
+    if (capacity() > m_table.size())
     {
         m_table.resize(capacity());
     }
