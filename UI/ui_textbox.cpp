@@ -13,18 +13,18 @@ void UI_textbox::set_text(std::string text)
 {
     if (text == m_text)
         return;
-    m_text = text;
+    m_text = std::move(text);
     emit ui_changed();
     emit changed(m_text);
 }
 
 void UI_textbox::set_hint(std::string hint)
 {
-    m_hint = hint;
+    m_hint = std::move(hint);
     emit ui_changed();
 }
 
-std::string UI_textbox::hint() const
+std::string UI_textbox::hint() const &
 {
     return m_hint;
 }

@@ -52,7 +52,7 @@ class UI_combobox : public UI_item
      *
      * @return std::string The text of the selected option
      */
-    std::string selected_text() const;
+    std::string selected_text() const &;
 
     /**
      * @brief Deserialize the combobox from JSON

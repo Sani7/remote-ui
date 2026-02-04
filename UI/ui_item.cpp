@@ -12,7 +12,7 @@ UI_item::UI_item(std::string type, QObject *parent)
 {
 }
 
-std::string UI_item::type() const
+std::string UI_item::type() const &
 {
     return m_type;
 }
@@ -30,7 +30,7 @@ void UI_item::set_text(std::string text)
 {
     if (this->m_text != text)
     {
-        this->m_text = text;
+        this->m_text = std::move(text);
         emit ui_changed();
     }
 }
@@ -41,7 +41,7 @@ void UI_item::append_text(std::string text)
     emit ui_changed();
 }
 
-std::string UI_item::text() const
+std::string UI_item::text() const &
 {
     return m_text;
 }
@@ -50,12 +50,12 @@ void UI_item::set_fg_color(Color fg_color)
 {
     if (this->m_fg_color != fg_color)
     {
-        this->m_fg_color = fg_color;
+        this->m_fg_color = std::move(fg_color);
         emit ui_changed();
     }
 }
 
-Color UI_item::fg_color() const
+Color UI_item::fg_color() const &
 {
     return m_fg_color;
 }
@@ -64,12 +64,12 @@ void UI_item::set_bg_color(Color bg_color)
 {
     if (this->m_bg_color != bg_color)
     {
-        this->m_bg_color = bg_color;
+        this->m_bg_color = std::move(bg_color);
         emit ui_changed();
     }
 }
 
-Color UI_item::bg_color() const
+Color UI_item::bg_color() const &
 {
     return m_bg_color;
 }
@@ -78,7 +78,7 @@ void UI_item::set_enabled(bool enabled)
 {
     if (this->m_enabled != enabled)
     {
-        this->m_enabled = enabled;
+        this->m_enabled = std::move(enabled);
         emit ui_changed();
     }
 }
@@ -92,7 +92,7 @@ void UI_item::set_visible(bool visible)
 {
     if (this->m_visible != visible)
     {
-        this->m_visible = visible;
+        this->m_visible = std::move(visible);
         emit ui_changed();
     }
 }

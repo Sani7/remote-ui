@@ -96,7 +96,7 @@ class UI_dial : public UI_item
      *
      * @return std::string The unit of the dial
      */
-    std::string unit() const;
+    std::string unit() const &;
 
     /**
      * @brief Deserialize the dial from JSON

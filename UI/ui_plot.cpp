@@ -12,24 +12,24 @@ UI_plot::UI_plot(std::string text, std::string x_label, std::string y_label, QOb
 
 void UI_plot::set_x_label(std::string name)
 {
-    m_x_label = name;
+    m_x_label = std::move(name);
 
     emit ui_changed();
 }
 
-std::string UI_plot::x_label() const
+std::string UI_plot::x_label() const &
 {
     return m_x_label;
 }
 
 void UI_plot::set_y_label(std::string name)
 {
-    m_y_label = name;
+    m_y_label = std::move(name);
 
     emit ui_changed();
 }
 
-std::string UI_plot::y_label() const
+std::string UI_plot::y_label() const &
 {
     return m_y_label;
 }
@@ -50,12 +50,12 @@ void UI_plot::add_value(double x, double y)
     emit ui_changed();
 }
 
-const std::vector<double> &UI_plot::x_vals() const
+const std::vector<double> &UI_plot::x_vals() const &
 {
     return m_x_vals;
 }
 
-const std::vector<double> &UI_plot::y_vals() const
+const std::vector<double> &UI_plot::y_vals() const &
 {
     return m_y_vals;
 }

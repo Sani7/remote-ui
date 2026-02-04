@@ -41,7 +41,7 @@ class UI_item : public QObject
      *
      * @return std::string The type of the UI item
      */
-    std::string type() const;
+    std::string type() const &;
     /**
      * @brief Check if the JSON object is of the correct type
      *
@@ -68,7 +68,7 @@ class UI_item : public QObject
      *
      * @return std::string The text of the UI item
      */
-    std::string text() const;
+    std::string text() const &;
 
     /**
      * @brief Set the foreground color of the UI item
@@ -81,7 +81,7 @@ class UI_item : public QObject
      *
      * @return Color The foreground color of the UI item
      */
-    Color fg_color() const;
+    Color fg_color() const &;
 
     /**
      * @brief Set the background color of the UI item
@@ -94,7 +94,7 @@ class UI_item : public QObject
      *
      * @return Color The background color of the UI item
      */
-    Color bg_color() const;
+    Color bg_color() const &;
 
     /**
      * @brief Enable or disable the UI item

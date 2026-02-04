@@ -7,19 +7,19 @@ UI_status_bar::UI_status_bar(QObject *parent) : UI_item(UI_STATUS_BAR_TYPE, pare
 
 UI_status_bar::UI_status_bar(std::string message, QObject *parent) : UI_item(UI_STATUS_BAR_TYPE, parent), m_timeout(0)
 {
-    m_text = message;
+    m_text = std::move(message);
     setup_item(true, false, false);
 }
 
 void UI_status_bar::show_message(std::string message, size_t timeout)
 {
     // This should work because the message gets only send once when it changes
-    m_text = message;
+    m_text = std::move(message);
     m_timeout = timeout;
     emit ui_changed();
 }
 
-std::string UI_status_bar::message() const
+std::string UI_status_bar::message() const &
 {
     return m_text;
 }

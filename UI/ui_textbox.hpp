@@ -46,7 +46,7 @@ class UI_textbox : public UI_item
      *
      * @return std::string The hint text
      */
-    std::string hint() const;
+    std::string hint() const &;
 
     /**
      * @brief Deserialize the textbox from JSON

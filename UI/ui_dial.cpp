@@ -52,7 +52,7 @@ double UI_dial::max() const
     return m_max;
 }
 
-std::string UI_dial::unit() const
+std::string UI_dial::unit() const &
 {
     return m_unit;
 }

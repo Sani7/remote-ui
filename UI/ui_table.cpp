@@ -90,7 +90,7 @@ void UI_table::set_column_label(size_t index, std::string label)
     emit ui_changed();
 }
 
-std::string UI_table::column_label(size_t index) const
+std::string UI_table::column_label(size_t index) const &
 {
     if (m_column_count <= index)
     {
@@ -113,12 +113,12 @@ void UI_table::insert_item(size_t row, size_t column, std::string text)
 
     size_t index = row * m_column_count + column;
 
-    m_table.at(index) = text;
+    m_table.at(index) = std::move(text);
 
     emit ui_changed();
 }
 
-std::string UI_table::item(size_t row, size_t column) const
+std::string UI_table::item(size_t row, size_t column) const &
 {
     if (m_column_count <= column || m_row_count <= row)
     {

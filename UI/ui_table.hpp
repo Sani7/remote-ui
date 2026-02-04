@@ -90,7 +90,7 @@ class UI_table : public UI_item
      * @param index The index of the column
      * @return std::string The label of the column
      */
-    std::string column_label(size_t index) const;
+    std::string column_label(size_t index) const &;
 
     /**
      * @brief Insert an item into the table at the specified row and column
@@ -107,7 +107,7 @@ class UI_table : public UI_item
      * @param column The column of the item
      * @return std::string The text of the item
      */
-    std::string item(size_t row, size_t column) const;
+    std::string item(size_t row, size_t column) const &;
 
     /**
      * @brief empty_item This function clears the item

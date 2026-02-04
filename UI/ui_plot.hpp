@@ -37,7 +37,7 @@ class UI_plot : public UI_item
      *
      * @return std::string The x-axis label
      */
-    std::string x_label() const;
+    std::string x_label() const &;
 
     /**
      * @brief Set the label for the y-axis
@@ -50,7 +50,7 @@ class UI_plot : public UI_item
      *
      * @return std::string The y-axis label
      */
-    std::string y_label() const;
+    std::string y_label() const &;
 
     /**
      * @brief Add a value to the plot
@@ -71,14 +71,14 @@ class UI_plot : public UI_item
      *
      * @return a list of x values and a list of y values
      */
-    const std::vector<double> &x_vals() const;
+    const std::vector<double> &x_vals() const &;
     /**
      * @brief Get the y values of the plot
      *        This is only for testing purposes
      *
      * @return a list of y values
      */
-    const std::vector<double> &y_vals() const;
+    const std::vector<double> &y_vals() const &;
     /**
      * @brief Clear all values from the plot
      *

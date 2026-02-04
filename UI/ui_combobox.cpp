@@ -16,7 +16,7 @@ void UI_combobox::set_selected(size_t selected)
 {
     if (selected == m_selected)
         return;
-    m_selected = selected;
+    m_selected = std::move(selected);
     emit ui_changed();
     emit changed(selected_text());
 }
@@ -38,7 +38,7 @@ size_t UI_combobox::selected() const
     return m_selected;
 }
 
-std::string UI_combobox::selected_text() const
+std::string UI_combobox::selected_text() const &
 {
     return m_options[m_selected];
 }

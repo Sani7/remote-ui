@@ -36,7 +36,7 @@ class UI_status_bar : public UI_item
      *
      * @return std::string The current message
      */
-    std::string message() const;
+    std::string message() const &;
     /**
      * @brief Get the timeout for the current message
      *
