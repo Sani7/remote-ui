@@ -34,8 +34,7 @@ class UI_led : public UI_item
      * @param state The state to set
      * @param on The color when the LED is on
      * @param off The color when the LED is off
-     * @return true If the state was changed
-     * @return false If the state was not changed
+     * @return state
      */
     bool set_led(bool state, Color on, Color off);
 
