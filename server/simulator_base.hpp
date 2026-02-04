@@ -160,7 +160,10 @@ class Simulator_base : public QObject
      * @return true If the bit is high
      * @return false If the bit is low
      */
-    constexpr bool check_input_high(uint32_t data, uint16_t pinnummer);
+    inline bool check_input_high(uint32_t data, uint16_t pinnummer)
+    {
+        return (data & (1 << pinnummer));
+    }
   signals:
     /**
      * @brief Signal emitted when the ui of the simulator changes
