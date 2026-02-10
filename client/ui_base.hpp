@@ -236,63 +236,69 @@ class UI_base : public QMainWindow
      */
     void setup_button(QWidget *item, size_t index);
     /**
-     * @brief Set the up combobox object
+     * @brief Setup the combobox object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_combobox(QWidget *item, size_t index);
     /**
-     * @brief Set the up checkbox object
+     * @brief Setup the checkbox object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_checkbox(QWidget *item, size_t index);
     /**
-     * @brief Set the up dial object
+     * @brief Setup the dial object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_dial(QWidget *item, size_t index);
     /**
-     * @brief Set the up slider object
+     * @brief Setup the slider object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_slider(QWidget *item, size_t index);
     /**
-     * @brief Set the up spinbox object
+     * @brief Setup the slider object
+     * @param item
+     * @param index
+     */
+    void setup_textbox(QWidget *item, size_t index);
+    /**
+     * @brief Setup the spinbox object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_spinbox(QWidget *item, size_t index);
     /**
-     * @brief Set the up double spinbox object
+     * @brief Setup the double spinbox object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_double_spinbox(QWidget *item, size_t index);
     /**
-     * @brief Set the up hex spinbox object
+     * @brief Setup the hex spinbox object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_hex_spinbox(QWidget *item, size_t index);
     /**
-     * @brief Set the up tab widget object
+     * @brief Setup the tab widget object
      *
      * @param item The UI item
      * @param index The index of the UI item
      */
     void setup_tab_widget(QWidget *item, size_t index);
     /**
-     * @brief Set the up CAN UI object
+     * @brief Setup the CAN UI object
      *
      * @param item The UI item
      * @param index The index of the UI item

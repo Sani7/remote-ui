@@ -345,7 +345,35 @@ void UI_base::process_ui_thermo(json &ui_item, QWidget *widget)
 
 void UI_base::process_ui_textbox(json &ui_item, QWidget *widget)
 {
-    SPDLOG_CRITICAL("Not implemented");
+    auto line_edit = qobject_cast<QLineEdit *>(widget);
+    if (line_edit == nullptr)
+    {
+        SPDLOG_WARN("widget is not of type QLineEdit");
+        return;
+    }
+
+    bool visible = ui_item.at("visible");
+    bool enabled = ui_item.at("enabled");
+    QString hint = QString::fromStdString(ui_item.at("hint"));
+    QString text = QString::fromStdString(ui_item.at("text"));
+
+    if (line_edit->isVisible() != visible)
+    {
+        line_edit->setVisible(visible);
+    }
+
+    if (line_edit->isEnabled() != enabled)
+    {
+        line_edit->setEnabled(enabled);
+    }
+    if (line_edit->placeholderText() != hint)
+    {
+        line_edit->setPlaceholderText(hint);
+    }
+    if (line_edit->text() != text)
+    {
+        line_edit->setText(text);
+    }
 }
 
 void UI_base::process_ui_combobox(json &ui_item, QWidget *widget)
@@ -942,6 +970,7 @@ void UI_base::setup_ui_item(QWidget *item, size_t index)
     setup_checkbox(item, index);
     setup_dial(item, index);
     setup_slider(item, index);
+    setup_textbox(item, index);
     setup_spinbox(item, index);
     setup_double_spinbox(item, index);
     setup_hex_spinbox(item, index);
@@ -996,6 +1025,16 @@ void UI_base::setup_slider(QWidget *item, size_t index)
 
     connect(slider, &QwtSlider::sliderMoved, this,
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
+}
+
+void UI_base::setup_textbox(QWidget *item, size_t index)
+{
+    QLineEdit *line_edit = qobject_cast<QLineEdit *>(item);
+    if (line_edit == nullptr)
+        return;
+
+    connect(line_edit, &QLineEdit::textEdited, this,
+            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::text_changed, index, line_edit->text()); });
 }
 
 void UI_base::setup_spinbox(QWidget *item, size_t index)
