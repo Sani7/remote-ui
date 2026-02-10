@@ -25,8 +25,6 @@ target_include_directories(UI
   PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     PRIVATE
-    ${PROJECT_DIR}/external/**
-    ${PROJECT_DIR}/src/CAN/
     ${CMAKE_BINARY_DIR}/**
 )
 
