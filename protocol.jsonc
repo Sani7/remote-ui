@@ -7,7 +7,7 @@
             "parameters": [
                 {
                     "name": "id",
-                    "type": "string",
+                    "type": "size_t",
                     "description": "The id of the UI element"
                 }
             ],
@@ -98,31 +98,71 @@
     [
         {
             "type": "clicked",
-            "id": "name"
+            "description": "Someone clicked on a UI elements",
+            "parameters": [
+                {
+                    "name": "id",
+                    "type": "size_t",
+                    "description": "The id of the UI element"
+                }
+            ]
         },
         {
             "type": "value_changed",
-            "id": "name",
-            "value": 0
+            "description": "Someone changed a value on a UI elements",
+            "parameters": [
+                {
+                    "name": "id",
+                    "type": "size_t",
+                    "description": "The id of the UI element"
+                },
+                {
+                    "name": "value",
+                    "type": "double",
+                    "description": "The value that changed"
+                }
+            ]
         },
         {
             "type": "text_changed",
-            "id": "name",
-            "text": "text"
+            "description": "Someone changed text on a UI elements",
+            "parameters": [
+                {
+                    "name": "id",
+                    "type": "size_t",
+                    "description": "The id of the UI element"
+                },
+                {
+                    "name": "text",
+                    "type": "string",
+                    "description": "The text that changed"
+                }
+            ]
         },
         {
             "type": "selected",
-            "id": "name",
-            "item": "name"
+            "description": "Someone changed selection on a UI elements",
+            "parameters": [
+                {
+                    "name": "id",
+                    "type": "size_t",
+                    "description": "The id of the UI element"
+                },
+                {
+                    "name": "selected",
+                    "type": "size_t",
+                    "description": "The index of the selected item"
+                }
+            ]
         },
         {
-            // Server to client
             "type": "ui_changed",
-            "UI_elements": [
+            "description": "A message from Server to client to notify that the UI changed with the changed UI elements",
+            "parameters": [
                 {
-                    "id": "name",
-                    "type": "type"
-                    // ,...
+                    "name": "UIElements",
+                    "type": "List<UIElements>",
+                    "description": "List of UI elements"
                 }
             ]
         }
