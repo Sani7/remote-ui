@@ -54,7 +54,10 @@ void Test_Sim::timer()
     {
         m_slider.set_value(0);
     }
-    m_slider.set_value(m_slider.value() + 1);
+    else
+    {
+        m_slider.set_value(m_slider.value() + 1);
+    }
     m_tab_widget.advance_tab();
     m_stacked_widget.advance_tab();
 }
