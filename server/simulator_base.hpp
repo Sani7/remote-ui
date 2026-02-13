@@ -1,5 +1,4 @@
 #pragma once
-#include "spdlog/spdlog.h"
 #include <QSerialPort>
 #include <QThread>
 #include <QTimer>
@@ -21,6 +20,14 @@ Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
     {                                                                                                                  \
         return new sim(com, parent);                                                                                   \
     }
+
+#define LOG_SRC_LOC(level, msg) emit log_signal(__FILE__, __LINE__, __FUNCTION__, (int)level, msg)
+#define LOG_TRACE(msg) LOG_SRC_LOC(Log_level_enum::trace, msg)
+#define LOG_DEBUG(msg) LOG_SRC_LOC(Log_level_enum::debug, msg)
+#define LOG_INFO(msg) LOG_SRC_LOC(Log_level_enum::info, msg)
+#define LOG_WARN(msg) LOG_SRC_LOC(Log_level_enum::warn, msg)
+#define LOG_ERROR(msg) LOG_SRC_LOC(Log_level_enum::err, msg)
+#define LOG_CRITICAL(msg) LOG_SRC_LOC(Log_level_enum::critical, msg)
 
 /**
  * @brief Struct holding all communication interfaces
@@ -49,6 +56,17 @@ class Simulator_base : public QObject
 {
     Q_OBJECT
   public:
+    enum class Log_level_enum : int
+    {
+        trace,
+        debug,
+        info,
+        warn,
+        err,
+        critical,
+        off,
+        n_levels
+    };
     /**
      * @brief Construct a new Simulator_base object
      *
@@ -170,6 +188,8 @@ class Simulator_base : public QObject
      *
      */
     void sim_changed();
+
+    void log_signal(const char *filename_in, int line_in, const char *funcname_in, int level, QString msg);
 
   protected:
     /**
