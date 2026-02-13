@@ -36,7 +36,7 @@ void UI_base::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     setWindowTitle(m_name);
-    SPDLOG_DEBUG("Connecting callbacks");
+    LOG_DEBUG("Connecting callbacks");
     m_first_load = true;
 
     connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
@@ -54,7 +54,7 @@ void UI_base::closeEvent(QCloseEvent *event)
     QWidget::closeEvent(event);
     if (m_open == true)
     {
-        SPDLOG_DEBUG("Disconnecting callbacks");
+        LOG_DEBUG("Disconnecting callbacks");
         m_timer_update->stop();
         disconnect(m_web_socket, nullptr, nullptr, nullptr);
         m_open = false;
@@ -109,7 +109,7 @@ void UI_base::UI_item_parser(json &input)
         auto widget = id_to_ui(ui_item.at("id"));
         if (widget == nullptr)
         {
-            SPDLOG_WARN("id_to_ui returned null on {}", QString::number((size_t)ui_item.at("id")).toStdString());
+            LOG_WARN(QString("id_to_ui returned null on %0").arg((size_t)ui_item.at("id")));
             return;
         }
 
@@ -216,7 +216,7 @@ void UI_base::process_ui_label(json &ui_item, QWidget *widget)
     auto label = qobject_cast<QLabel *>(widget);
     if (label == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QLabel");
+        LOG_WARN("widget is not of type QLabel");
         return;
     }
 
@@ -247,7 +247,7 @@ void UI_base::process_ui_slider(json &ui_item, QWidget *widget)
     auto slider = qobject_cast<QwtSlider *>(widget);
     if (slider == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QwtSlider");
+        LOG_WARN("widget is not of type QwtSlider");
         return;
     }
 
@@ -286,7 +286,7 @@ void UI_base::process_ui_dial(json &ui_item, QWidget *widget)
     auto dial = qobject_cast<QwtDial *>(widget);
     if (dial == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QwtDial");
+        LOG_WARN("widget is not of type QwtDial");
         return;
     }
 
@@ -318,7 +318,7 @@ void UI_base::process_ui_thermo(json &ui_item, QWidget *widget)
     auto thermo = qobject_cast<QwtThermo *>(widget);
     if (thermo == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QwtThermo");
+        LOG_WARN("widget is not of type QwtThermo");
         return;
     }
 
@@ -348,7 +348,7 @@ void UI_base::process_ui_textbox(json &ui_item, QWidget *widget)
     auto line_edit = qobject_cast<QLineEdit *>(widget);
     if (line_edit == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QLineEdit");
+        LOG_WARN("widget is not of type QLineEdit");
         return;
     }
 
@@ -381,7 +381,7 @@ void UI_base::process_ui_combobox(json &ui_item, QWidget *widget)
     auto combobox = qobject_cast<QComboBox *>(widget);
     if (combobox == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QComboBox");
+        LOG_WARN("widget is not of type QComboBox");
         return;
     }
 
@@ -413,7 +413,7 @@ void UI_base::process_ui_combobox(json &ui_item, QWidget *widget)
 
 void UI_base::process_ui_radiobutton(json &ui_item, QWidget *widget)
 {
-    SPDLOG_CRITICAL("Not implemented");
+    LOG_CRITICAL("Not implemented");
 }
 
 void UI_base::process_ui_checkbox(json &ui_item, QWidget *widget)
@@ -421,7 +421,7 @@ void UI_base::process_ui_checkbox(json &ui_item, QWidget *widget)
     auto checkbox = qobject_cast<QCheckBox *>(widget);
     if (checkbox == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QCheckbox");
+        LOG_WARN("widget is not of type QCheckbox");
         return;
     }
 
@@ -487,7 +487,7 @@ void UI_base::process_ui_button(json &ui_item, QWidget *widget)
     auto button = qobject_cast<QPushButton *>(widget);
     if (button == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QPushButton");
+        LOG_WARN("widget is not of type QPushButton");
         return;
     }
 
@@ -547,7 +547,7 @@ void UI_base::process_ui_led(json &ui_item, QWidget *widget)
     auto led = qobject_cast<Led *>(widget);
     if (led == nullptr)
     {
-        SPDLOG_WARN("widget is not of type led");
+        LOG_WARN("widget is not of type led");
         return;
     }
 
@@ -601,7 +601,7 @@ void UI_base::process_ui_spinbox(json &ui_item, QWidget *widget)
     auto spinbox = qobject_cast<QSpinBox *>(widget);
     if (spinbox == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QSpinBox");
+        LOG_WARN("widget is not of type QSpinBox");
         return;
     }
 
@@ -640,7 +640,7 @@ void UI_base::process_ui_double_spinbox(json &ui_item, QWidget *widget)
     auto spinbox = qobject_cast<QDoubleSpinBox *>(widget);
     if (spinbox == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QDoubleSpinBox");
+        LOG_WARN("widget is not of type QDoubleSpinBox");
         return;
     }
 
@@ -679,7 +679,7 @@ void UI_base::process_ui_hex_spinbox(json &ui_item, QWidget *widget)
     auto spinbox = qobject_cast<HexSpinBox *>(widget);
     if (spinbox == nullptr)
     {
-        SPDLOG_WARN("widget is not of type HexSpinBox");
+        LOG_WARN("widget is not of type HexSpinBox");
         return;
     }
 
@@ -718,13 +718,13 @@ void UI_base::process_ui_tab_widget(json &ui_item, QWidget *widget)
     auto tab_widget = qobject_cast<QTabWidget *>(widget);
     if (tab_widget == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QTabWidget");
+        LOG_WARN("widget is not of type QTabWidget");
         return;
     }
 
     if (tab_widget->count() != ui_item.at("tab_names").size())
     {
-        SPDLOG_ERROR("QTabWidget has not the same amount of tabs as the server");
+        LOG_ERROR("QTabWidget has not the same amount of tabs as the server");
         return;
     }
 
@@ -765,13 +765,13 @@ void UI_base::process_ui_stacked_widget(json &ui_item, QWidget *widget)
     auto stacked_widget = qobject_cast<QStackedWidget *>(widget);
     if (stacked_widget == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QStackedWidget");
+        LOG_WARN("widget is not of type QStackedWidget");
         return;
     }
 
     if (stacked_widget->count() != ui_item.at("tab_count"))
     {
-        SPDLOG_ERROR("QStackedWidget has not the same amount of tabs as the server");
+        LOG_ERROR("QStackedWidget has not the same amount of tabs as the server");
         return;
     }
 
@@ -799,7 +799,7 @@ void UI_base::process_ui_status_bar(json &ui_item, QWidget *widget)
     auto status_bar = qobject_cast<QStatusBar *>(widget);
     if (status_bar == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QStatusBar");
+        LOG_WARN("widget is not of type QStatusBar");
         return;
     }
 
@@ -814,7 +814,7 @@ void UI_base::process_ui_plot(json &ui_item, QWidget *widget)
     auto plot = qobject_cast<Plot_wrapper *>(widget);
     if (plot == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QwtPlot");
+        LOG_WARN("widget is not of type QwtPlot");
         return;
     }
 
@@ -876,7 +876,7 @@ void UI_base::process_ui_table(json &ui_item, QWidget *widget)
     auto table = qobject_cast<QTableWidget *>(widget);
     if (table == nullptr)
     {
-        SPDLOG_WARN("widget is not of type QTableWidget");
+        LOG_WARN("widget is not of type QTableWidget");
         return;
     }
 
@@ -947,7 +947,7 @@ void UI_base::process_ui_can(json &ui_item, QWidget *widget)
     auto can_ui = qobject_cast<Can_Transceive *>(widget);
     if (can_ui == nullptr)
     {
-        SPDLOG_WARN("widget is not of type led");
+        LOG_WARN("widget is not of type led");
         return;
     }
 

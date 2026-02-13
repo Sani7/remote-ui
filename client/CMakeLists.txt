@@ -84,7 +84,7 @@ if (NOT EMSCRIPTEN)
         # Create a library for each .cpp file
         add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui)
         target_link_libraries(ui_${LIB_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets magic_enum::magic_enum nlohmann_json::nlohmann_json)
-        target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${CMAKE_SOURCE_DIR}/external/qwt/src ${CMAKE_SOURCE_DIR}/external/spdlog/include ${PROJECT_BINARY_DIR}/)
+        target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${CMAKE_SOURCE_DIR}/external/qwt/src ${PROJECT_BINARY_DIR}/)
 
         set_target_properties(
             ui_${LIB_NAME}

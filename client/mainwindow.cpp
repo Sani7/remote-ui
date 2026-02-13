@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QThread>
 #include <magic_enum/magic_enum.hpp>
+#include <spdlog/spdlog.h>
 
 typedef UI_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
 
@@ -31,6 +32,11 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
         }
         auto widget = loaded_ui(m_web_socket.get(), this);
         m_sims.insert(std::make_pair(widget->name(), widget));
+        connect(widget, &UI_base::log_signal, this,
+                [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
+                    spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
+                                                      (spdlog::level::level_enum)level, msg.toStdString());
+                });
         lib.unload();
     }
 
