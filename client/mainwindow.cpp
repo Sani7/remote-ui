@@ -18,7 +18,8 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
     ui->setupUi(this);
     connect(m_web_socket.get(), &Web_socket_wrapper::log_signal, this,
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
-                spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
+                if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
+                    spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
                                                   (spdlog::level::level_enum)level, msg.toStdString());
             });
 
@@ -45,8 +46,9 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
         m_sims.insert(std::make_pair(widget->name(), widget));
         connect(widget, &UI_base::log_signal, this,
                 [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
-                    spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
-                                                      (spdlog::level::level_enum)level, msg.toStdString());
+                    if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
+                        spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
+                                                          (spdlog::level::level_enum)level, msg.toStdString());
                 });
     }
 

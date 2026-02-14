@@ -160,7 +160,8 @@ void Simulators::switch_simulator(std::string name)
         Qt::QueuedConnection);
     connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::log_signal, this,
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
-                spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
+                if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
+                    spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
                                                   (spdlog::level::level_enum)level, msg.toStdString());
             });
     this->start();
