@@ -22,11 +22,11 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
                                                   (spdlog::level::level_enum)level, msg.toStdString());
             });
 
-    QLibrary lib;
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so" << "*.dll", QDir::Files,
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libui_*.so" << "*libui_*.dll", QDir::Files,
                     QDirIterator::Subdirectories);
     while (it.hasNext())
     {
+        QLibrary lib;
         lib.setFileName(it.next());
         lib.load();
         auto loaded_ui = Get_UI(lib.resolve("get_ui"));

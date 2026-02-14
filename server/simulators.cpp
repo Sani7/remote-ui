@@ -51,11 +51,11 @@ Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_dev
         }
     }
 
-    QLibrary lib;
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*.so", QDir::Files,
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libsim_*.so", QDir::Files,
                     QDirIterator::Subdirectories);
     while (it.hasNext())
     {
+        QLibrary lib;
         lib.setFileName(it.next());
         lib.load();
         auto loaded_sim = Get_Sim(lib.resolve("get_sim"));
