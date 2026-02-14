@@ -66,8 +66,12 @@ Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_dev
             continue;
         }
         auto widget = loaded_sim(m_com, this);
+        if (widget == nullptr)
+        {
+            lib.unload();
+            continue;
+        }
         m_simulators.insert(std::make_pair(widget->name(), widget));
-        lib.unload();
     }
 
     // Insert Debug sims here

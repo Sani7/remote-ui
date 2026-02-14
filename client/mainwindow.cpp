@@ -31,13 +31,17 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
             continue;
         }
         auto widget = loaded_ui(m_web_socket.get(), this);
+        if (widget == nullptr)
+        {
+            lib.unload();
+            continue;
+        }
         m_sims.insert(std::make_pair(widget->name(), widget));
         connect(widget, &UI_base::log_signal, this,
                 [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
                     spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
                                                       (spdlog::level::level_enum)level, msg.toStdString());
                 });
-        lib.unload();
     }
 
     // Insert debug sims here
