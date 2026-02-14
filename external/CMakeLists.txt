@@ -1,4 +1,6 @@
 set(QWT_BUILD_SHARED ON)
+set(COLOR_BUILD_PIC ON)
+set(SPDLOG_BUILD_PIC ON)
 add_subdirectory(color)
 add_subdirectory(cpp-templates)
 add_subdirectory(git_tag_cpp)
