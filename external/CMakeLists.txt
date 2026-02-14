@@ -1,3 +1,4 @@
+set(QWT_BUILD_SHARED ON)
 add_subdirectory(color)
 add_subdirectory(cpp-templates)
 add_subdirectory(git_tag_cpp)

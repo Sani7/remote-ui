@@ -3,6 +3,12 @@
 #include <QWidget>
 #include <nlohmann/json.hpp>
 
+#ifdef INTERNAL
+#define EXPORT Q_DECL_EXPORT
+#else
+#define EXPORT Q_DECL_IMPORT
+#endif
+
 Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 Q_FORWARD_DECLARE_OBJC_CLASS(QLabel);
@@ -28,7 +34,7 @@ using json = nlohmann::json;
 /**
  * @brief Base class for client UIs
  */
-class UI_base : public QMainWindow
+class EXPORT UI_base : public QMainWindow
 {
     Q_OBJECT
   public:

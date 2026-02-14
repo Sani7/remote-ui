@@ -1,6 +1,13 @@
 #pragma once
 #include <QObject>
 #include <nlohmann/json.hpp>
+
+#ifdef INTERNAL
+#define EXPORT Q_DECL_EXPORT
+#else
+#define EXPORT Q_DECL_IMPORT
+#endif
+
 Q_FORWARD_DECLARE_OBJC_CLASS(QWebSocket);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 using json = nlohmann::json;
@@ -9,7 +16,7 @@ using json = nlohmann::json;
  * @brief Class wrapping a WebSocket connection
  *
  */
-class Web_socket_wrapper : public QObject
+class EXPORT Web_socket_wrapper : public QObject
 {
     Q_OBJECT
   public:
@@ -25,6 +32,18 @@ class Web_socket_wrapper : public QObject
         get_simulators,
         end,
         begin = 0
+    };
+
+    enum class Log_level_enum : int
+    {
+        trace,
+        debug,
+        info,
+        warn,
+        err,
+        critical,
+        off,
+        n_levels
     };
 
     /**
@@ -121,7 +140,7 @@ class Web_socket_wrapper : public QObject
      */
     void inhibit_events(bool inhibit);
 
-  Q_SIGNALS:
+  signals:
     /**
      * @brief Signal emitted when the WebSocket is connected
      *
@@ -144,6 +163,8 @@ class Web_socket_wrapper : public QObject
      * @param data The JSON event data
      */
     void on_event_cb(json &data);
+
+    void log_signal(const char *filename_in, int line_in, const char *funcname_in, int level, QString msg);
 
   private Q_SLOTS:
     /**

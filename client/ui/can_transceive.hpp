@@ -2,6 +2,12 @@
 #include "hex_spinbox.hpp"
 #include <QWidget>
 
+#ifdef INTERNAL
+#define EXPORT Q_DECL_EXPORT
+#else
+#define EXPORT Q_DECL_IMPORT
+#endif
+
 namespace Ui
 {
 class Can_Transceive;
@@ -11,7 +17,7 @@ class Can_Transceive;
  * @brief Class representing a CAN transceive UI component
  *
  */
-class Can_Transceive : public QWidget
+class EXPORT Can_Transceive : public QWidget
 {
     Q_OBJECT
 

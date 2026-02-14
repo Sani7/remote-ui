@@ -2,11 +2,17 @@
 #include <QRadioButton>
 #include <QVBoxLayout>
 
+#ifdef INTERNAL
+#define EXPORT Q_DECL_EXPORT
+#else
+#define EXPORT Q_DECL_IMPORT
+#endif
+
 /**
  * @brief Class representing a better radiobutton group
  *
  */
-class Better_Radiobutton : public QWidget
+class EXPORT Better_Radiobutton : public QWidget
 {
     Q_OBJECT
   public:

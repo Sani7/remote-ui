@@ -1,8 +1,15 @@
 #include "web_socket_wrapper.hpp"
-#include "spdlog/spdlog.h"
 #include <QTimer>
 #include <QtWebSockets/QWebSocket>
 #include <magic_enum/magic_enum.hpp>
+
+#define LOG_SRC_LOC(level, msg) emit log_signal(__FILE__, __LINE__, __FUNCTION__, (int)level, msg)
+#define LOG_TRACE(msg) LOG_SRC_LOC(Log_level_enum::trace, msg)
+#define LOG_DEBUG(msg) LOG_SRC_LOC(Log_level_enum::debug, msg)
+#define LOG_INFO(msg) LOG_SRC_LOC(Log_level_enum::info, msg)
+#define LOG_WARN(msg) LOG_SRC_LOC(Log_level_enum::warn, msg)
+#define LOG_ERROR(msg) LOG_SRC_LOC(Log_level_enum::err, msg)
+#define LOG_CRITICAL(msg) LOG_SRC_LOC(Log_level_enum::critical, msg)
 
 Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     : QObject(parent), m_web_socket(new QWebSocket("", QWebSocketProtocol::VersionLatest, this)),
@@ -11,8 +18,9 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     connect(m_web_socket, &QWebSocket::connected, this, &Web_socket_wrapper::m_on_connected);
     connect(m_web_socket, &QWebSocket::disconnected, this, &Web_socket_wrapper::on_closed);
     connect(m_web_socket, &QWebSocket::pong, this, &Web_socket_wrapper::m_on_pong);
-    connect(m_web_socket, &QWebSocket::errorOccurred, this,
-            [=](QAbstractSocket::SocketError error) { SPDLOG_ERROR(magic_enum::enum_name(error)); });
+    connect(m_web_socket, &QWebSocket::errorOccurred, this, [this](QAbstractSocket::SocketError error) {
+        LOG_ERROR(QString::fromStdString(std::string(magic_enum::enum_name(error))));
+    });
     connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
         m_web_socket->ping();
         m_pong_timer->start(1000);
@@ -200,7 +208,7 @@ void Web_socket_wrapper::m_on_pong(quint64 elapsedTime)
 
 void Web_socket_wrapper::m_on_pong_timeout()
 {
-    SPDLOG_CRITICAL("Pong timeout");
+    LOG_CRITICAL("Pong timeout");
     m_web_socket->close();
     emit on_closed();
 }

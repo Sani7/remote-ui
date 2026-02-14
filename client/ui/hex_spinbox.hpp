@@ -3,13 +3,19 @@
 #include <QRegularExpressionValidator>
 #include <QSpinBox>
 
+#ifdef INTERNAL
+#define EXPORT Q_DECL_EXPORT
+#else
+#define EXPORT Q_DECL_IMPORT
+#endif
+
 /**
  * @brief Class representing a hexadecimal spin box
  * @note Since QSpinBox uses int as the storage type, the effective editing range
  *       is +/- 0x7FFF FFFF, so it can't handle a full unsigned int.
  *       QDoubleSpinBox would be a more suitable base class if a wider range is needed.
  */
-class HexSpinBox : public QSpinBox
+class EXPORT HexSpinBox : public QSpinBox
 {
     Q_OBJECT
 
