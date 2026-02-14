@@ -80,6 +80,20 @@ target_include_directories(client_common
     ${PROJECT_BINARY_DIR}
 )
 
+add_custom_command(TARGET client_common POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:client_common>
+    $<TARGET_FILE_DIR:unisim_client>)
+
+add_custom_target(copy_qwt_to_unisim
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:qwt>
+        $<TARGET_FILE_DIR:unisim_client>
+    COMMENT "Copying qwt → unisim_client output dir"
+    VERBATIM
+)
+add_dependencies(unisim_client copy_qwt_to_unisim)
+
 if (NOT EMSCRIPTEN)
     file(GLOB_RECURSE sims "simulators/*.cpp")
     # Loop through each .cpp file and create a library for it
