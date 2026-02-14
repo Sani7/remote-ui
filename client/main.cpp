@@ -8,6 +8,7 @@
 #include <QCommandLineParser>
 #include <QProcess>
 #include <QUrl>
+#include "magic_enum/magic_enum.hpp"
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
@@ -26,7 +27,6 @@ void init_logger()
     spdlog::set_default_logger(logger);
     spdlog::set_pattern("[%H:%M:%S %z] [%^---%L---%$] %s:%# %!: %v");
     spdlog::flush_every(std::chrono::seconds(3));
-    spdlog::set_level(spdlog::level::trace);
 }
 
 int main(int argc, char *argv[])
@@ -56,9 +56,16 @@ int main(int argc, char *argv[])
                                           QCoreApplication::translate("main", "default"), QLatin1String(""));
     parser.addOption(default_sim_option);
 
+    QCommandLineOption log_option(QStringList() << "l"
+                                                << "log",
+                                  QCoreApplication::translate("main", "Log level for the unisim server [default: trace]."),
+                                  QCoreApplication::translate("main", "log"), QLatin1String("trace"));
+    parser.addOption(log_option);
+
     parser.process(a);
     // Initialize the logger
     init_logger();
+    spdlog::set_level(magic_enum::enum_cast<spdlog::level::level_enum>(parser.value(log_option).toStdString()).value_or(spdlog::level::off));
 
     QUrl url;
     url.setScheme("ws");
@@ -94,6 +101,7 @@ int main(int argc, char *argv[])
 #endif
     url.setPort(parser.value(port_option).toInt());
     QString default_sim = parser.value(default_sim_option);
+    SPDLOG_INFO("Connecting client on {}", url.toString().toStdString());
     MainWindow w(url, default_sim);
     w.show();
     return a.exec();

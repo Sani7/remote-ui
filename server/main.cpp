@@ -6,6 +6,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
+#include "magic_enum/magic_enum.hpp"
 #include "git_version.h"
 #include "simulators.hpp"
 
@@ -21,7 +22,6 @@ void init_logger()
     spdlog::set_default_logger(logger);
     spdlog::set_pattern("[%H:%M:%S %z] [%^---%L---%$] %s:%# %!: %v");
     spdlog::flush_every(std::chrono::seconds(3));
-    spdlog::set_level(spdlog::level::trace);
 }
 
 int main(int argc, char *argv[])
@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
                                                  << "port",
                                    QCoreApplication::translate("main", "Port for the unisim server [default: 9002]."),
                                    QCoreApplication::translate("main", "port"), QLatin1String("9002"));
+    QCommandLineOption log_option(QStringList() << "l"
+                                                 << "log",
+                                   QCoreApplication::translate("main", "Log level for the unisim server [default: trace]."),
+                                   QCoreApplication::translate("main", "log"), QLatin1String("trace"));
     QCommandLineOption can_port0_option(QStringList() << "c" << "c0",
                                         QCoreApplication::translate("main", "CAN device 0."),
                                         QCoreApplication::translate("main", "can device 0."));
@@ -54,6 +58,7 @@ int main(int argc, char *argv[])
     QCommandLineOption uart_port3_option(QStringList() << "u3", QCoreApplication::translate("main", "uart device 3."),
                                          QCoreApplication::translate("main", "uart device 3."));
     parser.addOption(port_option);
+    parser.addOption(log_option);
     parser.addOption(can_port0_option);
     parser.addOption(can_port1_option);
     parser.addOption(can_port2_option);
@@ -71,6 +76,7 @@ int main(int argc, char *argv[])
 
     // Initialize the logger
     init_logger();
+    spdlog::set_level(magic_enum::enum_cast<spdlog::level::level_enum>(parser.value(log_option).toStdString()).value_or(spdlog::level::off));
 
     // The server starts in this thread
     SPDLOG_INFO("Starting server");
