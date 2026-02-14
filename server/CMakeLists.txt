@@ -69,7 +69,7 @@ foreach(sim ${sims})
     # Create a library for each .cpp file
     add_library(sim_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp)
     target_link_libraries(sim_${LIB_NAME} PRIVATE Qt::SerialBus magic_enum::magic_enum nlohmann_json::nlohmann_json)
-    target_include_directories(sim_${LIB_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extensions ${CMAKE_SOURCE_DIR}/UI ${CMAKE_SOURCE_DIR}/external/color ${CMAKE_SOURCE_DIR}/external/cpp-templates)
+    target_include_directories(sim_${LIB_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extensions ${CMAKE_CURRENT_LIST_DIR}/../UI ${CMAKE_CURRENT_LIST_DIR}/../external/color ${CMAKE_CURRENT_LIST_DIR}/../external/cpp-templates)
     add_custom_command(TARGET sim_${LIB_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:sim_${LIB_NAME}>
