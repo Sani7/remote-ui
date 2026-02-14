@@ -22,8 +22,8 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
                                                   (spdlog::level::level_enum)level, msg.toStdString());
             });
 
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libui_*.so" << "*libui_*.dll", QDir::Files,
-                    QDirIterator::Subdirectories);
+    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libui_*.so" << "*libui_*.dll",
+                    QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext())
     {
         QLibrary lib;
