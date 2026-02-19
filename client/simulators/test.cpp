@@ -1,10 +1,11 @@
 #include "test.hpp"
+#include "factory.hpp"
 #include "ui_test.h"
 
-EXPORT_UI(Test_Sim);
+REGISTER_UI(Test_Sim);
 
 Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
-    : UI_base("Test Sim", web_socket, parent), ui(new Ui::Test_Sim)
+    : UI_base(web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
 

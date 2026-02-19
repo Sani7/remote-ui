@@ -1,4 +1,5 @@
 #include "mainwindow.hpp"
+#include "factory.hpp"
 #include "ui_base.hpp"
 #include "ui_mainwindow.h"
 #include "web_socket_wrapper.hpp"
@@ -23,33 +24,19 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
                                                   (spdlog::level::level_enum)level, msg.toStdString());
             });
 
-    QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libui_*.so" << "*libui_*.dll",
-                    QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext())
+    for (const QString &name : UIFactory::instance().keys())
     {
-        QLibrary lib;
-        lib.setFileName(it.next());
-        lib.load();
-        auto loaded_ui = Get_UI(lib.resolve("get_ui"));
-        if (loaded_ui == nullptr)
+        if (auto* w = UIFactory::instance().create(name, m_web_socket.get(), this))
         {
-            SPDLOG_INFO("{} NOT FOUND", lib.fileName().toStdString());
-            lib.unload();
-            continue;
+            w->set_name(name);
+            m_sims.insert(std::make_pair(name, w));
+            connect(w, &UI_base::log_signal, this,
+                    [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
+                        if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
+                            spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
+                                                              (spdlog::level::level_enum)level, msg.toStdString());
+                    });
         }
-        auto widget = loaded_ui(m_web_socket.get(), this);
-        if (widget == nullptr)
-        {
-            lib.unload();
-            continue;
-        }
-        m_sims.insert(std::make_pair(widget->name(), widget));
-        connect(widget, &UI_base::log_signal, this,
-                [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
-                    if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
-                        spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
-                                                          (spdlog::level::level_enum)level, msg.toStdString());
-                });
     }
 
     // Insert debug sims here
@@ -103,7 +90,8 @@ void MainWindow::pase_sim_names(json &sims)
 {
     for (json &item : sims)
     {
-        ui->comboBox->addItem(QString::fromStdString(item));
+        if (m_sims.contains(QString::fromStdString(item)))
+            ui->comboBox->addItem(QString::fromStdString(item));
     }
 
     QThread::msleep(30);

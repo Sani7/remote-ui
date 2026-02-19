@@ -7,9 +7,8 @@
 #include <QMessageBox>
 #include <magic_enum/magic_enum.hpp>
 
-UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
-    : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_web_socket(web_socket),
-      m_name(name)
+UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
+    : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_web_socket(web_socket)
 {
     this->setWindowState(Qt::WindowMaximized);
     m_ui_lookup.reserve(40);
@@ -22,14 +21,14 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
     connect(exit_app, &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
 }
 
+void UI_base::set_name(QString name)
+{
+    m_name = name;
+}
+
 QWidget *UI_base::id_to_ui(size_t id)
 {
     return m_ui_lookup.at(id);
-}
-
-QString UI_base::name() const
-{
-    return m_name;
 }
 
 void UI_base::showEvent(QShowEvent *event)

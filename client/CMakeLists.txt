@@ -4,17 +4,26 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB_RECURSE ui "ui/*")
+file(GLOB_RECURSE sims "simulators/*")
 
 set(PROJECT_SOURCES
+    ${ui}
+    ${sims}
     IterableEnum.hpp
     main.cpp
     mainwindow.cpp
     mainwindow.hpp
     mainwindow.ui
+    factory.hpp
+    helpers.cpp
+    helpers.hpp
+    ui_base.cpp
+    ui_base.hpp
+    web_socket_wrapper.cpp
+    web_socket_wrapper.hpp
 )
 
 qt_add_executable(unisim_client
-    MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
     )
 
@@ -29,11 +38,12 @@ set_target_properties(
 target_include_directories(unisim_client
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/ui
     ${CMAKE_CURRENT_LIST_DIR}/simulators
     ${PROJECT_BINARY_DIR}/
 )
 
-target_link_libraries(unisim_client PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets spdlog magic_enum::magic_enum nlohmann_json::nlohmann_json git_tag client_common)
+target_link_libraries(unisim_client PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets spdlog magic_enum::magic_enum nlohmann_json::nlohmann_json git_tag qwt)
 
 include(GNUInstallDirs)
 install(TARGETS unisim_client
@@ -42,83 +52,31 @@ install(TARGETS unisim_client
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(unisim_client)
-endif()
+# if (NOT EMSCRIPTEN)
+#     file(GLOB_RECURSE sims "simulators/*.cpp")
+#     # Loop through each .cpp file and create a library for it
+#     foreach(sim ${sims})
+#         # Extract the base name of the file (without the directory and extension)
+#         get_filename_component(LIB_NAME ${sim} NAME_WE)
 
-add_library(client_common SHARED)
-target_sources(client_common
-    PRIVATE
-    ${ui}
-    helpers.cpp
-    helpers.hpp
-    ui_base.cpp
-    ui_base.hpp
-    web_socket_wrapper.cpp
-    web_socket_wrapper.hpp
-)
-target_compile_definitions(client_common PRIVATE
-    INTERNAL
-)
-target_link_libraries(client_common
-    PUBLIC
-    qwt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json
-)
+#         # Create a library for each .cpp file
+#         add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui)
+#         target_link_libraries(ui_${LIB_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets client_common)
+#         target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${PROJECT_BINARY_DIR}/)
 
-set_target_properties(
-    client_common
-    PROPERTIES
-        AUTOMOC ON
-        AUTORCC ON
-        AUTOUIC ON
-)
+#         set_target_properties(
+#             ui_${LIB_NAME}
+#             PROPERTIES
+#                 AUTOUIC ON
+#                 AUTOMOC ON
+#                 AUTORCC ON
+#         )
 
-target_include_directories(client_common
-    PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/ui
-    ${PROJECT_BINARY_DIR}
-)
-
-add_custom_command(TARGET client_common POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    $<TARGET_FILE:client_common>
-    $<TARGET_FILE_DIR:unisim_client>)
-
-add_custom_target(copy_qwt_to_unisim
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:qwt>
-        $<TARGET_FILE_DIR:unisim_client>
-    COMMENT "Copying qwt → unisim_client output dir"
-    VERBATIM
-)
-add_dependencies(unisim_client copy_qwt_to_unisim)
-
-if (NOT EMSCRIPTEN)
-    file(GLOB_RECURSE sims "simulators/*.cpp")
-    # Loop through each .cpp file and create a library for it
-    foreach(sim ${sims})
-        # Extract the base name of the file (without the directory and extension)
-        get_filename_component(LIB_NAME ${sim} NAME_WE)
-
-        # Create a library for each .cpp file
-        add_library(ui_${LIB_NAME} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.hpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.cpp ${CMAKE_CURRENT_SOURCE_DIR}/simulators/${LIB_NAME}.ui)
-        target_link_libraries(ui_${LIB_NAME} PUBLIC Qt${QT_VERSION_MAJOR}::Widgets client_common)
-        target_include_directories(ui_${LIB_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ui ${PROJECT_BINARY_DIR}/)
-
-        set_target_properties(
-            ui_${LIB_NAME}
-            PROPERTIES
-                AUTOUIC ON
-                AUTOMOC ON
-                AUTORCC ON
-        )
-
-        add_custom_command(TARGET ui_${LIB_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:ui_${LIB_NAME}>
-            $<TARGET_FILE_DIR:unisim_client>)
-    endforeach()
-else()
-    file(GLOB_RECURSE sims "simulators/*")
-endif()
+#         add_custom_command(TARGET ui_${LIB_NAME} POST_BUILD
+#             COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#             $<TARGET_FILE:ui_${LIB_NAME}>
+#             $<TARGET_FILE_DIR:unisim_client>)
+#     endforeach()
+# else()
+#     file(GLOB_RECURSE sims "simulators/*")
+# endif()

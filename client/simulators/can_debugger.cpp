@@ -1,10 +1,11 @@
 #include "can_debugger.hpp"
+#include "factory.hpp"
 #include "ui_can_debugger.h"
 
-EXPORT_UI(Can_Debugger);
+REGISTER_UI(Can_Debugger);
 
 Can_Debugger::Can_Debugger(Web_socket_wrapper *web_socket, QWidget *parent)
-    : UI_base("Can Debugger", web_socket, parent), ui(new Ui::Can_Debugger)
+    : UI_base(web_socket, parent), ui(new Ui::Can_Debugger)
 {
     ui->setupUi(this);
 

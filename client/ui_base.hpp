@@ -56,13 +56,8 @@ class EXPORT UI_base : public QMainWindow
      * @param api The weboscket connection to the server API
      * @param parent The parent widget
      */
-    explicit UI_base(QString name, Web_socket_wrapper *api, QWidget *parent = nullptr);
-    /**
-     * @brief Get the name of the simulator
-     *
-     * @return QString The name of the simulator
-     */
-    QString name() const;
+    explicit UI_base(Web_socket_wrapper *api, QWidget *parent = nullptr);
+    void set_name(QString name);
     /**
      * @brief Get the UI element by its ID
      *
@@ -350,7 +345,6 @@ class EXPORT UI_base : public QMainWindow
   private:
     Web_socket_wrapper *m_web_socket;
     QString m_name;
-
     QTimer *m_timer_update;
     uint32_t m_refresh_rate;
     QMessageBox *m_error;
