@@ -5,12 +5,6 @@
 #include <functional>
 #include <nlohmann/json.hpp>
 
-#ifdef INTERNAL
-#define EXPORT Q_DECL_EXPORT
-#else
-#define EXPORT Q_DECL_IMPORT
-#endif
-
 Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 Q_FORWARD_DECLARE_OBJC_CLASS(QLabel);
@@ -19,11 +13,6 @@ Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
 using json = nlohmann::json;
 
 #define PUSH_UI_ITEM(item) push_ui_item(ui->item)
-#define EXPORT_UI(client)                                                                                              \
-    extern "C" Q_DECL_EXPORT UI_base *get_ui(Web_socket_wrapper *api, QWidget *parent)                                 \
-    {                                                                                                                  \
-        return new client(api, parent);                                                                                \
-    }
 
 #define LOG_SRC_LOC(level, msg) emit log_signal(__FILE__, __LINE__, __FUNCTION__, (int)(level), (msg))
 #define LOG_TRACE(msg) LOG_SRC_LOC(Log_level_enum::trace, msg)
@@ -36,7 +25,7 @@ using json = nlohmann::json;
 /**
  * @brief Base class for client UIs
  */
-class EXPORT UI_base : public QMainWindow
+class UI_base : public QMainWindow
 {
     Q_OBJECT
   public:
@@ -58,13 +47,8 @@ class EXPORT UI_base : public QMainWindow
      * @param api The weboscket connection to the server API
      * @param parent The parent widget
      */
-    explicit UI_base(QString name, Web_socket_wrapper *api, QWidget *parent = nullptr);
-    /**
-     * @brief Get the name of the simulator
-     *
-     * @return QString The name of the simulator
-     */
-    QString name() const;
+    explicit UI_base(Web_socket_wrapper *api, QWidget *parent = nullptr);
+    void set_name(QString name);
     /**
      * @brief Get the UI element by its ID
      *
@@ -216,7 +200,6 @@ class EXPORT UI_base : public QMainWindow
   private:
     Web_socket_wrapper *m_web_socket;
     QString m_name;
-
     QTimer *m_timer_update;
     uint32_t m_refresh_rate;
     QMessageBox *m_error;

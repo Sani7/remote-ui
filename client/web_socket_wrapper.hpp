@@ -2,12 +2,6 @@
 #include <QObject>
 #include <nlohmann/json.hpp>
 
-#ifdef INTERNAL
-#define EXPORT Q_DECL_EXPORT
-#else
-#define EXPORT Q_DECL_IMPORT
-#endif
-
 Q_FORWARD_DECLARE_OBJC_CLASS(QWebSocket);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 using json = nlohmann::json;
@@ -16,7 +10,7 @@ using json = nlohmann::json;
  * @brief Class wrapping a WebSocket connection
  *
  */
-class EXPORT Web_socket_wrapper : public QObject
+class Web_socket_wrapper : public QObject
 {
     Q_OBJECT
   public:

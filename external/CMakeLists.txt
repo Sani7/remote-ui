@@ -1,4 +1,3 @@
-set(QWT_BUILD_SHARED ON)
 set(COLOR_BUILD_PIC ON)
 set(SPDLOG_BUILD_PIC ON)
 add_subdirectory(color)
