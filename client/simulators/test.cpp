@@ -4,8 +4,7 @@
 
 REGISTER_UI(Test_Sim);
 
-Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent)
-    : UI_base(web_socket, parent), ui(new Ui::Test_Sim)
+Test_Sim::Test_Sim(Web_socket_wrapper *web_socket, QWidget *parent) : UI_base(web_socket, parent), ui(new Ui::Test_Sim)
 {
     ui->setupUi(this);
 

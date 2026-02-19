@@ -14,7 +14,10 @@ class Test_Sim : public UI_base
     explicit Test_Sim(Web_socket_wrapper *web_socket = nullptr, QWidget *parent = nullptr);
     ~Test_Sim();
 
-    static QString name() {return "Test Sim";};
+    static QString name()
+    {
+        return "Test Sim";
+    };
 
     QLabel *id_to_label(QWidget *widget) override;
 

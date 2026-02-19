@@ -10,8 +10,6 @@
 #include <magic_enum/magic_enum.hpp>
 #include <spdlog/spdlog.h>
 
-typedef UI_base *(*Get_UI)(Web_socket_wrapper *, QWidget *);
-
 MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), m_error(new QMessageBox()),
       m_web_socket(new Web_socket_wrapper(ws_url))
@@ -21,12 +19,12 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
                 if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
                     spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
-                                                  (spdlog::level::level_enum)level, msg.toStdString());
+                                                      (spdlog::level::level_enum)level, msg.toStdString());
             });
 
     for (const QString &name : UIFactory::instance().keys())
     {
-        if (auto* w = UIFactory::instance().create(name, m_web_socket.get(), this))
+        if (auto *w = UIFactory::instance().create(name, m_web_socket.get(), this))
         {
             w->set_name(name);
             m_sims.insert(std::make_pair(name, w));

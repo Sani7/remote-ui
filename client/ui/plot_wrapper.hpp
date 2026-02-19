@@ -4,17 +4,11 @@
 #include <qwt_plot_curve.h>
 #include <qwt_text.h>
 
-#ifdef INTERNAL
-#define EXPORT Q_DECL_EXPORT
-#else
-#define EXPORT Q_DECL_IMPORT
-#endif
-
 /**
  * @brief Class wrapping a QwtPlot for plotting data
  *
  */
-class EXPORT Plot_wrapper : public QwtPlot
+class Plot_wrapper : public QwtPlot
 {
     Q_OBJECT
   public:

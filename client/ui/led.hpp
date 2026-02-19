@@ -1,17 +1,11 @@
 #pragma once
 #include "QPushButton"
 
-#ifdef INTERNAL
-#define EXPORT Q_DECL_EXPORT
-#else
-#define EXPORT Q_DECL_IMPORT
-#endif
-
 /**
  * @brief Class representing an LED widget
  *
  */
-class EXPORT Led : public QPushButton
+class Led : public QPushButton
 {
     Q_OBJECT
   public:

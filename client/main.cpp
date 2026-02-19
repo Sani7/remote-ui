@@ -1,4 +1,5 @@
 #include "git_version.h"
+#include "magic_enum/magic_enum.hpp"
 #include "mainwindow.hpp"
 #include "spdlog/async.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -8,7 +9,6 @@
 #include <QCommandLineParser>
 #include <QProcess>
 #include <QUrl>
-#include "magic_enum/magic_enum.hpp"
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
@@ -56,16 +56,18 @@ int main(int argc, char *argv[])
                                           QCoreApplication::translate("main", "default"), QLatin1String(""));
     parser.addOption(default_sim_option);
 
-    QCommandLineOption log_option(QStringList() << "l"
-                                                << "log",
-                                  QCoreApplication::translate("main", "Log level for the unisim server [default: trace]."),
-                                  QCoreApplication::translate("main", "log"), QLatin1String("trace"));
+    QCommandLineOption log_option(
+        QStringList() << "l"
+                      << "log",
+        QCoreApplication::translate("main", "Log level for the unisim server [default: trace]."),
+        QCoreApplication::translate("main", "log"), QLatin1String("trace"));
     parser.addOption(log_option);
 
     parser.process(a);
     // Initialize the logger
     init_logger();
-    spdlog::set_level(magic_enum::enum_cast<spdlog::level::level_enum>(parser.value(log_option).toStdString()).value_or(spdlog::level::off));
+    spdlog::set_level(magic_enum::enum_cast<spdlog::level::level_enum>(parser.value(log_option).toStdString())
+                          .value_or(spdlog::level::off));
 
     QUrl url;
     url.setScheme("ws");
