@@ -1,6 +1,7 @@
 #pragma once
 #include <QMainWindow>
 #include <QWidget>
+#include <functional>
 #include <nlohmann/json.hpp>
 
 #ifdef INTERNAL
@@ -96,7 +97,6 @@ class EXPORT UI_base : public QMainWindow
      * @param j The JSON command
      */
     void on_cmd_cb(json &j);
-
     /**
      * @brief Push a UI item to the internal list and setup its connections
      *        The item have to be in the same order as from the server
@@ -104,147 +104,12 @@ class EXPORT UI_base : public QMainWindow
      * @param item The UI item to push
      */
     void push_ui_item(QWidget *item);
-
     /**
      * @brief Parse UI items from JSON and update the UI accordingly
      *
      * @param input The JSON input containing UI items
      */
     void UI_item_parser(json &input);
-    /**
-     * @brief Process a label UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_label(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a slider UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_slider(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a dial UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_dial(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a thermo UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_thermo(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a textbox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_textbox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a combobox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_combobox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a radiobutton UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_radiobutton(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a checkbox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_checkbox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a button UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_button(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a LED UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_led(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a spinbox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_spinbox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a double spinbox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_double_spinbox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a hex spinbox UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_hex_spinbox(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a tab widget UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_tab_widget(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a stacked widget UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_stacked_widget(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a status bar UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_status_bar(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a plot UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_plot(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a table UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_table(json &ui_item, QWidget *widget);
-    /**
-     * @brief Process a CAN UI item
-     *
-     * @param ui_item The JSON UI item
-     * @param widget The associated widget
-     */
-    void process_ui_can(json &ui_item, QWidget *widget);
-
     /**
      * @brief Setup a generic UI item
      *
@@ -357,4 +222,5 @@ class EXPORT UI_base : public QMainWindow
     bool m_open = false;
     bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;
+    QMap<std::string, std::function<void(json &, QWidget *)>> m_process_lookup;
 };
