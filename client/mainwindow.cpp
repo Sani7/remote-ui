@@ -20,7 +20,7 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
                 if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
                     spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
-                                                  (spdlog::level::level_enum)level, msg.toStdString());
+                                                      (spdlog::level::level_enum)level, msg.toStdString());
             });
 
     QDirIterator it(QCoreApplication::applicationDirPath(), QStringList() << "*libui_*.so" << "*libui_*.dll",
