@@ -15,9 +15,23 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     : QObject(parent), m_web_socket(new QWebSocket("", QWebSocketProtocol::VersionLatest, this)),
       m_ping_timer(new QTimer(this)), m_pong_timer(new QTimer(this))
 {
-    connect(m_web_socket, &QWebSocket::connected, this, &Web_socket_wrapper::m_on_connected);
-    connect(m_web_socket, &QWebSocket::disconnected, this, &Web_socket_wrapper::on_closed);
-    connect(m_web_socket, &QWebSocket::pong, this, &Web_socket_wrapper::m_on_pong);
+    connect(m_web_socket, &QWebSocket::connected, this, [=, this] {
+        m_connected = true;
+        connect(m_web_socket, &QWebSocket::textMessageReceived, this, &Web_socket_wrapper::m_on_received);
+        m_ping_timer->start(5000);
+        emit on_connected();
+    });
+    connect(m_web_socket, &QWebSocket::disconnected, this, [=, this] { emit on_closed(); });
+    connect(m_web_socket, &QWebSocket::pong, this, [=, this](quint64 elapsedTime) {
+        if (elapsedTime > 1000)
+        {
+            m_web_socket->close();
+            emit on_closed();
+        }
+
+        m_pong_timer->stop();
+        m_ping_timer->start(1000);
+    });
     connect(m_web_socket, &QWebSocket::errorOccurred, this, [this](QAbstractSocket::SocketError error) {
         LOG_ERROR(QString::fromStdString(std::string(magic_enum::enum_name(error))));
     });
@@ -25,7 +39,11 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
         m_web_socket->ping();
         m_pong_timer->start(1000);
     });
-    connect(m_pong_timer, &QTimer::timeout, this, &Web_socket_wrapper::m_on_pong_timeout);
+    connect(m_pong_timer, &QTimer::timeout, this, [=, this] {
+        LOG_CRITICAL("Pong timeout");
+        m_web_socket->close();
+        emit on_closed();
+    });
     m_ping_timer->setSingleShot(true);
     m_pong_timer->setSingleShot(true);
     m_web_socket->setProxy(QNetworkProxy::NoProxy);
@@ -163,22 +181,6 @@ void Web_socket_wrapper::send_event(Event e, size_t id, uint32_t sid, uint8_t dl
     }
 }
 
-void Web_socket_wrapper::close()
-{
-    if (m_connected)
-        m_web_socket->close();
-}
-
-void Web_socket_wrapper::m_on_connected()
-{
-    m_connected = true;
-    connect(m_web_socket, &QWebSocket::textMessageReceived, this, &Web_socket_wrapper::m_on_received);
-
-    m_ping_timer->start(5000);
-
-    emit on_connected();
-}
-
 void Web_socket_wrapper::m_on_received(QString message)
 {
     json j = json::parse(message.toStdString());
@@ -192,25 +194,6 @@ void Web_socket_wrapper::m_on_received(QString message)
         emit on_event_cb(j.at("event"));
         return;
     }
-}
-
-void Web_socket_wrapper::m_on_pong(quint64 elapsedTime)
-{
-    if (elapsedTime > 1000)
-    {
-        m_web_socket->close();
-        emit on_closed();
-    }
-
-    m_pong_timer->stop();
-    m_ping_timer->start(1000);
-}
-
-void Web_socket_wrapper::m_on_pong_timeout()
-{
-    LOG_CRITICAL("Pong timeout");
-    m_web_socket->close();
-    emit on_closed();
 }
 
 void Web_socket_wrapper::inhibit_events(bool inhibit)

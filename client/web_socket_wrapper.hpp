@@ -129,11 +129,6 @@ class EXPORT Web_socket_wrapper : public QObject
      */
     void send_event(Event e, size_t id, uint32_t sid, uint8_t dlc, std::array<uint8_t, 8> payload);
     /**
-     * @brief Close the WebSocket connection
-     *
-     */
-    void close();
-    /**
      * @brief Inhibit or allow sending events to the server
      *
      * @param inhibit True to inhibit events, false to allow
@@ -168,26 +163,10 @@ class EXPORT Web_socket_wrapper : public QObject
 
   private Q_SLOTS:
     /**
-     * @brief Internal slot for handling WebSocket connection established
-     *
-     */
-    void m_on_connected();
-    /**
      * @brief Internal slot for handling WebSocket disconnection
      *
      */
     void m_on_received(QString message);
-    /**
-     * @brief Internal slot for handling pong responses
-     *
-     * @param elapsedTime The elapsed time since the ping was sent
-     */
-    void m_on_pong(quint64 elapsedTime);
-    /**
-     * @brief Internal slot for handling pong timeouts
-     *
-     */
-    void m_on_pong_timeout();
 
   private:
     bool m_connected = false;
