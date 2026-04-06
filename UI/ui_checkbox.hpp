@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_CHECKBOX_TYPE std::string("ui_checkbox")
-
 /**
  * @brief Class representing a UI checkbox
  *

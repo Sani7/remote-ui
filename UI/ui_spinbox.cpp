@@ -1,11 +1,11 @@
 #include "ui_spinbox.hpp"
 
-UI_spinbox::UI_spinbox(QObject *parent) : UI_item(UI_SPINBOX_TYPE, parent)
+UI_spinbox::UI_spinbox(QObject *parent) : UI_item(UI_enum::ui_spinbox, parent)
 {
     setup_item(false, false, false);
 }
 
-UI_spinbox::UI_spinbox(double min, double max, double value, QObject *parent) : UI_item(UI_SPINBOX_TYPE, parent)
+UI_spinbox::UI_spinbox(double min, double max, double value, QObject *parent) : UI_item(UI_enum::ui_spinbox, parent)
 {
     setup_item(false, false, false);
     m_min = min;

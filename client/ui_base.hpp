@@ -1,4 +1,5 @@
 #pragma once
+#include "ui_enum.hpp"
 #include <QMainWindow>
 #include <QWidget>
 #include <functional>
@@ -222,5 +223,5 @@ class EXPORT UI_base : public QMainWindow
     bool m_open = false;
     bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;
-    QMap<std::string, std::function<void(json &, QWidget *)>> m_process_lookup;
+    QMap<UI_enum, std::function<void(json &, QWidget *)>> m_process_lookup;
 };

@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_COMBOBOX_TYPE std::string("ui_combobox")
-
 /**
  * @brief Class representing a UI combobox
  *

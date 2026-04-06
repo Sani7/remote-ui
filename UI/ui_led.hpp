@@ -2,8 +2,6 @@
 #include "ui_item.hpp"
 #include <string>
 
-#define UI_LED_TYPE std::string("ui_led")
-
 /**
  * @brief Class representing a UI led
  *

@@ -20,7 +20,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
     QPushButton *exit_app = m_error->addButton("Exit Application", QMessageBox::AcceptRole);
     m_error->addButton("Close", QMessageBox::RejectRole);
     connect(exit_app, &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
-    m_process_lookup.insert("ui_label", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_label, [=, this](json &ui_item, QWidget *widget) {
         auto label = qobject_cast<QLabel *>(widget);
         if (label == nullptr)
         {
@@ -48,7 +48,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
         }
     });
 
-    m_process_lookup.insert("ui_slider", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_slider, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 // TODO: Find a cleaner fix
 #ifdef __WIN32
@@ -93,7 +93,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
         }
         // TODO: Add color for scale
     });
-    m_process_lookup.insert("ui_dial", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_dial, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 // TODO: Find a cleaner fix
 #ifdef __WIN32
@@ -131,7 +131,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             dial->setVisible(visible);
         }
     });
-    m_process_lookup.insert("ui_thermo", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_thermo, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
 // TODO: Find a cleaner fix
 #ifdef __WIN32
@@ -169,7 +169,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             thermo->setVisible(visible);
         }
     });
-    m_process_lookup.insert("ui_textbox", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_textbox, [=, this](json &ui_item, QWidget *widget) {
         auto line_edit = qobject_cast<QLineEdit *>(widget);
         if (line_edit == nullptr)
         {
@@ -200,7 +200,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             line_edit->setText(text);
         }
     });
-    m_process_lookup.insert("ui_combobox", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_combobox, [=, this](json &ui_item, QWidget *widget) {
         auto combobox = qobject_cast<QComboBox *>(widget);
         if (combobox == nullptr)
         {
@@ -233,9 +233,9 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             combobox->setCurrentIndex(selected);
         }
     });
-    m_process_lookup.insert("ui_radiobutton",
-                            [=, this](json &ui_item, QWidget *widget) { LOG_CRITICAL("Not implemented"); });
-    m_process_lookup.insert("ui_checkbox", [=, this](json &ui_item, QWidget *widget) {
+    // m_process_lookup.insert(UI_enum::ui_radiobutton,
+    //                         [=, this](json &ui_item, QWidget *widget) { LOG_CRITICAL("Not implemented"); });
+    m_process_lookup.insert(UI_enum::ui_checkbox, [=, this](json &ui_item, QWidget *widget) {
         auto checkbox = qobject_cast<QCheckBox *>(widget);
         if (checkbox == nullptr)
         {
@@ -299,7 +299,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(checkbox, fg_color, bg_color);
         }
     });
-    m_process_lookup.insert("ui_button", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_button, [=, this](json &ui_item, QWidget *widget) {
         auto button = qobject_cast<QPushButton *>(widget);
         if (button == nullptr)
         {
@@ -357,7 +357,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(button, fg_color, bg_color);
         }
     });
-    m_process_lookup.insert("ui_led", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_led, [=, this](json &ui_item, QWidget *widget) {
         auto led = qobject_cast<Led *>(widget);
         if (led == nullptr)
         {
@@ -409,7 +409,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(led, color, bg_color);
         }
     });
-    m_process_lookup.insert("ui_spinbox", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_spinbox, [=, this](json &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<QSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -446,7 +446,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue((int)value);
         }
     });
-    m_process_lookup.insert("ui_double_spinbox", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_double_spinbox, [=, this](json &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<QDoubleSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -483,7 +483,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue(value);
         }
     });
-    m_process_lookup.insert("ui_hex_spinbox", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_hex_spinbox, [=, this](json &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<HexSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -520,7 +520,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue((int)value);
         }
     });
-    m_process_lookup.insert("ui_tab_widget", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_tab_widget, [=, this](json &ui_item, QWidget *widget) {
         auto tab_widget = qobject_cast<QTabWidget *>(widget);
         if (tab_widget == nullptr)
         {
@@ -565,7 +565,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             tab_widget->setCurrentIndex(ui_item.at("selected"));
         }
     });
-    m_process_lookup.insert("ui_stacked_widget", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_stacked_widget, [=, this](json &ui_item, QWidget *widget) {
         auto stacked_widget = qobject_cast<QStackedWidget *>(widget);
         if (stacked_widget == nullptr)
         {
@@ -597,7 +597,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             stacked_widget->setCurrentIndex(ui_item.at("current_tab"));
         }
     });
-    m_process_lookup.insert("ui_status_bar", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_status_bar, [=, this](json &ui_item, QWidget *widget) {
         auto status_bar = qobject_cast<QStatusBar *>(widget);
         if (status_bar == nullptr)
         {
@@ -610,7 +610,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             status_bar->showMessage(QString::fromStdString(ui_item.at("text")), ui_item.at("timeout"));
         }
     });
-    m_process_lookup.insert("ui_plot", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_plot, [=, this](json &ui_item, QWidget *widget) {
         auto plot = qobject_cast<Plot_wrapper *>(widget);
         if (plot == nullptr)
         {
@@ -670,7 +670,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
             plot->setAxisScale(QwtAxis::XBottom, x_vals[0], x_vals[x_vals.size() - 1]);
         plot->replot();
     });
-    m_process_lookup.insert("ui_table", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_table, [=, this](json &ui_item, QWidget *widget) {
         auto table = qobject_cast<QTableWidget *>(widget);
         if (table == nullptr)
         {
@@ -739,7 +739,7 @@ UI_base::UI_base(QString name, Web_socket_wrapper *web_socket, QWidget *parent)
         }
         table->resizeColumnsToContents();
     });
-    m_process_lookup.insert("ui_can", [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_enum::ui_can, [=, this](json &ui_item, QWidget *widget) {
         auto can_ui = qobject_cast<Can_Transceive *>(widget);
         if (can_ui == nullptr)
         {
@@ -851,7 +851,8 @@ void UI_base::UI_item_parser(json &input)
             return;
         }
 
-        m_process_lookup[ui_item.at("type")](ui_item, widget);
+        m_process_lookup[magic_enum::enum_cast<UI_enum>((std::string)ui_item.at("type")).value_or(UI_enum::end)](
+            ui_item, widget);
     }
 }
 

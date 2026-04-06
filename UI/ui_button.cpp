@@ -1,11 +1,12 @@
 #include "ui_button.hpp"
+#include "ui_enum.hpp"
 
 UI_button::UI_button(std::string text, Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_BUTTON_TYPE, text, fg_color, bg_color, parent)
+    : UI_item(UI_enum::ui_button, text, fg_color, bg_color, parent)
 {
 }
 
-UI_button::UI_button(QObject *parent) : UI_item(UI_BUTTON_TYPE, parent)
+UI_button::UI_button(QObject *parent) : UI_item(UI_enum::ui_button, parent)
 {
 }
 

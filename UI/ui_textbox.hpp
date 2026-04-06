@@ -2,8 +2,6 @@
 #include "ui_item.hpp"
 #include <string>
 
-#define UI_TEXTBOX_TYPE std::string("ui_textbox")
-
 /**
  * @brief Class representing a UI textbox
  *

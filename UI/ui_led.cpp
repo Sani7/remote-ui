@@ -1,11 +1,11 @@
 #include "ui_led.hpp"
 
-UI_led::UI_led(QObject *parent) : UI_item(UI_LED_TYPE, "", Color::Default, Color::Default, parent)
+UI_led::UI_led(QObject *parent) : UI_item(UI_enum::ui_led, "", Color::Default, Color::Default, parent)
 {
 }
 
 UI_led::UI_led(std::string text, Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_LED_TYPE, text, fg_color, bg_color, parent)
+    : UI_item(UI_enum::ui_led, text, fg_color, bg_color, parent)
 {
 }
 

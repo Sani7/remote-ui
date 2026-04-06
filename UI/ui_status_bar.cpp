@@ -1,11 +1,12 @@
 #include "ui_status_bar.hpp"
 
-UI_status_bar::UI_status_bar(QObject *parent) : UI_item(UI_STATUS_BAR_TYPE, parent), m_timeout(0)
+UI_status_bar::UI_status_bar(QObject *parent) : UI_item(UI_enum::ui_status_bar, parent), m_timeout(0)
 {
     setup_item(true, false, false);
 }
 
-UI_status_bar::UI_status_bar(std::string message, QObject *parent) : UI_item(UI_STATUS_BAR_TYPE, parent), m_timeout(0)
+UI_status_bar::UI_status_bar(std::string message, QObject *parent)
+    : UI_item(UI_enum::ui_status_bar, parent), m_timeout(0)
 {
     m_text = std::move(message);
     setup_item(true, false, false);

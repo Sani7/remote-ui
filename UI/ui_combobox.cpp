@@ -1,13 +1,13 @@
 #include "ui_combobox.hpp"
 
-UI_combobox::UI_combobox(QObject *parent) : UI_item(UI_COMBOBOX_TYPE, parent), m_options()
+UI_combobox::UI_combobox(QObject *parent) : UI_item(UI_enum::ui_combobox, parent), m_options()
 {
     setup_item(false, true, true);
 }
 
 UI_combobox::UI_combobox(Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected,
                          QObject *parent)
-    : UI_item(UI_COMBOBOX_TYPE, "", fg_color, bg_color, parent), m_options(options), m_selected(selected)
+    : UI_item(UI_enum::ui_combobox, "", fg_color, bg_color, parent), m_options(options), m_selected(selected)
 {
     setup_item(false, true, true);
 }

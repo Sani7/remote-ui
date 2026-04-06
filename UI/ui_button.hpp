@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_BUTTON_TYPE std::string("ui_button")
-
 /**
  * @brief Class representing a UI button
  *

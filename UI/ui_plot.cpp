@@ -1,11 +1,11 @@
 #include "ui_plot.hpp"
 
-UI_plot::UI_plot(QObject *parent) : UI_item{UI_PLOT_TYPE, parent}
+UI_plot::UI_plot(QObject *parent) : UI_item{UI_enum::ui_plot, parent}
 {
 }
 
 UI_plot::UI_plot(std::string text, std::string x_label, std::string y_label, QObject *parent)
-    : UI_item(UI_PLOT_TYPE, parent), m_x_label(x_label), m_y_label(y_label)
+    : UI_item(UI_enum::ui_plot, parent), m_x_label(x_label), m_y_label(y_label)
 {
     set_text(text);
 }

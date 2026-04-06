@@ -1,11 +1,11 @@
 #include "ui_stacked_widget.hpp"
 
-UI_stacked_widget::UI_stacked_widget(QObject *parent) : UI_item(UI_STACKED_WIDGET_TYPE, parent)
+UI_stacked_widget::UI_stacked_widget(QObject *parent) : UI_item(UI_enum::ui_stacked_widget, parent)
 {
 }
 
 UI_stacked_widget::UI_stacked_widget(size_t tab_count, size_t current_tab, QObject *parent)
-    : UI_item(UI_STACKED_WIDGET_TYPE, parent), m_tab_count(tab_count), m_current_tab(current_tab)
+    : UI_item(UI_enum::ui_stacked_widget, parent), m_tab_count(tab_count), m_current_tab(current_tab)
 {
 }
 

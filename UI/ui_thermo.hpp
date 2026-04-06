@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_THERMO_TYPE std::string("ui_thermo")
-
 // TODO: Add color scale
 /**
  * @brief Class representing a UI thermometer

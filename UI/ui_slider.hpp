@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_SLIDER_TYPE std::string("ui_slider")
-
 /**
  * @brief Class representing a UI slider
  *

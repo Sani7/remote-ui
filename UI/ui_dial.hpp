@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_DIAL_TYPE std::string("ui_dial")
-
 /**
  * @brief Class representing a UI dial
  *

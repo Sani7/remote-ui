@@ -2,8 +2,6 @@
 #include "ui_item.hpp"
 #include <string>
 
-#define UI_LABEL_TYPE std::string("ui_label")
-
 /**
  * @brief Class representing a UI label
  *

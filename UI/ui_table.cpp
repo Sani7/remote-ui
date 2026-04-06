@@ -1,14 +1,14 @@
 #include "ui_table.hpp"
 
-UI_table::UI_table(QObject *parent) : UI_item(UI_TABLE_TYPE, parent), m_row_count(0), m_column_count(0)
+UI_table::UI_table(QObject *parent) : UI_item(UI_enum::ui_table, parent), m_row_count(0), m_column_count(0)
 {
     setup_item(false, false, false);
 }
 
 UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels,
                    std::vector<std::string> column_labels, QObject *parent)
-    : UI_item(UI_TABLE_TYPE, parent), m_row_count(row_count), m_column_count(column_count), m_row_labels(row_labels),
-      m_column_labels(column_labels), m_table()
+    : UI_item(UI_enum::ui_table, parent), m_row_count(row_count), m_column_count(column_count),
+      m_row_labels(row_labels), m_column_labels(column_labels), m_table()
 {
     setup_item(false, false, false);
     m_row_labels.reserve(100);

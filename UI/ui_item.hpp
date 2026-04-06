@@ -1,5 +1,6 @@
 #pragma once
 #include "color.hpp"
+#include "ui_enum.hpp"
 #include <cstdint>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -24,7 +25,7 @@ class UI_item : public QObject
      * @param type The type of the UI item
      * @param parent The parent QObject
      */
-    explicit UI_item(std::string type, QObject *parent = nullptr);
+    explicit UI_item(UI_enum type, QObject *parent = nullptr);
     /**
      * @brief Construct a new UI item object
      *
@@ -34,14 +35,14 @@ class UI_item : public QObject
      * @param bg_color The background color of the UI item
      * @param parent The parent QObject
      */
-    explicit UI_item(std::string type, std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    explicit UI_item(UI_enum type, std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
 
     /**
      * @brief Get the type of the UI item
      *
      * @return std::string The type of the UI item
      */
-    std::string type() const &;
+    std::string_view type() const &;
     /**
      * @brief Check if the JSON object is of the correct type
      *
@@ -196,7 +197,7 @@ class UI_item : public QObject
      * @brief The type of the UI item
      *
      */
-    std::string m_type;
+    UI_enum m_type;
     /**
      * @brief The text of the UI item
      *

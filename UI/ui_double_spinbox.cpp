@@ -1,12 +1,12 @@
 #include "ui_double_spinbox.hpp"
 
-UI_double_spinbox::UI_double_spinbox(QObject *parent) : UI_item(UI_DOUBLE_SPINBOX_TYPE, parent)
+UI_double_spinbox::UI_double_spinbox(QObject *parent) : UI_item(UI_enum::ui_double_spinbox, parent)
 {
     setup_item(false, false, false);
 }
 
 UI_double_spinbox::UI_double_spinbox(double min, double max, double value, QObject *parent)
-    : UI_item(UI_DOUBLE_SPINBOX_TYPE, parent)
+    : UI_item(UI_enum::ui_double_spinbox, parent)
 {
     setup_item(false, false, false);
     m_min = min;

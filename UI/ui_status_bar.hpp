@@ -1,6 +1,5 @@
 #pragma once
 #include "ui_item.hpp"
-#define UI_STATUS_BAR_TYPE std::string("ui_status_bar")
 
 /**
  * @brief Class representing a UI status bar

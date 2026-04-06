@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_SPINBOX_TYPE std::string("ui_spinbox")
-
 /**
  * @brief Class representing a UI spinbox
  *

@@ -2,8 +2,6 @@
 #include "ui_item.hpp"
 #include <QCanBusFrame>
 
-#define UI_CAN_TYPE std::string("ui_can")
-
 /**
  * @brief Class representing a CAN UI item
  *

@@ -34,6 +34,15 @@ target_link_libraries(UI
   PUBLIC
     Color
     nlohmann_json::nlohmann_json
+    magic_enum::magic_enum
     Qt::Core
     Qt::SerialBus
+    UI_enum
+)
+
+add_library(UI_enum INTERFACE)
+
+target_include_directories(UI_enum
+    INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/enum
 )

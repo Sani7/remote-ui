@@ -1,6 +1,5 @@
 #pragma once
 #include "ui_item.hpp"
-#define UI_PLOT_TYPE std::string("ui_plot")
 
 /**
  * @brief Class representing a UI plot

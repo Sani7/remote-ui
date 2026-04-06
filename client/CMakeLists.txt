@@ -62,7 +62,7 @@ target_compile_definitions(client_common PRIVATE
 )
 target_link_libraries(client_common
     PUBLIC
-    qwt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json
+    qwt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets magic_enum::magic_enum nlohmann_json::nlohmann_json UI_enum
 )
 
 set_target_properties(

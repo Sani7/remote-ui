@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_TAB_WIDGET_TYPE std::string("ui_tab_widget")
-
 /**
  * @brief Class representing a UI tab widget
  *

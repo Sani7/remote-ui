@@ -1,8 +1,6 @@
 #pragma once
 #include "ui_item.hpp"
 
-#define UI_TABLE_TYPE std::string("ui_table")
-
 /**
  * @brief Class representing a UI table
  *

@@ -12,12 +12,13 @@ template <class T> T ByteArrayToStdArray(const QByteArray &byteArray)
     return stdArray;
 }
 
-UI_can::UI_can(Color fg_color, Color bg_color, QObject *parent) : UI_item(UI_CAN_TYPE, "", fg_color, bg_color, parent)
+UI_can::UI_can(Color fg_color, Color bg_color, QObject *parent)
+    : UI_item(UI_enum::ui_can, "", fg_color, bg_color, parent)
 {
     setup_item(false, true, true);
 }
 
-UI_can::UI_can(QObject *parent) : UI_item(UI_CAN_TYPE, parent)
+UI_can::UI_can(QObject *parent) : UI_item(UI_enum::ui_can, parent)
 {
     setup_item(false, true, true);
 }

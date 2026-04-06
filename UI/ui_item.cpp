@@ -1,20 +1,21 @@
 #include "ui_item.hpp"
+#include <magic_enum/magic_enum.hpp>
 
-UI_item::UI_item(std::string type, std::string text, Color fg_color, Color bg_color, QObject *parent)
+UI_item::UI_item(UI_enum type, std::string text, Color fg_color, Color bg_color, QObject *parent)
     : QObject(parent), m_id((size_t)-1), m_type(type), m_text(text), m_fg_color(fg_color), m_bg_color(bg_color),
       m_enabled(true), m_visible(true)
 {
 }
 
-UI_item::UI_item(std::string type, QObject *parent)
+UI_item::UI_item(UI_enum type, QObject *parent)
     : QObject(parent), m_id((size_t)-1), m_type(type), m_text(""), m_fg_color(Color::Default),
       m_bg_color(Color::Default), m_enabled(true), m_visible(true)
 {
 }
 
-std::string UI_item::type() const &
+std::string_view UI_item::type() const &
 {
-    return m_type;
+    return magic_enum::enum_name(m_type);
 }
 
 bool UI_item::is_type(json j)
@@ -23,7 +24,7 @@ bool UI_item::is_type(json j)
     {
         return false;
     }
-    return j.at("type") == m_type;
+    return magic_enum::enum_cast<UI_enum>(j.at("type")).value_or(UI_enum::end) == m_type;
 }
 
 void UI_item::set_text(std::string text)
@@ -129,7 +130,7 @@ json UI_item::to_json(size_t id) const
 {
     json j;
     j["id"] = id;
-    j["type"] = m_type;
+    j["type"] = type();
     if (m_text_enabled)
         j["text"] = m_text;
     if (m_fg_color_enabled)
