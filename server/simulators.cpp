@@ -202,50 +202,32 @@ Simulator_base *Simulators::invoke_active_simulator()
 json Simulators::changed_UI_items()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    if (this->m_simulators.empty())
-    {
+
+    if (this->m_simulators.empty() || this->m_current_simulator.empty())
         return "{}"_json;
-    }
-    if (this->m_current_simulator.empty())
-    {
-        return "{}"_json;
-    }
 
     json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
+
+    // Fast path: nothing at all changed
+    if (after == m_before)
+        return "{}"_json;
+
     json changed;
     changed["event"]["type"] = "ui_changed";
 
-    json diff = json::diff(m_before, after);
+    const auto& ui_items     = after["UI_items"];
+    const auto& prev_ui_items = m_before["UI_items"];   // may be null on first call
 
-    if (diff.empty())
+    const size_t count = ui_items.size();
+    for (size_t i = 0; i < count; ++i)
     {
-        return "{}"_json;
-    }
-
-    // diff to ui items list
-    // get index out of each item in diff /UI_items/0/**
-    // but the index can be the same for multiple items
-    // Then push the ui_item at that index to the changed json
-    std::unordered_set<size_t> addedIndices;
-
-    try
-    {
-        for (auto &item : diff)
+        // If item is new or any field changed -> send full current item
+        if (i >= prev_ui_items.size() || ui_items[i] != prev_ui_items[i])
         {
-            std::string path = item["path"];
-            size_t index = std::stoul(path.substr(10, path.find("/", 10) - 10));
-            if (addedIndices.find(index) != addedIndices.end())
-                continue;
-
-            changed["event"]["UI_items"].push_back(after["UI_items"][index]);
-            addedIndices.insert(index);
+            changed["event"]["UI_items"].push_back(ui_items[i]);
         }
     }
-    catch (const std::exception &e)
-    {
-        SPDLOG_ERROR(e.what());
-    }
 
-    m_before = after;
+    m_before = std::move(after);
     return changed;
 }
