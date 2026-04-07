@@ -24,7 +24,7 @@ bool UI_item::is_type(json j)
     {
         return false;
     }
-    return magic_enum::enum_cast<UI_enum>(j.at("type")).value_or(UI_enum::end) == m_type;
+    return magic_enum::enum_cast<UI_enum>((std::string)j.at("type")).value_or(UI_enum::end) == m_type;
 }
 
 void UI_item::set_text(std::string text)

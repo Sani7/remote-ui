@@ -1,24 +1,25 @@
 #include "ui_item.hpp"
+#include "ui_enum.hpp"
 #include <QSignalSpy>
 #include <gtest/gtest.h>
 
 TEST(UI_item, is_type)
 {
-    UI_item item(std::string("item"));
-    json j = {{"type", "item"}};
+    UI_item item(UI_enum::end);
+    json j = {{"type", "end"}};
     EXPECT_TRUE(item.is_type(j));
 }
 
 TEST(UI_item, set_text)
 {
-    UI_item item(std::string("item"));
+    UI_item item(UI_enum::end);
     item.set_text("text");
     EXPECT_EQ(item.text(), "text");
 }
 
 TEST(UI_item, set_fg_color)
 {
-    UI_item item(std::string("item"));
+    UI_item item(UI_enum::end);
     item.set_fg_color(Color(0, 0, 0));
     EXPECT_EQ(item.fg_color(), Color(0, 0, 0));
 
@@ -28,7 +29,7 @@ TEST(UI_item, set_fg_color)
 
 TEST(UI_item, set_bg_color)
 {
-    UI_item item(std::string("item"));
+    UI_item item(UI_enum::end);
     item.set_bg_color(Color(0, 0, 0));
     EXPECT_EQ(item.bg_color(), Color(0, 0, 0));
 
@@ -38,10 +39,10 @@ TEST(UI_item, set_bg_color)
 
 TEST(UI_item, from_json)
 {
-    UI_item item(std::string("item"));
+    UI_item item(UI_enum::end);
     json j;
     j["id"] = 0;
-    j["type"] = "item";
+    j["type"] = "end";
     j["text"] = "item_text";
     j["text_size"] = 12;
     j["fg_color"] = "0xFFFFFFFF";
@@ -57,9 +58,9 @@ TEST(UI_item, from_json)
 
 TEST(UI_item, to_json)
 {
-    UI_item item("item", "item_text", Color(255, 255, 255), Color(0, 0, 0));
+    UI_item item(UI_enum::end, "item_text", Color(255, 255, 255), Color(0, 0, 0));
     json j = item.to_json(0);
-    EXPECT_EQ(j.at("type"), "item");
+    EXPECT_EQ(j.at("type"), "end");
     EXPECT_EQ(j.at("id"), 0);
     EXPECT_EQ(j.at("text"), "item_text");
     EXPECT_EQ(j.at("fg_color"), Color(255, 255, 255).to_hex());
@@ -68,7 +69,7 @@ TEST(UI_item, to_json)
 
 TEST(UI_item, signal)
 {
-    UI_item item("item", "item_text", Color(255, 255, 255), Color(0, 0, 0));
+    UI_item item(UI_enum::end, "item_text", Color(255, 255, 255), Color(0, 0, 0));
     QSignalSpy spy(&item, &UI_item::ui_changed);
     item.set_text("text");
     item.append_text(" ");

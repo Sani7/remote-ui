@@ -20,6 +20,7 @@ if (GTest_FOUND)
     target_link_libraries(tests
         PRIVATE
         UI
+        UI_enum
         gtest
         magic_enum::magic_enum
         GTest::gtest_main
