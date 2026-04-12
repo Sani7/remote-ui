@@ -25,7 +25,7 @@ using json = nlohmann::json;
         return new client(api, parent);                                                                                \
     }
 
-#define LOG_SRC_LOC(level, msg) emit log_signal(__FILE__, __LINE__, __FUNCTION__, (int)level, msg)
+#define LOG_SRC_LOC(level, msg) emit log_signal(__FILE__, __LINE__, __FUNCTION__, (int)(level), (msg))
 #define LOG_TRACE(msg) LOG_SRC_LOC(Log_level_enum::trace, msg)
 #define LOG_DEBUG(msg) LOG_SRC_LOC(Log_level_enum::debug, msg)
 #define LOG_INFO(msg) LOG_SRC_LOC(Log_level_enum::info, msg)
