@@ -28,6 +28,8 @@ add_subdirectory(client)
 # contains an "external" library we will link to
 add_subdirectory(external)
 
+add_subdirectory(protobuf)
+
 # defines the executable
 if(NOT EMSCRIPTEN)
 add_subdirectory(server)

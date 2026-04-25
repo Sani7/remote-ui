@@ -1,0 +1,50 @@
+syntax = "proto3";
+import "m_ui_items.proto";
+
+message Empty {}
+
+message UI_id_m { uint32 id = 1; }
+message UI_items_m { repeated UI_item_m item = 1; }
+
+message Simulator_m { string simuator = 1;}
+
+message Simulators_m { repeated string simulator = 1; }
+
+message Clicked_m {}
+
+message Value_changed_m { double value = 1; }
+
+message Text_changed_m { string text = 1; }
+
+message Selected_m { uint32 selected = 1; }
+
+message CAN_send_m { CAN_Frame_m frame = 1; }
+
+message Clear_m {}
+
+message Event_m {
+    uint32 id = 1;
+    oneof kind {
+        Clicked_m clicked = 2;
+        Value_changed_m value_changed = 3;
+        Text_changed_m text_changed = 4;
+        Selected_m selected = 5;
+        CAN_send_m can_send = 6;
+        Clear_m clear = 7;
+    }
+}
+
+service RemoteUiService {
+    // Commands
+    rpc Command_get_ui_element (UI_id_m) returns (UI_items_m);
+    rpc Command_get_ui_elements (Empty) returns (UI_items_m);
+    rpc Command_switch_simulator (Simulator_m) returns (Empty);
+    rpc Command_get_active_simulator (Empty) returns (Simulator_m);
+    rpc Command_get_simulators (Empty) returns (Simulators_m);
+
+    // Events
+    rpc SendEvent (Event_m) returns (Empty);
+
+    // Broadcasting
+    rpc SubscribeUIChanges (Empty) returns (stream UI_items_m);
+}
