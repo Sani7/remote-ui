@@ -24,7 +24,24 @@ class UI_led : public UI_item
      * @param bg_color The background color
      * @param parent The parent QObject
      */
-    UI_led(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    UI_led(QString text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+
+    /**
+     * @brief set_text
+     * @param text The text field of the button
+     */
+    void set_text(QString text) override;
+
+    /**
+     * @brief text
+     * @return The text field of the button
+     */
+    QString text() const;
+
+    void set_fg_color(Color fg_color);
+    Color fg_color() const;
+    void set_bg_color(Color bg_color);
+    Color bg_color() const;
 
     /**
      * @brief Set the state of the LED
@@ -35,18 +52,4 @@ class UI_led : public UI_item
      * @return state
      */
     bool set_led(bool state, Color on, Color off);
-
-    /**
-     * @brief Deserialize the LED from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the LED to JSON
-     *
-     * @param id The id of the LED
-     * @return json The JSON representation of the LED
-     */
-    json to_json(size_t id) const override;
 };

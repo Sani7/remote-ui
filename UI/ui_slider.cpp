@@ -1,75 +1,51 @@
 #include "ui_slider.hpp"
 
-UI_slider::UI_slider(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
+UI_slider::UI_slider(QString text, QString unit, double min, double max,
                      double value, QObject *parent)
-    : UI_item(UI_enum::ui_slider, text, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value),
-      m_unit(unit)
+    : UI_item(UI_typeGadget::UI_type::ui_slider, parent)
 {
+    m_ui_item.setRange(UI_range_m());
+    m_ui_item.range().setText(text);
+    m_ui_item.range().setUnit(unit);
+    m_ui_item.range().setMax(max);
+    m_ui_item.range().setMin(min);
+    m_ui_item.range().setValue(value);
 }
 
-UI_slider::UI_slider(std::string text, std::string unit, double min, double max, double value, QObject *parent)
-    : UI_slider(text, unit, Color::Default, Color::Default, min, max, value, parent)
-{
-}
-
-UI_slider::UI_slider(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+UI_slider::UI_slider(QString text, double min, double max, double value,
                      QObject *parent)
-    : UI_slider(text, "", fg_color, bg_color, min, max, value, parent)
+    : UI_slider(text, "", min, max, value, parent)
 {
 }
 
-UI_slider::UI_slider(std::string text, double min, double max, double value, QObject *parent)
-    : UI_slider(text, "", Color::Default, Color::Default, min, max, value, parent)
+UI_slider::UI_slider(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_slider, parent)
 {
-}
-
-UI_slider::UI_slider(QObject *parent) : UI_item(UI_enum::ui_slider, parent)
-{
+    m_ui_item.setRange(UI_range_m());
 }
 
 void UI_slider::set_value(double value)
 {
-    if (value < m_min || value > m_max)
+    if (value < m_ui_item.range().min() || value > m_ui_item.range().max())
         return;
-    if (value == m_value)
+    if (value == m_ui_item.range().value())
         return;
 
-    this->m_value = value;
+    m_ui_item.range().setValue(value);
     emit ui_changed();
-    emit changed(m_value);
+    emit changed(m_ui_item.range().value());
 }
 
 double UI_slider::value() const
 {
-    return m_value;
+    return m_ui_item.range().value();
 }
 
 double UI_slider::min() const
 {
-    return m_min;
+    return m_ui_item.range().min();
 }
 
 double UI_slider::max() const
 {
-    return m_max;
-}
-
-void UI_slider::from_json(const json &j)
-{
-    UI_item::from_json(j);
-
-    this->m_min = j.at("min");
-    this->m_max = j.at("max");
-    this->m_value = j.at("value");
-    this->m_unit = j.at("unit");
-}
-
-json UI_slider::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["min"] = this->m_min;
-    j["max"] = this->m_max;
-    j["value"] = this->m_value;
-    j["unit"] = this->m_unit;
-    return j;
+    return m_ui_item.range().max();
 }

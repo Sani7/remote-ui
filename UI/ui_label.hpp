@@ -18,7 +18,7 @@ class UI_label : public UI_item
      * @param bg_color The background color
      * @param parent The parent QObject
      */
-    UI_label(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    UI_label(QString text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     /**
      * @brief Construct a UI label object
      *
@@ -27,16 +27,25 @@ class UI_label : public UI_item
     UI_label(QObject *parent = nullptr);
 
     /**
-     * @brief Deserialize the label from JSON
-     *
-     * @param j The JSON object
+     * @brief set_text
+     * @param text The text field of the button
      */
-    void from_json(const json &j) override;
+    void set_text(QString text);
+
     /**
-     * @brief Serialize the label to JSON
-     *
-     * @param id The id of the label
-     * @return json The JSON representation of the label
+     * @brief append_text Append
+     * @param text
      */
-    json to_json(size_t id) const override;
+    void append_text(QString text);
+
+    /**
+     * @brief text
+     * @return The text field of the button
+     */
+    QString text() const;
+
+    void set_fg_color(Color fg_color);
+    Color fg_color() const;
+    void set_bg_color(Color bg_color);
+    Color bg_color() const;
 };

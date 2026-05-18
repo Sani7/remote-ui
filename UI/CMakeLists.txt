@@ -1,5 +1,5 @@
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-if(NOT EMSCRIPTEN)
+
 add_library(UI STATIC)
 
 find_package(Qt6 REQUIRED COMPONENTS Core SerialBus)
@@ -33,17 +33,8 @@ target_include_directories(UI
 target_link_libraries(UI
   PUBLIC
     Color
-    nlohmann_json::nlohmann_json
     magic_enum::magic_enum
     Qt::Core
     Qt::SerialBus
-    UI_enum
-)
-endif()
-
-add_library(UI_enum INTERFACE)
-
-target_include_directories(UI_enum
-    INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/enum
+    proto-ui
 )

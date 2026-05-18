@@ -1,162 +1,168 @@
 #include "ui_table.hpp"
 
-UI_table::UI_table(QObject *parent) : UI_item(UI_enum::ui_table, parent), m_row_count(0), m_column_count(0)
+UI_table::UI_table(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_table, parent)
 {
-    setup_item(false, false, false);
+    m_ui_item.setTable(UI_table_m());
 }
 
-UI_table::UI_table(size_t row_count, size_t column_count, std::vector<std::string> row_labels,
-                   std::vector<std::string> column_labels, QObject *parent)
-    : UI_item(UI_enum::ui_table, parent), m_row_count(row_count), m_column_count(column_count),
-      m_row_labels(row_labels), m_column_labels(column_labels), m_table()
+UI_table::UI_table(qsizetype row_count, qsizetype column_count, QList<QString> row_labels,
+                   QList<QString> column_labels, QObject *parent)
+    : UI_item(UI_typeGadget::UI_type::ui_table, parent)
 {
-    setup_item(false, false, false);
-    m_row_labels.reserve(100);
-    m_column_labels.reserve(100);
-    m_table.reserve(500);
+    m_ui_item.setTable(UI_table_m());
+    m_ui_item.table().setRowCount(row_count);
+    m_ui_item.table().setColumnCount(column_count);
+    m_ui_item.table().setColumnLabels(column_labels);
+    m_ui_item.table().setRowLabels(row_labels);
 }
 
-void UI_table::set_row_count(size_t count)
+void UI_table::set_row_count(qsizetype count)
 {
-    m_row_count = count;
-    if (m_row_count != 0 || m_column_count != 0)
+    m_ui_item.table().setRowCount(count);
+    auto column_count = m_ui_item.table().columnCount();
+    auto row_count = m_ui_item.table().rowCount();
+    auto row_labels = m_ui_item.table().rowLabels();
+
+    if (row_count != 0 || column_count != 0)
     {
-        m_table.resize(m_column_count * m_row_count);
+        auto table = m_ui_item.table().table();
+        table.resize(column_count * count);
+        m_ui_item.table().setTable(table);
     }
 
-    m_row_labels.resize(m_row_count);
+    row_labels.resize(count);
+    m_ui_item.table().setRowLabels(row_labels);
 
     emit ui_changed();
 }
 
-size_t UI_table::row_count() const
+qsizetype UI_table::row_count() const
 {
-    return m_row_count;
+    return m_ui_item.table().rowCount();
 }
 
-void UI_table::set_column_count(size_t count)
+void UI_table::set_column_count(qsizetype count)
 {
-    m_column_count = count;
-    if (m_row_count != 0 || m_column_count != 0)
+    m_ui_item.table().setColumnCount(count);
+    auto column_count = m_ui_item.table().columnCount();
+    auto row_count = m_ui_item.table().rowCount();
+    auto column_labels = m_ui_item.table().columnLabels();
+
+    if (row_count != 0 || column_count != 0)
     {
-        m_table.resize(m_column_count * m_row_count);
+        auto table = m_ui_item.table().table();
+        table.resize(column_count * count);
+        m_ui_item.table().setTable(table);
     }
-    m_column_labels.resize(m_column_count);
+
+    column_labels.resize(count);
+    m_ui_item.table().setColumnLabels(column_labels);
 
     emit ui_changed();
 }
 
-size_t UI_table::column_count() const
+qsizetype UI_table::column_count() const
 {
-    return m_column_count;
+    return m_ui_item.table().columnCount();
 }
 
-size_t UI_table::capacity() const
+qsizetype UI_table::capacity() const
 {
-    return m_row_count * m_column_count;
+    return m_ui_item.table().rowCount() * m_ui_item.table().columnCount();
 }
 
-void UI_table::set_row_label(size_t index, std::string label)
+void UI_table::set_row_label(qsizetype index, QString label)
 {
-    if (m_row_count <= index)
+    if (m_ui_item.table().rowCount() <= index)
     {
         return;
     }
 
-    m_row_labels[index] = std::move(label);
+    auto labels = m_ui_item.table().rowLabels();
+    labels.replace(index, label);
+    m_ui_item.table().setRowLabels(labels);
 
     emit ui_changed();
 }
 
-std::string UI_table::row_label(size_t index) const
+QString UI_table::row_label(qsizetype index) const
 {
-    if (m_row_count <= index)
+    if (m_ui_item.table().rowCount() <= index)
     {
         return "";
     }
 
-    return m_row_labels[index];
+    return m_ui_item.table().rowLabels().at(index);
 }
 
-void UI_table::set_column_label(size_t index, std::string label)
+void UI_table::set_column_label(qsizetype index, QString label)
 {
-    if (m_column_count <= index)
+    if (m_ui_item.table().columnCount() <= index)
     {
         return;
     }
 
-    m_column_labels[index] = std::move(label);
+    auto labels = m_ui_item.table().columnLabels();
+    labels.replace(index, label);
+    m_ui_item.table().setColumnLabels(labels);
 
     emit ui_changed();
 }
 
-std::string UI_table::column_label(size_t index) const &
+QString UI_table::column_label(qsizetype index) const &
 {
-    if (m_column_count <= index)
+    if (m_ui_item.table().columnCount() <= index)
     {
         return "";
     }
 
-    return m_column_labels[index];
+    return m_ui_item.table().columnLabels().at(index);
 }
 
-void UI_table::insert_item(size_t row, size_t column, std::string text)
+void UI_table::insert_item(qsizetype row, qsizetype column, QString text)
 {
-    if (m_column_count <= column || m_row_count <= row)
+    if (m_ui_item.table().columnCount() <= column || m_ui_item.table().rowCount() <= row)
     {
         return;
     }
-    if (capacity() > m_table.size())
+    if (capacity() > m_ui_item.table().table().size())
     {
-        m_table.resize(capacity());
+        auto table = m_ui_item.table().table();
+        table.resize(capacity());
+        m_ui_item.table().setTable(table);
     }
 
-    size_t index = row * m_column_count + column;
+    qsizetype index = row * m_ui_item.table().columnCount() + column;
 
-    m_table.at(index) = std::move(text);
+    auto table = m_ui_item.table().table();
+    table.replace(index, text);
+    m_ui_item.table().setTable(table);
 
     emit ui_changed();
 }
 
-std::string UI_table::item(size_t row, size_t column) const &
+QString UI_table::item(qsizetype row, qsizetype column) const &
 {
-    if (m_column_count <= column || m_row_count <= row)
+    if (m_ui_item.table().columnCount() <= column || m_ui_item.table().rowCount() <= row)
     {
         return "";
     }
-    size_t index = row * m_column_count + column;
+    qsizetype index = row * m_ui_item.table().columnCount() + column;
 
-    return m_table.at(index);
+    return m_ui_item.table().table().at(index);
 }
 
-void UI_table::empty_item(size_t row, size_t column)
+void UI_table::empty_item(qsizetype row, qsizetype column)
 {
-    size_t index = row * m_column_count + column;
+    if (m_ui_item.table().columnCount() <= column || m_ui_item.table().rowCount() <= row)
+    {
+        return;
+    }
+    qsizetype index = row * m_ui_item.table().columnCount() + column;
 
-    m_table[index] = "";
+    auto table = m_ui_item.table().table();
+    table.replace(index, "");
+    m_ui_item.table().setTable(table);
 
     emit ui_changed();
-}
-
-void UI_table::from_json(const json &j)
-{
-    UI_item::from_json(j);
-
-    this->m_row_count = j.at("row_count");
-    this->m_row_labels = j.at("row_labels");
-    this->m_column_count = j.at("column_count");
-    this->m_column_labels = j.at("column_labels");
-    this->m_table = j.at("table");
-}
-
-json UI_table::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["row_count"] = m_row_count;
-    j["row_labels"] = m_row_labels;
-    j["column_count"] = m_column_count;
-    j["column_labels"] = m_column_labels;
-    j["table"] = m_table;
-
-    return j;
 }

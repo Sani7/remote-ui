@@ -18,7 +18,7 @@ class UI_textbox : public UI_item
      * @param bg_color The background color
      * @param parent The parent QObject
      */
-    UI_textbox(std::string hint, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    UI_textbox(QString hint, Color fg_color, Color bg_color, QObject *parent = nullptr);
     /**
      * @brief Construct a UI textbox object
      *
@@ -31,42 +31,32 @@ class UI_textbox : public UI_item
      *
      * @param text The text to set
      */
-    void set_text(std::string text) override;
+    void set_text(QString text) override;
+
+    QString text() const;
+
+    void set_fg_color(Color fg_color);
+    Color fg_color() const;
+    void set_bg_color(Color bg_color);
+    Color bg_color() const;
 
     /**
      * @brief Get the hint text of the textbox
      *
      * @param hint The hint text to set
      */
-    void set_hint(std::string hint);
+    void set_hint(QString hint);
     /**
      * @brief Get the hint text of the textbox
      *
-     * @return std::string The hint text
+     * @return QString The hint text
      */
-    std::string hint() const &;
-
-    /**
-     * @brief Deserialize the textbox from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the textbox to JSON
-     *
-     * @param id The id of the textbox
-     * @return json The JSON representation of the textbox
-     */
-    json to_json(size_t id) const override;
+    QString hint() const &;
   signals:
     /**
      * @brief Signal emitted when the text changes
      *
      * @param text The new text
      */
-    void changed(std::string text);
-
-  private:
-    std::string m_hint;
+    void changed(QString text);
 };

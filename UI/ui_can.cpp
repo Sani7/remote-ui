@@ -1,53 +1,49 @@
 #include "ui_can.hpp"
 
-template <class T> T ByteArrayToStdArray(const QByteArray &byteArray)
-{
-    T stdArray;
-
-    for (unsigned int i = 0; i < stdArray.size() && i < (unsigned int)byteArray.size(); i++)
-    {
-        stdArray[i] = (unsigned char)byteArray.at(i);
-    }
-
-    return stdArray;
-}
-
 UI_can::UI_can(Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_enum::ui_can, "", fg_color, bg_color, parent)
+    : UI_item(UI_typeGadget::UI_type::ui_can, parent)
 {
-    setup_item(false, true, true);
+    m_ui_item.can().mutColor().setFgColor(fg_color.color());
+    m_ui_item.can().mutColor().setBgColor(bg_color.color());
 }
 
-UI_can::UI_can(QObject *parent) : UI_item(UI_enum::ui_can, parent)
+UI_can::UI_can(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_can, parent)
 {
-    setup_item(false, true, true);
 }
 
 void UI_can::add_send_message(QCanBusFrame msg)
 {
-    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
-                   ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
-    m_can_send_messages.push_back(frame);
+    CAN_Frame_m frame;(msg.frameId(), msg.payload().size(), msg.payload());
+    frame.setSid(msg.frameId());
+    frame.setDlc(msg.payload().size());
+    frame.setPayload(msg.payload());
+    auto send_frames = m_ui_item.can().sendFrames();
+    send_frames.append(frame);
+    m_ui_item.can().setSendFrames(send_frames);
     emit ui_changed();
 }
 
 void UI_can::add_received_message(QCanBusFrame msg)
 {
-    CanFrame frame(msg.frameId(), (uint8_t)msg.payload().size(),
-                   ByteArrayToStdArray<std::array<uint8_t, 8>>(msg.payload()));
-    m_can_received_messages.push_back(frame);
+    CAN_Frame_m frame;(msg.frameId(), msg.payload().size(), msg.payload());
+    frame.setSid(msg.frameId());
+    frame.setDlc(msg.payload().size());
+    frame.setPayload(msg.payload());
+    auto recv_frames = m_ui_item.can().recvFrames();
+    recv_frames.append(frame);
+    m_ui_item.can().setRecvFrames(recv_frames);
     emit ui_changed();
 }
 
 void UI_can::clear_send_buffer()
 {
-    m_can_send_messages.clear();
+    m_ui_item.can().setSendFrames(QList<CAN_Frame_m>());
     emit ui_changed();
 }
 
 void UI_can::clear_receive_buffer()
 {
-    m_can_received_messages.clear();
+    m_ui_item.can().setSendFrames(QList<CAN_Frame_m>());
     emit ui_changed();
 }
 
@@ -57,56 +53,12 @@ void UI_can::clear()
     clear_receive_buffer();
 }
 
-void UI_can::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    m_can_send_messages.clear();
-    m_can_received_messages.clear();
-    for (const auto &msg : j.at("send_msgs"))
-    {
-        CanFrame can_msg(msg.at("id"), msg.at("dlc"), msg.at("payload"));
-        m_can_send_messages.push_back(can_msg);
-    }
-    for (const auto &msg : j.at("rcvd_msgs"))
-    {
-        CanFrame can_msg(msg.at("id"), msg.at("dlc"), msg.at("payload"));
-        m_can_received_messages.push_back(can_msg);
-    }
-}
-
-json UI_can::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    json can_send_messages = json::array();
-    json can_received_messages = json::array();
-    for (const auto &msg : m_can_send_messages)
-    {
-        json can_msg;
-        can_msg["id"] = (uint32_t)msg.m_SID;
-        can_msg["dlc"] = msg.m_DLC;
-        can_msg["payload"] = msg.m_payload;
-
-        can_send_messages.push_back(can_msg);
-    }
-    j["send_msgs"] = can_send_messages;
-    for (const auto &msg : m_can_received_messages)
-    {
-        json can_msg;
-        can_msg["id"] = (uint32_t)msg.m_SID;
-        can_msg["dlc"] = msg.m_DLC;
-        can_msg["payload"] = msg.m_payload;
-
-        can_received_messages.push_back(can_msg);
-    }
-    j["rcvd_msgs"] = can_received_messages;
-    return j;
-}
-
-void UI_can::can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
+void UI_can::can_send(uint32_t id, uint64_t dlc, QByteArray payload)
 {
     QCanBusFrame frame;
+    Q_UNUSED(dlc);
     frame.setFrameId(id);
-    frame.setPayload(QByteArray::fromRawData((const char *)(payload.data()), dlc));
+    frame.setPayload(payload);
 
     emit send(frame);
 }

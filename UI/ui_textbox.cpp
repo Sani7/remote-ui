@@ -1,43 +1,61 @@
 #include "ui_textbox.hpp"
 
-UI_textbox::UI_textbox(std::string hint, Color fg_color, Color bg_color, QObject *parent)
-    : UI_item(UI_enum::ui_textbox, "", fg_color, bg_color, parent), m_hint(hint)
+UI_textbox::UI_textbox(QString hint, Color fg_color, Color bg_color, QObject *parent)
+    : UI_item(UI_typeGadget::UI_type::ui_textbox, parent)
 {
+    m_ui_item.setTextbox(UI_textbox_m());
+    m_ui_item.textbox().setHint(hint);
+    m_ui_item.textbox().mutColor().setFgColor(fg_color.color());
+    m_ui_item.textbox().mutColor().setBgColor(bg_color.color());
 }
 
-UI_textbox::UI_textbox(QObject *parent) : UI_item(UI_enum::ui_textbox, parent)
+UI_textbox::UI_textbox(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_textbox, parent)
 {
+    m_ui_item.setTextbox(UI_textbox_m());
 }
 
-void UI_textbox::set_text(std::string text)
+void UI_textbox::set_text(QString text)
 {
-    if (text == m_text)
+    if (text == m_ui_item.textbox().text())
         return;
-    m_text = std::move(text);
+    m_ui_item.textbox().setText(text);
     emit ui_changed();
-    emit changed(m_text);
+    emit changed(m_ui_item.textbox().text());
 }
 
-void UI_textbox::set_hint(std::string hint)
+QString UI_textbox::text() const
 {
-    m_hint = std::move(hint);
+    return m_ui_item.label().text();
+}
+
+void UI_textbox::set_fg_color(Color color)
+{
+    m_ui_item.label().mutColor().setFgColor(color.color());
+}
+
+Color UI_textbox::fg_color() const
+{
+    return Color(m_ui_item.label().color().fgColor());
+}
+
+void UI_textbox::set_bg_color(Color color)
+{
+    m_ui_item.label().mutColor().setBgColor(color.color());
+}
+
+Color UI_textbox::bg_color() const
+{
+    return Color(m_ui_item.label().color().bgColor());
+}
+
+void UI_textbox::set_hint(QString hint)
+{
+    m_ui_item.textbox().setHint(hint);
     emit ui_changed();
 }
 
-std::string UI_textbox::hint() const &
+QString UI_textbox::hint() const &
 {
-    return m_hint;
+    return m_ui_item.textbox().hint();
 }
 
-void UI_textbox::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    m_hint = j.at("hint");
-}
-
-json UI_textbox::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["hint"] = m_hint;
-    return j;
-}

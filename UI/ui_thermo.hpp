@@ -15,26 +15,13 @@ class UI_thermo : public UI_item
      *
      * @param text The text to display
      * @param unit The unit of the thermometer
-     * @param fg_color The foreground color
-     * @param bg_color The background color
      * @param min The minimum value
      * @param max The maximum value
      * @param value The initial value
      * @param parent The parent QObject
      */
-    UI_thermo(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max, double value,
+    UI_thermo(QString text, QString unit, double min, double max, double value,
               QObject *parent = nullptr);
-    /**
-     * @brief Construct a UI thermometer object
-     *
-     * @param text The text to display
-     * @param unit The unit of the thermometer
-     * @param min The minimum value
-     * @param max The maximum value
-     * @param value The initial value
-     * @param parent The parent QObject
-     */
-    UI_thermo(std::string text, std::string unit, double min, double max, double value, QObject *parent = nullptr);
     /**
      * @brief Construct a UI thermometer object
      *
@@ -46,18 +33,8 @@ class UI_thermo : public UI_item
      * @param value The initial value
      * @param parent The parent QObject
      */
-    UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+    UI_thermo(QString text, double min, double max, double value,
               QObject *parent = nullptr);
-    /**
-     * @brief Construct a UI thermometer object
-     *
-     * @param text The text to display
-     * @param min The minimum value
-     * @param max The maximum value
-     * @param value The initial value
-     * @param parent The parent QObject
-     */
-    UI_thermo(std::string text, double min, double max, double value, QObject *parent = nullptr);
     /**
      * @brief Construct a UI thermometer object
      *
@@ -129,25 +106,4 @@ class UI_thermo : public UI_item
      * @param value The normalized value (0.0 to 1.0) of the color stop to remove
      */
     void remove_color_stop_normalized(double value);
-
-    /**
-     * @brief Deserialize the thermometer from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the thermometer to JSON
-     *
-     * @param id The id of the thermometer
-     * @return json The JSON representation of the thermometer
-     */
-    json to_json(size_t id) const override;
-
-  private:
-    double m_min;
-    double m_max;
-    double m_value;
-    std::string m_unit;
-    std::unordered_map<double, Color> m_color_map;
 };

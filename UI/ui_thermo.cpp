@@ -1,143 +1,107 @@
 #include "ui_thermo.hpp"
 
-UI_thermo::UI_thermo(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
+UI_thermo::UI_thermo(QString text, QString unit, double min, double max,
                      double value, QObject *parent)
-    : UI_item(UI_enum::ui_thermo, text, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value),
-      m_unit(unit)
+    : UI_item(UI_typeGadget::UI_type::ui_thermo, parent)
 {
+    m_ui_item.setRange(UI_range_m());
+    m_ui_item.range().setText(text);
+    m_ui_item.range().setUnit(unit);
+    m_ui_item.range().setMin(min);
+    m_ui_item.range().setMax(max);
+    m_ui_item.range().setValue(value);
 }
 
-UI_thermo::UI_thermo(std::string text, std::string unit, double min, double max, double value, QObject *parent)
-    : UI_thermo(text, unit, Color::Default, Color::Default, min, max, value, parent)
-{
-}
-
-UI_thermo::UI_thermo(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+UI_thermo::UI_thermo(QString text, double min, double max, double value,
                      QObject *parent)
-    : UI_thermo(text, "", fg_color, bg_color, min, max, value, parent)
+    : UI_thermo(text, "", min, max, value, parent)
 {
 }
 
-UI_thermo::UI_thermo(std::string text, double min, double max, double value, QObject *parent)
-    : UI_thermo(text, "", Color::Default, Color::Default, min, max, value, parent)
-{
-}
-
-UI_thermo::UI_thermo(QObject *parent) : UI_item(UI_enum::ui_thermo, parent)
+UI_thermo::UI_thermo(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_thermo, parent)
 {
 }
 
 void UI_thermo::set_value(double value)
 {
-    if (value < m_min || value > m_max)
+    if (value < m_ui_item.range().min() || value > m_ui_item.range().max())
         return;
-    if (value == m_value)
+    if (value == m_ui_item.range().value())
         return;
 
-    this->m_value = value;
+    m_ui_item.range().setValue(value);
     emit ui_changed();
 }
 
 double UI_thermo::value() const
 {
-    return m_value;
+    return m_ui_item.range().value();
 }
 
 double UI_thermo::min() const
 {
-    return m_min;
+    return m_ui_item.range().min();
 }
 
 double UI_thermo::max() const
 {
-    return m_max;
+    return m_ui_item.range().max();
 }
 
 void UI_thermo::set_start_color(Color color)
 {
-    this->m_color_map[0] = color;
-    emit ui_changed();
+    Q_UNUSED(color);
+    // this->m_color_map[0] = color;
+    // emit ui_changed();
 }
 
 void UI_thermo::set_end_color(Color color)
 {
-    this->m_color_map[1] = color;
-    emit ui_changed();
+    Q_UNUSED(color);
+    // this->m_color_map[1] = color;
+    // emit ui_changed();
 }
 
 void UI_thermo::add_color_stop(double value, Color color)
 {
-    if (value <= 0 || value >= 1)
-        return;
+    Q_UNUSED(value);
+    Q_UNUSED(color);
+    // if (value <= 0 || value >= 1)
+    //     return;
 
-    this->m_color_map[value] = color;
-    emit ui_changed();
+    // this->m_color_map[value] = color;
+    // emit ui_changed();
 }
 
 void UI_thermo::add_color_stop_normalized(double value, Color color)
 {
-    if (value < m_min || value > m_max)
-        return;
+    Q_UNUSED(value);
+    Q_UNUSED(color);
+    // if (value < m_min || value > m_max)
+    //     return;
 
-    double normalized = (value - m_min) / (m_max - m_min);
-    this->m_color_map[normalized] = color;
-    emit ui_changed();
+    // double normalized = (value - m_min) / (m_max - m_min);
+    // this->m_color_map[normalized] = color;
+    // emit ui_changed();
 }
 
 void UI_thermo::remove_color_stop(double value)
 {
-    if (value <= 0 || value >= 1)
-        return;
+    Q_UNUSED(value);
+    // if (value <= 0 || value >= 1)
+    //     return;
 
-    this->m_color_map.erase(value);
-    emit ui_changed();
+    // this->m_color_map.erase(value);
+    // emit ui_changed();
 }
 
 void UI_thermo::remove_color_stop_normalized(double value)
 {
-    if (value < m_min || value > m_max)
-        return;
+    Q_UNUSED(value);
+    // if (value < m_min || value > m_max)
+    //     return;
 
-    double normalized = (value - m_min) / (m_max - m_min);
-    this->m_color_map.erase(normalized);
-    emit ui_changed();
-}
-
-void UI_thermo::from_json(const json &j)
-{
-    UI_item::from_json(j);
-
-    this->m_min = j.at("min");
-    this->m_max = j.at("max");
-    this->m_value = j.at("value");
-    this->m_unit = j.at("unit");
-    this->m_color_map.clear();
-    if (!j.contains("color_map"))
-        return;
-    for (auto &i : j["color_map"])
-    {
-        double k = i.at("key");
-        std::string c = i.at("value");
-        this->m_color_map[k] = Color(c);
-    }
-}
-
-json UI_thermo::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["min"] = this->m_min;
-    j["max"] = this->m_max;
-    j["value"] = this->m_value;
-    j["unit"] = this->m_unit;
-    if (this->m_color_map.empty())
-        return j;
-    j["color_map"] = json::array();
-    for (auto &[key, value] : this->m_color_map)
-    {
-        json item = json::object();
-        item["key"] = key;
-        item["value"] = value.to_hex();
-        j["color_map"].push_back(item);
-    }
-    return j;
+    // double normalized = (value - m_min) / (m_max - m_min);
+    // this->m_color_map.erase(normalized);
+    // emit ui_changed();
 }
