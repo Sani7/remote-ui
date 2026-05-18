@@ -1,172 +1,81 @@
 #include "ui_item.hpp"
-#include <magic_enum/magic_enum.hpp>
 
-UI_item::UI_item(UI_enum type, std::string text, Color fg_color, Color bg_color, QObject *parent)
-    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(text), m_fg_color(fg_color), m_bg_color(bg_color),
-      m_enabled(true), m_visible(true)
+UI_item::UI_item(UI_typeGadget::UI_type type, QObject *parent)
+    : QObject(parent)
 {
+    m_ui_item.setId_proto((size_t)-1);
+    m_ui_item.setType(type);
+    m_ui_item.setEnabled(true);
+    m_ui_item.setVisible(true);
 }
 
-UI_item::UI_item(UI_enum type, QObject *parent)
-    : QObject(parent), m_id((size_t)-1), m_type(type), m_text(""), m_fg_color(Color::Default),
-      m_bg_color(Color::Default), m_enabled(true), m_visible(true)
+void UI_item::set_id(size_t id)
 {
-}
-
-std::string_view UI_item::type() const &
-{
-    return magic_enum::enum_name(m_type);
-}
-
-bool UI_item::is_type(json j)
-{
-    if (!j.contains("type"))
-    {
-        return false;
-    }
-    return magic_enum::enum_cast<UI_enum>((std::string)j.at("type")).value_or(UI_enum::end) == m_type;
-}
-
-void UI_item::set_text(std::string text)
-{
-    if (this->m_text != text)
-    {
-        this->m_text = std::move(text);
-        emit ui_changed();
-    }
-}
-
-void UI_item::append_text(std::string text)
-{
-    m_text.append(text);
-    emit ui_changed();
-}
-
-std::string UI_item::text() const &
-{
-    return m_text;
-}
-
-void UI_item::set_fg_color(Color fg_color)
-{
-    if (this->m_fg_color != fg_color)
-    {
-        this->m_fg_color = std::move(fg_color);
-        emit ui_changed();
-    }
-}
-
-Color UI_item::fg_color() const &
-{
-    return m_fg_color;
-}
-
-void UI_item::set_bg_color(Color bg_color)
-{
-    if (this->m_bg_color != bg_color)
-    {
-        this->m_bg_color = std::move(bg_color);
-        emit ui_changed();
-    }
-}
-
-Color UI_item::bg_color() const &
-{
-    return m_bg_color;
+    m_ui_item.setId_proto(id);
 }
 
 void UI_item::set_enabled(bool enabled)
 {
-    if (this->m_enabled != enabled)
+    if (m_ui_item.enabled() != enabled)
     {
-        this->m_enabled = std::move(enabled);
+        m_ui_item.setEnabled(enabled);
         emit ui_changed();
     }
 }
 
 bool UI_item::is_enabled() const
 {
-    return m_enabled;
+    return m_ui_item.enabled();
 }
 
 void UI_item::set_visible(bool visible)
 {
-    if (this->m_visible != visible)
+    if (m_ui_item.visible() != visible)
     {
-        this->m_visible = std::move(visible);
+        m_ui_item.setVisible(visible);
         emit ui_changed();
     }
 }
 
 bool UI_item::is_visible() const
 {
-    return m_visible;
+    return m_ui_item.visible();
 }
 
-void UI_item::from_json(const json &j)
+UI_item_m UI_item::to_proto() const
 {
-    if (!is_type(j))
-        return;
-    j.at("id").get_to(m_id);
-    if (j.contains("text"))
-        j.at("text").get_to(m_text);
-    std::string color;
-    if (j.contains("fg_color"))
-    {
-        j.at("fg_color").get_to(color);
-        m_fg_color = Color(color);
-        color.clear();
-    }
-    if (j.contains("bg_color"))
-    {
-        j.at("bg_color").get_to(color);
-        m_bg_color = Color(color);
-    }
-    j.at("enabled").get_to(m_enabled);
-    j.at("visible").get_to(m_visible);
+    return m_ui_item;
 }
 
-json UI_item::to_json(size_t id) const
+void UI_item::from_proto(UI_item_m item)
 {
-    json j;
-    j["id"] = id;
-    j["type"] = type();
-    if (m_text_enabled)
-        j["text"] = m_text;
-    if (m_fg_color_enabled)
-        j["fg_color"] = m_fg_color.to_hex();
-    if (m_bg_color_enabled)
-        j["bg_color"] = m_bg_color.to_hex();
-    j["enabled"] = m_enabled;
-    j["visible"] = m_visible;
-    return j;
+    m_ui_item = item;
 }
 
 void UI_item::click() {};
 
-void UI_item::set_selected(size_t selected)
+void UI_item::set_selected(qsizetype selected)
 {
-    UNUSED(selected);
-};
+    Q_UNUSED(selected);
+}
+
+void UI_item::set_text(QString text)
+{
+    Q_UNUSED(text);
+}
+
 void UI_item::set_value(double value)
 {
-    UNUSED(value);
-};
+    Q_UNUSED(value);
+}
 
-void UI_item::can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
+void UI_item::can_send(uint32_t id, uint64_t dlc, QByteArray payload)
 {
-    UNUSED(id);
-    UNUSED(dlc);
-    UNUSED(payload);
-};
+    Q_UNUSED(id);
+    Q_UNUSED(dlc);
+    Q_UNUSED(payload);
+}
 
 void UI_item::clear()
 {
-}
-
-void UI_item::setup_item(bool text, bool fg_color, bool bg_color)
-{
-    m_text_enabled = text;
-    m_fg_color_enabled = fg_color;
-    m_bg_color_enabled = bg_color;
 }

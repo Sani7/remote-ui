@@ -21,7 +21,7 @@ class UI_status_bar : public UI_item
      * @param message The initial message
      * @param parent The parent QObject
      */
-    UI_status_bar(std::string message, QObject *parent = nullptr);
+    UI_status_bar(QString message, QObject *parent = nullptr);
 
     /**
      * @brief Show a message on the status bar
@@ -29,34 +29,17 @@ class UI_status_bar : public UI_item
      * @param message The message to show
      * @param timeout The timeout in milliseconds (0 for no timeout)
      */
-    void show_message(std::string message, size_t timeout = 0);
+    void show_message(QString message, size_t timeout = 0);
     /**
      * @brief Get the current message
      *
-     * @return std::string The current message
+     * @return QString The current message
      */
-    std::string message() const &;
+    QString message() const &;
     /**
      * @brief Get the timeout for the current message
      *
      * @return size_t The timeout in milliseconds
      */
     size_t timeout() const;
-
-    /**
-     * @brief Deserialize the status bar from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the status bar to JSON
-     *
-     * @param id The id of the status bar
-     * @return json The JSON representation of the status bar
-     */
-    json to_json(size_t id) const override;
-
-  private:
-    size_t m_timeout;
 };

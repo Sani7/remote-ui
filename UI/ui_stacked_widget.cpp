@@ -1,44 +1,34 @@
 #include "ui_stacked_widget.hpp"
 
-UI_stacked_widget::UI_stacked_widget(QObject *parent) : UI_item(UI_enum::ui_stacked_widget, parent)
+UI_stacked_widget::UI_stacked_widget(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_stacked_widget, parent)
 {
+    m_ui_item.setStackedWidget(UI_stacked_widget_m());
 }
 
-UI_stacked_widget::UI_stacked_widget(size_t tab_count, size_t current_tab, QObject *parent)
-    : UI_item(UI_enum::ui_stacked_widget, parent), m_tab_count(tab_count), m_current_tab(current_tab)
+UI_stacked_widget::UI_stacked_widget(qsizetype tab_count, qsizetype current_tab, QObject *parent)
+    : UI_item(UI_typeGadget::UI_type::ui_stacked_widget, parent)
 {
+    m_ui_item.setStackedWidget(UI_stacked_widget_m());
+    m_ui_item.stackedWidget().setTabCount(tab_count);
+    m_ui_item.stackedWidget().setCurrentTab(current_tab);
 }
 
-void UI_stacked_widget::set_selected(size_t selected)
+void UI_stacked_widget::set_selected(qsizetype selected)
 {
-    if (selected >= m_tab_count)
+    if (selected >= m_ui_item.stackedWidget().tabCount())
         return;
-    m_current_tab = selected;
+    m_ui_item.stackedWidget().setCurrentTab(selected);
     emit ui_changed();
 }
-size_t UI_stacked_widget::selected() const
+qsizetype UI_stacked_widget::selected() const
 {
-    return m_current_tab;
+    return m_ui_item.stackedWidget().currentTab();
 }
 
 void UI_stacked_widget::advance_tab()
 {
-    if (m_tab_count == 0)
+    if (m_ui_item.stackedWidget().tabCount() == 0)
         return;
-    m_current_tab = (m_current_tab + 1) % m_tab_count;
+    m_ui_item.stackedWidget().setCurrentTab((m_ui_item.stackedWidget().currentTab() + 1) % m_ui_item.stackedWidget().tabCount());
     emit ui_changed();
-}
-
-void UI_stacked_widget::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    m_tab_count = j.at("tab_count");
-    m_current_tab = j.at("current_tab");
-}
-json UI_stacked_widget::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["tab_count"] = m_tab_count;
-    j["current_tab"] = m_current_tab;
-    return j;
 }

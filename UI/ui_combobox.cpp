@@ -1,31 +1,33 @@
 #include "ui_combobox.hpp"
 
-UI_combobox::UI_combobox(QObject *parent) : UI_item(UI_enum::ui_combobox, parent), m_options()
+UI_combobox::UI_combobox(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_combobox, parent)
 {
-    setup_item(false, true, true);
+    m_ui_item.setCombobox(UI_combobox_m());
 }
 
-UI_combobox::UI_combobox(Color fg_color, Color bg_color, std::vector<std::string> options, size_t selected,
+UI_combobox::UI_combobox(QList<QString> options, qsizetype selected,
                          QObject *parent)
-    : UI_item(UI_enum::ui_combobox, "", fg_color, bg_color, parent), m_options(options), m_selected(selected)
+    : UI_item(UI_typeGadget::UI_type::ui_combobox, parent)
 {
-    setup_item(false, true, true);
+    m_ui_item.setCombobox(UI_combobox_m());
+    m_ui_item.combobox().setOptions(options);
+    m_ui_item.combobox().setSelected(selected);
 }
 
-void UI_combobox::set_selected(size_t selected)
+void UI_combobox::set_selected(qsizetype selected)
 {
-    if (selected == m_selected)
+    if (selected == m_ui_item.combobox().selected())
         return;
-    m_selected = std::move(selected);
+    m_ui_item.combobox().setSelected(selected);
     emit ui_changed();
     emit changed(selected_text());
 }
 
-void UI_combobox::set_selected(std::string selected)
+void UI_combobox::set_selected(QString selected)
 {
-    for (size_t i = 0; i < m_options.size(); i++)
+    for (qsizetype i = 0; i < m_ui_item.combobox().options().size(); i++)
     {
-        if (m_options[i] == selected)
+        if (m_ui_item.combobox().options().at(i) == selected)
         {
             set_selected(i);
             return;
@@ -33,34 +35,12 @@ void UI_combobox::set_selected(std::string selected)
     }
 }
 
-size_t UI_combobox::selected() const
+qsizetype UI_combobox::selected() const
 {
-    return m_selected;
+    return m_ui_item.combobox().selected();
 }
 
-std::string UI_combobox::selected_text() const &
+QString UI_combobox::selected_text() const &
 {
-    return m_options[m_selected];
-}
-
-void UI_combobox::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    if (j.contains("options"))
-    {
-        this->m_options.clear();
-        for (auto &option : j["options"])
-        {
-            this->m_options.push_back(option);
-        }
-    }
-    m_selected = j.at("selected");
-}
-
-json UI_combobox::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["options"] = this->m_options;
-    j["selected"] = m_selected;
-    return j;
+    return m_ui_item.combobox().options().at(m_ui_item.combobox().selected());
 }

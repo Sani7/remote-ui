@@ -1,104 +1,78 @@
 #include "ui_tab_widget.hpp"
 
-UI_tab_widget::UI_tab_widget(QObject *parent) : UI_item(UI_enum::ui_tab_widget, parent)
+UI_tab_widget::UI_tab_widget(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_tab_widget, parent)
 {
-    setup_item(false, false, false);
+    m_ui_item.setStackedWidget(UI_stacked_widget_m());
 }
 
-UI_tab_widget::UI_tab_widget(std::vector<std::string> tab_names, size_t selected, QObject *parent)
-    : UI_item(UI_enum::ui_tab_widget, parent), m_selected_tab(selected), m_tab_names(tab_names)
+UI_tab_widget::UI_tab_widget(QList<QString> tab_names, qsizetype selected, QObject *parent)
+    : UI_item(UI_typeGadget::UI_type::ui_tab_widget, parent)
 {
-    setup_item(false, false, false);
-    m_tab_visible.resize(m_tab_names.size(), true);
+    m_ui_item.setTabWidget(UI_tab_widget_m());
+    m_ui_item.tabWidget().setTabNames(tab_names);
+    m_ui_item.tabWidget().setSelecteTab(selected);
 }
 
-void UI_tab_widget::set_selected(size_t selected)
+void UI_tab_widget::set_selected(qsizetype selected)
 {
-    if (selected >= m_tab_names.size())
+    if (selected >= m_ui_item.tabWidget().tabNames().size())
         return;
-    m_selected_tab = selected;
+    m_ui_item.tabWidget().setSelecteTab(selected);
     emit ui_changed();
-    emit changed(m_selected_tab);
+    emit changed(selected);
 }
-size_t UI_tab_widget::selected() const
+qsizetype UI_tab_widget::selected() const
 {
-    return m_selected_tab;
+    return m_ui_item.tabWidget().selecteTab();
 }
 
-void UI_tab_widget::set_visible(size_t index, bool visible)
+void UI_tab_widget::set_visible(qsizetype index, bool visible)
 {
-    if (index >= m_tab_visible.size())
+    if (index >=  m_ui_item.tabWidget().tabNames().size())
     {
         // Only allow known tab amount from constructor
         return;
     }
-    m_tab_visible.at(index) = visible;
+    auto list = m_ui_item.tabWidget().tabVisible();
+    list.replace(index, visible);
+    m_ui_item.tabWidget().setTabVisible(list);
     emit ui_changed();
 }
-bool UI_tab_widget::visible(size_t index) const
+bool UI_tab_widget::visible(qsizetype index) const
 {
-    if (index >= m_tab_visible.size())
+    if (index >= m_ui_item.tabWidget().tabNames().size())
     {
         return false;
     }
-    return m_tab_visible.at(index);
+    return m_ui_item.tabWidget().tabVisible().at(index);
 }
 
-void UI_tab_widget::set_tab_name(size_t index, std::string name)
+void UI_tab_widget::set_tab_name(qsizetype index, QString name)
 {
-    if (index >= m_tab_names.size() || index >= m_tab_visible.size())
+    if (index >= m_ui_item.tabWidget().tabNames().size() || index >= m_ui_item.tabWidget().tabVisible().size())
     {
         // Only allow known tab amount from constructor
         return;
     }
-    m_tab_names.at(index) = name;
+    auto list = m_ui_item.tabWidget().tabNames();
+    list.replace(index, name);
+    m_ui_item.tabWidget().setTabNames(list);
     emit ui_changed();
 }
-std::string UI_tab_widget::tab_name(size_t index) const
+QString UI_tab_widget::tab_name(qsizetype index) const
 {
-    if (index >= m_tab_names.size())
+    if (index >= m_ui_item.tabWidget().tabNames().size())
     {
         return "";
     }
-    return m_tab_names.at(index);
+    return m_ui_item.tabWidget().tabNames().at(index);
 }
 
 void UI_tab_widget::advance_tab()
 {
-    if (m_tab_names.size() == 0)
+    if (m_ui_item.tabWidget().tabNames().empty())
         return;
-    m_selected_tab = (m_selected_tab + 1) % m_tab_names.size();
+    m_ui_item.tabWidget().setSelecteTab((m_ui_item.tabWidget().selecteTab() + 1) % m_ui_item.tabWidget().tabNames().size());
     emit ui_changed();
-    emit changed(m_selected_tab);
-}
-
-void UI_tab_widget::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    if (j.contains("tab_names"))
-    {
-        this->m_tab_names.clear();
-        for (auto &option : j["tab_names"])
-        {
-            this->m_tab_names.push_back(option);
-        }
-    }
-    if (j.contains("tab_visible"))
-    {
-        this->m_tab_visible.clear();
-        for (auto &option : j["tab_visible"])
-        {
-            this->m_tab_visible.push_back(option);
-        }
-    }
-    m_selected_tab = j.at("selected");
-}
-
-json UI_tab_widget::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["tab_names"] = m_tab_names;
-    j["tab_visible"] = m_tab_visible;
-    j["selected"] = m_selected_tab;
-    return j;
+    emit changed(m_ui_item.tabWidget().selecteTab());
 }

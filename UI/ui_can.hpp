@@ -84,27 +84,13 @@ class UI_can : public UI_item
     void clear_receive_buffer();
 
     /**
-     * @brief Deserialize the CAN item from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the CAN item to JSON
-     *
-     * @param id The id of the CAN item
-     * @return json The JSON representation of the CAN item
-     */
-    json to_json(size_t id) const override;
-
-    /**
      * @brief Handle a CAN send event
      *
      * @param id The CAN identifier
      * @param dlc The data length code
      * @param payload The data payload
      */
-    void can_send(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload) override;
+    void can_send(uint32_t id, uint64_t dlc, QByteArray payload) override;
     /**
      * @brief Clear the CAN item
      *
@@ -116,8 +102,4 @@ class UI_can : public UI_item
      * @param msg The CAN message sent
      */
     void send(QCanBusFrame msg);
-
-  private:
-    std::vector<CanFrame> m_can_send_messages;
-    std::vector<CanFrame> m_can_received_messages;
 };

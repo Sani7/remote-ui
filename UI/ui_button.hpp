@@ -17,7 +17,7 @@ class UI_button : public UI_item
      * @param bg_color The background color of the button
      * @param parent The parent QObject
      */
-    UI_button(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    UI_button(QString text, Color fg_color, Color bg_color, QObject *parent = nullptr);
     /**
      * @brief Construct a UI button object
      *
@@ -26,18 +26,21 @@ class UI_button : public UI_item
     UI_button(QObject *parent = nullptr);
 
     /**
-     * @brief Deserialize the button from JSON
-     *
-     * @param j The JSON object
+     * @brief set_text
+     * @param text The text field of the button
      */
-    void from_json(const json &j) override;
+    void set_text(QString text) override;
+
     /**
-     * @brief Serialize the button to JSON
-     *
-     * @param id The id of the button
-     * @return json The JSON representation of the button
+     * @brief text
+     * @return The text field of the button
      */
-    json to_json(size_t id) const override;
+    QString text() const;
+
+    void set_fg_color(Color fg_color);
+    Color fg_color() const;
+    void set_bg_color(Color bg_color);
+    Color bg_color() const;
 
     /**
      * @brief Handle a click event on the button

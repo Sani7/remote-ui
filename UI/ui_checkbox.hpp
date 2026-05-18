@@ -23,7 +23,24 @@ class UI_checkbox : public UI_item
      * @param bg_color The background color
      * @param parent The parent QObject
      */
-    UI_checkbox(std::string text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+    UI_checkbox(QString text, Color fg_color, Color bg_color, QObject *parent = nullptr);
+
+    /**
+     * @brief set_text
+     * @param text The text field of the button
+     */
+    void set_text(QString text) override;
+
+    /**
+     * @brief text
+     * @return The text field of the button
+     */
+    QString text() const;
+
+    void set_fg_color(Color fg_color);
+    Color fg_color() const;
+    void set_bg_color(Color bg_color);
+    Color bg_color() const;
 
     /**
      * @brief Handle a click event on the checkbox
@@ -44,20 +61,6 @@ class UI_checkbox : public UI_item
      */
     bool state() const;
 
-    /**
-     * @brief Deserialize the checkbox from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the checkbox to JSON
-     *
-     * @param id The id of the checkbox
-     * @return json The JSON representation of the checkbox
-     */
-    json to_json(size_t id) const override;
-
   signals:
     /**
      * @brief Signal emitted when the checkbox state changes
@@ -65,7 +68,4 @@ class UI_checkbox : public UI_item
      * @param checked The new state of the checkbox
      */
     void changed(bool checked);
-
-  private:
-    bool m_checked;
 };

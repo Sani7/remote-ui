@@ -1,44 +1,33 @@
 #include "ui_status_bar.hpp"
 
-UI_status_bar::UI_status_bar(QObject *parent) : UI_item(UI_enum::ui_status_bar, parent), m_timeout(0)
+UI_status_bar::UI_status_bar(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_status_bar, parent)
 {
-    setup_item(true, false, false);
+    m_ui_item.setStatusBar(UI_status_bar_m());
+    m_ui_item.statusBar().setTimeout(0);
 }
 
-UI_status_bar::UI_status_bar(std::string message, QObject *parent)
-    : UI_item(UI_enum::ui_status_bar, parent), m_timeout(0)
+UI_status_bar::UI_status_bar(QString message, QObject *parent)
+    : UI_item(UI_typeGadget::UI_type::ui_status_bar, parent)
 {
-    m_text = std::move(message);
-    setup_item(true, false, false);
+    m_ui_item.setStatusBar(UI_status_bar_m());
+    m_ui_item.statusBar().setMessage(message);
+    m_ui_item.statusBar().setTimeout(0);
 }
 
-void UI_status_bar::show_message(std::string message, size_t timeout)
+void UI_status_bar::show_message(QString message, size_t timeout)
 {
     // This should work because the message gets only send once when it changes
-    m_text = std::move(message);
-    m_timeout = timeout;
+    m_ui_item.statusBar().setMessage(message);
+    m_ui_item.statusBar().setTimeout(timeout);
     emit ui_changed();
 }
 
-std::string UI_status_bar::message() const &
+QString UI_status_bar::message() const &
 {
-    return m_text;
+    return m_ui_item.statusBar().message();
 }
 
 size_t UI_status_bar::timeout() const
 {
-    return m_timeout;
-}
-
-void UI_status_bar::from_json(const json &j)
-{
-    UI_item::from_json(j);
-    m_timeout = j.at("timeout");
-}
-
-json UI_status_bar::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["timeout"] = m_timeout;
-    return j;
+    return m_ui_item.statusBar().timeout();
 }

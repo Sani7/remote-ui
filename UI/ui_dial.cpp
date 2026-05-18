@@ -1,78 +1,54 @@
 #include "ui_dial.hpp"
 
-UI_dial::UI_dial(std::string text, std::string unit, Color fg_color, Color bg_color, double min, double max,
+UI_dial::UI_dial(QString text, QString unit, double min, double max,
                  double value, QObject *parent)
-    : UI_item(UI_enum::ui_dial, text, fg_color, bg_color, parent), m_min(min), m_max(max), m_value(value), m_unit(unit)
+    : UI_item(UI_typeGadget::UI_type::ui_dial, parent)
 {
+    m_ui_item.setRange(UI_range_m());
+    m_ui_item.range().setText(text);
+    m_ui_item.range().setUnit(unit);
+    m_ui_item.range().setMin(min);
+    m_ui_item.range().setMax(max);
+    m_ui_item.range().setValue(value);
 }
 
-UI_dial::UI_dial(std::string text, std::string unit, double min, double max, double value, QObject *parent)
-    : UI_dial(text, unit, Color::Default, Color::Default, min, max, value, parent)
-{
-}
-
-UI_dial::UI_dial(std::string text, Color fg_color, Color bg_color, double min, double max, double value,
+UI_dial::UI_dial(QString text, double min, double max, double value,
                  QObject *parent)
-    : UI_dial(text, "", fg_color, bg_color, min, max, value, parent)
+    : UI_dial(text, "", min, max, value, parent)
 {
 }
 
-UI_dial::UI_dial(std::string text, double min, double max, double value, QObject *parent)
-    : UI_dial(text, "", Color::Default, Color::Default, min, max, value, parent)
-{
-}
-
-UI_dial::UI_dial(QObject *parent) : UI_item(UI_enum::ui_dial, parent)
+UI_dial::UI_dial(QObject *parent) : UI_item(UI_typeGadget::UI_type::ui_dial, parent)
 {
 }
 
 void UI_dial::set_value(double value)
 {
-    if (value < m_min || value > m_max)
+    if (value < m_ui_item.range().min() || value > m_ui_item.range().max())
         return;
-    if (value == m_value)
+    if (value == m_ui_item.range().value())
         return;
 
-    this->m_value = value;
+    m_ui_item.range().setValue(value);
     emit ui_changed();
 }
 
 double UI_dial::value() const
 {
-    return m_value;
+    return m_ui_item.range().value();
 }
 
 double UI_dial::min() const
 {
-    return m_min;
+    return m_ui_item.range().min();
 }
 
 double UI_dial::max() const
 {
-    return m_max;
+    return m_ui_item.range().max();
 }
 
-std::string UI_dial::unit() const &
+QString UI_dial::unit() const &
 {
-    return m_unit;
-}
-
-void UI_dial::from_json(const json &j)
-{
-    UI_item::from_json(j);
-
-    this->m_min = j.at("min");
-    this->m_max = j.at("max");
-    this->m_value = j.at("value");
-    this->m_unit = j.at("unit");
-}
-
-json UI_dial::to_json(size_t id) const
-{
-    json j = UI_item::to_json(id);
-    j["min"] = this->m_min;
-    j["max"] = this->m_max;
-    j["value"] = this->m_value;
-    j["unit"] = this->m_unit;
-    return j;
+    return m_ui_item.range().unit();
 }

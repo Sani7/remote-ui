@@ -50,20 +50,6 @@ class UI_spinbox : public UI_item
      * @return double The maximum value
      */
     double max() const;
-
-    /**
-     * @brief Deserialize the spinbox from JSON
-     *
-     * @param j The JSON object
-     */
-    void from_json(const json &j) override;
-    /**
-     * @brief Serialize the spinbox to JSON
-     *
-     * @param id The id of the spinbox
-     * @return json The JSON representation of the spinbox
-     */
-    json to_json(size_t id) const override;
   signals:
     /**
      * @brief Signal emitted when the spinbox value changes
@@ -71,9 +57,4 @@ class UI_spinbox : public UI_item
      * @param value The new value of the spinbox
      */
     void changed(double value);
-
-  private:
-    double m_min;
-    double m_max;
-    double m_value;
 };
