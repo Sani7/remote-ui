@@ -41,14 +41,16 @@ class Websocket : public QObject
      *
      * @param message The message to send
      */
-    void broadcast(QString message);
+    void broadcast_binary(QByteArray message);
+    void broadcast_text(QString message);
     /**
      * @brief Send a message to a specific client
      *
      * @param conn The client connection
      * @param message The message to send
      */
-    void send(QWebSocket *conn, QString message);
+    void send_binary(QWebSocket *conn, QByteArray message);
+    void send_text(QWebSocket *conn, QString message);
   signals:
     /**
      * @brief Signal emitted when a message is received from a client
@@ -56,7 +58,8 @@ class Websocket : public QObject
      * @param conn The client connection
      * @param message The received message
      */
-    void on_message(QWebSocket *conn, QString message);
+    void on_binary_message(QWebSocket *conn, QByteArray message);
+    void on_text_message(QWebSocket *conn, QString message);
     /**
      * @brief Signal emitted when the server is closed
      *
@@ -74,6 +77,7 @@ class Websocket : public QObject
      *
      * @param message The received message
      */
+    void processBinaryMessage(QByteArray message);
     void processTextMessage(QString message);
     /**
      * @brief Private Slot called when a client disconnects

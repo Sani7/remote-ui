@@ -2,7 +2,7 @@
 #include "simulator_base.hpp"
 #include "ui_item.hpp"
 
-Simulator_base::Simulator_base(std::string name, Communication *com, std::chrono::milliseconds interval,
+Simulator_base::Simulator_base(QString name, Communication *com, std::chrono::milliseconds interval,
                                QObject *parent)
     : QObject(parent), m_name(name), m_timer(new QTimer(this)), m_interval(interval), m_com(com)
 {
@@ -10,7 +10,7 @@ Simulator_base::Simulator_base(std::string name, Communication *com, std::chrono
     m_UI_items.reserve(50);
 }
 
-std::string Simulator_base::name() const
+QString Simulator_base::name() const
 {
     // Get the name of the simulator
     return m_name;
@@ -20,17 +20,17 @@ void Simulator_base::push_ui_item(UI_item *item)
 {
     // Add a UI item to the simulator
     connect(item, &UI_item::ui_changed, this, [this] { emit sim_changed(); });
+    item->set_id(m_UI_items.size());
     m_UI_items.push_back(item);
 }
 
-json Simulator_base::get_UI_items() const
+QList<UI_item_m> Simulator_base::get_UI_items() const
 {
     // Get the UI items
-    json items;
-    items["name"] = m_name;
+    QList<UI_item_m> items;
     for (size_t i = 0; i < m_UI_items.size(); i++)
     {
-        items["UI_items"].push_back(m_UI_items[i]->to_json(i));
+        items.push_back(m_UI_items[i]->to_proto());
     }
 
     return items;

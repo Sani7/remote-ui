@@ -60,7 +60,15 @@ Websocket::~Websocket()
     qDeleteAll(m_clients.begin(), m_clients.end());
 }
 
-void Websocket::broadcast(QString message)
+void Websocket::broadcast_binary(QByteArray message)
+{
+    foreach (QWebSocket *conn, m_clients)
+    {
+        conn->sendBinaryMessage(message);
+    }
+}
+
+void Websocket::broadcast_text(QString message)
 {
     foreach (QWebSocket *conn, m_clients)
     {
@@ -68,7 +76,12 @@ void Websocket::broadcast(QString message)
     }
 }
 
-void Websocket::send(QWebSocket *conn, QString message)
+void Websocket::send_binary(QWebSocket *conn, QByteArray message)
+{
+    conn->sendBinaryMessage(message);
+}
+
+void Websocket::send_text(QWebSocket *conn, QString message)
 {
     conn->sendTextMessage(message);
 }
@@ -77,16 +90,23 @@ void Websocket::onNewConnection()
 {
     QWebSocket *pSocket = m_pWebSocketServer->nextPendingConnection();
 
+    connect(pSocket, &QWebSocket::binaryMessageReceived, this, &Websocket::processBinaryMessage);
     connect(pSocket, &QWebSocket::textMessageReceived, this, &Websocket::processTextMessage);
     connect(pSocket, &QWebSocket::disconnected, this, &Websocket::socketDisconnected);
 
     m_clients << pSocket;
 }
 
+void Websocket::processBinaryMessage(QByteArray message)
+{
+    QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    emit on_binary_message(pClient, message);
+}
+
 void Websocket::processTextMessage(QString message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    emit on_message(pClient, message);
+    emit on_text_message(pClient, message);
 }
 
 void Websocket::socketDisconnected()

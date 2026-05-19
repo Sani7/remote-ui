@@ -1,9 +1,10 @@
 #pragma once
 #include <QObject>
-#include <map>
+#include <QMap>
 #include <memory>
 #include <mutex>
-#include <nlohmann/json.hpp>
+#include <QProtobufSerializer>
+#include <messages.qpb.h>
 
 #define INSERT_SIMULATOR(type)                                                                                         \
     m_simulators.insert(std::make_pair(type(&m_com).name(), std::make_unique<type>(&m_com, this)));
@@ -14,8 +15,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(CAN_Wrapper);
 Q_FORWARD_DECLARE_OBJC_CLASS(QSerialPort);
 Q_FORWARD_DECLARE_OBJC_CLASS(Simulator_base);
 Q_FORWARD_DECLARE_OBJC_CLASS(Communication);
-
-using json = nlohmann::json;
+Q_FORWARD_DECLARE_OBJC_CLASS(UI_item_m);
 
 /**
  * @brief Class managing all simulators
@@ -75,9 +75,9 @@ class Simulators : public QObject
     /**
      * @brief Get the name of the active simulator
      *
-     * @return std::string The name of the active simulator
+     * @return QString The name of the active simulator
      */
-    std::string active_simulator_name() const;
+    QString active_simulator_name() const;
     /**
      * @brief Start the active simulator
      *
@@ -93,13 +93,13 @@ class Simulators : public QObject
      *
      * @param name The name of the simulator to switch to
      */
-    void switch_simulator(std::string name);
+    void switch_simulator(QString name);
     /**
      * @brief List all available simulators
      *
-     * @return std::vector<std::string> A list of simulator names
+     * @return std::vector<QString> A list of simulator names
      */
-    std::vector<std::string> list_simulators() const;
+    QList<QString> list_simulators() const;
     /**
      * @brief Check if no simulator is active
      *
@@ -120,7 +120,7 @@ class Simulators : public QObject
      *
      * @return json The changed UI items
      */
-    json changed_UI_items();
+    QList<UI_item_m> changed_UI_items();
 
     // Functions in message_parser.cpp
     /**
@@ -129,27 +129,28 @@ class Simulators : public QObject
      * @param message The message to parse
      * @return QString The parsed message
      */
-    QString message_parser(QString message);
+    QByteArray message_parser(QByteArray message);
     /**
      * @brief Parse a command in json format
      *
      * @param command The command to parse
      * @return json The parsed command
      */
-    json command_parser(json command);
+    //json command_parser(json command);
     /**
      * @brief Handle an event in json format
      *
      * @param event The event to handle
      */
-    void event_handler(json event);
+    void event_handler(Event_m event);
 
   private:
     QThread *m_server_thread;
     Websocket *m_server;
     Communication *m_com;
-    std::map<std::string, std::unique_ptr<Simulator_base>> m_simulators;
-    std::string m_current_simulator = "";
+    QMap<QString, Simulator_base*> m_simulators;
+    QString m_current_simulator = "";
     std::mutex m_mutex;
-    json m_before;
+    QList<UI_item_m> m_before;
+    QProtobufSerializer m_serializer;
 };

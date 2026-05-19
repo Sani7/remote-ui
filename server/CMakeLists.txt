@@ -57,6 +57,7 @@ target_sources(server_common
 target_link_libraries(server_common
     PUBLIC
     UI
+    proto-ui
     spdlog
     cpp_templates
     ${GPIOD_LIB}
