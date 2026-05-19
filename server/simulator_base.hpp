@@ -7,11 +7,8 @@
 #ifndef INTERNAL
 #include "ui.hpp"
 #else
-#include <nlohmann/json.hpp>
-
-using json = nlohmann::json;
-
 Q_FORWARD_DECLARE_OBJC_CLASS(UI_item);
+Q_FORWARD_DECLARE_OBJC_CLASS(UI_item_m);
 #endif
 
 #define PUSH_UI_ITEM(item) push_ui_item(&item)
@@ -75,15 +72,15 @@ class Simulator_base : public QObject
      * @param interval The interval of the timer (default is 100ms)
      * @param parent The parent QObject
      */
-    Simulator_base(std::string name, Communication *comms,
+    Simulator_base(QString name, Communication *comms,
                    std::chrono::milliseconds interval = std::chrono::milliseconds(100), QObject *parent = nullptr);
 
     /**
      * @brief Returns the name of the simulator
      *
-     * @return std::string The name of the simulator
+     * @return QString The name of the simulator
      */
-    std::string name() const;
+    QString name() const;
 
     /**
      * @brief This function adds a UI item to the simulator
@@ -98,7 +95,7 @@ class Simulator_base : public QObject
      *
      * @return json The UI items in json format
      */
-    json get_UI_items() const;
+    QList<UI_item_m> get_UI_items() const;
 
     /**
      * @brief Get the UI item object by id
@@ -112,20 +109,11 @@ class Simulator_base : public QObject
      * @brief Get the id of a UI item by pointer
      *
      * @param ptr A pointer to the UI item
-     * @return size_t The id of the UI item, or -1 if not found
+     * @return qsizetype The id of the UI item, or -1 if not found
      */
-    size_t ptr_to_id(UI_item *ptr) const
+    qsizetype ptr_to_id(UI_item *ptr) const
     {
-        size_t id = 0;
-        while (id < m_UI_items.size())
-        {
-            if (m_UI_items[id] == ptr)
-            {
-                return id;
-            }
-            id++;
-        }
-        return (size_t)-1;
+        return m_UI_items.indexOf(ptr);
     }
 
     /**
@@ -196,12 +184,12 @@ class Simulator_base : public QObject
      * @brief The name of the simulator
      *
      */
-    std::string m_name;
+    QString m_name;
     /**
      * @brief The UI items of the simulator
      *
      */
-    std::vector<UI_item *> m_UI_items;
+    QList<UI_item *> m_UI_items;
     /**
      * @brief The timer for the simulator
      *

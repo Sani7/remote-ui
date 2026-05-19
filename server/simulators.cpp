@@ -7,7 +7,6 @@
 #include <QDirIterator>
 #include <QLibrary>
 #include <QThread>
-#include <unordered_set>
 
 typedef Simulator_base *(*Get_Sim)(Communication *, QObject *);
 
@@ -71,17 +70,17 @@ Simulators::Simulators(uint16_t port, QStringList can_devs, QStringList uart_dev
             lib.unload();
             continue;
         }
-        m_simulators.insert(std::make_pair(widget->name(), widget));
+        m_simulators.insert(widget->name(), widget);
     }
 
     // Insert Debug sims here
     // INSERT_SIMULATOR(TEST_SIM);
 
-    connect(m_server, &Websocket::on_message, this, [this](QWebSocket *conn, QString message) {
-        QString response = message_parser(message);
-        if (response == "{}")
+    connect(m_server, &Websocket::on_binary_message, this, [this](QWebSocket *conn, QByteArray message) {
+        QByteArray response = message_parser(message);
+        if (response.isEmpty())
             return;
-        m_server->send(conn, response);
+        m_server->send_binary(conn, response);
     });
 }
 
@@ -89,7 +88,7 @@ Simulators::~Simulators()
 {
 }
 
-std::string Simulators::active_simulator_name() const
+QString Simulators::active_simulator_name() const
 {
     return this->m_current_simulator;
 }
@@ -101,14 +100,14 @@ void Simulators::start()
         SPDLOG_WARN("No simulators found");
         return;
     }
-    if (this->m_current_simulator.empty())
+    if (this->m_current_simulator.isEmpty())
     {
         SPDLOG_WARN("No active simulator");
         return;
     }
 
-    m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
-    this->m_simulators.at(m_current_simulator)->start();
+    m_before = this->m_simulators.value(m_current_simulator)->get_UI_items();
+    this->m_simulators.value(m_current_simulator)->start();
 }
 
 void Simulators::stop()
@@ -118,16 +117,16 @@ void Simulators::stop()
         SPDLOG_WARN("No simulators found");
         return;
     }
-    if (this->m_current_simulator.empty())
+    if (this->m_current_simulator.isEmpty())
     {
         SPDLOG_WARN("No active simulator");
         return;
     }
 
-    this->m_simulators.at(m_current_simulator)->stop();
+    this->m_simulators.value(m_current_simulator)->stop();
 }
 
-void Simulators::switch_simulator(std::string name)
+void Simulators::switch_simulator(QString name)
 {
     if (this->m_simulators.empty())
     {
@@ -136,29 +135,31 @@ void Simulators::switch_simulator(std::string name)
     }
     if (this->m_simulators.find(name) == this->m_simulators.end())
     {
-        SPDLOG_WARN("Simulator {} not found", name);
+        SPDLOG_WARN("Simulator {} not found", name.toStdString());
         return;
     }
 
-    if (!this->m_current_simulator.empty())
+    if (!this->m_current_simulator.isEmpty())
     {
-        SPDLOG_INFO("Stopping current simulator {} and switching to {}", m_current_simulator, name);
-        this->m_simulators.at(m_current_simulator)->stop();
-        disconnect(m_simulators.at(m_current_simulator).get());
+        SPDLOG_INFO("Stopping current simulator {} and switching to {}", m_current_simulator.toStdString(), name.toStdString());
+        this->m_simulators.value(m_current_simulator)->stop();
+        disconnect(m_simulators.value(m_current_simulator));
     }
 
     this->m_current_simulator = name;
     connect(
-        m_simulators.at(m_current_simulator).get(), &Simulator_base::sim_changed, this,
+        m_simulators.value(m_current_simulator), &Simulator_base::sim_changed, this,
         [this] {
-            auto json = changed_UI_items();
-            if (!json.empty())
+            auto changed = changed_UI_items();
+            UI_items_m items;
+            items.setItem(changed);
+            if (!changed.isEmpty())
             {
-                m_server->broadcast(QString::fromStdString(json.dump()));
+                m_server->broadcast_binary(m_serializer.serialize(&items));
             }
         },
         Qt::QueuedConnection);
-    connect(m_simulators.at(m_current_simulator).get(), &Simulator_base::log_signal, this,
+    connect(m_simulators.value(m_current_simulator), &Simulator_base::log_signal, this,
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
                 if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))
                     spdlog::default_logger_raw()->log(spdlog::source_loc{filename_in, line_in, funcname_in},
@@ -167,19 +168,14 @@ void Simulators::switch_simulator(std::string name)
     this->start();
 }
 
-std::vector<std::string> Simulators::list_simulators() const
+QList<QString> Simulators::list_simulators() const
 {
-    std::vector<std::string> names;
-    for (const auto &simulator : this->m_simulators)
-    {
-        names.push_back(simulator.first);
-    }
-    return names;
+    return this->m_simulators.keys();
 }
 
 bool Simulators::is_not_active() const
 {
-    return this->m_current_simulator.empty();
+    return this->m_current_simulator.isEmpty();
 }
 
 Simulator_base *Simulators::invoke_active_simulator()
@@ -189,45 +185,40 @@ Simulator_base *Simulators::invoke_active_simulator()
     {
         return nullptr;
     }
-    if (this->m_current_simulator.empty())
+    if (this->m_current_simulator.isEmpty())
     {
         return nullptr;
     }
 
-    m_before = this->m_simulators.at(m_current_simulator)->get_UI_items();
+    m_before = this->m_simulators.value(m_current_simulator)->get_UI_items();
 
-    return this->m_simulators.at(m_current_simulator).get();
+    return this->m_simulators.value(m_current_simulator);
 }
 
-json Simulators::changed_UI_items()
+QList<UI_item_m> Simulators::changed_UI_items()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
+    QList<UI_item_m> ret;
 
-    if (this->m_simulators.empty() || this->m_current_simulator.empty())
-        return "{}"_json;
+    if (this->m_simulators.empty() || this->m_current_simulator.isEmpty())
+        return ret;
 
-    json after = this->m_simulators.at(m_current_simulator)->get_UI_items();
+    auto after = this->m_simulators.value(m_current_simulator)->get_UI_items();
 
     // Fast path: nothing at all changed
     if (after == m_before)
-        return "{}"_json;
+        return ret;
 
-    json changed;
-    changed["event"]["type"] = "ui_changed";
-
-    const auto &ui_items = after["UI_items"];
-    const auto &prev_ui_items = m_before["UI_items"]; // may be null on first call
-
-    const size_t count = ui_items.size();
-    for (size_t i = 0; i < count; ++i)
+    const qsizetype count = after.size();
+    for (qsizetype i = 0; i < count; ++i)
     {
         // If item is new or any field changed -> send full current item
-        if (i >= prev_ui_items.size() || ui_items[i] != prev_ui_items[i])
+        if (i >= m_before.size() || after[i] != m_before[i])
         {
-            changed["event"]["UI_items"].push_back(ui_items[i]);
+            ret.push_back(after[i]);
         }
     }
 
     m_before = std::move(after);
-    return changed;
+    return ret;
 }
