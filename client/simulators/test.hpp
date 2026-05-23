@@ -11,7 +11,7 @@ class Test_Sim : public UI_base
     Q_OBJECT
 
   public:
-    explicit Test_Sim(Web_socket_wrapper *web_socket = nullptr, QWidget *parent = nullptr);
+    explicit Test_Sim(RemoteUiService::Client *web_socket = nullptr, QWidget *parent = nullptr);
     ~Test_Sim();
 
     static QString name()

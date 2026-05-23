@@ -3,12 +3,12 @@
 #include "helpers.hpp"
 #include "led.hpp"
 #include "plot_wrapper.hpp"
-#include "web_socket_wrapper.hpp"
 #include <QMessageBox>
 #include <magic_enum/magic_enum.hpp>
+#include "messages_client.grpc.qpb.h"
 
-UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
-    : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_web_socket(web_socket)
+UI_base::UI_base(RemoteUiService::Client *remote_ui_client, QWidget *parent)
+    : QMainWindow{parent}, m_timer_update(new QTimer()), m_error(new QMessageBox(this)), m_remote_ui_client(remote_ui_client)
 {
     this->setWindowState(Qt::WindowMaximized);
     m_ui_lookup.reserve(40);
@@ -19,7 +19,8 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
     QPushButton *exit_app = m_error->addButton("Exit Application", QMessageBox::AcceptRole);
     m_error->addButton("Close", QMessageBox::RejectRole);
     connect(exit_app, &QPushButton::clicked, this, &QCoreApplication::quit, Qt::QueuedConnection);
-    m_process_lookup.insert(UI_enum::ui_label, [=, this](json &ui_item, QWidget *widget) {
+
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_label, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto label = qobject_cast<QLabel *>(widget);
         if (label == nullptr)
         {
@@ -27,9 +28,9 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        QString value = QString::fromStdString(ui_item.at("text"));
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        QString value = ui_item.label().text();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (label->isEnabled() != enabled)
         {
@@ -47,8 +48,8 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
         }
     });
 
-    m_process_lookup.insert(UI_enum::ui_slider, [=, this](json &ui_item, QWidget *widget) {
-        QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_slider, [=, this](const UI_item_m &ui_item, QWidget *widget) {
+        QLabel *label = id_to_label(id_to_ui(ui_item.id_proto()));
         auto slider = qobject_cast<QwtSlider *>(widget);
         if (slider == nullptr)
         {
@@ -56,10 +57,10 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        double value = ui_item.at("value");
-        bool enable = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
-        QString unit = QString::fromStdString(ui_item.at("unit"));
+        double value = ui_item.range().value();
+        bool enable = ui_item.enabled();
+        bool visible = ui_item.visible();
+        QString unit = ui_item.range().unit();
 
         if (label != nullptr)
         {
@@ -82,8 +83,8 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
         }
         // TODO: Add color for scale
     });
-    m_process_lookup.insert(UI_enum::ui_dial, [=, this](json &ui_item, QWidget *widget) {
-        QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_dial, [=, this](const UI_item_m &ui_item, QWidget *widget) {
+        QLabel *label = id_to_label(id_to_ui(ui_item.id_proto()));
         auto dial = qobject_cast<QwtDial *>(widget);
         if (dial == nullptr)
         {
@@ -91,9 +92,9 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        double value = ui_item.at("value");
-        bool visible = ui_item.at("visible");
-        QString unit = QString::fromStdString(ui_item.at("unit"));
+        double value = ui_item.range().value();
+        bool visible = ui_item.visible();
+        QString unit = ui_item.range().unit();
 
         if (label != nullptr)
         {
@@ -110,8 +111,8 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             dial->setVisible(visible);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_thermo, [=, this](json &ui_item, QWidget *widget) {
-        QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_thermo, [=, this](const UI_item_m &ui_item, QWidget *widget) {
+        QLabel *label = id_to_label(id_to_ui(ui_item.id_proto()));
         auto thermo = qobject_cast<QwtThermo *>(widget);
         if (thermo == nullptr)
         {
@@ -119,9 +120,9 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        double value = ui_item.at("value");
-        bool visible = ui_item.at("visible");
-        QString unit = QString::fromStdString(ui_item.at("unit"));
+        double value = ui_item.range().value();
+        bool visible = ui_item.visible();
+        QString unit = ui_item.range().unit();
 
         if (label != nullptr)
         {
@@ -138,7 +139,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             thermo->setVisible(visible);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_textbox, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_textbox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto line_edit = qobject_cast<QLineEdit *>(widget);
         if (line_edit == nullptr)
         {
@@ -146,10 +147,10 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        bool visible = ui_item.at("visible");
-        bool enabled = ui_item.at("enabled");
-        QString hint = QString::fromStdString(ui_item.at("hint"));
-        QString text = QString::fromStdString(ui_item.at("text"));
+        bool visible = ui_item.visible();
+        bool enabled = ui_item.enabled();
+        QString hint = ui_item.textbox().hint();
+        QString text = ui_item.textbox().text();
 
         if (line_edit->isVisible() != visible)
         {
@@ -169,7 +170,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             line_edit->setText(text);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_combobox, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_combobox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto combobox = qobject_cast<QComboBox *>(widget);
         if (combobox == nullptr)
         {
@@ -177,9 +178,9 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        size_t selected = ui_item.at("selected");
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        size_t selected = ui_item.combobox().selected();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (combobox->isEnabled() != enabled)
         {
@@ -191,10 +192,10 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             combobox->setVisible(visible);
         }
 
-        for (json &item : ui_item.at("options"))
+        for (const QString &item : ui_item.combobox().options())
         {
-            if (combobox->findText(QString::fromStdString(item)) == -1)
-                combobox->addItem(QString::fromStdString(item));
+            if (combobox->findText(item) == -1)
+                combobox->addItem(item);
         }
 
         if (combobox->currentIndex() != selected)
@@ -202,9 +203,9 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             combobox->setCurrentIndex(selected);
         }
     });
-    // m_process_lookup.insert(UI_enum::ui_radiobutton,
-    //                         [=, this](json &ui_item, QWidget *widget) { LOG_CRITICAL("Not implemented"); });
-    m_process_lookup.insert(UI_enum::ui_checkbox, [=, this](json &ui_item, QWidget *widget) {
+    // m_process_lookup.insert(UI_typeGadget::UI_type::ui_radiobutton,
+    //                         [=, this](const UI_item_m &ui_item, QWidget *widget) { LOG_CRITICAL("Not implemented"); });
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_checkbox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto checkbox = qobject_cast<QCheckBox *>(widget);
         if (checkbox == nullptr)
         {
@@ -212,12 +213,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
-        QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
-        QString text = QString::fromStdString(ui_item.at("text"));
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
-        bool checked = ui_item.at("checked");
+        QColor bg_color = QColor(ui_item.checkbox().color().bgColor());
+        QColor fg_color = QColor(ui_item.checkbox().color().fgColor());
+        QString text = ui_item.checkbox().text();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
+        bool checked = ui_item.checkbox().checked();
 
         if (checkbox->isChecked() != checked)
         {
@@ -268,7 +269,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(checkbox, fg_color, bg_color);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_button, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_button, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto button = qobject_cast<QPushButton *>(widget);
         if (button == nullptr)
         {
@@ -276,11 +277,11 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
-        QColor fg_color = QColor(QString::fromStdString(ui_item.at("fg_color")));
-        QString text = QString::fromStdString(ui_item.at("text"));
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        QColor bg_color = QColor(ui_item.label().color().bgColor());
+        QColor fg_color = QColor(ui_item.label().color().fgColor());
+        QString text = ui_item.label().text();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (button->isEnabled() != enabled)
         {
@@ -326,7 +327,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(button, fg_color, bg_color);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_led, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_led, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto led = qobject_cast<Led *>(widget);
         if (led == nullptr)
         {
@@ -334,10 +335,10 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
-        QColor color = QColor(QString::fromStdString(ui_item.at("fg_color")));
-        QString text = QString::fromStdString(ui_item.at("text"));
-        bool visible = ui_item.at("visible");
+        QColor bg_color = QColor(ui_item.label().color().bgColor());
+        QColor color = QColor(ui_item.label().color().fgColor());
+        QString text = ui_item.label().text();
+        bool visible = ui_item.visible();
 
         if (led->isVisible() != visible)
         {
@@ -378,7 +379,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             set_widget_color(led, color, bg_color);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_spinbox, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_spinbox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<QSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -386,11 +387,11 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
-        double min = ui_item.at("min");
-        double max = ui_item.at("max");
-        double value = ui_item.at("value");
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
+        double min = ui_item.range().min();
+        double max = ui_item.range().max();
+        double value = ui_item.range().value();
 
         if (enabled != spinbox->isEnabled())
         {
@@ -415,7 +416,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue((int)value);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_double_spinbox, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_double_spinbox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<QDoubleSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -423,11 +424,11 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
-        double min = ui_item.at("min");
-        double max = ui_item.at("max");
-        double value = ui_item.at("value");
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
+        double min = ui_item.range().min();
+        double max = ui_item.range().max();
+        double value = ui_item.range().value();
 
         if (enabled != spinbox->isEnabled())
         {
@@ -452,7 +453,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue(value);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_hex_spinbox, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_hex_spinbox, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto spinbox = qobject_cast<HexSpinBox *>(widget);
         if (spinbox == nullptr)
         {
@@ -460,11 +461,11 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
-        double min = ui_item.at("min");
-        double max = ui_item.at("max");
-        double value = ui_item.at("value");
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
+        double min = ui_item.range().min();
+        double max = ui_item.range().max();
+        double value = ui_item.range().value();
 
         if (enabled != spinbox->isEnabled())
         {
@@ -489,7 +490,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             spinbox->setValue((int)value);
         }
     });
-    m_process_lookup.insert(UI_enum::ui_tab_widget, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_tab_widget, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto tab_widget = qobject_cast<QTabWidget *>(widget);
         if (tab_widget == nullptr)
         {
@@ -497,15 +498,15 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        if (tab_widget->count() != ui_item.at("tab_names").size())
+        if (tab_widget->count() != ui_item.tabWidget().tabNames().size())
         {
             LOG_ERROR("QTabWidget has not the same amount of tabs as the server");
             return;
         }
 
-        auto tab_names = ui_item.at("tab_names");
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        auto tab_names = ui_item.tabWidget().tabNames();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (tab_widget->isEnabled() != enabled)
         {
@@ -519,22 +520,22 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
 
         for (size_t i = 0; i < tab_names.size(); i++)
         {
-            if (tab_widget->tabText(i) != QString::fromStdString(tab_names[i]))
+            if (tab_widget->tabText(i) != tab_names[i])
             {
-                tab_widget->setTabText(i, QString::fromStdString(tab_names[i]));
+                tab_widget->setTabText(i, tab_names[i]);
             }
-            if (tab_widget->isVisible() != ui_item.at("tab_visible")[i])
+            if (tab_widget->isVisible() != ui_item.tabWidget().tabVisible()[i])
             {
-                tab_widget->setTabVisible(i, ui_item.at("tab_visible")[i]);
+                tab_widget->setTabVisible(i, ui_item.tabWidget().tabVisible()[i]);
             }
         }
 
-        if (tab_widget->currentIndex() != ui_item.at("selected"))
+        if (tab_widget->currentIndex() != ui_item.tabWidget().selecteTab())
         {
-            tab_widget->setCurrentIndex(ui_item.at("selected"));
+            tab_widget->setCurrentIndex(ui_item.tabWidget().selecteTab());
         }
     });
-    m_process_lookup.insert(UI_enum::ui_stacked_widget, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_stacked_widget, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto stacked_widget = qobject_cast<QStackedWidget *>(widget);
         if (stacked_widget == nullptr)
         {
@@ -542,14 +543,14 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        if (stacked_widget->count() != ui_item.at("tab_count"))
+        if (stacked_widget->count() != ui_item.stackedWidget().tabCount())
         {
             LOG_ERROR("QStackedWidget has not the same amount of tabs as the server");
             return;
         }
 
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (stacked_widget->isEnabled() != enabled)
         {
@@ -561,12 +562,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             stacked_widget->setVisible(visible);
         }
 
-        if (stacked_widget->currentIndex() != ui_item.at("current_tab"))
+        if (stacked_widget->currentIndex() != ui_item.stackedWidget().currentTab())
         {
-            stacked_widget->setCurrentIndex(ui_item.at("current_tab"));
+            stacked_widget->setCurrentIndex(ui_item.stackedWidget().currentTab());
         }
     });
-    m_process_lookup.insert(UI_enum::ui_status_bar, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_status_bar, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto status_bar = qobject_cast<QStatusBar *>(widget);
         if (status_bar == nullptr)
         {
@@ -574,12 +575,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        if (status_bar->currentMessage() != QString::fromStdString(ui_item.at("text")))
+        if (status_bar->currentMessage() != ui_item.statusBar().message())
         {
-            status_bar->showMessage(QString::fromStdString(ui_item.at("text")), ui_item.at("timeout"));
+            status_bar->showMessage(ui_item.statusBar().message(), ui_item.statusBar().timeout());
         }
     });
-    m_process_lookup.insert(UI_enum::ui_plot, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_plot, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto plot = qobject_cast<Plot_wrapper *>(widget);
         if (plot == nullptr)
         {
@@ -587,17 +588,17 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        QString text = QString::fromStdString(ui_item.at("text"));
-        QColor bg_color = QColor(QString::fromStdString(ui_item.at("bg_color")));
-        QColor color = QColor(QString::fromStdString(ui_item.at("fg_color")));
-        QString x_label = QString::fromStdString(ui_item.at("x_label"));
-        QString y_label = QString::fromStdString(ui_item.at("y_label"));
+        QString text = ui_item.plot().text();
+        QColor bg_color = QColor(ui_item.plot().color().bgColor());
+        QColor color = QColor(ui_item.plot().color().fgColor());
+        QString x_label = ui_item.plot().xLabel();
+        QString y_label = ui_item.plot().yLabel();
 
-        std::vector<double> x_vals = (std::vector<double>)ui_item.at("x_vals");
-        std::vector<double> y_vals = (std::vector<double>)ui_item.at("y_vals");
+        QList<double> x_vals = ui_item.plot().xVals();
+        QList<double> y_vals = ui_item.plot().yVals();
 
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (plot->isEnabled() != enabled)
         {
@@ -639,7 +640,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             plot->setAxisScale(QwtAxis::XBottom, x_vals[0], x_vals[x_vals.size() - 1]);
         plot->replot();
     });
-    m_process_lookup.insert(UI_enum::ui_table, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_table, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto table = qobject_cast<QTableWidget *>(widget);
         if (table == nullptr)
         {
@@ -647,13 +648,13 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             return;
         }
 
-        size_t row_count = ui_item.at("row_count");
-        std::vector<std::string> row_labels = (std::vector<std::string>)ui_item.at("row_labels");
-        size_t column_count = ui_item.at("column_count");
-        std::vector<std::string> column_labels = (std::vector<std::string>)ui_item.at("column_labels");
-        std::vector<std::string> table_data = (std::vector<std::string>)ui_item.at("table");
-        bool enabled = ui_item.at("enabled");
-        bool visible = ui_item.at("visible");
+        size_t row_count = ui_item.table().rowCount();
+        QList<QString> row_labels = ui_item.table().rowLabels();
+        size_t column_count = ui_item.table().columnCount();
+        QList<QString> column_labels = ui_item.table().columnLabels();
+        QList<QString> table_data = ui_item.table().table();
+        bool enabled = ui_item.enabled();
+        bool visible = ui_item.visible();
 
         if (table->isEnabled() != enabled)
         {
@@ -683,7 +684,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
                 if (table->verticalHeaderItem(i) == nullptr)
                     table->setVerticalHeaderItem(i, new QTableWidgetItem());
                 if (row_labels[i] != table->verticalHeaderItem(i)->text())
-                    table->verticalHeaderItem(i)->setText(QString::fromStdString(row_labels[i]));
+                    table->verticalHeaderItem(i)->setText(row_labels[i]);
             }
         }
         if (column_count != 0)
@@ -693,7 +694,7 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
                 if (table->horizontalHeaderItem(i) == nullptr)
                     table->setHorizontalHeaderItem(i, new QTableWidgetItem());
                 if (column_labels[i] != table->horizontalHeaderItem(i)->text())
-                    table->horizontalHeaderItem(i)->setText(QString::fromStdString(column_labels[i]));
+                    table->horizontalHeaderItem(i)->setText(column_labels[i]);
             }
         }
         for (size_t i = 0; i < table_data.size(); i++)
@@ -704,11 +705,11 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
             {
                 table->setItem(row, column, new QTableWidgetItem());
             }
-            table->item(row, column)->setText(QString::fromStdString(table_data[i]));
+            table->item(row, column)->setText(table_data[i]);
         }
         table->resizeColumnsToContents();
     });
-    m_process_lookup.insert(UI_enum::ui_can, [=, this](json &ui_item, QWidget *widget) {
+    m_process_lookup.insert(UI_typeGadget::UI_type::ui_can, [=, this](const UI_item_m &ui_item, QWidget *widget) {
         auto can_ui = qobject_cast<Can_Transceive *>(widget);
         if (can_ui == nullptr)
         {
@@ -717,14 +718,14 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
         }
 
         can_ui->clear();
-        for (auto &send_item : ui_item.at("send_msgs"))
+        for (auto &send_item : ui_item.can().sendFrames())
         {
-            can_ui->add_send_item(send_item.at("id"), send_item.at("dlc"), send_item.at("payload"));
+            can_ui->add_send_item(send_item.sid(), send_item.dlc(), send_item.payload());
         }
 
-        for (auto &recvd_item : ui_item.at("rcvd_msgs"))
+        for (auto &recvd_item : ui_item.can().recvFrames())
         {
-            can_ui->add_receive_item(recvd_item.at("id"), recvd_item.at("dlc"), recvd_item.at("payload"));
+            can_ui->add_receive_item(recvd_item.sid(), recvd_item.dlc(), recvd_item.payload());
         }
     });
 }
@@ -746,12 +747,42 @@ void UI_base::showEvent(QShowEvent *event)
     LOG_DEBUG("Connecting callbacks");
     m_first_load = true;
 
-    connect(m_web_socket, &Web_socket_wrapper::on_command_cb, this, [=, this](json &j) { on_cmd_cb(j); });
-    connect(m_web_socket, &Web_socket_wrapper::on_event_cb, this, [=, this](json &j) { on_event_cb(j); });
-    connect(m_web_socket, &Web_socket_wrapper::on_closed, this, [=, this] { m_error->open(); });
+    auto reply = m_remote_ui_client->Command_get_ui_elements(Empty());
+    connect(reply.get(), &QGrpcCallReply::finished, reply.get(), [this, reply = std::move(reply)](const QGrpcStatus &status) {
+                if (!status.isOk())
+                {
+                    LOG_ERROR(QString("Command get ui elements failed: %0").arg(status.message()));
+                    return;
+                }
+                auto response = reply->read<UI_items_m>();
+                if (!response.has_value())
+                {
+                    qDebug("Command get ui elements deserialization failed");
+                    return;
+                }
+                UI_item_parser(response.value());
+            },
+            Qt::SingleShotConnection);
 
-    m_web_socket->inhibit_events(true);
-    m_web_socket->send_command(Web_socket_wrapper::Command::get_UI_elements);
+    m_stream = m_remote_ui_client->SubscribeUIChanges(Empty());
+
+    connect(
+        m_stream.get(), &QGrpcServerStream::finished, this,
+        [this](const QGrpcStatus &status) {
+            if (!status.isOk())
+                m_error->show();
+        },
+        Qt::SingleShotConnection);
+
+    connect(m_stream.get(), &QGrpcServerStream::messageReceived, this, [this, stream = m_stream.get()] {
+        auto response = stream->read<UI_items_m>();
+        if (!response.has_value())
+        {
+            qDebug("Client (UnaryCall) deserialization failed");
+            return;
+        }
+        UI_item_parser(response.value());
+    });
     this->m_timer_update->start(m_refresh_rate);
     m_open = true;
 }
@@ -763,43 +794,9 @@ void UI_base::closeEvent(QCloseEvent *event)
     {
         LOG_DEBUG("Disconnecting callbacks");
         m_timer_update->stop();
-        disconnect(m_web_socket, nullptr, nullptr, nullptr);
+        disconnect(m_stream.get(), nullptr, nullptr, nullptr);
         m_open = false;
         this->parentWidget()->show();
-    }
-}
-
-void UI_base::on_cmd_cb(json &j)
-{
-    auto response = magic_enum::enum_cast<Web_socket_wrapper::Command>(std::string(j.at("type")))
-                        .value_or(Web_socket_wrapper::Command::end);
-    switch (response)
-    {
-    case Web_socket_wrapper::Command::get_UI_elements:
-    case Web_socket_wrapper::Command::get_UI_element:
-        UI_item_parser(j);
-        break;
-    default:
-        break;
-    }
-    if (m_first_load)
-    {
-        m_web_socket->inhibit_events(false);
-        m_first_load = false;
-    }
-}
-
-void UI_base::on_event_cb(json &j)
-{
-    auto response = magic_enum::enum_cast<Web_socket_wrapper::Event>(std::string(j.at("type")))
-                        .value_or(Web_socket_wrapper::Event::end);
-    switch (response)
-    {
-    case Web_socket_wrapper::Event::ui_changed:
-        UI_item_parser(j);
-        break;
-    default:
-        break;
     }
 }
 
@@ -809,18 +806,18 @@ void UI_base::push_ui_item(QWidget *item)
     setup_ui_item(item, m_ui_lookup.size() - 1);
 }
 
-void UI_base::UI_item_parser(json &input)
+void UI_base::UI_item_parser(UI_items_m &input)
 {
-    for (auto &ui_item : input.at("UI_items"))
+    for (auto &ui_item : input.item())
     {
-        auto widget = id_to_ui(ui_item.at("id"));
+        auto widget = id_to_ui(ui_item.id_proto());
         if (widget == nullptr)
         {
-            LOG_WARN(QString("id_to_ui returned null on %0").arg((size_t)ui_item.at("id")));
+            LOG_WARN(QString("id_to_ui returned null on %0").arg((size_t)ui_item.id_proto()));
             return;
         }
 
-        m_process_lookup[magic_enum::enum_cast<UI_enum>((std::string)ui_item.at("type")).value_or(UI_enum::end)](
+        m_process_lookup[ui_item.type()](
             ui_item, widget);
     }
 }
@@ -845,8 +842,12 @@ void UI_base::setup_button(QWidget *item, size_t index)
     QPushButton *button = qobject_cast<QPushButton *>(item);
     if (button == nullptr)
         return;
-    connect(button, &QPushButton::clicked, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index); });
+    connect(button, &QPushButton::clicked, this, [=, this] {
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setClicked(Clicked_m());
+        (void)m_remote_ui_client->SendEvent(event);
+    });
 }
 
 void UI_base::setup_combobox(QWidget *item, size_t index)
@@ -855,8 +856,12 @@ void UI_base::setup_combobox(QWidget *item, size_t index)
     if (combobox == nullptr)
         return;
 
-    connect(combobox, &QComboBox::activated, this, [=, this] {
-        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)combobox->currentIndex());
+    connect(combobox, &QComboBox::activated, this, [=, this](int combo_index) {
+        auto event = Event_m();
+        event.setSelected(Selected_m());
+        event.setId_proto(index);
+        event.selected().setSelected(combo_index);
+        (void)m_remote_ui_client->SendEvent(event);
     });
 }
 
@@ -866,8 +871,12 @@ void UI_base::setup_checkbox(QWidget *item, size_t index)
     if (checkbox == nullptr)
         return;
 
-    connect(checkbox, &QCheckBox::clicked, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clicked, index); });
+    connect(checkbox, &QCheckBox::clicked, this, [=, this] {
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setClicked(Clicked_m());
+        (void)m_remote_ui_client->SendEvent(event);
+    });
 }
 
 void UI_base::setup_dial(QWidget *item, size_t index)
@@ -891,8 +900,13 @@ void UI_base::setup_slider(QWidget *item, size_t index)
         return;
     }
 
-    connect(slider, &QwtSlider::sliderMoved, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
+    connect(slider, &QwtSlider::sliderMoved, this, [=, this] (double value) {
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setValueChanged(Value_changed_m());
+        event.valueChanged().setValue(value);
+        (void)m_remote_ui_client->SendEvent(event);
+    });
 }
 
 void UI_base::setup_textbox(QWidget *item, size_t index)
@@ -901,8 +915,13 @@ void UI_base::setup_textbox(QWidget *item, size_t index)
     if (line_edit == nullptr)
         return;
 
-    connect(line_edit, &QLineEdit::textEdited, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::text_changed, index, line_edit->text()); });
+    connect(line_edit, &QLineEdit::textEdited, this, [=, this] {
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setTextChanged(Text_changed_m());
+        event.textChanged().setText(line_edit->text());
+        (void)m_remote_ui_client->SendEvent(event);
+    });
 }
 
 void UI_base::setup_spinbox(QWidget *item, size_t index)
@@ -912,7 +931,11 @@ void UI_base::setup_spinbox(QWidget *item, size_t index)
         return;
 
     connect(spinbox, &QSpinBox::valueChanged, this, [=, this](int value) {
-        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value);
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setValueChanged(Value_changed_m());
+        event.valueChanged().setValue(value);
+        (void)m_remote_ui_client->SendEvent(event);
     });
 }
 
@@ -923,7 +946,11 @@ void UI_base::setup_double_spinbox(QWidget *item, size_t index)
         return;
 
     connect(spinbox, &QDoubleSpinBox::valueChanged, this, [=, this](double value) {
-        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, value);
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setValueChanged(Value_changed_m());
+        event.valueChanged().setValue(value);
+        (void)m_remote_ui_client->SendEvent(event);
     });
 }
 
@@ -934,7 +961,11 @@ void UI_base::setup_hex_spinbox(QWidget *item, size_t index)
         return;
 
     connect(spinbox, &HexSpinBox::valueChanged, this, [=, this](int value) {
-        m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, (double)value);
+        auto event = Event_m();
+        event.setId_proto(index);
+        event.setValueChanged(Value_changed_m());
+        event.valueChanged().setValue(value);
+        (void)m_remote_ui_client->SendEvent(event);
     });
 }
 
@@ -945,7 +976,11 @@ void UI_base::setup_tab_widget(QWidget *item, size_t index)
         return;
 
     connect(tab_widget, &QTabWidget::currentChanged, this, [=, this](int tab_index) {
-        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)tab_index);
+        auto event = Event_m();
+        event.setSelected(Selected_m());
+        event.setId_proto(index);
+        event.selected().setSelected(tab_index);
+        (void)m_remote_ui_client->SendEvent(event);
     });
 }
 
@@ -956,9 +991,20 @@ void UI_base::setup_can_ui(QWidget *item, size_t index)
         return;
 
     connect(can, &Can_Transceive::send_can_message, this,
-            [=, this](uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload) {
-                m_web_socket->send_event(Web_socket_wrapper::Event::can_send, index, id, dlc, payload);
+            [=, this](uint32_t id, uint8_t dlc, QByteArray payload) {
+                auto event = Event_m();
+                event.setId_proto(index);
+                event.setCanSend(CAN_send_m());
+                event.canSend().mutFrame().setSid(id);
+                event.canSend().mutFrame().setDlc(dlc);
+                event.canSend().mutFrame().setPayload(payload);
+                (void)m_remote_ui_client->SendEvent(event);
             });
     connect(can, &Can_Transceive::can_clear, this,
-            [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::clear, index); });
+            [=, this] {
+                auto event = Event_m();
+                event.setId_proto(index);
+                event.setClear(Clear_m());
+                (void)m_remote_ui_client->SendEvent(event);
+            });
 }

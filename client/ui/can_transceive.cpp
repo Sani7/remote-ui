@@ -15,11 +15,11 @@ Can_Transceive::Can_Transceive(QWidget *parent) : QWidget(parent), ui(new Ui::Ca
     connect(ui->b_can_send_send, &QPushButton::clicked, this, [=, this] {
         emit send_can_message(
             ui->s_can_send_sid->value(), ui->c_can_send_dlc->currentIndex(),
-            std::array<uint8_t, 8>(
-                {(uint8_t)(can_send_hexspinboxes[0]->value()), (uint8_t)(can_send_hexspinboxes[1]->value()),
-                 (uint8_t)(can_send_hexspinboxes[2]->value()), (uint8_t)(can_send_hexspinboxes[3]->value()),
-                 (uint8_t)(can_send_hexspinboxes[4]->value()), (uint8_t)(can_send_hexspinboxes[5]->value()),
-                 (uint8_t)(can_send_hexspinboxes[6]->value()), (uint8_t)(can_send_hexspinboxes[7]->value())}));
+            QByteArray().append((uint8_t)(can_send_hexspinboxes[0]->value())).append((uint8_t)(can_send_hexspinboxes[0]->value()))
+                .append((uint8_t)(can_send_hexspinboxes[1]->value())).append((uint8_t)(can_send_hexspinboxes[2]->value()))
+                .append((uint8_t)(can_send_hexspinboxes[3]->value())).append((uint8_t)(can_send_hexspinboxes[4]->value()))
+                .append((uint8_t)(can_send_hexspinboxes[5]->value())).append((uint8_t)(can_send_hexspinboxes[6]->value()))
+                .append((uint8_t)(can_send_hexspinboxes[7]->value())));
     });
     connect(ui->b_clear, &QPushButton::clicked, this, [=, this] { emit can_clear(); });
 }
@@ -48,7 +48,7 @@ void Can_Transceive::clear()
     ui->send_list->setRowCount(0);
 }
 
-void Can_Transceive::add_send_item(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
+void Can_Transceive::add_send_item(uint32_t id, uint8_t dlc, QByteArray payload)
 {
     size_t rc = ui->send_list->rowCount();
     ui->send_list->setRowCount(rc + 1);
@@ -62,7 +62,7 @@ void Can_Transceive::add_send_item(uint32_t id, uint8_t dlc, std::array<uint8_t,
     ui->send_list->resizeColumnsToContents();
 }
 
-void Can_Transceive::add_receive_item(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload)
+void Can_Transceive::add_receive_item(uint32_t id, uint8_t dlc, QByteArray payload)
 {
     size_t rc = ui->recvd_list->rowCount();
     ui->recvd_list->setRowCount(rc + 1);

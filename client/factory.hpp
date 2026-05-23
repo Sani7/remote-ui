@@ -9,7 +9,7 @@
 class UIFactory
 {
   public:
-    using Creator = std::function<UI_base *(Web_socket_wrapper *web_socket, QWidget *)>;
+    using Creator = std::function<UI_base *(RemoteUiService::Client *s, QWidget *)>;
 
     static UIFactory &instance()
     {
@@ -25,12 +25,12 @@ class UIFactory
         return true;
     }
 
-    UI_base *create(const QString &key, Web_socket_wrapper *w, QWidget *parent = nullptr) const
+    UI_base *create(const QString &key, RemoteUiService::Client *s, QWidget *parent = nullptr) const
     {
         auto it = m_creators.constFind(key);
         if (it == m_creators.cend())
             return nullptr;
-        return it.value()(w, parent);
+        return it.value()(s, parent);
     }
 
     QStringList keys() const
@@ -50,7 +50,7 @@ class UIFactory
         Register##TYPE()                                                                                               \
         {                                                                                                              \
             UIFactory::instance().registerType(TYPE::name(),                                                           \
-                                               [](Web_socket_wrapper *w, QWidget *p) { return new TYPE(w, p); });      \
+                                               [](RemoteUiService::Client *s, QWidget *p) { return new TYPE(s, p); });      \
         }                                                                                                              \
     };                                                                                                                 \
     static Register##TYPE register_##TYPE;                                                                             \
