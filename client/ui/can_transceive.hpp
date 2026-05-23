@@ -47,7 +47,7 @@ class Can_Transceive : public QWidget
      * @param dlc The Data Length Code
      * @param payload The CAN message payload
      */
-    void add_send_item(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload);
+    void add_send_item(uint32_t id, uint8_t dlc, QByteArray payload);
 
     /**
      * @brief Add a received CAN message to the receive list
@@ -56,7 +56,7 @@ class Can_Transceive : public QWidget
      * @param dlc The Data Length Code
      * @param payload The CAN message payload
      */
-    void add_receive_item(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload);
+    void add_receive_item(uint32_t id, uint8_t dlc, QByteArray payload);
 
   signals:
     /**
@@ -66,7 +66,7 @@ class Can_Transceive : public QWidget
      * @param dlc The Data Length Code
      * @param payload The CAN message payload
      */
-    void send_can_message(uint32_t id, uint8_t dlc, std::array<uint8_t, 8> payload);
+    void send_can_message(uint32_t id, uint8_t dlc, QByteArray payload);
 
     /**
      * @brief Emitted when the CAN message lists are to be cleared

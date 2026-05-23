@@ -1,5 +1,5 @@
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Svg WebSockets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg WebSockets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Svg Protobuf Grpc)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg Protobuf Grpc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -19,19 +19,16 @@ set(PROJECT_SOURCES
     helpers.hpp
     ui_base.cpp
     ui_base.hpp
-    web_socket_wrapper.cpp
-    web_socket_wrapper.hpp
 )
 
 qt_add_executable(unisim_client
     ${PROJECT_SOURCES}
-    )
+)
 
 set_target_properties(
     unisim_client
     PROPERTIES
         AUTOMOC ON
-        AUTORCC ON
         AUTOUIC ON
 )
 
@@ -43,7 +40,7 @@ target_include_directories(unisim_client
     ${PROJECT_BINARY_DIR}/
 )
 
-target_link_libraries(unisim_client PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::WebSockets spdlog magic_enum::magic_enum nlohmann_json::nlohmann_json git_tag qwt UI_enum)
+target_link_libraries(unisim_client PUBLIC Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Protobuf Qt${QT_VERSION_MAJOR}::Grpc spdlog magic_enum::magic_enum qwt git_tag proto-ui-client)
 
 include(GNUInstallDirs)
 install(TARGETS unisim_client

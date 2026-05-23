@@ -4,7 +4,7 @@
 
 REGISTER_UI(Can_Debugger);
 
-Can_Debugger::Can_Debugger(Web_socket_wrapper *web_socket, QWidget *parent)
+Can_Debugger::Can_Debugger(RemoteUiService::Client *web_socket, QWidget *parent)
     : UI_base(web_socket, parent), ui(new Ui::Can_Debugger)
 {
     ui->setupUi(this);

@@ -1,16 +1,19 @@
 #pragma once
-#include "ui_enum.hpp"
 #include <QMainWindow>
 #include <QWidget>
 #include <functional>
-#include <nlohmann/json.hpp>
+#include "messages.qpb.h"
+#include "m_ui_items.qpb.h"
+#include "messages_client.grpc.qpb.h"
 
-Q_FORWARD_DECLARE_OBJC_CLASS(Web_socket_wrapper);
 Q_FORWARD_DECLARE_OBJC_CLASS(QTimer);
 Q_FORWARD_DECLARE_OBJC_CLASS(QLabel);
 Q_FORWARD_DECLARE_OBJC_CLASS(QMessageBox);
 
-using json = nlohmann::json;
+namespace RemoteUiService
+{
+class Client;
+}
 
 #define PUSH_UI_ITEM(item) push_ui_item(ui->item)
 
@@ -44,11 +47,10 @@ class UI_base : public QMainWindow
      * @brief Construct a new ui base object
      *
      * @param name The name of the simulator
-     * @param api The weboscket connection to the server API
+     * @param api The grpc connection to the server API
      * @param parent The parent widget
      */
-    explicit UI_base(Web_socket_wrapper *api, QWidget *parent = nullptr);
-    void set_name(QString name);
+    explicit UI_base(RemoteUiService::Client *api, QWidget *parent = nullptr);
     /**
      * @brief Get the UI element by its ID
      *
@@ -56,6 +58,7 @@ class UI_base : public QMainWindow
      * @return QWidget* The UI element
      */
     QWidget *id_to_ui(size_t id);
+    void set_name(QString name);
     /**
      * @brief Get the label associated with a widget
      *        This function has to be overridden in derived classes if labels are used
@@ -71,18 +74,6 @@ class UI_base : public QMainWindow
 
   protected:
     /**
-     * @brief Handle an event callback from the server
-     *
-     * @param j The JSON event
-     */
-    void on_event_cb(json &j);
-    /**
-     * @brief Handle a command callback from the server
-     *
-     * @param j The JSON command
-     */
-    void on_cmd_cb(json &j);
-    /**
      * @brief Push a UI item to the internal list and setup its connections
      *        The item have to be in the same order as from the server
      *
@@ -94,7 +85,7 @@ class UI_base : public QMainWindow
      *
      * @param input The JSON input containing UI items
      */
-    void UI_item_parser(json &input);
+    void UI_item_parser(UI_items_m &input);
     /**
      * @brief Setup a generic UI item
      *
@@ -198,7 +189,8 @@ class UI_base : public QMainWindow
     void log_signal(const char *filename_in, int line_in, const char *funcname_in, int level, QString msg);
 
   private:
-    Web_socket_wrapper *m_web_socket;
+    RemoteUiService::Client *m_remote_ui_client;
+    std::unique_ptr<QGrpcServerStream> m_stream;
     QString m_name;
     QTimer *m_timer_update;
     uint32_t m_refresh_rate;
@@ -206,5 +198,5 @@ class UI_base : public QMainWindow
     bool m_open = false;
     bool m_first_load = true;
     std::vector<QWidget *> m_ui_lookup;
-    QMap<UI_enum, std::function<void(json &, QWidget *)>> m_process_lookup;
+    QMap<UI_typeGadget::UI_type, std::function<void(const UI_item_m &, QWidget *)>> m_process_lookup;
 };
