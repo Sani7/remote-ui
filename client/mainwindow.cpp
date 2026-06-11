@@ -1,5 +1,6 @@
 #include "mainwindow.hpp"
 #include "factory.hpp"
+#include "git_version.h"
 #include "ui_base.hpp"
 #include "ui_mainwindow.h"
 #include "web_socket_wrapper.hpp"
@@ -15,6 +16,10 @@ MainWindow::MainWindow(QUrl ws_url, QString sim, QWidget *parent)
       m_web_socket(new Web_socket_wrapper(ws_url))
 {
     ui->setupUi(this);
+    ui->statusbar->showMessage(QString("Version: %1-%2%3")
+                                   .arg(Git_version::branch)
+                                   .arg(Git_version::shortSha1)
+                                   .arg(Git_version::dirty ? "-dirty" : ""));
     connect(m_web_socket.get(), &Web_socket_wrapper::log_signal, this,
             [](const char *filename_in, int line_in, const char *funcname_in, int level, QString msg) {
                 if (spdlog::default_logger_raw()->should_log((spdlog::level::level_enum)level))

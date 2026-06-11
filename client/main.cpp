@@ -33,9 +33,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp client\n\tversion: " + QString::fromStdString(Git_version::branch) +
-                                     "-" + QString::fromStdString(Git_version::shortSha1) +
-                                     QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
+    parser.setApplicationDescription(QString("unisim_cpp client\n\tVersion: %1-%2%3")
+                                         .arg(Git_version::branch)
+                                         .arg(Git_version::shortSha1)
+                                         .arg(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
     QCommandLineOption host_option(QStringList() << "s"
@@ -70,11 +71,15 @@ int main(int argc, char *argv[])
                           .value_or(spdlog::level::off));
 
     QUrl url;
-    url.setScheme("ws");
 #ifdef EMSCRIPTEN
     emscripten::val location = emscripten::val::global("location");
-    url.setHost(QString::fromStdString(location["href"].as<std::string>()));
+    url.setHost(QString::fromStdString(location["hostname"].as<std::string>()));
+    url.setPath("/ws");
+    url.setPort(443);
+    url.setScheme("wss");
 #else
+    url.setScheme("ws");
+    url.setPort(parser.value(port_option).toInt());
     url.setHost(parser.value(host_option));
 #if defined(__linux__)
     if (parser.value(host_option).endsWith(".local"))
@@ -101,7 +106,6 @@ int main(int argc, char *argv[])
     }
 #endif
 #endif
-    url.setPort(parser.value(port_option).toInt());
     QString default_sim = parser.value(default_sim_option);
     SPDLOG_INFO("Connecting client on {}", url.toString().toStdString());
     MainWindow w(url, default_sim);

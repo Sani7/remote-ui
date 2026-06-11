@@ -7,3 +7,15 @@ add_subdirectory(json)
 add_subdirectory(magic_enum)
 add_subdirectory(spdlog)
 add_subdirectory(qwt)
+
+if (EMSCRIPTEN)
+target_compile_options(spdlog
+    PRIVATE
+        -pthread
+)
+
+target_link_options(spdlog
+    PRIVATE
+        -pthread
+)
+endif()

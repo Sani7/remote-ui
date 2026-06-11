@@ -21,9 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
 set(PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # defines targets and sources
-if(NOT EMSCRIPTEN)
 add_subdirectory(UI)
-endif()
 
 add_subdirectory(client)
 

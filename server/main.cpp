@@ -29,9 +29,10 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("unisim_cpp server\n\tversion: " + QString::fromStdString(Git_version::branch) +
-                                     "-" + QString::fromStdString(Git_version::shortSha1) +
-                                     QString::fromStdString(Git_version::dirty ? "-dirty" : ""));
+    parser.setApplicationDescription(QString("unisim_cpp server\n\tVersion: %1-%2%3")
+                                         .arg(Git_version::branch)
+                                         .arg(Git_version::shortSha1)
+                                         .arg(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
     QCommandLineOption port_option(QStringList() << "p"

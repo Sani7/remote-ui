@@ -1,5 +1,5 @@
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
+if(NOT EMSCRIPTEN)
 add_library(UI STATIC)
 
 find_package(Qt6 REQUIRED COMPONENTS Core SerialBus)
@@ -39,6 +39,7 @@ target_link_libraries(UI
     Qt::SerialBus
     UI_enum
 )
+endif()
 
 add_library(UI_enum INTERFACE)
 

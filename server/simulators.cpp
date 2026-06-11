@@ -215,8 +215,8 @@ json Simulators::changed_UI_items()
     json changed;
     changed["event"]["type"] = "ui_changed";
 
-    const auto& ui_items     = after["UI_items"];
-    const auto& prev_ui_items = m_before["UI_items"];   // may be null on first call
+    const auto &ui_items = after["UI_items"];
+    const auto &prev_ui_items = m_before["UI_items"]; // may be null on first call
 
     const size_t count = ui_items.size();
     for (size_t i = 0; i < count; ++i)

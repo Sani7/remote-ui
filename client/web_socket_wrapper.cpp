@@ -22,6 +22,22 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
         emit on_connected();
     });
     connect(m_web_socket, &QWebSocket::disconnected, this, [=, this] { emit on_closed(); });
+    connect(m_web_socket, &QWebSocket::errorOccurred, this, [this](QAbstractSocket::SocketError error) {
+        LOG_ERROR(QString::fromStdString(std::string(magic_enum::enum_name(error))));
+    });
+    connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
+#ifdef EMSCRIPTEN
+        if (m_web_socket->state() != QAbstractSocket::ConnectedState)
+        {
+            m_web_socket->close();
+            emit on_closed();
+        }
+        m_ping_timer->start(1000);
+    });
+#else
+        m_web_socket->ping();
+        m_pong_timer->start(1000);
+    });
     connect(m_web_socket, &QWebSocket::pong, this, [=, this](quint64 elapsedTime) {
         if (elapsedTime > 1000)
         {
@@ -32,18 +48,12 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
         m_pong_timer->stop();
         m_ping_timer->start(1000);
     });
-    connect(m_web_socket, &QWebSocket::errorOccurred, this, [this](QAbstractSocket::SocketError error) {
-        LOG_ERROR(QString::fromStdString(std::string(magic_enum::enum_name(error))));
-    });
-    connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
-        m_web_socket->ping();
-        m_pong_timer->start(1000);
-    });
     connect(m_pong_timer, &QTimer::timeout, this, [=, this] {
         LOG_CRITICAL("Pong timeout");
         m_web_socket->close();
         emit on_closed();
     });
+#endif
     m_ping_timer->setSingleShot(true);
     m_pong_timer->setSingleShot(true);
     m_web_socket->setProxy(QNetworkProxy::NoProxy);
