@@ -66,6 +66,7 @@ set_target_properties(
     server_common
     PROPERTIES
         AUTOMOC ON
+        AUTOUIC OFF
 )
 
 target_include_directories(server_common
