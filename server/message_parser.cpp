@@ -104,7 +104,7 @@ void Simulators::event_handler(json event)
             break;
         }
         case Event::selected: {
-            SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::string(event.at("selected")));
+            SPDLOG_DEBUG("Event {}: {} {}", type, (size_t)event.at("id"), std::to_string((size_t)event.at("selected")));
             invoke_active_simulator()->get_UI_item(event.at("id"))->set_selected(event.at("selected"));
             break;
         }
