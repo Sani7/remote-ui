@@ -992,8 +992,8 @@ void UI_base::setup_tab_widget(QWidget *item, size_t index)
     if (tab_widget == nullptr)
         return;
 
-    connect(tab_widget, &QTabWidget::currentChanged, this, [=, this](int index) {
-        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)index);
+    connect(tab_widget, &QTabWidget::currentChanged, this, [=, this](int tab_index) {
+        m_web_socket->send_event(Web_socket_wrapper::Event::selected, index, (size_t)tab_index);
     });
 }
 
