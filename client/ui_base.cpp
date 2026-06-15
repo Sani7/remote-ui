@@ -49,22 +49,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
 
     m_process_lookup.insert(UI_enum::ui_slider, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
-// TODO: Find a cleaner fix
-#ifdef __WIN32
-        if (!widget->inherits("QwtSlider"))
-        {
-            LOG_WARN("widget is not of type QwtSlider");
-            return;
-        }
-        auto slider = static_cast<QwtSlider *>(widget);
-#else
         auto slider = qobject_cast<QwtSlider *>(widget);
         if (slider == nullptr)
         {
             LOG_WARN("widget is not of type QwtSlider");
             return;
         }
-#endif
 
         double value = ui_item.at("value");
         bool enable = ui_item.at("enabled");
@@ -94,22 +84,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
     });
     m_process_lookup.insert(UI_enum::ui_dial, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
-// TODO: Find a cleaner fix
-#ifdef __WIN32
-        if (!widget->inherits("QwtDial"))
-        {
-            LOG_WARN("widget is not of type QwtDial");
-            return;
-        }
-        auto dial = static_cast<QwtDial *>(widget);
-#else
         auto dial = qobject_cast<QwtDial *>(widget);
         if (dial == nullptr)
         {
             LOG_WARN("widget is not of type QwtDial");
             return;
         }
-#endif
 
         double value = ui_item.at("value");
         bool visible = ui_item.at("visible");
@@ -132,22 +112,12 @@ UI_base::UI_base(Web_socket_wrapper *web_socket, QWidget *parent)
     });
     m_process_lookup.insert(UI_enum::ui_thermo, [=, this](json &ui_item, QWidget *widget) {
         QLabel *label = id_to_label(id_to_ui(ui_item.at("id")));
-// TODO: Find a cleaner fix
-#ifdef __WIN32
-        if (!widget->inherits("QwtThermo"))
-        {
-            LOG_WARN("widget is not of type QwtThermo");
-            return;
-        }
-        auto thermo = static_cast<QwtThermo *>(widget);
-#else
         auto thermo = qobject_cast<QwtThermo *>(widget);
         if (thermo == nullptr)
         {
             LOG_WARN("widget is not of type QwtThermo");
             return;
         }
-#endif
 
         double value = ui_item.at("value");
         bool visible = ui_item.at("visible");
@@ -902,42 +872,24 @@ void UI_base::setup_checkbox(QWidget *item, size_t index)
 
 void UI_base::setup_dial(QWidget *item, size_t index)
 {
-#ifdef __WIN32
-    if (!item->inherits("QwtDial"))
-    {
-        LOG_WARN("widget is not of type QwtDial");
-        return;
-    }
-    auto dial = static_cast<QwtDial *>(item);
-#else
     auto dial = qobject_cast<QwtDial *>(item);
     if (dial == nullptr)
     {
         LOG_WARN("widget is not of type QwtDial");
         return;
     }
-#endif
 
     create_dial_needle(dial);
 }
 
 void UI_base::setup_slider(QWidget *item, size_t index)
 {
-#ifdef __WIN32
-    if (!item->inherits("QwtSlider"))
-    {
-        LOG_WARN("widget is not of type QwtSlider");
-        return;
-    }
-    auto slider = static_cast<QwtSlider *>(item);
-#else
     auto slider = qobject_cast<QwtSlider *>(item);
     if (slider == nullptr)
     {
         LOG_WARN("widget is not of type QwtSlider");
         return;
     }
-#endif
 
     connect(slider, &QwtSlider::sliderMoved, this,
             [=, this] { m_web_socket->send_event(Web_socket_wrapper::Event::value_changed, index, slider->value()); });
