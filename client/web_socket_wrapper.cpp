@@ -25,6 +25,7 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     connect(m_web_socket, &QWebSocket::errorOccurred, this, [this](QAbstractSocket::SocketError error) {
         LOG_ERROR(QString::fromStdString(std::string(magic_enum::enum_name(error))));
     });
+
     connect(m_ping_timer, &QTimer::timeout, this, [=, this] {
 #ifdef EMSCRIPTEN
         if (m_web_socket->state() != QAbstractSocket::ConnectedState)
@@ -53,6 +54,18 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
         m_web_socket->close();
         emit on_closed();
     });
+    connect(m_web_socket, &QWebSocket::sslErrors,
+            this, [&](const QList<QSslError> &errors) {
+                QList<QSslError> exeptions;
+                for (const auto &err : errors) {
+                    if (err.error() == QSslError::UnableToGetLocalIssuerCertificate)
+                    {
+                        exeptions.append(err);
+                        LOG_WARN(QString("Allowing ssl error: %1 from %2").arg("UnableToGetLocalIssuerCertificate").arg(!err.certificate().isNull() ? err.certificate().subjectDisplayName() : "Unknown"));
+                    }
+                }
+                m_web_socket->ignoreSslErrors(exeptions);
+            });
 #endif
     m_ping_timer->setSingleShot(true);
     m_pong_timer->setSingleShot(true);

@@ -39,17 +39,16 @@ int main(int argc, char *argv[])
                                          .arg(Git_version::dirty ? "-dirty" : ""));
     parser.addHelpOption();
 
+    QCommandLineOption debug_option(QStringList() << "debug",
+                                   QCoreApplication::translate("main", "debug unisim_cpp server host [default: localhost:9002]."),
+                                   QCoreApplication::translate("main", "host"), QLatin1String("localhost:9002"));
+    parser.addOption(debug_option);
+
     QCommandLineOption host_option(QStringList() << "s"
                                                  << "server",
                                    QCoreApplication::translate("main", "unisim_cpp server host [default: localhost]."),
                                    QCoreApplication::translate("main", "host"), QLatin1String("localhost"));
     parser.addOption(host_option);
-
-    QCommandLineOption port_option(QStringList() << "p"
-                                                 << "port",
-                                   QCoreApplication::translate("main", "Port for unisim_cpp [default: 9002]."),
-                                   QCoreApplication::translate("main", "port"), QLatin1String("9002"));
-    parser.addOption(port_option);
 
     QCommandLineOption default_sim_option(QStringList() << "d"
                                                         << "default",
@@ -71,40 +70,44 @@ int main(int argc, char *argv[])
                           .value_or(spdlog::level::off));
 
     QUrl url;
+    if (parser.isSet(debug_option))
+    {
+        url = QUrl::fromUserInput(parser.value(debug_option));
+        url.setScheme("ws");
+#if defined(__linux__)
+        if (url.host().endsWith(".local"))
+        {
+            QProcess p;
+            p.start("avahi-resolve", {"-4", "--name", url.host()});
+            p.waitForFinished(-1);
+            QString stdout = p.readAllStandardOutput();
+            QString stderr = p.readAllStandardError();
+            if (!stderr.isEmpty())
+            {
+                SPDLOG_CRITICAL("Unable to resolve {}", parser.value(host_option).toStdString());
+                return -1;
+            }
+
+            auto ret = stdout.split(u'\t', Qt::SkipEmptyParts);
+            if (ret.count() < 2)
+            {
+                SPDLOG_CRITICAL("Unable to resolve {}: not enough paramteters", parser.value(host_option).toStdString());
+            }
+
+            ret[1].removeLast();
+            url.setHost(ret[1]);
+        }
+#endif
+    } else
+    {
+        url.setPath("/ws");
+        url.setPort(443);
+        url.setScheme("wss");
+        url.setHost(parser.value(host_option));
+    }
 #ifdef EMSCRIPTEN
     emscripten::val location = emscripten::val::global("location");
     url.setHost(QString::fromStdString(location["hostname"].as<std::string>()));
-    url.setPath("/ws");
-    url.setPort(443);
-    url.setScheme("wss");
-#else
-    url.setScheme("ws");
-    url.setPort(parser.value(port_option).toInt());
-    url.setHost(parser.value(host_option));
-#if defined(__linux__)
-    if (parser.value(host_option).endsWith(".local"))
-    {
-        QProcess p;
-        p.start("avahi-resolve", {"-4", "--name", parser.value(host_option)});
-        p.waitForFinished(-1);
-        QString stdout = p.readAllStandardOutput();
-        QString stderr = p.readAllStandardError();
-        if (!stderr.isEmpty())
-        {
-            SPDLOG_CRITICAL("Unable to resolve {}", parser.value(host_option).toStdString());
-            return -1;
-        }
-
-        auto ret = stdout.split(u'\t', Qt::SkipEmptyParts);
-        if (ret.count() < 2)
-        {
-            SPDLOG_CRITICAL("Unable to resolve {}: not enough paramteters", parser.value(host_option).toStdString());
-        }
-
-        ret[1].removeLast();
-        url.setHost(ret[1]);
-    }
-#endif
 #endif
     QString default_sim = parser.value(default_sim_option);
     SPDLOG_INFO("Connecting client on {}", url.toString().toStdString());
