@@ -57,14 +57,29 @@ Web_socket_wrapper::Web_socket_wrapper(const QUrl &url, QObject *parent)
     connect(m_web_socket, &QWebSocket::sslErrors,
             this, [&](const QList<QSslError> &errors) {
                 QList<QSslError> exeptions;
-                for (const auto &err : errors) {
-                    if (err.error() == QSslError::UnableToGetLocalIssuerCertificate)
-                    {
+                for (const QSslError &err : errors) {
+                    switch (err.error()) {
+                    case QSslError::UnableToGetLocalIssuerCertificate:
+                    // case QSslError::UnableToVerifyFirstCertificate:
+                    // case QSslError::SelfSignedCertificate:
+                    // case QSslError::SelfSignedCertificateInChain:
+                    // case QSslError::CertificateUntrusted:
                         exeptions.append(err);
-                        LOG_WARN(QString("Allowing ssl error: %1 from %2").arg("UnableToGetLocalIssuerCertificate").arg(!err.certificate().isNull() ? err.certificate().subjectDisplayName() : "Unknown"));
+                        LOG_WARN(QString("Allowing SSL error: %1 (%2)")
+                                     .arg(err.errorString(), err.certificate().isNull()
+                                                                 ? "no cert"
+                                                                 : err.certificate().subjectDisplayName()));
+                        break;
+                    default:
+                        LOG_ERROR(QString("Unexpected SSL error (not ignored): %1")
+                                      .arg(err.errorString()));
+                        break;
                     }
                 }
-                m_web_socket->ignoreSslErrors(exeptions);
+
+                if (!exeptions.isEmpty()) {
+                    m_web_socket->ignoreSslErrors(exeptions);
+                }
             });
 #endif
     m_ping_timer->setSingleShot(true);
