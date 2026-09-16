@@ -45,6 +45,11 @@ void Visa::disconnect()
     m_tcp_socket->disconnectFromHost();
 }
 
+void Visa::abort()
+{
+    m_tcp_socket->abort();
+}
+
 bool Visa::connected() const
 {
     return m_connected;

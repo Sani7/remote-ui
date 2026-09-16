@@ -37,6 +37,11 @@ class Visa : public QObject
     void disconnect();
 
     /**
+     * @brief abort Abort and reset the socket
+     */
+    void abort();
+
+    /**
      * @brief Check if the VISA device is connected
      *
      * @return true If the device is connected
