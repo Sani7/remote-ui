@@ -42,7 +42,7 @@ void Visa::connect(QString ip, quint16 port)
 
 void Visa::disconnect()
 {
-    m_tcp_socket->disconnect();
+    m_tcp_socket->disconnectFromHost();
 }
 
 bool Visa::connected() const
